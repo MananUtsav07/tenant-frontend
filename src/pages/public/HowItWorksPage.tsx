@@ -70,14 +70,11 @@ export function HowItWorksPage() {
           className="relative mt-10 space-y-4"
         >
           <div className="pointer-events-none absolute bottom-12 left-[23px] top-12 hidden w-px bg-gradient-to-b from-blue-300 via-slate-300 to-transparent sm:block" />
-          {workflow.map((step, index) => (
+          {workflow.map((step) => (
             <motion.li key={step.title} variants={revealVariants} className="relative rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_20px_55px_-45px_rgba(15,23,42,0.65)] sm:pl-20">
               <div className="mb-3 flex items-center gap-3 sm:absolute sm:left-4 sm:top-5">
                 <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-slate-950 text-blue-300">
                   {step.icon}
-                </span>
-                <span className="inline-flex rounded-full border border-slate-200 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">
-                  Step {index + 1}
                 </span>
               </div>
               <h2 className="font-[Space_Grotesk] text-2xl font-semibold text-slate-900">{step.title}</h2>

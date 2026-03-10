@@ -56,7 +56,7 @@ export function HowItWorksSection() {
           viewport={viewportOnce}
           className="mt-8 grid gap-4 md:grid-cols-2"
         >
-          {steps.map((step, index) => (
+          {steps.map((step) => (
             <motion.li
               key={step.title}
               variants={revealVariants}
@@ -66,7 +66,6 @@ export function HowItWorksSection() {
                 <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-blue-200 bg-blue-50 text-blue-700">
                   {step.icon}
                 </span>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Step {index + 1}</p>
               </div>
               <h3 className="mt-3 font-[Space_Grotesk] text-lg font-semibold text-slate-900">{step.title}</h3>
               <p className="mt-2 text-sm text-slate-600">{step.description}</p>
