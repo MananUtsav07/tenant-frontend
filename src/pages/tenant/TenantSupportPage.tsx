@@ -1,0 +1,103 @@
+﻿import { useEffect, useState } from 'react'
+import { Building2, Inbox, Mail, MessageSquare, Phone } from 'lucide-react'
+
+import { Button } from '../../components/common/Button'
+import { EmptyState } from '../../components/common/EmptyState'
+import { ErrorState } from '../../components/common/ErrorState'
+import { LoadingState } from '../../components/common/LoadingState'
+import { TicketTable } from '../../components/common/TicketTable'
+import { useTenantAuth } from '../../hooks/useTenantAuth'
+import { ROUTES } from '../../routes/constants'
+import { api } from '../../services/api'
+import type { TenantOwnerContact, TenantTicket } from '../../types/api'
+
+export function TenantSupportPage() {
+  const { token } = useTenantAuth()
+  const [ownerContact, setOwnerContact] = useState<TenantOwnerContact | null>(null)
+  const [tickets, setTickets] = useState<TenantTicket[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const load = async () => {
+      if (!token) {
+        return
+      }
+
+      try {
+        setError(null)
+        const [contactResponse, ticketsResponse] = await Promise.all([
+          api.getTenantOwnerContact(token),
+          api.getTenantTickets(token),
+        ])
+        setOwnerContact(contactResponse.owner)
+        setTickets(ticketsResponse.tickets)
+      } catch (loadError) {
+        setError(loadError instanceof Error ? loadError.message : 'Failed to load support details')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    void load()
+  }, [token])
+
+  return (
+    <section className="space-y-6">
+      <div>
+        <h2 className="inline-flex items-center gap-2 text-2xl font-semibold text-slate-900">
+          <MessageSquare className="h-6 w-6 text-blue-600" />
+          Support
+        </h2>
+        <p className="text-sm text-slate-400">Owner support contact and recent support activity.</p>
+      </div>
+
+      {error ? <ErrorState message={error} /> : null}
+      {loading ? <LoadingState message="Loading support details..." rows={4} /> : null}
+
+      {!loading && ownerContact ? (
+        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-5">
+          <h3 className="text-lg font-semibold text-slate-900">Owner Contact</h3>
+          <div className="mt-3 space-y-2 text-sm text-slate-700">
+            <p className="inline-flex items-center gap-2">
+              <Building2 className="h-4 w-4 text-blue-600" />
+              Company: {ownerContact.company_name || '-'}
+            </p>
+            <p className="inline-flex items-center gap-2">
+              <Mail className="h-4 w-4 text-blue-600" />
+              Email: {ownerContact.support_email || '-'}
+            </p>
+            <p className="inline-flex items-center gap-2">
+              <Phone className="h-4 w-4 text-blue-600" />
+              WhatsApp: {ownerContact.support_whatsapp || '-'}
+            </p>
+          </div>
+        </div>
+      ) : null}
+
+      {!loading && tickets.length === 0 ? (
+        <EmptyState
+          title="No recent tickets"
+          description="Ticket history will show up once you raise a request."
+          icon={<Inbox className="h-5 w-5" />}
+          actionLabel="Create Ticket"
+          actionHref={ROUTES.tenantTickets}
+        />
+      ) : null}
+
+      {!loading && tickets.length > 0 ? (
+        <div>
+          <h3 className="mb-3 text-lg font-semibold text-slate-900">Ticket History</h3>
+          <TicketTable tickets={tickets} />
+          <Button to={ROUTES.tenantTickets} variant="ghost" size="sm" className="mt-3 px-0 text-blue-700 hover:bg-transparent">
+            Raise a new ticket
+          </Button>
+        </div>
+      ) : null}
+    </section>
+  )
+}
+
+
+
+
