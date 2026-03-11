@@ -138,6 +138,8 @@ export function TenantDashboardPage() {
               <p className="text-xs uppercase text-slate-400">Status</p>
               {rentPaymentState.status === 'eligible' ? (
                 <StatusBadge status="pending" />
+              ) : rentPaymentState.status === 'approved' ? (
+                <StatusBadge status="paid" />
               ) : (
                 <StatusBadge status={rentPaymentState.status} />
               )}
@@ -171,7 +173,7 @@ export function TenantDashboardPage() {
           ) : null}
 
           {rentPaymentState.status === 'approved' ? (
-            <p className="mt-4 text-sm font-medium text-emerald-700">Rent payment approved for this cycle.</p>
+            <p className="mt-4 text-sm font-medium text-emerald-700">Rent payment marked as paid for this cycle.</p>
           ) : null}
         </div>
       ) : null}
