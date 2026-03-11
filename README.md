@@ -103,6 +103,16 @@ Build:
 npm run build
 ```
 
+## Deploy to Vercel
+This frontend is configured for Vercel SPA routing.
+
+1. Import the `tenant-frontend` repo in Vercel.
+2. Framework Preset: `Vite`.
+3. Add environment variables:
+   - `VITE_API_BASE_URL=https://<your-backend-project>.vercel.app`
+   - `VITE_SITE_URL=https://<your-frontend-project>.vercel.app`
+4. Deploy.
+
 ## Notes
 - Owner and tenant sessions remain isolated with separate token storage keys.
 - Marketing pages and dashboards are connected through shared navbar/footer links.
@@ -113,3 +123,4 @@ npm run build
 - Page view and conversion tracking helpers are in `src/utils/analytics.ts`.
 - Public crawl assets are generated in `public/sitemap.xml` and `public/robots.txt`.
 - Theme preference (`light`, `dark`, `system`) is persisted in localStorage and controlled from navbar.
+- Tenant sessions are redirected away from public marketing pages to the tenant dashboard.

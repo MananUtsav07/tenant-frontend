@@ -7,6 +7,7 @@ import { Button } from '../../components/common/Button'
 import { ErrorState } from '../../components/common/ErrorState'
 import { FormInput } from '../../components/common/FormInput'
 import { SectionContainer } from '../../components/common/SectionContainer'
+import { otherCountryOptions, topCountryOptions } from '../../constants/countryCurrency'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { usePageSeo } from '../../hooks/usePageSeo'
 import { ROUTES } from '../../routes/constants'
@@ -30,6 +31,7 @@ export function OwnerLoginPage() {
     company_name: '',
     support_email: '',
     support_whatsapp: '',
+    country_code: '',
   })
   const revealVariants = useMotionVariants(revealUp)
 
@@ -65,6 +67,7 @@ export function OwnerLoginPage() {
           company_name: form.company_name || undefined,
           support_email: form.support_email || undefined,
           support_whatsapp: form.support_whatsapp || undefined,
+          country_code: form.country_code,
         })
         trackEvent('owner_signup_form_submit', {
           user_type: 'owner',
@@ -171,6 +174,38 @@ export function OwnerLoginPage() {
                 value={form.support_whatsapp}
                 onChange={(event) => updateField('support_whatsapp', event.target.value)}
               />
+
+              <label className="block space-y-2">
+                <span className="text-sm font-medium text-slate-600">Country where your properties are located</span>
+                <select
+                  name="owner_country_code"
+                  className="tf-field"
+                  value={form.country_code}
+                  onChange={(event) => updateField('country_code', event.target.value)}
+                  required
+                >
+                  <option value="" disabled>
+                    Select country
+                  </option>
+                  <optgroup label="Top Countries">
+                    {topCountryOptions.map((option) => (
+                      <option key={option.code} value={option.code}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Others">
+                    {otherCountryOptions.map((option) => (
+                      <option key={option.code} value={option.code}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </optgroup>
+                </select>
+                <span className="text-xs text-slate-500">
+                  Used to set your rent currency now and regional pricing later.
+                </span>
+              </label>
             </>
           ) : null}
 

@@ -27,11 +27,50 @@ export function formatDateTime(value: string | null | undefined): string {
   }).format(date)
 }
 
-export function formatCurrencyInr(value: number | null | undefined): string {
+function normalizeCurrencyCode(currencyCode: string | null | undefined): string {
+  const normalized = currencyCode?.trim().toUpperCase()
+  if (!normalized) {
+    return 'INR'
+  }
+  return normalized
+}
+
+export function formatCurrency(value: number | null | undefined, currencyCode?: string | null): string {
   const amount = typeof value === 'number' ? value : 0
-  return new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    maximumFractionDigits: 0,
-  }).format(amount)
+  const normalizedCurrencyCode = normalizeCurrencyCode(currencyCode)
+
+  try {
+    return new Intl.NumberFormat('en', {
+      style: 'currency',
+      currency: normalizedCurrencyCode,
+      maximumFractionDigits: 0,
+    }).format(amount)
+  } catch {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0,
+    }).format(amount)
+  }
+}
+
+export function getCurrencyMarker(currencyCode?: string | null): string {
+  const normalizedCurrencyCode = normalizeCurrencyCode(currencyCode)
+
+  try {
+    const parts = new Intl.NumberFormat('en', {
+      style: 'currency',
+      currency: normalizedCurrencyCode,
+      maximumFractionDigits: 0,
+      currencyDisplay: 'symbol',
+    }).formatToParts(0)
+
+    return parts.find((part) => part.type === 'currency')?.value ?? normalizedCurrencyCode
+  } catch {
+    return '₹'
+  }
+}
+
+export function formatCurrencyInr(value: number | null | undefined): string {
+  return formatCurrency(value, 'INR')
 }

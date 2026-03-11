@@ -3,6 +3,8 @@ export type Organization = {
   name: string
   slug: string
   plan_code: string | null
+  country_code: string
+  currency_code: string
   created_at: string
 }
 
@@ -239,6 +241,8 @@ export type AdminTenantRow = {
     name: string
     slug: string
     plan_code: string | null
+    country_code: string
+    currency_code: string
   } | null
 }
 

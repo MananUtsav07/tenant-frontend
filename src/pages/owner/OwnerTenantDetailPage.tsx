@@ -12,7 +12,7 @@ import { TicketTable } from '../../components/common/TicketTable'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { api } from '../../services/api'
 import type { TenantTicket } from '../../types/api'
-import { formatCurrencyInr, formatDate, formatDateTime } from '../../utils/date'
+import { formatCurrency, formatDate, formatDateTime } from '../../utils/date'
 
 type TenantDetailResponse = {
   tenant: {
@@ -45,7 +45,7 @@ type TenantDetailResponse = {
 
 export function OwnerTenantDetailPage() {
   const { id } = useParams<{ id: string }>()
-  const { token } = useOwnerAuth()
+  const { token, owner } = useOwnerAuth()
   const [detail, setDetail] = useState<TenantDetailResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -114,7 +114,9 @@ export function OwnerTenantDetailPage() {
               </div>
               <div>
                 <p className="text-xs uppercase text-slate-400">Rent</p>
-                <p className="text-sm text-slate-800">{formatCurrencyInr(detail.tenant.monthly_rent)}</p>
+                <p className="text-sm text-slate-800">
+                  {formatCurrency(detail.tenant.monthly_rent, owner?.organization?.currency_code)}
+                </p>
               </div>
               <div>
                 <p className="text-xs uppercase text-slate-400">Payment Status</p>

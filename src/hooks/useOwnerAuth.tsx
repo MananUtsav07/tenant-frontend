@@ -17,6 +17,7 @@ type OwnerAuthContextValue = {
     company_name?: string
     support_email?: string
     support_whatsapp?: string
+    country_code: string
   }) => Promise<void>
   logout: () => void
   refresh: () => Promise<void>
@@ -66,6 +67,7 @@ export function OwnerAuthProvider({ children }: { children: React.ReactNode }) {
     company_name?: string
     support_email?: string
     support_whatsapp?: string
+    country_code: string
   }) => {
     const response = await api.ownerRegister(input)
     writeOwnerToken(response.token)

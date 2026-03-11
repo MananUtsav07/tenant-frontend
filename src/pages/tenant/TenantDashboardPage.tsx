@@ -10,7 +10,7 @@ import { StatusBadge } from '../../components/common/StatusBadge'
 import { useTenantAuth } from '../../hooks/useTenantAuth'
 import { api } from '../../services/api'
 import type { Property, Tenant, TenantSummary } from '../../types/api'
-import { formatCurrencyInr, formatDate } from '../../utils/date'
+import { formatCurrency, formatDate } from '../../utils/date'
 
 export function TenantDashboardPage() {
   const { token, tenant: authTenant } = useTenantAuth()
@@ -70,7 +70,7 @@ export function TenantDashboardPage() {
           />
           <SummaryCard
             label="Monthly Rent"
-            value={formatCurrencyInr(summary.monthly_rent)}
+            value={formatCurrency(summary.monthly_rent, authTenant?.organization?.currency_code)}
             icon={<CircleDollarSign className="h-4 w-4" />}
           />
           <SummaryCard label="Due Day" value={summary.payment_due_day} icon={<CalendarClock className="h-4 w-4" />} />

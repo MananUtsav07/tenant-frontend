@@ -137,6 +137,7 @@ export const api = {
     company_name?: string
     support_email?: string
     support_whatsapp?: string
+    country_code: string
   }) => request<OwnerAuthPayload & { ok: true }>('/api/auth/owner/register', { method: 'POST', body }),
 
   ownerLogin: (body: { email: string; password: string }) =>
@@ -158,6 +159,8 @@ export const api = {
         name: string
         slug: string
         plan_code: string | null
+        country_code: string
+        currency_code: string
         created_at: string
       } | null
     }>('/api/auth/tenant/me', { token }),

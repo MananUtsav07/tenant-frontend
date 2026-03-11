@@ -13,7 +13,7 @@ import { useAdminAuth } from '../../hooks/useAdminAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
 import type { AdminOrganizationRow, AdminTenantRow, PaginationMeta } from '../../types/api'
-import { formatDateTime, formatCurrencyInr } from '../../utils/date'
+import { formatCurrency, formatDateTime } from '../../utils/date'
 
 export function AdminTenantsPage() {
   const { token } = useAdminAuth()
@@ -139,7 +139,9 @@ export function AdminTenantsPage() {
                   {tenant.properties?.property_name || '-'}
                   {tenant.properties?.unit_number ? ` (${tenant.properties.unit_number})` : ''}
                 </td>
-                <td className="px-4 py-3 text-slate-600">{formatCurrencyInr(tenant.monthly_rent)}</td>
+                <td className="px-4 py-3 text-slate-600">
+                  {formatCurrency(tenant.monthly_rent, tenant.organizations?.currency_code)}
+                </td>
                 <td className="px-4 py-3">
                   <div className="flex flex-wrap gap-2">
                     <StatusBadge status={tenant.payment_status} />

@@ -12,7 +12,7 @@ import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
 import type { Property, Tenant } from '../../types/api'
-import { formatCurrencyInr, formatDate, formatDateTime } from '../../utils/date'
+import { formatCurrency, formatDate, formatDateTime, getCurrencyMarker } from '../../utils/date'
 
 function buildEmptyTenantForm(defaultPropertyId = '') {
   return {
@@ -31,7 +31,7 @@ function buildEmptyTenantForm(defaultPropertyId = '') {
 }
 
 export function OwnerTenantsPage() {
-  const { token } = useOwnerAuth()
+  const { token, owner } = useOwnerAuth()
   const [tenants, setTenants] = useState<Tenant[]>([])
   const [properties, setProperties] = useState<Property[]>([])
   const [loading, setLoading] = useState(true)
@@ -39,6 +39,8 @@ export function OwnerTenantsPage() {
   const [busy, setBusy] = useState(false)
   const [editingTenantId, setEditingTenantId] = useState<string | null>(null)
   const [form, setForm] = useState(buildEmptyTenantForm)
+  const ownerCurrencyCode = owner?.organization?.currency_code ?? 'INR'
+  const ownerCurrencyMarker = getCurrencyMarker(ownerCurrencyCode)
 
   const loadData = useCallback(async () => {
     if (!token) {
@@ -278,14 +280,22 @@ export function OwnerTenantsPage() {
             onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
             required={!editingTenantId}
           />
-          <FormInput
-            label="Monthly Rent"
-            type="number"
-            name="tenant_monthly_rent"
-            value={form.monthly_rent}
-            onChange={(event) => setForm((current) => ({ ...current, monthly_rent: event.target.value }))}
-            required
-          />
+          <label className="block space-y-2">
+            <span className="text-sm font-medium text-slate-600">Monthly Rent</span>
+            <div className="relative">
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-500">
+                {ownerCurrencyMarker}
+              </span>
+              <input
+                type="number"
+                name="tenant_monthly_rent"
+                className="tf-field pl-8"
+                value={form.monthly_rent}
+                onChange={(event) => setForm((current) => ({ ...current, monthly_rent: event.target.value }))}
+                required
+              />
+            </div>
+          </label>
           <FormInput
             label="Due Day"
             type="number"
@@ -405,7 +415,7 @@ export function OwnerTenantsPage() {
                 <p className="text-xs text-slate-400">{tenant.email || 'No email'}</p>
               </td>
               <td className="px-4 py-3 text-slate-700">{tenant.tenant_access_id}</td>
-              <td className="px-4 py-3 text-slate-700">{formatCurrencyInr(tenant.monthly_rent)}</td>
+              <td className="px-4 py-3 text-slate-700">{formatCurrency(tenant.monthly_rent, ownerCurrencyCode)}</td>
               <td className="px-4 py-3 text-slate-400">
                 {formatDate(tenant.lease_start_date)} - {formatDate(tenant.lease_end_date)}
               </td>
