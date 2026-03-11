@@ -30,15 +30,24 @@ export function TenantDashboardPage() {
 
     try {
       setError(null)
-      const [summaryResponse, propertyResponse, rentPaymentResponse] = await Promise.all([
+      const [summaryResponse, propertyResponse] = await Promise.all([
         api.getTenantSummary(token),
         api.getTenantProperty(token),
-        api.getTenantRentPaymentState(token),
       ])
       setSummary(summaryResponse.summary)
       setProperty(propertyResponse.property)
       setTenant(propertyResponse.tenant)
-      setRentPaymentState(rentPaymentResponse.state)
+
+      try {
+        const rentPaymentResponse = await api.getTenantRentPaymentState(token)
+        setRentPaymentState(rentPaymentResponse.state)
+      } catch (rentPaymentError) {
+        if (rentPaymentError instanceof Error && rentPaymentError.message.toLowerCase().includes('route not found')) {
+          setRentPaymentState(null)
+          return
+        }
+        throw rentPaymentError
+      }
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : 'Failed to load tenant dashboard')
     } finally {

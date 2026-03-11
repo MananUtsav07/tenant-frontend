@@ -31,7 +31,9 @@ import type {
   PublicOperationsSnapshot,
 } from '../types/api'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || 'http://localhost:8787'
+const rawApiBaseUrl = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim() ?? ''
+const normalizedApiBaseUrl = rawApiBaseUrl.split(',')[0]?.trim().replace(/\/$/, '').replace(/\/api$/, '') ?? ''
+const API_BASE_URL = normalizedApiBaseUrl || 'http://localhost:8787'
 
 type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE'
 

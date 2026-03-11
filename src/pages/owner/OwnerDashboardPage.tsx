@@ -31,12 +31,19 @@ export function OwnerDashboardPage() {
 
     try {
       setError(null)
-      const [summaryResponse, approvalsResponse] = await Promise.all([
-        api.getOwnerSummary(token),
-        api.getOwnerRentPaymentApprovals(token),
-      ])
+      const summaryResponse = await api.getOwnerSummary(token)
       setSummary(summaryResponse.summary)
-      setApprovals(approvalsResponse.approvals)
+
+      try {
+        const approvalsResponse = await api.getOwnerRentPaymentApprovals(token)
+        setApprovals(approvalsResponse.approvals)
+      } catch (approvalsError) {
+        if (approvalsError instanceof Error && approvalsError.message.toLowerCase().includes('route not found')) {
+          setApprovals([])
+          return
+        }
+        throw approvalsError
+      }
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : 'Failed to load dashboard data')
     } finally {
