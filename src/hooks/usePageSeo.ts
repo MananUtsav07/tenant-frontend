@@ -52,6 +52,53 @@ function upsertStructuredData(structuredData?: Record<string, unknown>) {
   }
 }
 
+function splitUrlCandidates(rawValue: string | undefined): string[] {
+  if (!rawValue) {
+    return []
+  }
+
+  return rawValue
+    .split(',')
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+}
+
+function normalizeAbsoluteUrl(value: string): string | null {
+  const trimmed = value.trim()
+  if (!trimmed) {
+    return null
+  }
+
+  const hasProtocol = /^[a-zA-Z][a-zA-Z\d+\-.]*:\/\//.test(trimmed)
+  const normalized = hasProtocol ? trimmed : trimmed.startsWith('localhost') ? `http://${trimmed}` : `https://${trimmed}`
+
+  try {
+    return new URL(normalized).toString()
+  } catch {
+    return null
+  }
+}
+
+function resolveSiteUrl(): string {
+  const envCandidates = splitUrlCandidates(import.meta.env.VITE_SITE_URL)
+  for (const candidate of envCandidates) {
+    const normalized = normalizeAbsoluteUrl(candidate)
+    if (normalized) {
+      return normalized
+    }
+  }
+
+  return window.location.origin
+}
+
+function toAbsoluteUrl(value: string, baseUrl: string, fallback: string): string {
+  try {
+    return new URL(value, baseUrl).toString()
+  } catch {
+    return fallback
+  }
+}
+
 export function usePageSeo({
   title,
   description,
@@ -64,8 +111,9 @@ export function usePageSeo({
   const structuredDataKey = structuredData ? JSON.stringify(structuredData) : ''
 
   useEffect(() => {
-    const siteUrl = import.meta.env.VITE_SITE_URL || window.location.origin
-    const canonicalUrl = new URL(canonicalPath ?? `${window.location.pathname}${window.location.search}`, siteUrl).toString()
+    const siteUrl = resolveSiteUrl()
+    const canonicalTarget = canonicalPath ?? `${window.location.pathname}${window.location.search}`
+    const canonicalUrl = toAbsoluteUrl(canonicalTarget, siteUrl, window.location.href)
     const renderedTitle = `${title} | ${APP_NAME}`
 
     document.title = renderedTitle
@@ -80,7 +128,7 @@ export function usePageSeo({
     upsertMeta('name', 'twitter:description', description)
 
     if (image) {
-      const imageUrl = new URL(image, siteUrl).toString()
+      const imageUrl = toAbsoluteUrl(image, siteUrl, image)
       upsertMeta('property', 'og:image', imageUrl)
       upsertMeta('name', 'twitter:image', imageUrl)
     }
