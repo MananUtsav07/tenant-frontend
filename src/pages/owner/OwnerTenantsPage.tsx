@@ -14,6 +14,25 @@ import { api } from '../../services/api'
 import type { Property, Tenant } from '../../types/api'
 import { formatCurrency, formatDate, formatDateTime, getCurrencyMarker } from '../../utils/date'
 
+function getNextDueDate(dayOfMonth: number, now = new Date()): Date {
+  const currentYear = now.getUTCFullYear()
+  const currentMonth = now.getUTCMonth()
+  const daysInCurrentMonth = new Date(Date.UTC(currentYear, currentMonth + 1, 0)).getUTCDate()
+  const safeDayCurrentMonth = Math.max(1, Math.min(dayOfMonth, daysInCurrentMonth))
+  const currentCandidate = new Date(Date.UTC(currentYear, currentMonth, safeDayCurrentMonth, 9, 0, 0, 0))
+
+  if (currentCandidate >= now) {
+    return currentCandidate
+  }
+
+  const nextMonthDate = new Date(Date.UTC(currentYear, currentMonth + 1, 1, 9, 0, 0, 0))
+  const nextYear = nextMonthDate.getUTCFullYear()
+  const nextMonth = nextMonthDate.getUTCMonth()
+  const daysInNextMonth = new Date(Date.UTC(nextYear, nextMonth + 1, 0)).getUTCDate()
+  const safeDayNextMonth = Math.max(1, Math.min(dayOfMonth, daysInNextMonth))
+  return new Date(Date.UTC(nextYear, nextMonth, safeDayNextMonth, 9, 0, 0, 0))
+}
+
 function buildEmptyTenantForm(defaultPropertyId = '') {
   return {
     property_id: defaultPropertyId,
@@ -38,6 +57,7 @@ export function OwnerTenantsPage() {
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [editingTenantId, setEditingTenantId] = useState<string | null>(null)
+  const [showTenantForm, setShowTenantForm] = useState(false)
   const [form, setForm] = useState(buildEmptyTenantForm)
   const ownerCurrencyCode = owner?.organization?.currency_code ?? 'INR'
   const ownerCurrencyMarker = getCurrencyMarker(ownerCurrencyCode)
@@ -75,6 +95,7 @@ export function OwnerTenantsPage() {
   const resetForm = () => {
     setForm(buildEmptyTenantForm(properties[0]?.id ?? ''))
     setEditingTenantId(null)
+    setShowTenantForm(false)
   }
 
   const handleCreateTenant = async (event: FormEvent) => {
@@ -111,7 +132,7 @@ export function OwnerTenantsPage() {
     }
 
     if (!Number.isInteger(dueDay) || dueDay < 1 || dueDay > 31) {
-      setError('Due day must be an integer between 1 and 31')
+      setError('Due date must be an integer between 1 and 31')
       return
     }
 
@@ -175,6 +196,7 @@ export function OwnerTenantsPage() {
   }
 
   const beginEdit = (tenant: Tenant) => {
+    setShowTenantForm(true)
     setEditingTenantId(tenant.id)
     setForm({
       property_id: tenant.property_id,
@@ -204,11 +226,35 @@ export function OwnerTenantsPage() {
         </span>
       </div>
 
-      <form
-        onSubmit={handleCreateTenant}
-        autoComplete="off"
-        className="rounded-2xl border border-slate-200 bg-white shadow-sm p-5"
-      >
+      {!showTenantForm && properties.length > 0 ? (
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900">Create Tenant</h3>
+              <p className="text-sm text-slate-500">Click below to open the full tenant form.</p>
+            </div>
+            <Button
+              type="button"
+              onClick={() => {
+                setShowTenantForm(true)
+                setEditingTenantId(null)
+                setForm(buildEmptyTenantForm(properties[0]?.id ?? ''))
+              }}
+              variant="secondary"
+              iconLeft={<UserRoundPlus className="h-4 w-4" />}
+            >
+              Add Tenant
+            </Button>
+          </div>
+        </div>
+      ) : null}
+
+      {showTenantForm ? (
+        <form
+          onSubmit={handleCreateTenant}
+          autoComplete="off"
+          className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        >
         <input
           type="text"
           name="prevent_username"
@@ -297,7 +343,7 @@ export function OwnerTenantsPage() {
             </div>
           </label>
           <FormInput
-            label="Due Day"
+            label="Due Date"
             type="number"
             name="tenant_due_day"
             min={1}
@@ -363,7 +409,7 @@ export function OwnerTenantsPage() {
           </label>
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mt-4 flex flex-wrap gap-2">
           <Button
             type="submit"
             disabled={busy || properties.length === 0}
@@ -372,13 +418,17 @@ export function OwnerTenantsPage() {
           >
             {editingTenantId ? 'Save Tenant' : 'Create Tenant'}
           </Button>
-          {editingTenantId ? (
-            <Button type="button" onClick={resetForm} variant="outline" className="border-slate-300 bg-white text-slate-700">
-              Cancel Edit
+            <Button
+              type="button"
+              onClick={resetForm}
+              variant="outline"
+              className="border-slate-300 bg-white text-slate-700"
+            >
+              {editingTenantId ? 'Cancel Edit' : 'Close Form'}
             </Button>
-          ) : null}
-        </div>
-      </form>
+          </div>
+        </form>
+      ) : null}
 
       {error ? <ErrorState message={error} /> : null}
       {loading ? <LoadingState message="Loading tenant records..." rows={4} /> : null}
@@ -400,14 +450,17 @@ export function OwnerTenantsPage() {
           icon={<Users className="h-5 w-5" />}
           actionLabel="Start Tenant Form"
           onAction={() => {
-            const fullNameInput = document.querySelector<HTMLInputElement>('input[name="tenant_full_name"]')
-            fullNameInput?.focus()
+            setShowTenantForm(true)
+            setTimeout(() => {
+              const fullNameInput = document.querySelector<HTMLInputElement>('input[name="tenant_full_name"]')
+              fullNameInput?.focus()
+            }, 0)
           }}
         />
       ) : null}
 
       {!loading && tenants.length > 0 ? (
-        <DataTable headers={['Name', 'Access ID', 'Rent', 'Lease', 'Status', 'Created', 'Actions']}>
+        <DataTable headers={['Name', 'Access ID', 'Rent', 'Due Date', 'Lease', 'Status', 'Created', 'Actions']}>
           {tenants.map((tenant) => (
             <tr key={tenant.id}>
               <td className="px-4 py-3">
@@ -416,6 +469,7 @@ export function OwnerTenantsPage() {
               </td>
               <td className="px-4 py-3 text-slate-700">{tenant.tenant_access_id}</td>
               <td className="px-4 py-3 text-slate-700">{formatCurrency(tenant.monthly_rent, ownerCurrencyCode)}</td>
+              <td className="px-4 py-3 text-slate-700">{formatDate(getNextDueDate(tenant.payment_due_day).toISOString())}</td>
               <td className="px-4 py-3 text-slate-400">
                 {formatDate(tenant.lease_start_date)} - {formatDate(tenant.lease_end_date)}
               </td>

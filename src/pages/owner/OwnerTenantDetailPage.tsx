@@ -14,6 +14,25 @@ import { api } from '../../services/api'
 import type { TenantTicket } from '../../types/api'
 import { formatCurrency, formatDate, formatDateTime } from '../../utils/date'
 
+function getNextDueDate(dayOfMonth: number, now = new Date()): Date {
+  const currentYear = now.getUTCFullYear()
+  const currentMonth = now.getUTCMonth()
+  const daysInCurrentMonth = new Date(Date.UTC(currentYear, currentMonth + 1, 0)).getUTCDate()
+  const safeDayCurrentMonth = Math.max(1, Math.min(dayOfMonth, daysInCurrentMonth))
+  const currentCandidate = new Date(Date.UTC(currentYear, currentMonth, safeDayCurrentMonth, 9, 0, 0, 0))
+
+  if (currentCandidate >= now) {
+    return currentCandidate
+  }
+
+  const nextMonthDate = new Date(Date.UTC(currentYear, currentMonth + 1, 1, 9, 0, 0, 0))
+  const nextYear = nextMonthDate.getUTCFullYear()
+  const nextMonth = nextMonthDate.getUTCMonth()
+  const daysInNextMonth = new Date(Date.UTC(nextYear, nextMonth + 1, 0)).getUTCDate()
+  const safeDayNextMonth = Math.max(1, Math.min(dayOfMonth, daysInNextMonth))
+  return new Date(Date.UTC(nextYear, nextMonth, safeDayNextMonth, 9, 0, 0, 0))
+}
+
 type TenantDetailResponse = {
   tenant: {
     id: string
@@ -121,6 +140,10 @@ export function OwnerTenantDetailPage() {
               <div>
                 <p className="text-xs uppercase text-slate-400">Payment Status</p>
                 <StatusBadge status={detail.tenant.payment_status} />
+              </div>
+              <div>
+                <p className="text-xs uppercase text-slate-400">Due Date</p>
+                <p className="text-sm text-slate-800">{formatDate(getNextDueDate(detail.tenant.payment_due_day).toISOString())}</p>
               </div>
               <div>
                 <p className="text-xs uppercase text-slate-400">Lease</p>

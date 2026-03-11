@@ -104,7 +104,7 @@ export function TenantDashboardPage() {
             value={formatCurrency(summary.monthly_rent, authTenant?.organization?.currency_code)}
             icon={<CircleDollarSign className="h-4 w-4" />}
           />
-          <SummaryCard label="Due Day" value={summary.payment_due_day} icon={<CalendarClock className="h-4 w-4" />} />
+          <SummaryCard label="Due Date" value={formatDate(summary.next_due_date)} icon={<CalendarClock className="h-4 w-4" />} />
         </div>
       ) : null}
 
