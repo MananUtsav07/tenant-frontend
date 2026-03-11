@@ -19,12 +19,14 @@ import type {
   OwnerAuthPayload,
   OwnerAiSettingsResponse,
   OwnerNotification,
+  OwnerRentPaymentApproval,
   OwnerSummary,
   Property,
   Tenant,
   TenantAuthPayload,
   TenantOwnerContact,
   TenantSummary,
+  TenantRentPaymentState,
   TenantTicket,
   PublicOperationsSnapshot,
 } from '../types/api'
@@ -172,6 +174,23 @@ export const api = {
 
   getOwnerSummary: (token: string) => request<{ ok: true; summary: OwnerSummary }>('/api/owners/dashboard-summary', { token }),
 
+  getOwnerRentPaymentApprovals: (token: string) =>
+    request<{ ok: true; approvals: OwnerRentPaymentApproval[] }>('/api/owners/rent-payment-approvals', { token }),
+
+  reviewOwnerRentPaymentApproval: (
+    token: string,
+    approvalId: string,
+    body: {
+      action: 'approve' | 'reject'
+      rejection_reason?: string
+    },
+  ) =>
+    request<{ ok: true; approval: OwnerRentPaymentApproval }>(`/api/owners/rent-payment-approvals/${approvalId}`, {
+      method: 'PATCH',
+      token,
+      body,
+    }),
+
   getOwnerAiSettings: (token: string) =>
     request<OwnerAiSettingsResponse>('/api/owner/ai-settings', { token }),
 
@@ -272,6 +291,15 @@ export const api = {
 
   getTenantSummary: (token: string) =>
     request<{ ok: true; summary: TenantSummary }>('/api/tenants/dashboard-summary', { token }),
+
+  getTenantRentPaymentState: (token: string) =>
+    request<{ ok: true; state: TenantRentPaymentState }>('/api/tenants/rent-payment-state', { token }),
+
+  markTenantRentPaid: (token: string) =>
+    request<{ ok: true; state: TenantRentPaymentState; approval: OwnerRentPaymentApproval }>(
+      '/api/tenants/rent-payment-mark-paid',
+      { method: 'POST', token, body: {} },
+    ),
 
   getTenantProperty: (token: string) =>
     request<{ ok: true; property: Property | null; tenant: Tenant }>('/api/tenants/property', { token }),

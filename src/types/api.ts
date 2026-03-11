@@ -84,6 +84,7 @@ export type OwnerSummary = {
   overdue_rent: number
   reminders_pending: number
   unread_notifications: number
+  awaiting_approvals: number
 }
 
 export type OwnerSubscription = {
@@ -124,6 +125,50 @@ export type TenantSummary = {
   lease_start_date: string | null
   lease_end_date: string | null
   next_due_date: string
+}
+
+export type RentPaymentApprovalStatus = 'awaiting_owner_approval' | 'approved' | 'rejected'
+
+export type TenantRentPaymentState = {
+  is_visible: boolean
+  can_mark_paid: boolean
+  status: RentPaymentApprovalStatus | 'eligible' | 'not_available'
+  cycle_year: number
+  cycle_month: number
+  due_date: string
+  window_starts_at: string
+  amount_paid: number
+  currency_code: string
+  rejection_reason: string | null
+  approval_id: string | null
+  requested_at: string | null
+  reviewed_at: string | null
+}
+
+export type OwnerRentPaymentApproval = {
+  id: string
+  organization_id: string
+  owner_id: string
+  tenant_id: string
+  property_id: string
+  cycle_year: number
+  cycle_month: number
+  due_date: string
+  amount_paid: number
+  status: RentPaymentApprovalStatus
+  rejection_reason: string | null
+  reviewed_by_owner_id: string | null
+  reviewed_at: string | null
+  created_at: string
+  updated_at: string
+  tenants?: {
+    full_name: string
+    tenant_access_id: string
+  } | null
+  properties?: {
+    property_name: string
+    unit_number: string | null
+  } | null
 }
 
 export type TenantOwnerContact = {

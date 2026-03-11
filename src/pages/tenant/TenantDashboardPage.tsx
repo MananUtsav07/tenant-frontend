@@ -1,6 +1,7 @@
-﻿import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { BellRing, CalendarClock, CircleDollarSign, Home, LifeBuoy } from 'lucide-react'
 
+import { Button } from '../../components/common/Button'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
@@ -9,7 +10,7 @@ import { SummaryCard } from '../../components/common/SummaryCard'
 import { StatusBadge } from '../../components/common/StatusBadge'
 import { useTenantAuth } from '../../hooks/useTenantAuth'
 import { api } from '../../services/api'
-import type { Property, Tenant, TenantSummary } from '../../types/api'
+import type { Property, Tenant, TenantRentPaymentState, TenantSummary } from '../../types/api'
 import { formatCurrency, formatDate } from '../../utils/date'
 
 export function TenantDashboardPage() {
@@ -17,33 +18,54 @@ export function TenantDashboardPage() {
   const [summary, setSummary] = useState<TenantSummary | null>(null)
   const [property, setProperty] = useState<Property | null>(null)
   const [tenant, setTenant] = useState<Tenant | null>(null)
+  const [rentPaymentState, setRentPaymentState] = useState<TenantRentPaymentState | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [markingPaid, setMarkingPaid] = useState(false)
 
-  useEffect(() => {
-    const load = async () => {
-      if (!token) {
-        return
-      }
-
-      try {
-        setError(null)
-        const [summaryResponse, propertyResponse] = await Promise.all([
-          api.getTenantSummary(token),
-          api.getTenantProperty(token),
-        ])
-        setSummary(summaryResponse.summary)
-        setProperty(propertyResponse.property)
-        setTenant(propertyResponse.tenant)
-      } catch (loadError) {
-        setError(loadError instanceof Error ? loadError.message : 'Failed to load tenant dashboard')
-      } finally {
-        setLoading(false)
-      }
+  const loadDashboard = useCallback(async () => {
+    if (!token) {
+      return
     }
 
-    void load()
+    try {
+      setError(null)
+      const [summaryResponse, propertyResponse, rentPaymentResponse] = await Promise.all([
+        api.getTenantSummary(token),
+        api.getTenantProperty(token),
+        api.getTenantRentPaymentState(token),
+      ])
+      setSummary(summaryResponse.summary)
+      setProperty(propertyResponse.property)
+      setTenant(propertyResponse.tenant)
+      setRentPaymentState(rentPaymentResponse.state)
+    } catch (loadError) {
+      setError(loadError instanceof Error ? loadError.message : 'Failed to load tenant dashboard')
+    } finally {
+      setLoading(false)
+    }
   }, [token])
+
+  useEffect(() => {
+    void loadDashboard()
+  }, [loadDashboard])
+
+  const handleMarkRentPaid = async () => {
+    if (!token) {
+      return
+    }
+
+    try {
+      setMarkingPaid(true)
+      setError(null)
+      await api.markTenantRentPaid(token)
+      await loadDashboard()
+    } catch (markError) {
+      setError(markError instanceof Error ? markError.message : 'Failed to mark rent as paid')
+    } finally {
+      setMarkingPaid(false)
+    }
+  }
 
   return (
     <section className="space-y-6">
@@ -58,7 +80,7 @@ export function TenantDashboardPage() {
       </div>
 
       {error ? <ErrorState message={error} /> : null}
-      {loading ? <LoadingState message="Loading tenant summary..." rows={4} /> : null}
+      {loading ? <LoadingState message="Loading tenant summary..." rows={5} /> : null}
 
       {!loading && summary ? (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -85,8 +107,68 @@ export function TenantDashboardPage() {
         />
       ) : null}
 
+      {!loading && rentPaymentState?.is_visible ? (
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h3 className="text-lg font-semibold text-slate-900">Rent Payment Verification</h3>
+          <p className="mt-1 text-sm text-slate-500">
+            Available from 7 days before due date and remains until approved by your owner.
+          </p>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            <div>
+              <p className="text-xs uppercase text-slate-400">Due Date</p>
+              <p className="text-sm font-medium text-slate-800">{formatDate(rentPaymentState.due_date)}</p>
+            </div>
+            <div>
+              <p className="text-xs uppercase text-slate-400">Amount</p>
+              <p className="text-sm font-medium text-slate-800">
+                {formatCurrency(rentPaymentState.amount_paid, rentPaymentState.currency_code)}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs uppercase text-slate-400">Status</p>
+              {rentPaymentState.status === 'eligible' ? (
+                <StatusBadge status="pending" />
+              ) : (
+                <StatusBadge status={rentPaymentState.status} />
+              )}
+            </div>
+          </div>
+
+          {rentPaymentState.status === 'eligible' ? (
+            <div className="mt-4">
+              <Button type="button" variant="secondary" disabled={markingPaid} onClick={() => void handleMarkRentPaid()}>
+                {markingPaid ? 'Submitting...' : 'Mark Rent as Paid'}
+              </Button>
+            </div>
+          ) : null}
+
+          {rentPaymentState.status === 'awaiting_owner_approval' ? (
+            <p className="mt-4 text-sm font-medium text-violet-700">Waiting for owner verification.</p>
+          ) : null}
+
+          {rentPaymentState.status === 'rejected' ? (
+            <div className="mt-4 space-y-3">
+              <p className="text-sm font-medium text-rose-700">Owner rejected this confirmation.</p>
+              {rentPaymentState.rejection_reason ? (
+                <p className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
+                  Reason: {rentPaymentState.rejection_reason}
+                </p>
+              ) : null}
+              <Button type="button" variant="secondary" disabled={markingPaid} onClick={() => void handleMarkRentPaid()}>
+                {markingPaid ? 'Resubmitting...' : 'Resubmit Mark as Paid'}
+              </Button>
+            </div>
+          ) : null}
+
+          {rentPaymentState.status === 'approved' ? (
+            <p className="mt-4 text-sm font-medium text-emerald-700">Rent payment approved for this cycle.</p>
+          ) : null}
+        </div>
+      ) : null}
+
       {!loading && tenant ? (
-        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-5">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <h3 className="text-lg font-semibold text-slate-900">Lease & Payment Details</h3>
           <div className="mt-3 grid gap-3 md:grid-cols-3">
             <div>
@@ -110,7 +192,7 @@ export function TenantDashboardPage() {
       ) : null}
 
       {!loading && property ? (
-        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-5">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <h3 className="text-lg font-semibold text-slate-900">Property</h3>
           <p className="mt-2 inline-flex items-center gap-2 text-sm text-slate-700">
             <Home className="h-4 w-4 text-blue-600" />
@@ -123,8 +205,3 @@ export function TenantDashboardPage() {
     </section>
   )
 }
-
-
-
-
-
