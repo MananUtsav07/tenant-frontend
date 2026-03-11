@@ -1,13 +1,15 @@
-﻿import { useState, type FormEvent } from 'react'
+import { useMemo, useState, type FormEvent } from 'react'
 import { motion } from 'framer-motion'
 import { Building2, UserRound, UserRoundPlus } from 'lucide-react'
+import countryList from 'react-select-country-list'
+import Select, { type StylesConfig } from 'react-select'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 
 import { Button } from '../../components/common/Button'
 import { ErrorState } from '../../components/common/ErrorState'
 import { FormInput } from '../../components/common/FormInput'
 import { SectionContainer } from '../../components/common/SectionContainer'
-import { otherCountryOptions, topCountryOptions } from '../../constants/countryCurrency'
+import { allCountryOptions } from '../../constants/countryCurrency'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { usePageSeo } from '../../hooks/usePageSeo'
 import { ROUTES } from '../../routes/constants'
@@ -15,6 +17,55 @@ import { trackEvent } from '../../utils/analytics'
 import { revealUp, useMotionVariants, viewportOnce } from '../../utils/motion'
 
 type Mode = 'login' | 'register'
+type CountrySelectOption = {
+  value: string
+  label: string
+  isSupported: boolean
+}
+
+const countrySelectStyles: StylesConfig<CountrySelectOption, false> = {
+  control: (baseStyles, state) => ({
+    ...baseStyles,
+    minHeight: '44px',
+    borderRadius: '0.75rem',
+    borderColor: state.isFocused ? '#60a5fa' : '#c6d3e6',
+    boxShadow: state.isFocused ? '0 0 0 3px rgba(147, 197, 253, 0.42)' : 'none',
+    backgroundColor: '#ffffff',
+    '&:hover': {
+      borderColor: '#adc2e2',
+    },
+  }),
+  placeholder: (baseStyles) => ({
+    ...baseStyles,
+    color: '#64748b',
+  }),
+  input: (baseStyles) => ({
+    ...baseStyles,
+    color: '#0f172a',
+  }),
+  singleValue: (baseStyles) => ({
+    ...baseStyles,
+    color: '#0f172a',
+  }),
+  menu: (baseStyles) => ({
+    ...baseStyles,
+    borderRadius: '0.75rem',
+    border: '1px solid #d9e2f0',
+    boxShadow: '0 12px 28px -18px rgba(15, 23, 42, 0.35)',
+    overflow: 'hidden',
+  }),
+  option: (baseStyles, state) => ({
+    ...baseStyles,
+    fontSize: '0.925rem',
+    backgroundColor: state.isFocused ? '#f1f5f9' : '#ffffff',
+    color: state.isDisabled ? '#94a3b8' : '#0f172a',
+    cursor: state.isDisabled ? 'not-allowed' : 'pointer',
+  }),
+  indicatorSeparator: (baseStyles) => ({
+    ...baseStyles,
+    backgroundColor: '#d9e2f0',
+  }),
+}
 
 export function OwnerLoginPage() {
   const navigate = useNavigate()
@@ -34,6 +85,27 @@ export function OwnerLoginPage() {
     country_code: '',
   })
   const revealVariants = useMotionVariants(revealUp)
+  const supportedCountryCodes = useMemo(() => new Set(allCountryOptions.map((option) => option.code)), [])
+  const countryOptions = useMemo<CountrySelectOption[]>(() => {
+    const options = countryList()
+      .getData()
+      .map((option) => ({
+        value: option.value,
+        label: option.label,
+        isSupported: supportedCountryCodes.has(option.value),
+      }))
+
+    const supportedOptions = options.filter((option) => option.isSupported)
+    const unsupportedOptions = options
+      .filter((option) => !option.isSupported)
+      .sort((left, right) => left.label.localeCompare(right.label))
+
+    return [...supportedOptions, ...unsupportedOptions]
+  }, [supportedCountryCodes])
+  const selectedCountry = useMemo(
+    () => countryOptions.find((option) => option.value === form.country_code) ?? null,
+    [countryOptions, form.country_code],
+  )
 
   usePageSeo({
     title: 'Owner Login',
@@ -60,6 +132,12 @@ export function OwnerLoginPage() {
           user_type: 'owner',
         })
       } else {
+        if (!form.country_code) {
+          setError('Please select the country where your properties are located.')
+          setBusy(false)
+          return
+        }
+
         await register({
           email: form.email,
           password: form.password,
@@ -177,33 +255,24 @@ export function OwnerLoginPage() {
 
               <label className="block space-y-2">
                 <span className="text-sm font-medium text-slate-600">Country where your properties are located</span>
-                <select
+                <Select<CountrySelectOption, false>
+                  inputId="owner_country_code"
                   name="owner_country_code"
-                  className="tf-field"
-                  value={form.country_code}
-                  onChange={(event) => updateField('country_code', event.target.value)}
-                  required
-                >
-                  <option value="" disabled>
-                    Select country
-                  </option>
-                  <optgroup label="Top Countries">
-                    {topCountryOptions.map((option) => (
-                      <option key={option.code} value={option.code}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </optgroup>
-                  <optgroup label="Others">
-                    {otherCountryOptions.map((option) => (
-                      <option key={option.code} value={option.code}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </optgroup>
-                </select>
+                  options={countryOptions}
+                  value={selectedCountry}
+                  onChange={(option) => updateField('country_code', option?.value ?? '')}
+                  placeholder="Type to search country..."
+                  noOptionsMessage={() => 'No country found'}
+                  isSearchable
+                  styles={countrySelectStyles}
+                  isOptionDisabled={(option) => !option.isSupported}
+                  formatOptionLabel={(option) =>
+                    option.isSupported ? option.label : `${option.label} (Coming soon)`
+                  }
+                />
                 <span className="text-xs text-slate-500">
-                  Used to set your rent currency now and regional pricing later.
+                  Used to set your rent currency now and regional pricing later. Countries marked "Coming soon" are
+                  listed for visibility and cannot be selected yet.
                 </span>
               </label>
             </>
@@ -232,5 +301,3 @@ export function OwnerLoginPage() {
     </SectionContainer>
   )
 }
-
-
