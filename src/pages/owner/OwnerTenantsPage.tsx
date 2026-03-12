@@ -42,11 +42,24 @@ function buildEmptyTenantForm(defaultPropertyId = '') {
     password: '',
     lease_start_date: '',
     lease_end_date: '',
-    monthly_rent: '0',
+    monthly_rent: '',
     payment_due_day: '1',
     payment_status: 'pending' as Tenant['payment_status'],
     status: 'active' as Tenant['status'],
   }
+}
+
+function sanitizeRentInput(value: string, currencyMarker: string): string {
+  const withoutMarker = value.replace(currencyMarker, '')
+  const numeric = withoutMarker.replace(/[^\d.]/g, '')
+  const [wholePart, ...decimalParts] = numeric.split('.')
+  const decimalPart = decimalParts.join('').slice(0, 2)
+
+  if (!wholePart && !decimalPart) {
+    return ''
+  }
+
+  return decimalPart.length > 0 ? `${wholePart || '0'}.${decimalPart}` : wholePart
 }
 
 export function OwnerTenantsPage() {
@@ -123,6 +136,11 @@ export function OwnerTenantsPage() {
 
     if (!editingTenantId && trimmedPassword.length < 8) {
       setError('Tenant password must be at least 8 characters')
+      return
+    }
+
+    if (form.monthly_rent.trim().length === 0) {
+      setError('Monthly rent is required')
       return
     }
 
@@ -328,19 +346,20 @@ export function OwnerTenantsPage() {
           />
           <label className="block space-y-2">
             <span className="text-sm font-medium text-slate-600">Monthly Rent</span>
-            <div className="relative">
-              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-500">
-                {ownerCurrencyMarker}
-              </span>
-              <input
-                type="number"
-                name="tenant_monthly_rent"
-                className="tf-field pl-8"
-                value={form.monthly_rent}
-                onChange={(event) => setForm((current) => ({ ...current, monthly_rent: event.target.value }))}
-                required
-              />
-            </div>
+            <input
+              type="text"
+              inputMode="decimal"
+              name="tenant_monthly_rent"
+              className="tf-field"
+              value={`${ownerCurrencyMarker}${form.monthly_rent}`}
+              onChange={(event) =>
+                setForm((current) => ({
+                  ...current,
+                  monthly_rent: sanitizeRentInput(event.target.value, ownerCurrencyMarker),
+                }))
+              }
+              required
+            />
           </label>
           <FormInput
             label="Due Date"
