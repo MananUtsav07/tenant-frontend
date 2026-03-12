@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { AdminPagination } from '../../components/admin/AdminPagination'
@@ -52,7 +52,7 @@ export function AdminTicketsPage() {
           }),
           api.getAdminOrganizations(token, {
             page: 1,
-            page_size: 200,
+            page_size: 100,
             sort_by: 'name',
             sort_order: 'asc',
           }),
@@ -154,5 +154,6 @@ export function AdminTicketsPage() {
     </section>
   )
 }
+
 
 

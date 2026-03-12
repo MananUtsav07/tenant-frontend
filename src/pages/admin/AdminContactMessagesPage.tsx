@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { AdminPagination } from '../../components/admin/AdminPagination'
 import { AdminListToolbar } from '../../components/admin/AdminListToolbar'
@@ -49,7 +49,7 @@ export function AdminContactMessagesPage() {
           }),
           api.getAdminOrganizations(token, {
             page: 1,
-            page_size: 200,
+            page_size: 100,
             sort_by: 'name',
             sort_order: 'asc',
           }),
@@ -144,5 +144,6 @@ export function AdminContactMessagesPage() {
     </section>
   )
 }
+
 
 
