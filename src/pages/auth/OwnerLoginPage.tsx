@@ -21,6 +21,7 @@ type CountrySelectOption = {
   value: string
   label: string
   isSupported: boolean
+  flag: string
 }
 
 const countrySelectStyles: StylesConfig<CountrySelectOption, false> = {
@@ -67,6 +68,15 @@ const countrySelectStyles: StylesConfig<CountrySelectOption, false> = {
   }),
 }
 
+function countryCodeToFlag(countryCode: string): string {
+  const normalizedCode = countryCode.trim().toUpperCase()
+  if (!/^[A-Z]{2}$/.test(normalizedCode)) {
+    return '🌐'
+  }
+
+  return String.fromCodePoint(...normalizedCode.split('').map((character) => 127397 + character.charCodeAt(0)))
+}
+
 export function OwnerLoginPage() {
   const navigate = useNavigate()
   const { owner, login, register } = useOwnerAuth()
@@ -93,6 +103,7 @@ export function OwnerLoginPage() {
         value: option.value,
         label: option.label,
         isSupported: supportedCountryCodes.has(option.value),
+        flag: countryCodeToFlag(option.value),
       }))
 
     const supportedOptions = options.filter((option) => option.isSupported)
@@ -266,9 +277,14 @@ export function OwnerLoginPage() {
                   isSearchable
                   styles={countrySelectStyles}
                   isOptionDisabled={(option) => !option.isSupported}
-                  formatOptionLabel={(option) =>
-                    option.isSupported ? option.label : `${option.label} (Coming soon)`
-                  }
+                  formatOptionLabel={(option) => (
+                    <span className="flex items-center gap-2">
+                      <span aria-hidden="true" className="text-base leading-none">
+                        {option.flag}
+                      </span>
+                      <span>{option.isSupported ? option.label : `${option.label} (Coming soon)`}</span>
+                    </span>
+                  )}
                 />
                 <span className="text-xs text-slate-500">
                   Used to set your rent currency now and regional pricing later. Countries marked "Coming soon" are
