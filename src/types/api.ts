@@ -61,6 +61,51 @@ export type TenantTicket = {
   updated_at: string
 }
 
+export type SupportTicketMessage = {
+  id: string
+  ticket_id: string
+  organization_id: string
+  sender_role: 'tenant' | 'owner' | 'admin' | 'system'
+  sender_owner_id: string | null
+  sender_tenant_id: string | null
+  sender_admin_id: string | null
+  message: string
+  message_type: 'initial_message' | 'reply' | 'closing_note' | 'system'
+  created_at: string
+  sender_display_name: string
+}
+
+export type SupportTicketDetail = TenantTicket & {
+  tenants?: {
+    id: string
+    full_name: string
+    tenant_access_id: string
+    email?: string | null
+    properties?: {
+      id: string
+      property_name: string
+      unit_number: string | null
+    } | null
+  } | null
+  owners?: {
+    id: string
+    full_name: string | null
+    company_name: string | null
+    email: string
+    support_email?: string | null
+  } | null
+  organizations?: {
+    id: string
+    name: string
+    slug: string
+  } | null
+}
+
+export type SupportTicketThread = {
+  ticket: SupportTicketDetail
+  messages: SupportTicketMessage[]
+}
+
 export type OwnerNotification = {
   id: string
   organization_id: string

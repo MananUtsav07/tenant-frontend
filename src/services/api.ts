@@ -23,6 +23,7 @@ import type {
   OwnerRentPaymentApproval,
   OwnerSummary,
   Property,
+  SupportTicketThread,
   Tenant,
   TenantAuthPayload,
   TenantOwnerContact,
@@ -281,11 +282,25 @@ export const api = {
 
   getOwnerTickets: (token: string) => request<{ ok: true; tickets: TenantTicket[] }>('/api/owners/tickets', { token }),
 
-  updateOwnerTicket: (token: string, ticketId: string, status: TenantTicket['status']) =>
+  getOwnerTicketDetail: (token: string, ticketId: string) =>
+    request<{ ok: true; thread: SupportTicketThread }>(`/api/owners/tickets/${ticketId}`, { token }),
+
+  replyOwnerTicket: (token: string, ticketId: string, body: { message: string }) =>
+    request<{ ok: true; message: SupportTicketThread['messages'][number] }>(`/api/owners/tickets/${ticketId}/replies`, {
+      method: 'POST',
+      token,
+      body,
+    }),
+
+  updateOwnerTicket: (
+    token: string,
+    ticketId: string,
+    body: { status: TenantTicket['status']; closing_message?: string },
+  ) =>
     request<{ ok: true; ticket: TenantTicket }>(`/api/owners/tickets/${ticketId}`, {
       method: 'PATCH',
       token,
-      body: { status },
+      body,
     }),
 
   getOwnerNotifications: (token: string) =>
@@ -331,8 +346,18 @@ export const api = {
 
   getTenantTickets: (token: string) => request<{ ok: true; tickets: TenantTicket[] }>('/api/tenants/tickets', { token }),
 
+  getTenantTicketDetail: (token: string, ticketId: string) =>
+    request<{ ok: true; thread: SupportTicketThread }>(`/api/tenants/tickets/${ticketId}`, { token }),
+
   createTenantTicket: (token: string, body: { subject: string; message: string }) =>
     request<{ ok: true; ticket: TenantTicket }>('/api/tenants/tickets', { method: 'POST', token, body }),
+
+  replyTenantTicket: (token: string, ticketId: string, body: { message: string }) =>
+    request<{ ok: true; message: SupportTicketThread['messages'][number] }>(`/api/tenants/tickets/${ticketId}/replies`, {
+      method: 'POST',
+      token,
+      body,
+    }),
 
   getTenantOwnerContact: (token: string) =>
     request<{ ok: true; owner: TenantOwnerContact }>('/api/tenants/owner-contact', { token }),
@@ -366,6 +391,27 @@ export const api = {
 
   getAdminTickets: (token: string, query: ListQueryInput) =>
     request<AdminListResponse<AdminTicketRow>>(`/api/admin/tickets${toQueryString(query)}`, { token }),
+
+  getAdminTicketDetail: (token: string, ticketId: string) =>
+    request<{ ok: true; thread: SupportTicketThread }>(`/api/admin/tickets/${ticketId}`, { token }),
+
+  replyAdminTicket: (token: string, ticketId: string, body: { message: string }) =>
+    request<{ ok: true; message: SupportTicketThread['messages'][number] }>(`/api/admin/tickets/${ticketId}/replies`, {
+      method: 'POST',
+      token,
+      body,
+    }),
+
+  updateAdminTicket: (
+    token: string,
+    ticketId: string,
+    body: { status: TenantTicket['status']; closing_message?: string },
+  ) =>
+    request<{ ok: true; ticket: TenantTicket }>(`/api/admin/tickets/${ticketId}`, {
+      method: 'PATCH',
+      token,
+      body,
+    }),
 
   getAdminContactMessages: (token: string, query: ListQueryInput) =>
     request<AdminListResponse<ContactMessage>>(`/api/admin/contact-messages${toQueryString(query)}`, { token }),
