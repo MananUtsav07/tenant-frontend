@@ -28,6 +28,7 @@ import type {
   TenantSummary,
   TenantRentPaymentState,
   TenantTicket,
+  TelegramOnboardingState,
   PublicOperationsSnapshot,
 } from '../types/api'
 
@@ -280,6 +281,12 @@ export const api = {
   markNotificationRead: (token: string, notificationId: string) =>
     request<{ ok: true }>(`/api/owners/notifications/${notificationId}/read`, { method: 'PATCH', token }),
 
+  getOwnerTelegramOnboarding: (token: string) =>
+    request<{ ok: true; onboarding: TelegramOnboardingState }>('/api/owners/telegram/onboarding', { token }),
+
+  disconnectOwnerTelegram: (token: string) =>
+    request<{ ok: true; disconnected: boolean }>('/api/owners/telegram/disconnect', { method: 'POST', token, body: {} }),
+
   processOwnerReminders: (token: string) =>
     request<{
       ok: true
@@ -313,6 +320,12 @@ export const api = {
 
   getTenantOwnerContact: (token: string) =>
     request<{ ok: true; owner: TenantOwnerContact }>('/api/tenants/owner-contact', { token }),
+
+  getTenantTelegramOnboarding: (token: string) =>
+    request<{ ok: true; onboarding: TelegramOnboardingState }>('/api/tenants/telegram/onboarding', { token }),
+
+  disconnectTenantTelegram: (token: string) =>
+    request<{ ok: true; disconnected: boolean }>('/api/tenants/telegram/disconnect', { method: 'POST', token, body: {} }),
 
   getAdminDashboardSummary: (token: string) =>
     request<{ ok: true; summary: AdminDashboardSummary }>('/api/admin/dashboard-summary', { token }),
