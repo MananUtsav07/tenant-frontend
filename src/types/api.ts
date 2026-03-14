@@ -200,6 +200,11 @@ export type OwnerAuthPayload = {
 
 export type ApiSuccess<T> = T & { ok: true }
 
+export type ApiMessageResponse = {
+  ok: true
+  message: string
+}
+
 export type ContactMessageReceipt = {
   id: string
   created_at: string

@@ -282,39 +282,155 @@ a {
   pointer-events: none;
 }
 
+.ph-form-panel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(83, 88, 100, 0.48);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(240, 163, 35, 0.08), transparent 26%),
+    linear-gradient(180deg, rgba(19, 24, 38, 0.96), rgba(11, 15, 27, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 28px 72px -56px rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(18px);
+}
+
+.ph-form-toolbar {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(83, 88, 100, 0.42);
+  background:
+    linear-gradient(180deg, rgba(18, 24, 38, 0.94), rgba(11, 16, 28, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 24px 56px -44px rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(16px);
+}
+
 .tf-panel-inset {
   border: 1px solid rgba(83, 88, 100, 0.44);
   background: rgba(255, 255, 255, 0.03);
   border-radius: 1rem;
 }
 
+.ph-form-control,
+.ph-form-select,
+.ph-form-textarea,
 .tf-field {
   width: 100%;
-  border-radius: 0.95rem;
-  border: 1px solid var(--ph-border);
-  background: rgba(11, 22, 51, 0.52);
+  border: 1px solid rgba(83, 88, 100, 0.48);
+  border-radius: 1.15rem;
+  background:
+    linear-gradient(180deg, rgba(12, 19, 34, 0.9), rgba(10, 14, 25, 0.98));
   color: var(--ph-text);
-  padding: 0.7rem 0.9rem;
+  min-height: 3.5rem;
+  padding: 0.95rem 1rem;
   outline: none;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 18px 36px -28px rgba(0, 0, 0, 0.78);
+  appearance: none;
+  -webkit-appearance: none;
+  color-scheme: dark;
   transition:
     border-color 160ms ease,
     box-shadow 160ms ease,
-    background-color 160ms ease;
+    background-color 160ms ease,
+    transform 160ms ease;
 }
 
+.ph-form-textarea,
+textarea.tf-field {
+  min-height: 8.5rem;
+  resize: vertical;
+}
+
+.ph-form-control::placeholder,
+.ph-form-textarea::placeholder,
 .tf-field::placeholder {
   color: var(--ph-text-muted);
+  opacity: 1;
 }
 
+.ph-form-control:hover,
+.ph-form-select:hover,
+.ph-form-textarea:hover,
 .tf-field:hover {
-  border-color: rgba(151, 105, 34, 0.52);
+  border-color: rgba(151, 105, 34, 0.42);
+  background:
+    linear-gradient(180deg, rgba(13, 21, 37, 0.94), rgba(10, 14, 25, 1));
 }
 
+.ph-form-control:focus,
+.ph-form-select:focus,
+.ph-form-textarea:focus,
 .tf-field:focus {
   border-color: rgba(240, 163, 35, 0.68);
-  box-shadow: 0 0 0 3px rgba(240, 163, 35, 0.16);
-  background: rgba(11, 22, 51, 0.66);
+  box-shadow:
+    0 0 0 3px rgba(240, 163, 35, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 22px 42px -30px rgba(0, 0, 0, 0.84);
+  background:
+    linear-gradient(180deg, rgba(14, 22, 38, 0.98), rgba(10, 14, 25, 1));
+}
+
+.ph-form-control:disabled,
+.ph-form-select:disabled,
+.ph-form-textarea:disabled,
+.tf-field:disabled {
+  cursor: not-allowed;
+  border-color: rgba(83, 88, 100, 0.32);
+  color: rgba(151, 153, 158, 0.88);
+  background:
+    linear-gradient(180deg, rgba(12, 17, 28, 0.82), rgba(10, 14, 25, 0.92));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.ph-form-control::-webkit-calendar-picker-indicator,
+.ph-form-control::-webkit-time-picker-indicator,
+.tf-field::-webkit-calendar-picker-indicator,
+.tf-field::-webkit-time-picker-indicator {
+  cursor: pointer;
+  opacity: 0.78;
+  filter: invert(81%) sepia(16%) saturate(424%) hue-rotate(352deg) brightness(104%) contrast(92%);
+}
+
+.ph-form-control::-webkit-search-decoration,
+.ph-form-control::-webkit-search-cancel-button,
+.tf-field::-webkit-search-decoration,
+.tf-field::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+.ph-form-control[type='number']::-webkit-outer-spin-button,
+.ph-form-control[type='number']::-webkit-inner-spin-button,
+.tf-field[type='number']::-webkit-outer-spin-button,
+.tf-field[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.ph-form-control[type='number'],
+.tf-field[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.ph-form-select option,
+.tf-field option {
+  background: #101522;
+  color: var(--ph-text);
+}
+
+.ph-form-control:-webkit-autofill,
+.ph-form-control:-webkit-autofill:hover,
+.ph-form-control:-webkit-autofill:focus,
+.ph-form-textarea:-webkit-autofill,
+.tf-field:-webkit-autofill,
+.tf-field:-webkit-autofill:hover,
+.tf-field:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px rgba(12, 19, 34, 0.96) inset;
+  -webkit-text-fill-color: var(--ph-text);
+  caret-color: var(--ph-text);
 }
 
 .tf-title {

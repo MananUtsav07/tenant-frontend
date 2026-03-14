@@ -70,8 +70,8 @@ export function AdminContactMessagesPage() {
   return (
     <section className="space-y-4">
       <div>
-        <h2 className="text-2xl font-semibold text-slate-900">Contact Messages</h2>
-        <p className="text-sm text-slate-400">All public contact-form submissions.</p>
+        <h2 className="ph-title text-2xl font-semibold text-[var(--ph-text)]">Contact Messages</h2>
+        <p className="mt-2 text-sm text-[var(--ph-text-muted)]">All public contact-form submissions.</p>
       </div>
 
       <AdminListToolbar
@@ -118,17 +118,17 @@ export function AdminContactMessagesPage() {
           <DataTable headers={['Name', 'Organization', 'Email', 'Message', 'Date']}>
             {items.map((message) => (
               <tr key={message.id}>
-                <td className="px-4 py-3 text-slate-700">{message.name}</td>
-                <td className="px-4 py-3 text-slate-600">
+                <td className="px-4 py-3 text-[var(--ph-text)]">{message.name}</td>
+                <td className="px-4 py-3 text-[var(--ph-text-soft)]">
                   {message.organizations ? (
                     <OrganizationBadge name={message.organizations.name} slug={message.organizations.slug} />
                   ) : (
-                    <span className="text-xs text-slate-500">Public</span>
+                    <span className="text-xs text-[var(--ph-text-muted)]">Public</span>
                   )}
                 </td>
-                <td className="px-4 py-3 text-slate-600">{message.email}</td>
-                <td className="max-w-xl px-4 py-3 text-slate-600">{message.message}</td>
-                <td className="px-4 py-3 text-slate-400">{formatDateTime(message.created_at)}</td>
+                <td className="px-4 py-3 text-[var(--ph-text-soft)]">{message.email}</td>
+                <td className="max-w-xl px-4 py-3 text-[var(--ph-text-soft)]">{message.message}</td>
+                <td className="px-4 py-3 text-[var(--ph-text-muted)]">{formatDateTime(message.created_at)}</td>
               </tr>
             ))}
           </DataTable>

@@ -5,6 +5,7 @@ import { Button } from '../../components/common/Button'
 import { DataTable } from '../../components/common/DataTable'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
+import { FormInput } from '../../components/common/FormInput'
 import { LoadingState } from '../../components/common/LoadingState'
 import { OrganizationBadge } from '../../components/common/OrganizationBadge'
 import { StatusBadge } from '../../components/common/StatusBadge'
@@ -231,8 +232,11 @@ export function OwnerDashboardPage() {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex min-w-[280px] flex-col gap-2">
-                      <input
-                        className="tf-field h-9 px-3 text-sm"
+                      <FormInput
+                        label="Reject note"
+                        hideLabel
+                        wrapperClassName="gap-0"
+                        className="min-h-11 rounded-xl px-3 py-2 text-sm"
                         placeholder="Optional reject note"
                         value={rejectionNotes[approval.id] ?? ''}
                         onChange={(event) =>

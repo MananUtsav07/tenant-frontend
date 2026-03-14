@@ -1,12 +1,13 @@
-﻿import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import { LifeBuoy, Plus, TicketX } from 'lucide-react'
+import { useCallback, useEffect, useState, type FormEvent } from 'react'
 
 import { Button } from '../../components/common/Button'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
-import { FormInput } from '../../components/common/FormInput'
+import { FormInput, FormTextarea } from '../../components/common/FormInput'
 import { LoadingState } from '../../components/common/LoadingState'
 import { TicketTable } from '../../components/common/TicketTable'
+import { dashboardFormPanelClassName } from '../../components/common/formTheme'
 import { useTenantAuth } from '../../hooks/useTenantAuth'
 import { api } from '../../services/api'
 import type { TenantTicket } from '../../types/api'
@@ -63,14 +64,14 @@ export function TenantTicketsPage() {
   return (
     <section className="space-y-6">
       <div>
-        <h2 className="inline-flex items-center gap-2 text-2xl font-semibold text-slate-900">
-          <LifeBuoy className="h-6 w-6 text-blue-600" />
+        <h2 className="ph-title inline-flex items-center gap-2 text-2xl font-semibold text-[var(--ph-text)]">
+          <LifeBuoy className="h-6 w-6 text-[var(--ph-accent)]" />
           Support Tickets
         </h2>
-        <p className="text-sm text-slate-400">Raise and track support requests.</p>
+        <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Raise and track support requests.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-3 rounded-2xl border border-slate-200 bg-white shadow-sm p-5">
+      <form onSubmit={handleSubmit} className={`${dashboardFormPanelClassName} space-y-4`}>
         <FormInput
           label="Subject"
           name="tenant_ticket_subject"
@@ -79,21 +80,15 @@ export function TenantTicketsPage() {
           onChange={(event) => setSubject(event.target.value)}
           required
         />
-        <FormInput
-          as="textarea"
+        <FormTextarea
           label="Message"
           name="tenant_ticket_message"
-          rows={4}
+          rows={5}
           value={message}
           onChange={(event) => setMessage(event.target.value)}
           required
         />
-        <Button
-          type="submit"
-          disabled={busy}
-          variant="secondary"
-          iconLeft={<Plus className="h-4 w-4" />}
-        >
+        <Button type="submit" disabled={busy} variant="primary" iconLeft={<Plus className="h-4 w-4" />}>
           {busy ? 'Submitting...' : 'Raise Ticket'}
         </Button>
       </form>
@@ -118,7 +113,3 @@ export function TenantTicketsPage() {
     </section>
   )
 }
-
-
-
-

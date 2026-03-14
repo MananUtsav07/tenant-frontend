@@ -73,8 +73,8 @@ export function AdminTenantsPage() {
   return (
     <section className="space-y-4">
       <div>
-        <h2 className="text-2xl font-semibold text-slate-900">Tenants</h2>
-        <p className="text-sm text-slate-400">View all tenant accounts and payment state across owners.</p>
+        <h2 className="ph-title text-2xl font-semibold text-[var(--ph-text)]">Tenants</h2>
+        <p className="mt-2 text-sm text-[var(--ph-text-muted)]">View all tenant accounts and payment state across owners.</p>
       </div>
 
       <AdminListToolbar
@@ -123,8 +123,8 @@ export function AdminTenantsPage() {
             {items.map((tenant) => (
               <tr key={tenant.id}>
                 <td className="px-4 py-3">
-                  <p className="font-medium text-slate-900">{tenant.full_name}</p>
-                  <p className="text-xs text-slate-400">{tenant.email || tenant.owners?.email || 'No email'}</p>
+                  <p className="font-medium text-[var(--ph-text)]">{tenant.full_name}</p>
+                  <p className="text-xs text-[var(--ph-text-muted)]">{tenant.email || tenant.owners?.email || 'No email'}</p>
                 </td>
                 <td className="px-4 py-3 text-slate-600">
                   <Link
@@ -148,7 +148,7 @@ export function AdminTenantsPage() {
                     <StatusBadge status={tenant.status} />
                   </div>
                 </td>
-                <td className="px-4 py-3 text-slate-400">{formatDateTime(tenant.created_at)}</td>
+                <td className="px-4 py-3 text-[var(--ph-text-muted)]">{formatDateTime(tenant.created_at)}</td>
               </tr>
             ))}
           </DataTable>

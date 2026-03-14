@@ -3,6 +3,7 @@ import type {
   AdminAiStatus,
   AdminAuthPayload,
   AdminDashboardSummary,
+  ApiMessageResponse,
   AdminListResponse,
   AdminOwnerRow,
   AdminPropertyRow,
@@ -147,10 +148,22 @@ export const api = {
   ownerLogin: (body: { email: string; password: string }) =>
     request<OwnerAuthPayload & { ok: true }>('/api/auth/owner/login', { method: 'POST', body }),
 
+  ownerForgotPassword: (body: { email: string }) =>
+    request<ApiMessageResponse>('/api/auth/owner/forgot-password', { method: 'POST', body }),
+
+  ownerResetPassword: (body: { token: string; password: string }) =>
+    request<ApiMessageResponse>('/api/auth/owner/reset-password', { method: 'POST', body }),
+
   ownerMe: (token: string) => request<{ ok: true; owner: Owner }>('/api/auth/owner/me', { token }),
 
   tenantLogin: (body: { tenant_access_id: string; password: string; email?: string }) =>
     request<TenantAuthPayload & { ok: true }>('/api/auth/tenant/login', { method: 'POST', body }),
+
+  tenantForgotPassword: (body: { tenant_access_id: string; email: string }) =>
+    request<ApiMessageResponse>('/api/auth/tenant/forgot-password', { method: 'POST', body }),
+
+  tenantResetPassword: (body: { token: string; password: string }) =>
+    request<ApiMessageResponse>('/api/auth/tenant/reset-password', { method: 'POST', body }),
 
   tenantMe: (token: string) =>
     request<{
@@ -279,6 +292,12 @@ export const api = {
 
   markNotificationRead: (token: string, notificationId: string) =>
     request<{ ok: true }>(`/api/owners/notifications/${notificationId}/read`, { method: 'PATCH', token }),
+
+  markAllOwnerNotificationsRead: (token: string) =>
+    request<{ ok: true; updated_count: number }>('/api/owners/notifications/read-all', {
+      method: 'PATCH',
+      token,
+    }),
 
   processOwnerReminders: (token: string) =>
     request<{

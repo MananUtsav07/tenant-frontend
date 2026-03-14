@@ -19,6 +19,7 @@ type DashboardLayoutProps = {
   navItems: DashboardNavItem[]
   onLogout: () => void
   showTopNavbar?: boolean
+  headerActions?: ReactNode
 }
 
 export function DashboardLayout({
@@ -29,6 +30,7 @@ export function DashboardLayout({
   navItems,
   onLogout,
   showTopNavbar = true,
+  headerActions,
 }: DashboardLayoutProps) {
   const motionEnabled = useMotionEnabled()
 
@@ -79,6 +81,16 @@ export function DashboardLayout({
         <main className="saas-grid-bg ph-hex-bg relative min-w-0 overflow-hidden">
           <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-12 2xl:px-16">
             <div className="mx-auto w-full max-w-[1400px] py-6 lg:py-8">
+              {headerActions ? (
+                <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-[1.4rem] border border-[rgba(83,88,100,0.34)] bg-[linear-gradient(180deg,rgba(18,24,38,0.94),rgba(10,14,25,0.98))] px-4 py-3 shadow-[0_22px_48px_-36px_rgba(0,0,0,0.82)] backdrop-blur sm:px-5">
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#f1cb85]">Dashboard Header</p>
+                    <p className="mt-1 text-sm text-[var(--ph-text)]">{title}</p>
+                    <p className="text-xs text-[var(--ph-text-muted)]">{identityPrimary}</p>
+                  </div>
+                  <div className="flex items-center gap-3">{headerActions}</div>
+                </div>
+              ) : null}
               <Outlet />
             </div>
           </div>

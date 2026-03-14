@@ -78,7 +78,7 @@ export function Footer() {
           <div className="mt-4 space-y-3 text-sm text-[var(--ph-text-soft)]">
             <p className="inline-flex items-center gap-2">
               <Mail className="h-4 w-4 text-[var(--ph-accent)]" />
-              hello@prophives.com
+              support@prophives.com
             </p>
             <p className="inline-flex items-center gap-2">
               <Building2 className="h-4 w-4 text-[var(--ph-accent)]" />

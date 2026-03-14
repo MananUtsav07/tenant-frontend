@@ -72,8 +72,8 @@ export function AdminOwnersPage() {
   return (
     <section className="space-y-4">
       <div>
-        <h2 className="text-2xl font-semibold text-slate-900">Owners</h2>
-        <p className="text-sm text-slate-400">Manage and audit owner accounts across organizations.</p>
+        <h2 className="ph-title text-2xl font-semibold text-[var(--ph-text)]">Owners</h2>
+        <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Manage and audit owner accounts across organizations.</p>
       </div>
 
       <AdminListToolbar
@@ -122,8 +122,8 @@ export function AdminOwnersPage() {
             {items.map((owner) => (
               <tr key={owner.id}>
                 <td className="px-4 py-3">
-                  <p className="font-medium text-slate-900">{owner.full_name || 'Unnamed owner'}</p>
-                  <p className="text-xs text-slate-400">{owner.email}</p>
+                  <p className="font-medium text-[var(--ph-text)]">{owner.full_name || 'Unnamed owner'}</p>
+                  <p className="text-xs text-[var(--ph-text-muted)]">{owner.email}</p>
                 </td>
                 <td className="px-4 py-3 text-slate-600">
                   <Link
@@ -135,7 +135,7 @@ export function AdminOwnersPage() {
                 </td>
                 <td className="px-4 py-3 text-slate-600">{owner.company_name || '-'}</td>
                 <td className="px-4 py-3 text-slate-600">{owner.support_email || '-'}</td>
-                <td className="px-4 py-3 text-slate-400">{formatDateTime(owner.created_at)}</td>
+                <td className="px-4 py-3 text-[var(--ph-text-muted)]">{formatDateTime(owner.created_at)}</td>
               </tr>
             ))}
           </DataTable>

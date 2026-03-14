@@ -60,8 +60,8 @@ export function AdminOrganizationsPage() {
   return (
     <section className="space-y-4">
       <div>
-        <h2 className="text-2xl font-semibold text-slate-900">Organizations</h2>
-        <p className="text-sm text-slate-400">Tenant organizations onboarded to the platform.</p>
+        <h2 className="ph-title text-2xl font-semibold text-[var(--ph-text)]">Organizations</h2>
+        <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Tenant organizations onboarded to the platform.</p>
       </div>
 
       <AdminListToolbar
@@ -104,14 +104,14 @@ export function AdminOrganizationsPage() {
                   <Link to={ROUTES.adminOrganizationDetail.replace(':id', organization.id)} className="inline-flex hover:opacity-90">
                     <OrganizationBadge name={organization.name} slug={organization.slug} />
                   </Link>
-                  <p className="mt-1 text-xs text-slate-400">{organization.slug}</p>
+                  <p className="mt-1 text-xs text-[var(--ph-text-muted)]">{organization.slug}</p>
                 </td>
                 <td className="px-4 py-3 text-slate-600">{organization.plan_code || 'starter'}</td>
                 <td className="px-4 py-3 text-slate-600">{organization.counts.owners}</td>
                 <td className="px-4 py-3 text-slate-600">{organization.counts.tenants}</td>
                 <td className="px-4 py-3 text-slate-600">{organization.counts.properties}</td>
                 <td className="px-4 py-3 text-slate-600">{organization.counts.subscriptions}</td>
-                <td className="px-4 py-3 text-slate-400">{formatDateTime(organization.created_at)}</td>
+                <td className="px-4 py-3 text-[var(--ph-text-muted)]">{formatDateTime(organization.created_at)}</td>
               </tr>
             ))}
           </DataTable>

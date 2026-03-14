@@ -1,5 +1,7 @@
 import { Bell, Building2, LayoutDashboard, LifeBuoy, Sparkles, Users } from 'lucide-react'
 
+import { OwnerNotificationBell } from '../components/owner/OwnerNotificationBell'
+import { useOwnerNotifications, OwnerNotificationsProvider } from '../hooks/useOwnerNotifications'
 import { DashboardLayout } from './DashboardLayout'
 import { useOwnerAuth } from '../hooks/useOwnerAuth'
 import { ROUTES } from '../routes/constants'
@@ -13,9 +15,10 @@ const ownerLinks = [
   { to: ROUTES.ownerAiSettings, label: 'AI Settings', icon: <Sparkles className="h-4 w-4" /> },
 ]
 
-export function OwnerLayout() {
+function OwnerLayoutContent() {
   const { owner, logout } = useOwnerAuth()
   const organizationName = owner?.organization?.name || owner?.company_name || owner?.full_name || 'Organization'
+  const { unreadCount } = useOwnerNotifications()
 
   return (
     <DashboardLayout
@@ -25,6 +28,22 @@ export function OwnerLayout() {
       identitySecondary={owner?.email || undefined}
       navItems={ownerLinks}
       onLogout={logout}
+      headerActions={
+        <div className="flex items-center gap-3">
+          <div className="hidden rounded-full border border-[rgba(83,88,100,0.36)] bg-white/[0.03] px-3 py-1 text-xs text-[var(--ph-text-muted)] sm:block">
+            {unreadCount > 0 ? `${unreadCount} unread` : 'All clear'}
+          </div>
+          <OwnerNotificationBell />
+        </div>
+      }
     />
+  )
+}
+
+export function OwnerLayout() {
+  return (
+    <OwnerNotificationsProvider>
+      <OwnerLayoutContent />
+    </OwnerNotificationsProvider>
   )
 }

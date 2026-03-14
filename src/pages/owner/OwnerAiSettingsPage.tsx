@@ -1,49 +1,20 @@
-﻿import { AlertTriangle, Save, Sparkles } from 'lucide-react'
+import { AlertTriangle, Save, Sparkles } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 
 import { Button } from '../../components/common/Button'
 import { ErrorState } from '../../components/common/ErrorState'
+import { FormInput } from '../../components/common/FormInput'
+import { FormToggle } from '../../components/common/FormToggle'
 import { LoadingState } from '../../components/common/LoadingState'
+import {
+  dashboardDangerPanelClassName,
+  dashboardFormPanelClassName,
+  dashboardInfoPanelClassName,
+  dashboardSuccessPanelClassName,
+} from '../../components/common/formTheme'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { api } from '../../services/api'
 import type { OwnerAiSettings } from '../../types/api'
-
-type ToggleFieldProps = {
-  label: string
-  description: string
-  checked: boolean
-  onToggle: () => void
-  disabled?: boolean
-}
-
-function ToggleField({ label, description, checked, onToggle, disabled = false }: ToggleFieldProps) {
-  return (
-    <div className="flex items-start justify-between gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-      <div>
-        <p className="text-sm font-semibold text-slate-900">{label}</p>
-        <p className="mt-1 text-xs text-slate-600">{description}</p>
-      </div>
-      <button
-        type="button"
-        role="switch"
-        aria-checked={checked}
-        onClick={onToggle}
-        disabled={disabled}
-        className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full border transition ${
-          checked
-            ? 'border-blue-500 bg-blue-600'
-            : 'border-slate-300 bg-slate-200'
-        } ${disabled ? 'cursor-not-allowed opacity-60' : ''}`}
-      >
-        <span
-          className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
-            checked ? 'translate-x-6' : 'translate-x-1'
-          }`}
-        />
-      </button>
-    </div>
-  )
-}
 
 export function OwnerAiSettingsPage() {
   const { token } = useOwnerAuth()
@@ -76,13 +47,15 @@ export function OwnerAiSettingsPage() {
     void loadSettings()
   }, [loadSettings])
 
-  const toggleField = (field: keyof Pick<
-    OwnerAiSettings,
-    | 'automation_enabled'
-    | 'ticket_classification_enabled'
-    | 'reminder_generation_enabled'
-    | 'ticket_summarization_enabled'
-  >) => {
+  const toggleField = (
+    field: keyof Pick<
+      OwnerAiSettings,
+      | 'automation_enabled'
+      | 'ticket_classification_enabled'
+      | 'reminder_generation_enabled'
+      | 'ticket_summarization_enabled'
+    >,
+  ) => {
     setSettings((current) => {
       if (!current) {
         return current
@@ -129,18 +102,18 @@ export function OwnerAiSettingsPage() {
 
   return (
     <section className="space-y-6">
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="inline-flex items-center gap-2 text-2xl font-semibold text-slate-900">
-          <Sparkles className="h-6 w-6 text-blue-500" />
+      <div className={dashboardFormPanelClassName}>
+        <h2 className="ph-title inline-flex items-center gap-2 text-2xl font-semibold text-[var(--ph-text)]">
+          <Sparkles className="h-6 w-6 text-[var(--ph-accent)]" />
           AI Settings
         </h2>
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--ph-text-muted)]">
           Infrastructure is ready for future AI workflows. No AI automation is active in live operations yet.
         </p>
       </div>
 
       {!loading && !aiConfigured ? (
-        <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+        <div className={dashboardDangerPanelClassName}>
           <p className="inline-flex items-start gap-2">
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
             <span>OpenAI is not configured yet. AI features cannot be enabled.</span>
@@ -148,33 +121,33 @@ export function OwnerAiSettingsPage() {
         </div>
       ) : null}
 
-      {error ? <ErrorState message={error} variant="light" /> : null}
-      {loading ? <LoadingState message="Loading AI settings..." tone="light" rows={4} /> : null}
+      {error ? <ErrorState message={error} /> : null}
+      {loading ? <LoadingState message="Loading AI settings..." rows={4} /> : null}
 
       {!loading && settings ? (
-        <article className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <ToggleField
+        <article className={`${dashboardFormPanelClassName} space-y-4`}>
+          <FormToggle
             label="Enable AI Automation"
             description="Master switch for future AI-powered workflows."
             checked={settings.automation_enabled}
             onToggle={() => toggleField('automation_enabled')}
             disabled={!aiConfigured}
           />
-          <ToggleField
+          <FormToggle
             label="Ticket Classification"
             description="Future: classify ticket intent and category automatically."
             checked={settings.ticket_classification_enabled}
             onToggle={() => toggleField('ticket_classification_enabled')}
             disabled={!aiConfigured}
           />
-          <ToggleField
+          <FormToggle
             label="Reminder Generation"
             description="Future: generate optimized reminder messages."
             checked={settings.reminder_generation_enabled}
             onToggle={() => toggleField('reminder_generation_enabled')}
             disabled={!aiConfigured}
           />
-          <ToggleField
+          <FormToggle
             label="Ticket Summarization"
             description="Future: summarize long ticket threads for owners."
             checked={settings.ticket_summarization_enabled}
@@ -182,34 +155,29 @@ export function OwnerAiSettingsPage() {
             disabled={!aiConfigured}
           />
 
-          <label className="block space-y-2">
-            <span className="text-sm font-medium text-slate-700">AI Model</span>
-            <input
-              value={settings.ai_model}
-              onChange={(event) =>
-                setSettings((current) =>
-                  current
-                    ? {
-                        ...current,
-                        ai_model: event.target.value,
-                      }
-                    : current,
-                )
-              }
-              disabled={!aiConfigured}
-              className="tf-field disabled:cursor-not-allowed disabled:opacity-60"
-            />
-          </label>
+          <FormInput
+            label="AI Model"
+            value={settings.ai_model}
+            onChange={(event) =>
+              setSettings((current) =>
+                current
+                  ? {
+                      ...current,
+                      ai_model: event.target.value,
+                    }
+                  : current,
+              )
+            }
+            disabled={!aiConfigured}
+            hint="Stored for rollout readiness. Live production workflows remain unchanged."
+          />
 
-          <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-xs text-blue-700">
-            Preparation mode: toggles and model selection are stored for rollout readiness, but live workflows remain unchanged.
+          <div className={dashboardInfoPanelClassName}>
+            Preparation mode keeps your preferred toggles and model selection ready for rollout while maintaining
+            human-led approvals and live workflow stability.
           </div>
 
-          {success ? (
-            <div className="rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-              {success}
-            </div>
-          ) : null}
+          {success ? <div className={dashboardSuccessPanelClassName}>{success}</div> : null}
 
           <Button
             type="button"
@@ -225,6 +193,3 @@ export function OwnerAiSettingsPage() {
     </section>
   )
 }
-
-
-

@@ -26,7 +26,11 @@ export function NotificationList({
           whileInView="show"
           viewport={viewportOnce}
           whileHover={motionEnabled ? { y: -2 } : undefined}
-          className="tf-panel p-4"
+          className={`rounded-[1.5rem] border p-4 shadow-[0_24px_56px_-40px_rgba(0,0,0,0.84)] ${
+            notification.is_read
+              ? 'border-[rgba(83,88,100,0.38)] bg-[linear-gradient(180deg,rgba(18,24,38,0.92),rgba(10,14,25,0.98))]'
+              : 'border-[rgba(240,163,35,0.22)] bg-[linear-gradient(180deg,rgba(24,30,46,0.96),rgba(12,17,28,1))]'
+          }`}
         >
           <div className="flex items-start justify-between gap-3">
             <div>
@@ -34,7 +38,7 @@ export function NotificationList({
                 <Bell className="h-4 w-4 text-[var(--ph-accent)]" />
                 {notification.title}
               </p>
-              <p className="mt-1 text-sm text-[var(--ph-text-muted)]">{notification.message}</p>
+              <p className="mt-1 text-sm leading-relaxed text-[var(--ph-text-muted)]">{notification.message}</p>
               <p className="mt-2 text-xs text-[var(--ph-text-muted)]">{formatDateTime(notification.created_at)}</p>
             </div>
             {!notification.is_read ? (

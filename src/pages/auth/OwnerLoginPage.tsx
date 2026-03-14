@@ -3,13 +3,14 @@ import { motion } from 'framer-motion'
 import { Building2, ShieldCheck, Sparkles, UserRound, UserRoundPlus } from 'lucide-react'
 import countryList from 'react-select-country-list'
 import ReactCountryFlag from 'react-country-flag'
-import Select, { type StylesConfig } from 'react-select'
+import Select from 'react-select'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 
 import { Button } from '../../components/common/Button'
 import { ErrorState } from '../../components/common/ErrorState'
 import { FormInput } from '../../components/common/FormInput'
 import { SectionContainer } from '../../components/common/SectionContainer'
+import { getProphivesReactSelectStyles } from '../../components/common/formTheme'
 import { allCountryOptions } from '../../constants/countryCurrency'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { usePageSeo } from '../../hooks/usePageSeo'
@@ -22,58 +23,6 @@ type CountrySelectOption = {
   value: string
   label: string
   isSupported: boolean
-}
-
-const countrySelectStyles: StylesConfig<CountrySelectOption, false> = {
-  control: (baseStyles, state) => ({
-    ...baseStyles,
-    minHeight: '48px',
-    borderRadius: '1rem',
-    borderColor: state.isFocused ? '#f0a323' : 'rgba(83, 88, 100, 0.56)',
-    boxShadow: state.isFocused ? '0 0 0 3px rgba(240, 163, 35, 0.16)' : 'none',
-    backgroundColor: 'rgba(255, 255, 255, 0.03)',
-    '&:hover': {
-      borderColor: 'rgba(151, 105, 34, 0.48)',
-    },
-  }),
-  placeholder: (baseStyles) => ({
-    ...baseStyles,
-    color: '#97999e',
-  }),
-  input: (baseStyles) => ({
-    ...baseStyles,
-    color: '#eeeff0',
-  }),
-  singleValue: (baseStyles) => ({
-    ...baseStyles,
-    color: '#eeeff0',
-  }),
-  menu: (baseStyles) => ({
-    ...baseStyles,
-    borderRadius: '1rem',
-    border: '1px solid rgba(83, 88, 100, 0.56)',
-    boxShadow: '0 18px 34px -20px rgba(0, 0, 0, 0.72)',
-    backgroundColor: '#161c2c',
-    overflow: 'hidden',
-  }),
-  option: (baseStyles, state) => ({
-    ...baseStyles,
-    fontSize: '0.925rem',
-    backgroundColor: state.isFocused ? 'rgba(240, 163, 35, 0.08)' : '#161c2c',
-    color: state.isDisabled ? '#7b7f88' : '#eeeff0',
-    cursor: state.isDisabled ? 'not-allowed' : 'pointer',
-  }),
-  indicatorSeparator: (baseStyles) => ({
-    ...baseStyles,
-    backgroundColor: 'rgba(83, 88, 100, 0.56)',
-  }),
-  dropdownIndicator: (baseStyles) => ({
-    ...baseStyles,
-    color: '#97999e',
-    '&:hover': {
-      color: '#f0a323',
-    },
-  }),
 }
 
 export function OwnerLoginPage() {
@@ -189,7 +138,7 @@ export function OwnerLoginPage() {
             </p>
             <p className="inline-flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-[var(--ph-accent)]" />
-              Secure owner, resident, and admin workspace separation
+              Secure owner and resident workspace separation
             </p>
           </div>
         </motion.div>
@@ -253,6 +202,14 @@ export function OwnerLoginPage() {
               required
             />
 
+            {mode === 'login' ? (
+              <div className="-mt-1 flex justify-end">
+                <Link className="ph-link text-sm font-semibold" to={ROUTES.ownerForgotPassword}>
+                  Forgot password?
+                </Link>
+              </div>
+            ) : null}
+
             {mode === 'register' ? (
               <>
                 <FormInput
@@ -300,7 +257,7 @@ export function OwnerLoginPage() {
                     placeholder="Type to search country..."
                     noOptionsMessage={() => 'No country found'}
                     isSearchable
-                    styles={countrySelectStyles}
+                    styles={getProphivesReactSelectStyles<CountrySelectOption, false>()}
                     isOptionDisabled={(option) => !option.isSupported}
                     formatOptionLabel={(option) => (
                       <span className="flex items-center gap-2">

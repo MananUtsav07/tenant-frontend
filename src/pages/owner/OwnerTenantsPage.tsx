@@ -6,8 +6,13 @@ import { DataTable } from '../../components/common/DataTable'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { FormInput } from '../../components/common/FormInput'
+import { FormSelect } from '../../components/common/FormSelect'
 import { LoadingState } from '../../components/common/LoadingState'
 import { StatusBadge } from '../../components/common/StatusBadge'
+import {
+  dashboardFormPanelClassName,
+  dashboardInfoPanelClassName,
+} from '../../components/common/formTheme'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
@@ -235,21 +240,21 @@ export function OwnerTenantsPage() {
     <section className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-semibold text-slate-900">Tenants</h2>
-          <p className="text-sm text-slate-400">Create tenant access IDs and manage occupancy.</p>
+          <h2 className="ph-title text-2xl font-semibold text-[var(--ph-text)]">Tenants</h2>
+          <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Create tenant access IDs and manage occupancy.</p>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">
-          <Users className="h-3.5 w-3.5 text-blue-600" />
+        <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(83,88,100,0.42)] bg-[rgba(255,255,255,0.04)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">
+          <Users className="h-3.5 w-3.5 text-[var(--ph-accent)]" />
           {tenants.length} total
         </span>
       </div>
 
       {!showTenantForm && properties.length > 0 ? (
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className={dashboardFormPanelClassName}>
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h3 className="text-lg font-semibold text-slate-900">Create Tenant</h3>
-              <p className="text-sm text-slate-500">Click below to open the full tenant form.</p>
+              <h3 className="ph-title text-lg font-semibold text-[var(--ph-text)]">Create Tenant</h3>
+              <p className="mt-1 text-sm text-[var(--ph-text-muted)]">Open the full tenant form to provision access cleanly.</p>
             </div>
             <Button
               type="button"
@@ -271,7 +276,7 @@ export function OwnerTenantsPage() {
         <form
           onSubmit={handleCreateTenant}
           autoComplete="off"
-          className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+          className={dashboardFormPanelClassName}
         >
         <input
           type="text"
@@ -290,27 +295,24 @@ export function OwnerTenantsPage() {
           style={{ position: 'absolute', left: '-9999px', opacity: 0, width: 1, height: 1 }}
         />
 
-        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-          <label className="block space-y-2">
-            <span className="text-sm font-medium text-slate-600">Property</span>
-            <select
-              name="tenant_property_id"
-              autoComplete="off"
-              className="tf-field"
-              value={form.property_id}
-              onChange={(event) => setForm((current) => ({ ...current, property_id: event.target.value }))}
-              required
-            >
-              <option value="" disabled>
-                Select property
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <FormSelect
+            label="Property"
+            name="tenant_property_id"
+            autoComplete="off"
+            value={form.property_id}
+            onChange={(event) => setForm((current) => ({ ...current, property_id: event.target.value }))}
+            required
+          >
+            <option value="" disabled>
+              Select property
+            </option>
+            {properties.map((property) => (
+              <option key={property.id} value={property.id}>
+                {property.property_name}
               </option>
-              {properties.map((property) => (
-                <option key={property.id} value={property.id}>
-                  {property.property_name}
-                </option>
-              ))}
-            </select>
-          </label>
+            ))}
+          </FormSelect>
 
           <FormInput
             label="Full Name"
@@ -325,6 +327,7 @@ export function OwnerTenantsPage() {
             type="email"
             name="tenant_contact_email"
             autoComplete="new-password"
+            hint="Used for tenant credential emails and password reset links."
             value={form.email}
             onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
           />
@@ -340,27 +343,25 @@ export function OwnerTenantsPage() {
             type="password"
             name="tenant_access_password"
             autoComplete="new-password"
+            hint={editingTenantId ? undefined : 'This temporary password is sent once during tenant onboarding.'}
             value={form.password}
             onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
             required={!editingTenantId}
           />
-          <label className="block space-y-2">
-            <span className="text-sm font-medium text-slate-600">Monthly Rent</span>
-            <input
-              type="text"
-              inputMode="decimal"
-              name="tenant_monthly_rent"
-              className="tf-field"
-              value={`${ownerCurrencyMarker}${form.monthly_rent}`}
-              onChange={(event) =>
-                setForm((current) => ({
-                  ...current,
-                  monthly_rent: sanitizeRentInput(event.target.value, ownerCurrencyMarker),
-                }))
-              }
-              required
-            />
-          </label>
+          <FormInput
+            label="Monthly Rent"
+            type="text"
+            inputMode="decimal"
+            name="tenant_monthly_rent"
+            value={`${ownerCurrencyMarker}${form.monthly_rent}`}
+            onChange={(event) =>
+              setForm((current) => ({
+                ...current,
+                monthly_rent: sanitizeRentInput(event.target.value, ownerCurrencyMarker),
+              }))
+            }
+            required
+          />
           <FormInput
             label="Due Date"
             type="number"
@@ -386,49 +387,43 @@ export function OwnerTenantsPage() {
             onChange={(event) => setForm((current) => ({ ...current, lease_end_date: event.target.value }))}
           />
 
-          <label className="block space-y-2">
-            <span className="text-sm font-medium text-slate-600">Payment Status</span>
-            <select
-              name="tenant_payment_status"
-              className="tf-field"
-              value={form.payment_status}
-              onChange={(event) =>
-                setForm((current) => ({
-                  ...current,
-                  payment_status: event.target.value as Tenant['payment_status'],
-                }))
-              }
-              required
-            >
-              <option value="pending">pending</option>
-              <option value="paid">paid</option>
-              <option value="overdue">overdue</option>
-              <option value="partial">partial</option>
-            </select>
-          </label>
+          <FormSelect
+            label="Payment Status"
+            name="tenant_payment_status"
+            value={form.payment_status}
+            onChange={(event) =>
+              setForm((current) => ({
+                ...current,
+                payment_status: event.target.value as Tenant['payment_status'],
+              }))
+            }
+            required
+          >
+            <option value="pending">pending</option>
+            <option value="paid">paid</option>
+            <option value="overdue">overdue</option>
+            <option value="partial">partial</option>
+          </FormSelect>
 
-          <label className="block space-y-2">
-            <span className="text-sm font-medium text-slate-600">Tenant Status</span>
-            <select
-              name="tenant_status"
-              className="tf-field"
-              value={form.status}
-              onChange={(event) =>
-                setForm((current) => ({
-                  ...current,
-                  status: event.target.value as Tenant['status'],
-                }))
-              }
-              required
-            >
-              <option value="active">active</option>
-              <option value="inactive">inactive</option>
-              <option value="terminated">terminated</option>
-            </select>
-          </label>
+          <FormSelect
+            label="Tenant Status"
+            name="tenant_status"
+            value={form.status}
+            onChange={(event) =>
+              setForm((current) => ({
+                ...current,
+                status: event.target.value as Tenant['status'],
+              }))
+            }
+            required
+          >
+            <option value="active">active</option>
+            <option value="inactive">inactive</option>
+            <option value="terminated">terminated</option>
+          </FormSelect>
         </div>
 
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mt-5 flex flex-wrap gap-2">
           <Button
             type="submit"
             disabled={busy || properties.length === 0}
@@ -441,7 +436,6 @@ export function OwnerTenantsPage() {
               type="button"
               onClick={resetForm}
               variant="outline"
-              className="border-slate-300 bg-white text-slate-700"
             >
               {editingTenantId ? 'Cancel Edit' : 'Close Form'}
             </Button>
@@ -483,27 +477,22 @@ export function OwnerTenantsPage() {
           {tenants.map((tenant) => (
             <tr key={tenant.id}>
               <td className="px-4 py-3">
-                <p className="font-medium text-slate-900">{tenant.full_name}</p>
-                <p className="text-xs text-slate-400">{tenant.email || 'No email'}</p>
+                <p className="font-medium text-[var(--ph-text)]">{tenant.full_name}</p>
+                <p className="text-xs text-[var(--ph-text-muted)]">{tenant.email || 'No email'}</p>
               </td>
-              <td className="px-4 py-3 text-slate-700">{tenant.tenant_access_id}</td>
-              <td className="px-4 py-3 text-slate-700">{formatCurrency(tenant.monthly_rent, ownerCurrencyCode)}</td>
-              <td className="px-4 py-3 text-slate-700">{formatDate(getNextDueDate(tenant.payment_due_day).toISOString())}</td>
-              <td className="px-4 py-3 text-slate-400">
+              <td className="px-4 py-3 text-[var(--ph-text-soft)]">{tenant.tenant_access_id}</td>
+              <td className="px-4 py-3 text-[var(--ph-text-soft)]">{formatCurrency(tenant.monthly_rent, ownerCurrencyCode)}</td>
+              <td className="px-4 py-3 text-[var(--ph-text-soft)]">{formatDate(getNextDueDate(tenant.payment_due_day).toISOString())}</td>
+              <td className="px-4 py-3 text-[var(--ph-text-muted)]">
                 {formatDate(tenant.lease_start_date)} - {formatDate(tenant.lease_end_date)}
               </td>
               <td className="px-4 py-3">
                 <StatusBadge status={tenant.payment_status} />
               </td>
-              <td className="px-4 py-3 text-slate-400">{formatDateTime(tenant.created_at)}</td>
+              <td className="px-4 py-3 text-[var(--ph-text-muted)]">{formatDateTime(tenant.created_at)}</td>
               <td className="px-4 py-3">
                 <div className="flex flex-wrap gap-2">
-                  <Button
-                    to={`/owner/tenants/${tenant.id}`}
-                    variant="outline"
-                    size="sm"
-                    className="border-slate-300 bg-white text-slate-700"
-                  >
+                  <Button to={`/owner/tenants/${tenant.id}`} variant="outline" size="sm">
                     View
                   </Button>
                   <Button
@@ -511,7 +500,6 @@ export function OwnerTenantsPage() {
                     onClick={() => beginEdit(tenant)}
                     variant="outline"
                     size="sm"
-                    className="border-slate-300 bg-white text-slate-700"
                     iconLeft={<Pencil className="h-3.5 w-3.5" />}
                   >
                     Edit
@@ -521,7 +509,7 @@ export function OwnerTenantsPage() {
                     onClick={() => void handleDelete(tenant.id)}
                     variant="outline"
                     size="sm"
-                    className="border-red-200 bg-red-50 text-red-700 hover:bg-red-100"
+                    className="border-[rgba(244,163,163,0.28)] bg-[rgba(120,28,28,0.14)] text-red-200 hover:bg-[rgba(120,28,28,0.2)]"
                     iconLeft={<Trash2 className="h-3.5 w-3.5" />}
                   >
                     Delete
@@ -534,7 +522,7 @@ export function OwnerTenantsPage() {
       ) : null}
 
       {!loading && properties.length > 0 && tenants.length > 0 ? (
-        <p className="text-xs text-slate-500">
+        <p className={dashboardInfoPanelClassName}>
           Tip: leave password blank while editing to keep the tenant's current password.
         </p>
       ) : null}

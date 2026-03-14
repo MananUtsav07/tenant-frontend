@@ -36,7 +36,17 @@ const DocsOwnerDashboardPage = lazyNamedPage(() => import('../pages/docs/DocsOwn
 const DocsSupportTicketsPage = lazyNamedPage(() => import('../pages/docs/DocsSupportTicketsPage'), 'DocsSupportTicketsPage')
 
 const OwnerLoginPage = lazyNamedPage(() => import('../pages/auth/OwnerLoginPage'), 'OwnerLoginPage')
+const OwnerForgotPasswordPage = lazyNamedPage(() => import('../pages/auth/OwnerForgotPasswordPage'), 'OwnerForgotPasswordPage')
+const OwnerResetPasswordPage = lazyNamedPage(() => import('../pages/auth/OwnerResetPasswordPage'), 'OwnerResetPasswordPage')
 const TenantLoginPage = lazyNamedPage(() => import('../pages/auth/TenantLoginPage'), 'TenantLoginPage')
+const TenantForgotPasswordPage = lazyNamedPage(
+  () => import('../pages/auth/TenantForgotPasswordPage'),
+  'TenantForgotPasswordPage',
+)
+const TenantResetPasswordPage = lazyNamedPage(
+  () => import('../pages/auth/TenantResetPasswordPage'),
+  'TenantResetPasswordPage',
+)
 const AdminLoginPage = lazyNamedPage(() => import('../pages/auth/AdminLoginPage'), 'AdminLoginPage')
 
 const OwnerDashboardPage = lazyNamedPage(() => import('../pages/owner/OwnerDashboardPage'), 'OwnerDashboardPage')
@@ -86,7 +96,11 @@ function AppRoutes() {
         <Route path={ROUTES.docsOwnerDashboard} element={<DocsOwnerDashboardPage />} />
         <Route path={ROUTES.docsSupportTickets} element={<DocsSupportTicketsPage />} />
         <Route path={ROUTES.ownerLogin} element={<OwnerLoginPage />} />
+        <Route path={ROUTES.ownerForgotPassword} element={<OwnerForgotPasswordPage />} />
+        <Route path={ROUTES.ownerResetPassword} element={<OwnerResetPasswordPage />} />
         <Route path={ROUTES.tenantLogin} element={<TenantLoginPage />} />
+        <Route path={ROUTES.tenantForgotPassword} element={<TenantForgotPasswordPage />} />
+        <Route path={ROUTES.tenantResetPassword} element={<TenantResetPasswordPage />} />
         <Route
           path={ROUTES.adminRoot}
           element={

@@ -1,5 +1,5 @@
-﻿import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react'
 import { Pencil, Plus, Trash2 } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react'
 
 import { AdminPagination } from '../../components/admin/AdminPagination'
 import { AdminListToolbar } from '../../components/admin/AdminListToolbar'
@@ -7,9 +7,11 @@ import { Button } from '../../components/common/Button'
 import { DataTable } from '../../components/common/DataTable'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
-import { FormInput } from '../../components/common/FormInput'
+import { FormInput, FormTextarea } from '../../components/common/FormInput'
+import { FormSelect } from '../../components/common/FormSelect'
 import { LoadingState } from '../../components/common/LoadingState'
 import { StatusBadge } from '../../components/common/StatusBadge'
+import { dashboardFormPanelClassName } from '../../components/common/formTheme'
 import { useAdminAuth } from '../../hooks/useAdminAuth'
 import { api } from '../../services/api'
 import type { BlogPost, PaginationMeta } from '../../types/api'
@@ -165,13 +167,13 @@ export function AdminBlogPage() {
   return (
     <section className="space-y-4">
       <div>
-        <h2 className="text-2xl font-semibold text-slate-900">Blog Management</h2>
-        <p className="text-sm text-slate-400">Create, publish, and maintain public blog content.</p>
+        <h2 className="ph-title text-2xl font-semibold text-[var(--ph-text)]">Blog Management</h2>
+        <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Create, publish, and maintain public blog content.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="rounded-2xl border border-slate-200 bg-white shadow-sm p-5">
-        <h3 className="text-lg font-semibold text-slate-900">{formTitle}</h3>
-        <div className="mt-4 grid gap-3 md:grid-cols-2">
+      <form onSubmit={handleSubmit} className={dashboardFormPanelClassName}>
+        <h3 className="ph-title text-lg font-semibold text-[var(--ph-text)]">{formTitle}</h3>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
           <FormInput
             label="Title"
             value={form.title}
@@ -190,9 +192,8 @@ export function AdminBlogPage() {
             onChange={(event) => setForm((current) => ({ ...current, slug: slugify(event.target.value) }))}
             required
           />
-          <FormInput
+          <FormTextarea
             label="Excerpt"
-            as="textarea"
             rows={3}
             value={form.excerpt}
             onChange={(event) => setForm((current) => ({ ...current, excerpt: event.target.value }))}
@@ -208,36 +209,37 @@ export function AdminBlogPage() {
             value={form.author}
             onChange={(event) => setForm((current) => ({ ...current, author: event.target.value }))}
           />
-          <label className="block space-y-2">
-            <span className="text-sm font-medium text-slate-600">Published</span>
-            <select
-              value={form.published ? 'true' : 'false'}
-              onChange={(event) => setForm((current) => ({ ...current, published: event.target.value === 'true' }))}
-              className="tf-field"
-            >
-              <option value="false">Draft</option>
-              <option value="true">Published</option>
-            </select>
-          </label>
+          <FormSelect
+            label="Published"
+            value={form.published ? 'true' : 'false'}
+            onChange={(event) => setForm((current) => ({ ...current, published: event.target.value === 'true' }))}
+          >
+            <option value="false">Draft</option>
+            <option value="true">Published</option>
+          </FormSelect>
         </div>
 
-        <div className="mt-3">
-          <FormInput
+        <div className="mt-4">
+          <FormTextarea
             label="Content"
-            as="textarea"
-            rows={8}
+            rows={10}
             value={form.content}
             onChange={(event) => setForm((current) => ({ ...current, content: event.target.value }))}
             required
           />
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Button type="submit" variant="secondary" disabled={busy} iconLeft={editingBlogId ? <Pencil className="h-4 w-4" /> : <Plus className="h-4 w-4" />}>
+        <div className="mt-5 flex flex-wrap gap-2">
+          <Button
+            type="submit"
+            variant="secondary"
+            disabled={busy}
+            iconLeft={editingBlogId ? <Pencil className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+          >
             {editingBlogId ? 'Save Post' : 'Create Post'}
           </Button>
           {editingBlogId ? (
-            <Button type="button" variant="outline" className="border-slate-300 bg-white text-slate-700" onClick={resetForm}>
+            <Button type="button" variant="outline" onClick={resetForm}>
               Cancel Edit
             </Button>
           ) : null}
@@ -280,21 +282,20 @@ export function AdminBlogPage() {
             {items.map((post) => (
               <tr key={post.id}>
                 <td className="px-4 py-3">
-                  <p className="font-medium text-slate-900">{post.title}</p>
-                  <p className="text-xs text-slate-400">{post.author}</p>
+                  <p className="font-medium text-[var(--ph-text)]">{post.title}</p>
+                  <p className="text-xs text-[var(--ph-text-muted)]">{post.author}</p>
                 </td>
-                <td className="px-4 py-3 text-slate-600">{post.slug}</td>
+                <td className="px-4 py-3 text-[var(--ph-text-soft)]">{post.slug}</td>
                 <td className="px-4 py-3">
                   <StatusBadge status={post.published ? 'active' : 'inactive'} />
                 </td>
-                <td className="px-4 py-3 text-slate-400">{formatDateTime(post.created_at)}</td>
+                <td className="px-4 py-3 text-[var(--ph-text-muted)]">{formatDateTime(post.created_at)}</td>
                 <td className="px-4 py-3">
                   <div className="flex flex-wrap gap-2">
                     <Button
                       type="button"
                       variant="outline"
                       size="sm"
-                      className="border-slate-300 bg-white text-slate-700"
                       onClick={() => beginEdit(post)}
                       iconLeft={<Pencil className="h-3.5 w-3.5" />}
                     >
@@ -304,7 +305,7 @@ export function AdminBlogPage() {
                       type="button"
                       variant="outline"
                       size="sm"
-                      className="border-red-200 bg-red-50 text-red-700 hover:bg-red-100"
+                      className="border-[rgba(244,163,163,0.28)] bg-[rgba(120,28,28,0.14)] text-red-200 hover:bg-[rgba(120,28,28,0.2)]"
                       onClick={() => void handleDelete(post.id)}
                       iconLeft={<Trash2 className="h-3.5 w-3.5" />}
                       disabled={busy}
@@ -328,8 +329,3 @@ export function AdminBlogPage() {
     </section>
   )
 }
-
-
-
-
-

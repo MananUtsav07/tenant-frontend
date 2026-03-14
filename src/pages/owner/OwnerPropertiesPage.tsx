@@ -1,5 +1,5 @@
-﻿import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import { Building2, MapPin, Pencil, Plus, Trash2 } from 'lucide-react'
+import { useCallback, useEffect, useState, type FormEvent } from 'react'
 
 import { Button } from '../../components/common/Button'
 import { DataTable } from '../../components/common/DataTable'
@@ -7,6 +7,10 @@ import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { FormInput } from '../../components/common/FormInput'
 import { LoadingState } from '../../components/common/LoadingState'
+import {
+  dashboardFormPanelClassName,
+  dashboardInfoPanelClassName,
+} from '../../components/common/formTheme'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
@@ -114,14 +118,11 @@ export function OwnerPropertiesPage() {
   return (
     <section className="space-y-6">
       <div>
-        <h2 className="text-2xl font-semibold text-slate-900">Properties</h2>
-        <p className="text-sm text-slate-400">Create and manage your properties.</p>
+        <h2 className="ph-title text-2xl font-semibold text-[var(--ph-text)]">Properties</h2>
+        <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Create and manage your properties.</p>
       </div>
 
-      <form
-        onSubmit={handleSubmit}
-        className="grid gap-3 rounded-2xl border border-slate-200 bg-white shadow-sm p-5 md:grid-cols-3"
-      >
+      <form onSubmit={handleSubmit} className={`${dashboardFormPanelClassName} grid gap-4 md:grid-cols-3`}>
         <FormInput
           label="Property Name"
           name="property_name"
@@ -156,12 +157,7 @@ export function OwnerPropertiesPage() {
             {editingPropertyId ? 'Save Property' : 'Create Property'}
           </Button>
           {editingPropertyId ? (
-            <Button
-              type="button"
-              onClick={resetForm}
-              variant="outline"
-              className="border-slate-300 bg-white text-slate-700"
-            >
+            <Button type="button" onClick={resetForm} variant="outline">
               Cancel Edit
             </Button>
           ) : null}
@@ -189,11 +185,11 @@ export function OwnerPropertiesPage() {
           {properties.map((property) => (
             <tr key={property.id}>
               <td className="px-4 py-3">
-                <p className="font-medium text-slate-900">{property.property_name}</p>
-                <p className="text-xs text-slate-400">{property.unit_number || 'No unit'}</p>
+                <p className="font-medium text-[var(--ph-text)]">{property.property_name}</p>
+                <p className="text-xs text-[var(--ph-text-muted)]">{property.unit_number || 'No unit'}</p>
               </td>
-              <td className="px-4 py-3 text-slate-600">{property.address}</td>
-              <td className="px-4 py-3 text-slate-400">{formatDateTime(property.created_at)}</td>
+              <td className="px-4 py-3 text-[var(--ph-text-soft)]">{property.address}</td>
+              <td className="px-4 py-3 text-[var(--ph-text-muted)]">{formatDateTime(property.created_at)}</td>
               <td className="px-4 py-3">
                 <div className="flex gap-2">
                   <Button
@@ -201,7 +197,6 @@ export function OwnerPropertiesPage() {
                     onClick={() => beginEdit(property)}
                     variant="outline"
                     size="sm"
-                    className="border-slate-300 bg-white text-slate-700"
                     iconLeft={<Pencil className="h-3.5 w-3.5" />}
                   >
                     Edit
@@ -211,7 +206,7 @@ export function OwnerPropertiesPage() {
                     onClick={() => void handleDelete(property.id)}
                     variant="outline"
                     size="sm"
-                    className="border-red-200 bg-red-50 text-red-700 hover:bg-red-100"
+                    className="border-[rgba(244,163,163,0.28)] bg-[rgba(120,28,28,0.14)] text-red-200 hover:bg-[rgba(120,28,28,0.2)]"
                     iconLeft={<Trash2 className="h-3.5 w-3.5" />}
                   >
                     Delete
@@ -224,12 +219,12 @@ export function OwnerPropertiesPage() {
       ) : null}
 
       {!loading && properties.length > 0 ? (
-        <div className="rounded-2xl border border-slate-200 bg-white/95 shadow-sm p-4 text-sm text-slate-600">
+        <div className={dashboardInfoPanelClassName}>
           <p className="inline-flex items-center gap-2">
-            <MapPin className="h-4 w-4 text-blue-600" />
+            <MapPin className="h-4 w-4 text-[var(--ph-accent)]" />
             Properties are used across tenants, tickets, and reminders.
           </p>
-          <Button to={ROUTES.ownerTenants} variant="ghost" size="sm" className="mt-2 px-0 text-blue-700 hover:bg-transparent">
+          <Button to={ROUTES.ownerTenants} variant="ghost" size="sm" className="mt-2 px-0 hover:bg-transparent">
             Go to Tenants
           </Button>
         </div>
@@ -237,8 +232,3 @@ export function OwnerPropertiesPage() {
     </section>
   )
 }
-
-
-
-
-

@@ -72,8 +72,8 @@ export function AdminPropertiesPage() {
   return (
     <section className="space-y-4">
       <div>
-        <h2 className="text-2xl font-semibold text-slate-900">Properties</h2>
-        <p className="text-sm text-slate-400">Property records across all owner portfolios.</p>
+        <h2 className="ph-title text-2xl font-semibold text-[var(--ph-text)]">Properties</h2>
+        <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Property records across all owner portfolios.</p>
       </div>
 
       <AdminListToolbar
@@ -121,8 +121,8 @@ export function AdminPropertiesPage() {
             {items.map((property) => (
               <tr key={property.id}>
                 <td className="px-4 py-3">
-                  <p className="font-medium text-slate-900">{property.property_name}</p>
-                  <p className="text-xs text-slate-400">{property.unit_number || 'No unit'}</p>
+                  <p className="font-medium text-[var(--ph-text)]">{property.property_name}</p>
+                  <p className="text-xs text-[var(--ph-text-muted)]">{property.unit_number || 'No unit'}</p>
                 </td>
                 <td className="px-4 py-3 text-slate-600">
                   <Link
@@ -134,7 +134,7 @@ export function AdminPropertiesPage() {
                 </td>
                 <td className="px-4 py-3 text-slate-600">{property.address}</td>
                 <td className="px-4 py-3 text-slate-600">{property.owners?.email || '-'}</td>
-                <td className="px-4 py-3 text-slate-400">{formatDateTime(property.created_at)}</td>
+                <td className="px-4 py-3 text-[var(--ph-text-muted)]">{formatDateTime(property.created_at)}</td>
               </tr>
             ))}
           </DataTable>

@@ -115,6 +115,12 @@ export function TenantLoginPage() {
               required
             />
 
+            <div className="-mt-1 flex justify-end">
+              <Link className="ph-link text-sm font-semibold" to={ROUTES.tenantForgotPassword}>
+                Forgot password?
+              </Link>
+            </div>
+
             {error ? <ErrorState message={error} variant="light" /> : null}
 
             <Button

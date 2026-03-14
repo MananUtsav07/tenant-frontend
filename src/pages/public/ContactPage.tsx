@@ -76,7 +76,7 @@ export function ContactPage() {
                 <Mail className="h-4 w-4 text-[var(--ph-accent)]" />
                 Email
               </p>
-              <p className="mt-2 text-sm text-[var(--ph-text-muted)]">hello@prophives.com</p>
+              <p className="mt-2 text-sm text-[var(--ph-text-muted)]">support@prophives.com</p>
             </motion.div>
 
             <motion.div variants={revealVariants} className="ph-surface-card rounded-[1.5rem] p-5">
