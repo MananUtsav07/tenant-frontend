@@ -1,4 +1,4 @@
-﻿import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { BellElectric, Building, Clock10, MessageSquare } from 'lucide-react'
 
 import { revealUp, staggerParent, useMotionVariants, viewportOnce } from '../../utils/motion'
@@ -6,23 +6,23 @@ import { SectionContainer } from '../../components/common/SectionContainer'
 
 const benefits = [
   {
-    title: 'Save time managing tenants',
-    description: 'Replace fragmented spreadsheets and chat threads with a single operating workspace.',
+    title: 'Shorter response loops',
+    description: 'Owners and operators stay ahead of service issues before they become resident dissatisfaction.',
     icon: <Clock10 className="h-5 w-5" />,
   },
   {
-    title: 'Organized property management',
-    description: 'Keep properties, leases, and tenant records structured and searchable.',
+    title: 'Cleaner operational memory',
+    description: 'Every lease detail, workflow state, and resident request stays structured instead of disappearing across chats.',
     icon: <Building className="h-5 w-5" />,
   },
   {
-    title: 'Never miss rent reminders',
-    description: 'Automated schedules reduce manual follow-up and keep rent operations consistent.',
+    title: 'Measured collections follow-up',
+    description: 'Automated reminder timing keeps rent communication firm, consistent, and brand-safe.',
     icon: <BellElectric className="h-5 w-5" />,
   },
   {
-    title: 'Centralized communication',
-    description: 'Track support tickets and owner notifications in one dashboard timeline.',
+    title: 'One service narrative',
+    description: 'Support tickets, notifications, and approvals all sit inside one premium operating layer.',
     icon: <MessageSquare className="h-5 w-5" />,
   },
 ]
@@ -33,14 +33,15 @@ export function ProductBenefitsSection() {
 
   return (
     <SectionContainer size="wide">
-      <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
+      <div className="grid gap-6 lg:grid-cols-[0.95fr_1.15fr]">
         <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">Benefits</p>
-          <h2 className="mt-2 font-[Space_Grotesk] text-3xl font-semibold text-slate-950 md:text-4xl">
-            Built for teams that manage real properties
+          <span className="ph-kicker">Why Prophives</span>
+          <h2 className="ph-title mt-5 text-3xl font-semibold text-[var(--ph-text)] md:text-5xl">
+            Built for teams managing premium assets, not generic rentals
           </h2>
-          <p className="mt-4 text-slate-600">
-            TenantFlow helps owner teams move faster with fewer errors by unifying tenant management, support handling, and reminder workflows.
+          <p className="mt-4 text-base leading-relaxed text-[var(--ph-text-muted)] md:text-lg">
+            Prophives helps Dubai real estate operators move faster with fewer gaps by bringing AI-assisted service,
+            collections discipline, and portfolio visibility into one authoritative environment.
           </p>
         </motion.div>
 
@@ -52,10 +53,16 @@ export function ProductBenefitsSection() {
           className="grid gap-4 sm:grid-cols-2"
         >
           {benefits.map((benefit) => (
-            <motion.article key={benefit.title} variants={revealVariants} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_15px_40px_-35px_rgba(15,23,42,0.6)]">
-              <div className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-blue-100 text-blue-900">{benefit.icon}</div>
-              <h3 className="mt-3 font-[Space_Grotesk] text-lg font-semibold text-slate-900">{benefit.title}</h3>
-              <p className="mt-2 text-sm text-slate-600">{benefit.description}</p>
+            <motion.article
+              key={benefit.title}
+              variants={revealVariants}
+              className="ph-surface-card-soft rounded-[1.5rem] p-5"
+            >
+              <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-[rgba(240,163,35,0.18)] bg-[rgba(240,163,35,0.08)] text-[var(--ph-accent)]">
+                {benefit.icon}
+              </div>
+              <h3 className="ph-title mt-4 text-lg font-semibold text-[var(--ph-text)]">{benefit.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-[var(--ph-text-muted)]">{benefit.description}</p>
             </motion.article>
           ))}
         </motion.div>
@@ -63,5 +70,3 @@ export function ProductBenefitsSection() {
     </SectionContainer>
   )
 }
-
-

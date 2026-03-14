@@ -1,37 +1,48 @@
-﻿import { motion } from 'framer-motion'
+import type { ReactNode } from 'react'
+import { motion } from 'framer-motion'
 
 import { revealUp, useMotionVariants, viewportOnce } from '../../utils/motion'
 import { Button } from './Button'
 import { SectionContainer } from './SectionContainer'
 
 type CTASectionProps = {
-  title: string
-  description: string
+  eyebrow?: string
+  title: ReactNode
+  description: ReactNode
   primaryAction: { label: string; href: string }
   secondaryAction?: { label: string; href: string }
 }
 
-export function CTASection({ title, description, primaryAction, secondaryAction }: CTASectionProps) {
+export function CTASection({
+  eyebrow = 'Next Move',
+  title,
+  description,
+  primaryAction,
+  secondaryAction,
+}: CTASectionProps) {
   const revealVariants = useMotionVariants(revealUp)
 
   return (
-    <SectionContainer>
+    <SectionContainer className="premium-border py-10 md:py-14" tone="panel">
       <motion.div
         variants={revealVariants}
         initial="hidden"
         whileInView="show"
         viewport={viewportOnce}
-        className="premium-border rounded-3xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-sky-50 p-8 shadow-[0_28px_75px_-52px_rgba(37,99,235,0.62)] md:p-11"
+        className="relative grid gap-6 lg:grid-cols-[1.2fr_auto] lg:items-end"
       >
-        <h2 className="font-[Space_Grotesk] text-3xl font-semibold text-slate-950">{title}</h2>
-        <p className="mt-3 max-w-2xl text-base leading-relaxed text-slate-600">{description}</p>
-        <div className="mt-7 flex flex-wrap gap-3">
+        <div>
+          <span className="ph-kicker">{eyebrow}</span>
+          <h2 className="ph-title mt-5 text-3xl font-semibold text-[var(--ph-text)] md:text-4xl">{title}</h2>
+          <div className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--ph-text-muted)]">{description}</div>
+        </div>
+        <div className="flex flex-wrap gap-3">
           <Button
             to={primaryAction.href}
             variant="primary"
             size="lg"
             analyticsEvent="cta_click"
-            analyticsMetadata={{ section: title, action: primaryAction.label }}
+            analyticsMetadata={{ section: typeof title === 'string' ? title : 'cta', action: primaryAction.label }}
           >
             {primaryAction.label}
           </Button>
@@ -41,7 +52,10 @@ export function CTASection({ title, description, primaryAction, secondaryAction 
               variant="outline"
               size="lg"
               analyticsEvent="cta_click"
-              analyticsMetadata={{ section: title, action: secondaryAction.label }}
+              analyticsMetadata={{
+                section: typeof title === 'string' ? title : 'cta',
+                action: secondaryAction.label,
+              }}
             >
               {secondaryAction.label}
             </Button>
@@ -51,4 +65,3 @@ export function CTASection({ title, description, primaryAction, secondaryAction 
     </SectionContainer>
   )
 }
-

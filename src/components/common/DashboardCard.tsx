@@ -21,18 +21,18 @@ export function DashboardCard({ label, value, hint, icon }: DashboardCardProps) 
       whileInView="show"
       viewport={viewportOnce}
       whileHover={motionEnabled ? { y: -3 } : undefined}
-      className="tf-panel p-4"
+      className="tf-panel p-5"
     >
-      <p className="text-xs uppercase tracking-wide text-slate-500">{label}</p>
+      <p className="text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">{label}</p>
       <div className="mt-2 flex items-center justify-between gap-3">
-        <p className="text-3xl font-semibold text-slate-900">{value}</p>
+        <p className="text-3xl font-semibold text-[var(--ph-text)]">{value}</p>
         {icon ? (
-          <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-blue-200 bg-blue-50 text-blue-700">
+          <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-[rgba(240,163,35,0.2)] bg-[rgba(240,163,35,0.08)] text-[var(--ph-accent)]">
             {icon}
           </span>
         ) : null}
       </div>
-      {hint ? <p className="mt-2 text-xs text-slate-500">{hint}</p> : null}
+      {hint ? <p className="mt-2 text-xs text-[var(--ph-text-muted)]">{hint}</p> : null}
     </motion.div>
   )
 }

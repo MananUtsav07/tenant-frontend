@@ -13,7 +13,11 @@ export function PublicLayout() {
   const { tenant, loading } = useTenantAuth()
 
   if (loading) {
-    return <div className="p-6 text-slate-500">Loading tenant session...</div>
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[var(--ph-bg)] px-6 text-sm text-[var(--ph-text-muted)]">
+        Loading tenant session...
+      </div>
+    )
   }
 
   if (tenant) {
@@ -21,7 +25,7 @@ export function PublicLayout() {
   }
 
   return (
-    <div className="min-h-screen text-slate-900">
+    <div className="min-h-screen bg-[var(--ph-bg)] text-[var(--ph-text)]">
       <Navbar />
       <main className="saas-grid-bg relative isolate overflow-hidden">
         <AnimatePresence mode="wait" initial={false}>

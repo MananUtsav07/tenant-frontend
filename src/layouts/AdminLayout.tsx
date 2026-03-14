@@ -20,8 +20,8 @@ export function AdminLayout() {
 
   return (
     <DashboardLayout
-      title="Admin Portal"
-      subtitle="Platform operations and growth analytics"
+      title="Admin Observatory"
+      subtitle="Platform oversight, health, and portfolio intelligence"
       identityPrimary={admin?.full_name || admin?.email || 'Platform Admin'}
       identitySecondary={admin?.email || undefined}
       navItems={adminLinks}

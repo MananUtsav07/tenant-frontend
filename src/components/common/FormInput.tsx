@@ -23,11 +23,14 @@ export function FormInput(props: FormInputProps) {
   const inputClassName = clsx(
     'w-full rounded-xl border px-3 py-2.5 outline-none transition duration-150',
     variant === 'dark'
-      ? 'border-slate-700 bg-slate-900/90 text-slate-100 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/30'
-      : 'border-slate-300 bg-white text-slate-900 shadow-[0_10px_24px_-22px_rgba(15,23,42,0.35)] focus:border-blue-400 focus:ring-2 focus:ring-blue-300/50',
+      ? 'border-[rgba(83,88,100,0.56)] bg-[rgba(11,22,51,0.62)] text-[var(--ph-text)] focus:border-[rgba(240,163,35,0.72)] focus:ring-2 focus:ring-[rgba(240,163,35,0.18)]'
+      : 'border-[rgba(83,88,100,0.56)] bg-[rgba(255,255,255,0.03)] text-[var(--ph-text)] shadow-[0_10px_24px_-22px_rgba(0,0,0,0.45)] focus:border-[rgba(240,163,35,0.72)] focus:ring-2 focus:ring-[rgba(240,163,35,0.18)]',
   )
-  const labelClassName = clsx('text-sm font-medium', variant === 'dark' ? 'text-slate-300' : 'text-slate-600')
-  const errorClassName = variant === 'dark' ? 'text-xs text-red-400' : 'text-xs text-red-600'
+  const labelClassName = clsx(
+    'text-sm font-medium',
+    variant === 'dark' ? 'text-[var(--ph-text-soft)]' : 'text-[var(--ph-text-muted)]',
+  )
+  const errorClassName = 'text-xs text-red-300'
 
   return (
     <label className="block space-y-2">

@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { useParams } from 'react-router-dom'
 
@@ -64,27 +64,27 @@ export function BlogPostPage() {
           }}
         />
       ) : (
-        <SEO title="Blog Post" description="TenantFlow blog article." canonicalPath={ROUTES.blog} />
+        <SEO title="Article" description="Prophives insights article." canonicalPath={ROUTES.blog} />
       )}
 
-      <Button to={ROUTES.blog} variant="ghost" className="px-0 text-blue-700 hover:bg-transparent">
-        Back to blog
+      <Button to={ROUTES.blog} variant="ghost" className="px-0 text-[#f3d49a] hover:bg-transparent">
+        Back to insights
       </Button>
 
-      {error ? <ErrorState message={error} variant="light" /> : null}
-      {loading ? <LoadingState message="Loading article..." variant="message" /> : null}
+      <div className="mt-6">{error ? <ErrorState message={error} variant="light" /> : null}</div>
+      {loading ? <div className="mt-6"><LoadingState message="Loading article..." variant="message" /></div> : null}
 
       {!loading && post ? (
-        <article className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_25px_60px_-45px_rgba(15,23,42,0.55)] md:p-8">
+        <article className="ph-surface-card mt-6 rounded-[1.8rem] p-6 md:p-8">
           {post.cover_image ? (
-            <img src={post.cover_image} alt={post.title} loading="lazy" className="mb-6 h-64 w-full rounded-xl object-cover" />
+            <img src={post.cover_image} alt={post.title} loading="lazy" className="mb-6 h-64 w-full rounded-[1.4rem] object-cover" />
           ) : null}
 
-          <p className="text-xs uppercase tracking-[0.14em] text-slate-500">{formatDate(post.created_at)}</p>
-          <h1 className="mt-2 font-[Space_Grotesk] text-4xl font-semibold text-slate-900">{post.title}</h1>
-          <p className="mt-2 text-sm text-slate-500">By {post.author}</p>
+          <p className="text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">{formatDate(post.created_at)}</p>
+          <h1 className="ph-title mt-3 text-4xl font-semibold text-[var(--ph-text)]">{post.title}</h1>
+          <p className="mt-2 text-sm text-[var(--ph-text-muted)]">By {post.author}</p>
 
-          <div className="mt-8 space-y-4 text-slate-700 [&_h1]:font-[Space_Grotesk] [&_h1]:text-3xl [&_h1]:font-semibold [&_h2]:font-[Space_Grotesk] [&_h2]:text-2xl [&_h2]:font-semibold [&_h3]:font-[Space_Grotesk] [&_h3]:text-xl [&_h3]:font-semibold [&_li]:ml-5 [&_li]:list-disc [&_p]:leading-relaxed">
+          <div className="ph-rich-markdown mt-8 space-y-4 [&_h1]:text-3xl [&_h1]:font-semibold [&_h2]:text-2xl [&_h2]:font-semibold [&_h3]:text-xl [&_h3]:font-semibold [&_li]:ml-5 [&_li]:list-disc [&_p]:leading-relaxed">
             <ReactMarkdown>{post.content}</ReactMarkdown>
           </div>
         </article>
@@ -92,5 +92,3 @@ export function BlogPostPage() {
     </SectionContainer>
   )
 }
-
-

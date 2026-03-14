@@ -2,30 +2,30 @@ import { DocsArticleLayout } from '../../components/docs/DocsArticleLayout'
 import { ROUTES } from '../../routes/constants'
 
 const markdown = `
-## Tenant Login Requirements
+## Resident login requirements
 
-- Tenant Access ID (shared by owner)
+- Tenant Access ID shared by the owner
 - Password set during tenant creation
-- Optional tenant email for identity verification
+- Optional resident email for identity verification
 
-## Login Steps
+## Login steps
 
 1. Go to **Tenant Login**.
 2. Enter Tenant Access ID and password.
-3. Submit to access tenant dashboard.
+3. Submit to access the resident workspace.
 
 ## If login fails
 
-- Confirm Tenant Access ID is exact (case-sensitive).
-- Ask owner to verify tenant status is **active**.
-- Ask owner to reset tenant password from **Owner > Tenants**.
+- Confirm Tenant Access ID is exact.
+- Ask the owner to verify tenant status is **active**.
+- Ask the owner to reset the tenant password from **Owner Workspace > Tenants**.
 `
 
 export function DocsTenantLoginPage() {
   return (
     <DocsArticleLayout
-      title="Tenant Login Guide"
-      description="How tenants authenticate and troubleshoot access issues."
+      title="Resident Login Guide"
+      description="How residents authenticate and troubleshoot access issues."
       canonicalPath={ROUTES.docsTenantLogin}
       markdown={markdown}
     />

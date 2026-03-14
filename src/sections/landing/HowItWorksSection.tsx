@@ -1,5 +1,5 @@
-﻿import { motion } from 'framer-motion'
-import { Building2, ClipboardList, KeyRound, MessageCircleQuestion } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { ArrowRight, Building2, ClipboardList, KeyRound, MessageCircleQuestion } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { revealUp, staggerParent, useMotionVariants, viewportOnce } from '../../utils/motion'
@@ -9,23 +9,23 @@ import { ROUTES } from '../../routes/constants'
 
 const steps = [
   {
-    title: 'Owner creates property',
-    description: 'Set up property details and portfolio structure.',
+    title: 'Launch a property stack',
+    description: 'Configure buildings, units, and resident support structure for each portfolio.',
     icon: <Building2 className="h-5 w-5" />,
   },
   {
-    title: 'Owner adds tenants',
-    description: 'Add tenant records and configure lease essentials.',
+    title: 'Add residents and leases',
+    description: 'Bring tenant records, due dates, and payment expectations into one clean operational view.',
     icon: <ClipboardList className="h-5 w-5" />,
   },
   {
-    title: 'Tenants log in with ID',
-    description: 'Generated Tenant Access IDs unlock secure tenant portal login.',
+    title: 'Issue secure access',
+    description: 'Residents get their own workspace without owner-level exposure or operational friction.',
     icon: <KeyRound className="h-5 w-5" />,
   },
   {
-    title: 'Issues and updates flow in',
-    description: 'Tenants raise issues while owners track tickets, reminders, and alerts.',
+    title: 'Automate requests and reminders',
+    description: 'Support issues, rent chasers, and approvals move through clear stages with AI assistance.',
     icon: <MessageCircleQuestion className="h-5 w-5" />,
   },
 ]
@@ -35,54 +35,55 @@ export function HowItWorksSection() {
   const staggerVariants = useMotionVariants(staggerParent)
 
   return (
-    <SectionContainer className="py-10" size="wide">
-      <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce} className="glass-card rounded-3xl border border-slate-200 p-7 shadow-[0_30px_80px_-55px_rgba(15,23,42,0.6)] md:p-10">
+    <SectionContainer className="py-10 md:py-12" size="wide" tone="navy">
+      <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">How It Works</p>
-            <h2 className="mt-2 font-[Space_Grotesk] text-3xl font-semibold text-slate-950 md:text-4xl">
-              A clear 4-step workflow for property operations
+            <span className="ph-kicker">Operating Flow</span>
+            <h2 className="ph-title mt-5 text-3xl font-semibold text-[var(--ph-text)] md:text-4xl">
+              A disciplined workflow from onboarding to ongoing service
             </h2>
           </div>
-          <Button to={ROUTES.howItWorks} variant="outline">
-            View full flow
+          <Button to={ROUTES.howItWorks} variant="outline" iconRight={<ArrowRight className="h-4 w-4" />}>
+            View Full Workflow
           </Button>
         </div>
-
-        <motion.ol
-          variants={staggerVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={viewportOnce}
-          className="mt-8 grid gap-4 md:grid-cols-2"
-        >
-          {steps.map((step) => (
-            <motion.li
-              key={step.title}
-              variants={revealVariants}
-              className="rounded-xl border border-slate-200 bg-white p-4"
-            >
-              <div className="flex items-center gap-3">
-                <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-blue-200 bg-blue-50 text-blue-700">
-                  {step.icon}
-                </span>
-              </div>
-              <h3 className="mt-3 font-[Space_Grotesk] text-lg font-semibold text-slate-900">{step.title}</h3>
-              <p className="mt-2 text-sm text-slate-600">{step.description}</p>
-            </motion.li>
-          ))}
-        </motion.ol>
-
-        <p className="mt-6 text-sm text-slate-600">
-          Need details?{' '}
-          <Link to={ROUTES.contact} className="font-semibold text-blue-800 hover:text-blue-700">
-            Talk with our team
-          </Link>
-          .
-        </p>
       </motion.div>
+
+      <motion.ol
+        variants={staggerVariants}
+        initial="hidden"
+        whileInView="show"
+        viewport={viewportOnce}
+        className="mt-10 grid gap-4 md:grid-cols-2"
+      >
+        {steps.map((step, index) => (
+          <motion.li
+            key={step.title}
+            variants={revealVariants}
+            className="rounded-[1.6rem] border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-5"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-[rgba(240,163,35,0.18)] bg-[rgba(240,163,35,0.08)] text-[var(--ph-accent)]">
+                {step.icon}
+              </span>
+              <span className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--ph-text-muted)]">
+                Step {index + 1}
+              </span>
+            </div>
+            <h3 className="ph-title mt-4 text-xl font-semibold text-[var(--ph-text)]">{step.title}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-[var(--ph-text-muted)]">{step.description}</p>
+          </motion.li>
+        ))}
+      </motion.ol>
+
+      <p className="mt-6 text-sm text-[var(--ph-text-muted)]">
+        Want to see the rollout mapped to your portfolio?{' '}
+        <Link to={ROUTES.contact} className="ph-link font-semibold">
+          Talk to our team
+        </Link>
+        .
+      </p>
     </SectionContainer>
   )
 }
-
-

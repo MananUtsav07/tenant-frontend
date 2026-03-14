@@ -10,7 +10,7 @@ export type SeoOptions = {
   structuredData?: Record<string, unknown>
 }
 
-const APP_NAME = 'TenantFlow'
+const APP_NAME = 'Prophives'
 
 function upsertMeta(attribute: 'name' | 'property', key: string, content: string) {
   const selector = `meta[${attribute}="${key}"]`

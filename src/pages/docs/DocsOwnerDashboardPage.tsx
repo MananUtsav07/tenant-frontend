@@ -2,11 +2,11 @@ import { DocsArticleLayout } from '../../components/docs/DocsArticleLayout'
 import { ROUTES } from '../../routes/constants'
 
 const markdown = `
-## Owner Dashboard Overview
+## Owner workspace overview
 
-The owner dashboard provides:
+The owner workspace provides:
 
-- Active tenant count
+- Active resident count
 - Open support ticket count
 - Overdue rent indicator
 - Pending reminder count
@@ -14,22 +14,22 @@ The owner dashboard provides:
 
 ## Core sections
 
-- **Properties**: Add/edit/remove properties.
-- **Tenants**: Create tenant credentials and lease details.
-- **Tickets**: Update ticket status (open, in progress, resolved, closed).
+- **Properties**: Add, edit, or remove properties.
+- **Tenants**: Create resident credentials and lease details.
+- **Tickets**: Update ticket status from open to closed.
 - **Notifications**: Review reminder and ticket alerts.
 
 ## Best practices
 
 - Process reminders daily.
-- Keep tenant contact details current.
+- Keep resident contact details current.
 - Resolve tickets with status updates to maintain visibility.
 `
 
 export function DocsOwnerDashboardPage() {
   return (
     <DocsArticleLayout
-      title="Owner Dashboard Guide"
+      title="Owner Workspace Guide"
       description="Reference for owner workflows and operational best practices."
       canonicalPath={ROUTES.docsOwnerDashboard}
       markdown={markdown}

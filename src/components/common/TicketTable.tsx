@@ -21,12 +21,12 @@ export function TicketTable({
     <DataTable headers={headers}>
       {tickets.map((ticket) => (
         <tr key={ticket.id}>
-          <td className="px-4 py-3 font-medium text-slate-900">{ticket.subject}</td>
-          <td className="max-w-lg px-4 py-3 text-slate-600">{ticket.message}</td>
+          <td className="px-4 py-3 font-medium text-[var(--ph-text)]">{ticket.subject}</td>
+          <td className="max-w-lg px-4 py-3 text-[var(--ph-text-soft)]">{ticket.message}</td>
           <td className="px-4 py-3">
             <StatusBadge status={ticket.status} />
           </td>
-          <td className="px-4 py-3 text-slate-500">{formatDateTime(ticket.created_at)}</td>
+          <td className="px-4 py-3 text-[var(--ph-text-muted)]">{formatDateTime(ticket.created_at)}</td>
           {action ? <td className="px-4 py-3">{action(ticket)}</td> : null}
         </tr>
       ))}

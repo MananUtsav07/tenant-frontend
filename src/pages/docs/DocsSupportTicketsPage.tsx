@@ -2,11 +2,11 @@ import { DocsArticleLayout } from '../../components/docs/DocsArticleLayout'
 import { ROUTES } from '../../routes/constants'
 
 const markdown = `
-## Support Ticket Lifecycle
+## Support ticket lifecycle
 
-1. Tenant creates ticket with subject and message.
-2. Ticket appears in owner and admin ticket queues.
-3. Owner updates status as work progresses.
+1. Resident creates a ticket with a subject and message.
+2. Ticket appears in the owner queue.
+3. The owner updates status as work progresses.
 4. Ticket is resolved and closed when complete.
 
 ## Status definitions
@@ -19,7 +19,7 @@ const markdown = `
 ## Response guidelines
 
 - Keep ticket subjects clear and specific.
-- Update status quickly so tenants have visibility.
+- Update status quickly so residents have visibility.
 - Use notifications to prioritize high-impact issues.
 `
 
@@ -27,7 +27,7 @@ export function DocsSupportTicketsPage() {
   return (
     <DocsArticleLayout
       title="Support Tickets Guide"
-      description="How support ticket workflows function across tenant and owner dashboards."
+      description="How support ticket workflows function across resident and owner workspaces."
       canonicalPath={ROUTES.docsSupportTickets}
       markdown={markdown}
     />

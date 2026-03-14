@@ -6,6 +6,7 @@ import { DataTable } from '../../components/common/DataTable'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
+import { OrganizationBadge } from '../../components/common/OrganizationBadge'
 import { StatusBadge } from '../../components/common/StatusBadge'
 import { SummaryCard } from '../../components/common/SummaryCard'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
@@ -98,51 +99,95 @@ export function OwnerDashboardPage() {
     }
   }
 
+  const organizationLabel = owner?.organization?.name || owner?.company_name || owner?.full_name || 'Portfolio'
+
   return (
     <section className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div>
-          <h2 className="text-2xl font-semibold text-slate-900">Owner Dashboard</h2>
-          <p className="text-sm text-slate-400">Quick metrics for your portfolio operations.</p>
+      <div className="ph-surface-card-strong rounded-[1.9rem] p-6">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f1cb85]">Owner Command Center</p>
+            <h2 className="ph-title mt-3 text-3xl font-semibold text-[var(--ph-text)]">Portfolio overview</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--ph-text-muted)]">
+              Monitor residents, support requests, reminders, and approvals from a calmer control surface.
+            </p>
+            <div className="mt-4">
+              <OrganizationBadge name={organizationLabel} slug={owner?.organization?.slug} />
+            </div>
+          </div>
+          <Button
+            type="button"
+            onClick={() => void handleProcessReminders()}
+            disabled={processing}
+            variant="secondary"
+            iconLeft={<Clock3 className="h-4 w-4" />}
+          >
+            {processing ? 'Processing...' : 'Process reminder cycle'}
+          </Button>
         </div>
-        <Button
-          type="button"
-          onClick={() => void handleProcessReminders()}
-          disabled={processing}
-          variant="outline"
-          iconLeft={<Clock3 className="h-4 w-4" />}
-          className="border-slate-300 bg-white text-slate-700"
-        >
-          {processing ? 'Processing...' : 'Process reminders'}
-        </Button>
       </div>
 
       {error ? <ErrorState message={error} /> : null}
       {loading ? <LoadingState message="Loading dashboard summary..." rows={6} /> : null}
 
       {!loading && summary ? (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-6">
-          <SummaryCard label="Active Tenants" value={summary.active_tenants} icon={<Users className="h-4 w-4" />} />
-          <SummaryCard label="Open Tickets" value={summary.open_tickets} icon={<LifeBuoy className="h-4 w-4" />} />
-          <SummaryCard label="Overdue Rent" value={summary.overdue_rent} icon={<TriangleAlert className="h-4 w-4" />} />
-          <SummaryCard label="Reminders Pending" value={summary.reminders_pending} icon={<Clock3 className="h-4 w-4" />} />
-          <SummaryCard
-            label="Unread Notifications"
-            value={summary.unread_notifications}
-            icon={<Bell className="h-4 w-4" />}
-          />
-          <SummaryCard
-            label="Awaiting Approvals"
-            value={summary.awaiting_approvals}
-            icon={<CheckCheck className="h-4 w-4" />}
-          />
-        </div>
+        <>
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-6">
+            <SummaryCard label="Active Residents" value={summary.active_tenants} icon={<Users className="h-4 w-4" />} />
+            <SummaryCard label="Open Tickets" value={summary.open_tickets} icon={<LifeBuoy className="h-4 w-4" />} />
+            <SummaryCard label="Overdue Rent" value={summary.overdue_rent} icon={<TriangleAlert className="h-4 w-4" />} />
+            <SummaryCard label="Reminders Pending" value={summary.reminders_pending} icon={<Clock3 className="h-4 w-4" />} />
+            <SummaryCard
+              label="Unread Notices"
+              value={summary.unread_notifications}
+              icon={<Bell className="h-4 w-4" />}
+            />
+            <SummaryCard
+              label="Awaiting Approvals"
+              value={summary.awaiting_approvals}
+              icon={<CheckCheck className="h-4 w-4" />}
+            />
+          </div>
+
+          <div className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
+            <article className="ph-surface-card rounded-[1.7rem] p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Operational Focus</p>
+              <div className="mt-4 space-y-4 text-sm text-[var(--ph-text-soft)]">
+                <div>
+                  <p className="text-[var(--ph-text)]">{summary.overdue_rent > 0 ? 'Collections need attention' : 'Collections are currently stable'}</p>
+                  <p className="mt-1 text-[var(--ph-text-muted)]">
+                    {summary.overdue_rent > 0
+                      ? `${summary.overdue_rent} rent items are overdue and should be reviewed.`
+                      : 'No overdue rent items are currently flagged.'}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[var(--ph-text)]">{summary.awaiting_approvals > 0 ? 'Approval queue is active' : 'Approval queue is clear'}</p>
+                  <p className="mt-1 text-[var(--ph-text-muted)]">
+                    {summary.awaiting_approvals > 0
+                      ? `${summary.awaiting_approvals} resident payment confirmations are waiting for review.`
+                      : 'No resident payment confirmations are waiting for review.'}
+                  </p>
+                </div>
+              </div>
+            </article>
+
+            <article className="ph-surface-card rounded-[1.7rem] p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Automation Notes</p>
+              <ul className="mt-4 space-y-3 text-sm text-[var(--ph-text-soft)]">
+                <li>Reminder processing keeps scheduled follow-up disciplined across rent cycles.</li>
+                <li>Unread notices surface resident-facing activity that still needs attention.</li>
+                <li>Payment approvals stay human-led even when reminders and notifications are automated.</li>
+              </ul>
+            </article>
+          </div>
+        </>
       ) : null}
 
       {!loading && !summary && !error ? (
         <EmptyState
           title="No summary data"
-          description="Start by adding properties and tenants to generate dashboard metrics."
+          description="Start by adding properties and residents to generate dashboard metrics."
           icon={<TriangleAlert className="h-5 w-5" />}
           actionLabel="Manage Properties"
           actionHref={ROUTES.ownerProperties}
@@ -152,33 +197,35 @@ export function OwnerDashboardPage() {
       {!loading ? (
         <div className="space-y-3">
           <div>
-            <h3 className="text-lg font-semibold text-slate-900">Awaiting Approvals</h3>
-            <p className="text-sm text-slate-400">Review tenant rent payment confirmations pending your verification.</p>
+            <h3 className="ph-title text-2xl font-semibold text-[var(--ph-text)]">Awaiting approvals</h3>
+            <p className="text-sm text-[var(--ph-text-muted)]">
+              Review resident rent payment confirmations pending your verification.
+            </p>
           </div>
 
           {approvals.length === 0 ? (
             <EmptyState
               title="No rent approvals pending"
-              description="Tenant payment confirmations will appear here when submitted."
+              description="Resident payment confirmations will appear here when submitted."
               icon={<CheckCheck className="h-5 w-5" />}
             />
           ) : (
-            <DataTable headers={['Tenant', 'Property', 'Due Date', 'Amount', 'Requested', 'Status', 'Actions']}>
+            <DataTable headers={['Resident', 'Property', 'Due Date', 'Amount', 'Requested', 'Status', 'Actions']}>
               {approvals.map((approval) => (
                 <tr key={approval.id}>
                   <td className="px-4 py-3">
-                    <p className="font-medium text-slate-900">{approval.tenants?.full_name ?? '-'}</p>
-                    <p className="text-xs text-slate-400">{approval.tenants?.tenant_access_id ?? '-'}</p>
+                    <p className="font-medium text-[var(--ph-text)]">{approval.tenants?.full_name ?? '-'}</p>
+                    <p className="text-xs text-[var(--ph-text-muted)]">{approval.tenants?.tenant_access_id ?? '-'}</p>
                   </td>
-                  <td className="px-4 py-3 text-slate-700">
+                  <td className="px-4 py-3 text-[var(--ph-text-soft)]">
                     {approval.properties?.property_name ?? '-'}
                     {approval.properties?.unit_number ? ` (${approval.properties.unit_number})` : ''}
                   </td>
-                  <td className="px-4 py-3 text-slate-700">{formatDate(approval.due_date)}</td>
-                  <td className="px-4 py-3 text-slate-700">
+                  <td className="px-4 py-3 text-[var(--ph-text-soft)]">{formatDate(approval.due_date)}</td>
+                  <td className="px-4 py-3 text-[var(--ph-text-soft)]">
                     {formatCurrency(approval.amount_paid, owner?.organization?.currency_code)}
                   </td>
-                  <td className="px-4 py-3 text-slate-400">{formatDateTime(approval.created_at)}</td>
+                  <td className="px-4 py-3 text-[var(--ph-text-muted)]">{formatDateTime(approval.created_at)}</td>
                   <td className="px-4 py-3">
                     <StatusBadge status={approval.status} />
                   </td>
@@ -199,7 +246,7 @@ export function OwnerDashboardPage() {
                         <Button
                           type="button"
                           size="sm"
-                          variant="secondary"
+                          variant="primary"
                           disabled={reviewingApprovalId === approval.id}
                           onClick={() => void handleReviewApproval(approval.id, 'approve')}
                         >
@@ -209,7 +256,7 @@ export function OwnerDashboardPage() {
                           type="button"
                           size="sm"
                           variant="outline"
-                          className="border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100"
+                          className="border-red-500/28 bg-red-500/10 text-red-200 hover:bg-red-500/16"
                           disabled={reviewingApprovalId === approval.id}
                           onClick={() => void handleReviewApproval(approval.id, 'reject')}
                         >

@@ -40,23 +40,23 @@ function isLinkButton(props: ButtonProps): props is ButtonAsLink {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    'border border-blue-600 bg-gradient-to-b from-blue-600 to-blue-700 text-white shadow-[0_18px_36px_-20px_rgba(37,99,235,0.72)] hover:border-blue-500 hover:from-blue-500 hover:to-blue-600 active:from-blue-700 active:to-blue-700',
+    'border border-[rgba(240,163,35,0.32)] bg-[linear-gradient(180deg,#f3ae35_0%,#e39b1d_100%)] text-[#191108] shadow-[0_22px_48px_-26px_rgba(240,163,35,0.58)] hover:border-[#f6c26f] hover:shadow-[0_26px_58px_-28px_rgba(240,163,35,0.62)] active:translate-y-px',
   secondary:
-    'border border-slate-300 bg-gradient-to-b from-white to-slate-50 text-slate-700 shadow-[0_12px_28px_-20px_rgba(15,23,42,0.3)] hover:border-slate-400 hover:from-slate-50 hover:to-slate-100 active:from-slate-100 active:to-slate-100',
+    'border border-[rgba(83,88,100,0.56)] bg-[linear-gradient(180deg,rgba(26,34,56,0.95),rgba(16,21,34,0.98))] text-[var(--ph-text)] shadow-[0_16px_38px_-28px_rgba(0,0,0,0.62)] hover:border-[rgba(151,105,34,0.48)] hover:bg-[linear-gradient(180deg,rgba(31,40,66,0.95),rgba(16,21,34,1))]',
   outline:
-    'border border-blue-200 bg-white text-blue-700 shadow-[0_10px_24px_-22px_rgba(37,99,235,0.45)] hover:border-blue-300 hover:bg-blue-50/80 active:bg-blue-100/80',
-  ghost: 'bg-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900 active:bg-slate-200/70',
+    'border border-[rgba(240,163,35,0.34)] bg-[rgba(240,163,35,0.06)] text-[#f6d9a1] shadow-[0_16px_38px_-32px_rgba(240,163,35,0.42)] hover:bg-[rgba(240,163,35,0.1)] hover:text-[#fff1d5]',
+  ghost: 'bg-transparent text-[var(--ph-text-muted)] hover:bg-white/5 hover:text-[var(--ph-text)] active:bg-white/[0.07]',
 }
 
 const sizeClasses: Record<Size, string> = {
-  sm: 'px-3 py-2 text-sm',
-  md: 'px-4 py-2.5 text-sm',
-  lg: 'px-6 py-3 text-base',
+  sm: 'px-4 py-2 text-sm',
+  md: 'px-5 py-2.5 text-sm',
+  lg: 'px-6 py-3 text-sm sm:text-base',
 }
 
 function buttonClassName(variant: Variant, size: Size, className?: string) {
   return clsx(
-    'group inline-flex items-center justify-center gap-2 rounded-xl font-semibold ring-offset-white transition duration-200 focus-visible:ring-2 focus-visible:ring-blue-400/70 disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none',
+    'group inline-flex items-center justify-center gap-2 rounded-full font-semibold tracking-[0.01em] ring-offset-[var(--ph-bg)] transition duration-200 ease-out focus-visible:ring-2 focus-visible:ring-[rgba(240,163,35,0.72)] disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none',
     variantClasses[variant],
     sizeClasses[size],
     className,

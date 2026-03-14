@@ -1,6 +1,6 @@
-﻿import { useState, type FormEvent } from 'react'
 import { motion } from 'framer-motion'
-import { Clock3, Mail, MessageSquareMore } from 'lucide-react'
+import { useState, type FormEvent } from 'react'
+import { Clock3, Mail, MessageSquareMore, ShieldCheck } from 'lucide-react'
 
 import { Button } from '../../components/common/Button'
 import { FormInput } from '../../components/common/FormInput'
@@ -13,7 +13,7 @@ import { revealUp, staggerParent, useMotionVariants, viewportOnce } from '../../
 export function ContactPage() {
   usePageSeo({
     title: 'Contact',
-    description: 'Contact TenantFlow for product questions, demos, and onboarding support.',
+    description: 'Contact Prophives for demos, onboarding, and rollout planning for premium Dubai real estate operations.',
   })
 
   const [form, setForm] = useState({
@@ -42,7 +42,7 @@ export function ContactPage() {
       trackEvent('contact_form_submit_frontend', {
         user_type: 'public',
       })
-      setSuccess('Thanks for contacting us. Our team will respond shortly.')
+      setSuccess('Thanks for reaching out. We will reply shortly with next steps for your rollout.')
       setForm({ name: '', email: '', message: '' })
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Could not send contact request')
@@ -53,12 +53,15 @@ export function ContactPage() {
 
   return (
     <SectionContainer size="wide">
-      <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
+      <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
         <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">Contact</p>
-          <h1 className="mt-2 font-[Space_Grotesk] text-4xl font-semibold text-slate-950 md:text-5xl">Talk to the TenantFlow team</h1>
-          <p className="mt-4 text-slate-600">
-            Questions about onboarding, pricing, or deployment? Send us a message and we will get back quickly.
+          <span className="ph-kicker">Contact</span>
+          <h1 className="ph-title mt-5 text-4xl font-semibold text-[var(--ph-text)] md:text-6xl">
+            Plan your Prophives rollout
+          </h1>
+          <p className="mt-4 text-base leading-relaxed text-[var(--ph-text-muted)] md:text-lg">
+            Questions about onboarding, pricing, or implementation? We will help map the right owner and resident
+            experience for your portfolio.
           </p>
 
           <motion.div
@@ -68,19 +71,32 @@ export function ContactPage() {
             viewport={viewportOnce}
             className="mt-8 space-y-3"
           >
-            <motion.div variants={revealVariants} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_20px_50px_-38px_rgba(15,23,42,0.55)]">
-              <p className="inline-flex items-center gap-2 text-sm font-semibold text-slate-900">
-                <Mail className="h-4 w-4 text-blue-700" />
-                Company Email
+            <motion.div variants={revealVariants} className="ph-surface-card rounded-[1.5rem] p-5">
+              <p className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--ph-text)]">
+                <Mail className="h-4 w-4 text-[var(--ph-accent)]" />
+                Email
               </p>
-              <p className="mt-2 text-sm text-slate-600">support@tenantflow.app</p>
+              <p className="mt-2 text-sm text-[var(--ph-text-muted)]">hello@prophives.com</p>
             </motion.div>
-            <motion.div variants={revealVariants} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_20px_50px_-38px_rgba(15,23,42,0.55)]">
-              <p className="inline-flex items-center gap-2 text-sm font-semibold text-slate-900">
-                <Clock3 className="h-4 w-4 text-blue-700" />
-                Typical Response Window
+
+            <motion.div variants={revealVariants} className="ph-surface-card rounded-[1.5rem] p-5">
+              <p className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--ph-text)]">
+                <Clock3 className="h-4 w-4 text-[var(--ph-accent)]" />
+                Response Window
               </p>
-              <p className="mt-2 text-sm text-slate-600">Within one business day for sales and onboarding queries.</p>
+              <p className="mt-2 text-sm text-[var(--ph-text-muted)]">
+                Typically within one business day for sales and onboarding requests.
+              </p>
+            </motion.div>
+
+            <motion.div variants={revealVariants} className="ph-surface-card rounded-[1.5rem] p-5">
+              <p className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--ph-text)]">
+                <ShieldCheck className="h-4 w-4 text-[var(--ph-accent)]" />
+                Rollout Focus
+              </p>
+              <p className="mt-2 text-sm text-[var(--ph-text-muted)]">
+                Dubai real estate teams seeking premium automation, service visibility, and secure multi-role workspaces.
+              </p>
             </motion.div>
           </motion.div>
         </motion.div>
@@ -91,13 +107,13 @@ export function ContactPage() {
           whileInView="show"
           viewport={viewportOnce}
           onSubmit={handleSubmit}
-          className="rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_25px_65px_-40px_rgba(15,23,42,0.55)]"
+          className="ph-surface-card-strong rounded-[1.75rem] p-6 sm:p-7"
         >
-          <p className="inline-flex items-center gap-2 text-sm font-semibold text-slate-900">
-            <MessageSquareMore className="h-4 w-4 text-blue-700" />
+          <p className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--ph-text)]">
+            <MessageSquareMore className="h-4 w-4 text-[var(--ph-accent)]" />
             Send a message
           </p>
-          <div className="mt-4 space-y-4">
+          <div className="mt-5 space-y-4">
             <FormInput
               label="Name"
               variant="light"
@@ -116,7 +132,7 @@ export function ContactPage() {
               required
             />
             <FormInput
-              label="Message"
+              label="How can we help?"
               as="textarea"
               variant="light"
               value={form.message}
@@ -128,16 +144,18 @@ export function ContactPage() {
             />
           </div>
 
-          {error ? <p className="mt-4 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p> : null}
-          {success ? <p className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{success}</p> : null}
+          {error ? <p className="mt-4 rounded-xl border border-red-500/28 bg-red-950/28 px-3 py-2 text-sm text-red-200">{error}</p> : null}
+          {success ? (
+            <p className="mt-4 rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-3 py-2 text-sm text-emerald-200">
+              {success}
+            </p>
+          ) : null}
 
-          <Button type="submit" variant="secondary" size="lg" className="mt-5 w-full justify-center" disabled={busy}>
-            {busy ? 'Sending...' : 'Send Message'}
+          <Button type="submit" variant="primary" size="lg" className="mt-6 w-full justify-center" disabled={busy}>
+            {busy ? 'Sending...' : 'Request Demo'}
           </Button>
         </motion.form>
       </div>
     </SectionContainer>
   )
 }
-
-

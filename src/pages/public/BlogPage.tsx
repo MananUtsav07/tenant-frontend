@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button } from '../../components/common/Button'
 import { EmptyState } from '../../components/common/EmptyState'
@@ -35,49 +35,55 @@ export function BlogPage() {
   return (
     <SectionContainer size="wide">
       <SEO
-        title="Blog"
-        description="Insights and practical guides for property managers using TenantFlow."
+        title="Insights"
+        description="Insights and practical notes for property teams using Prophives."
         canonicalPath={ROUTES.blog}
         ogType="website"
         structuredData={{
           '@context': 'https://schema.org',
           '@type': 'Blog',
-          name: 'TenantFlow Blog',
-          description: 'Property management and tenant operations insights.',
+          name: 'Prophives Insights',
+          description: 'Property operations, resident experience, and workflow intelligence.',
           url: ROUTES.blog,
         }}
       />
 
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">Blog</p>
-      <h1 className="mt-2 font-[Space_Grotesk] text-4xl font-semibold text-slate-950 md:text-5xl">Product and operations insights</h1>
-      <p className="mt-4 max-w-3xl text-slate-600">
-        Learn how high-performing property teams manage tenants, support workflows, and reminders at scale.
+      <span className="ph-kicker">Insights</span>
+      <h1 className="ph-title mt-5 text-4xl font-semibold text-[var(--ph-text)] md:text-6xl">
+        Notes on premium property operations
+      </h1>
+      <p className="mt-4 max-w-3xl text-base leading-relaxed text-[var(--ph-text-muted)] md:text-lg">
+        Learn how high-performing real estate teams design calmer service workflows, clearer approvals, and stronger
+        resident experiences.
       </p>
 
-      {error ? <ErrorState message={error} variant="light" /> : null}
-      {loading ? <LoadingState message="Loading blog posts..." variant="message" /> : null}
+      <div className="mt-8">{error ? <ErrorState message={error} variant="light" /> : null}</div>
+      {loading ? <div className="mt-8"><LoadingState message="Loading articles..." variant="message" /></div> : null}
 
       {!loading && posts.length === 0 ? (
         <div className="mt-8">
-          <EmptyState title="No blog posts yet" description="Published blog posts will appear here." />
+          <EmptyState title="No articles published yet" description="Published articles will appear here." />
         </div>
       ) : null}
 
       {!loading && posts.length > 0 ? (
         <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {posts.map((post) => (
-            <article key={post.id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_25px_60px_-45px_rgba(15,23,42,0.55)]">
+            <article
+              key={post.id}
+              className="ph-surface-card overflow-hidden rounded-[1.7rem]"
+            >
               {post.cover_image ? (
                 <img src={post.cover_image} alt={post.title} loading="lazy" className="h-44 w-full object-cover" />
               ) : null}
               <div className="p-5">
-                <p className="text-xs uppercase tracking-[0.14em] text-slate-500">{formatDate(post.created_at)}</p>
-                <h2 className="mt-2 font-[Space_Grotesk] text-2xl font-semibold text-slate-900">{post.title}</h2>
-                <p className="mt-2 text-sm text-slate-600">{post.excerpt}</p>
+                <p className="text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">{formatDate(post.created_at)}</p>
+                <h2 className="ph-title mt-3 text-2xl font-semibold text-[var(--ph-text)]">{post.title}</h2>
+                <p className="mt-3 text-sm leading-relaxed text-[var(--ph-text-muted)]">{post.excerpt}</p>
                 <Button
                   to={`/blog/${post.slug}`}
                   variant="ghost"
-                  className="mt-4 px-0 text-blue-700 hover:bg-transparent"
+                  className="mt-4 px-0 text-[#f3d49a] hover:bg-transparent"
                   analyticsEvent="blog_post_open"
                   analyticsMetadata={{ slug: post.slug }}
                 >
@@ -89,15 +95,13 @@ export function BlogPage() {
         </div>
       ) : null}
 
-      <div className="mt-10 rounded-3xl border border-slate-200 bg-white p-6">
-        <h3 className="font-[Space_Grotesk] text-2xl font-semibold text-slate-900">Need help implementing these workflows?</h3>
-        <p className="mt-2 text-slate-600">Talk with our team to map your portfolio process in TenantFlow.</p>
-        <Button to={ROUTES.contact} variant="secondary" className="mt-4" analyticsEvent="cta_click" analyticsMetadata={{ location: 'blog_footer_contact' }}>
+      <div className="mt-10 rounded-[1.75rem] border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-6">
+        <h3 className="ph-title text-2xl font-semibold text-[var(--ph-text)]">Need help translating these ideas into rollout decisions?</h3>
+        <p className="mt-2 text-[var(--ph-text-muted)]">Talk with our team to map your portfolio process in Prophives.</p>
+        <Button to={ROUTES.contact} variant="primary" className="mt-4" analyticsEvent="cta_click" analyticsMetadata={{ location: 'blog_footer_contact' }}>
           Contact Team
         </Button>
       </div>
     </SectionContainer>
   )
 }
-
-

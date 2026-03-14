@@ -1,5 +1,5 @@
-﻿import { motion } from 'framer-motion'
-import { BellRing, Building2, ClipboardList, KeyRound, LayoutDashboard, MessageSquare } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Bot, Building2, LayoutDashboard, ShieldCheck, UserRound } from 'lucide-react'
 
 import { CTASection } from '../../components/common/CTASection'
 import { FeatureCard } from '../../components/common/FeatureCard'
@@ -10,53 +10,62 @@ import { revealUp, staggerParent, useMotionVariants, viewportOnce } from '../../
 
 const featureItems = [
   {
-    title: 'Tenant Dashboard',
-    description: 'Tenants view property details, payment status, and support history from one login.',
-    detail: 'Clear visibility for tenants.',
+    title: 'Owner Command Center',
+    description: 'Track residents, open issues, reminder queues, and approvals across your portfolio in one premium control surface.',
+    detail: 'Executive-grade visibility',
     icon: <LayoutDashboard className="h-5 w-5" />,
   },
   {
-    title: 'Owner Dashboard',
-    description: 'Owners monitor portfolio metrics like open tickets, active tenants, reminders, and notifications.',
-    detail: 'Decision-ready operational data.',
+    title: 'Resident Workspace',
+    description: 'Give tenants a polished portal for support, rent confirmation, and property details without exposing owner operations.',
+    detail: 'Resident-ready experience',
+    icon: <UserRound className="h-5 w-5" />,
+  },
+  {
+    title: 'Access Governance',
+    description: 'Control workspace boundaries, visibility rules, and operational permissions without adding friction to daily use.',
+    detail: 'Controlled role visibility',
+    icon: <ShieldCheck className="h-5 w-5" />,
+  },
+  {
+    title: 'AI Workflow Assistance',
+    description: 'Layer AI-assisted reminders, activity logs, and service workflows into the operation without losing human control.',
+    detail: 'Automation with governance',
+    icon: <Bot className="h-5 w-5" />,
+  },
+  {
+    title: 'Property & Lease Structure',
+    description: 'Keep buildings, units, rent terms, and resident records organized in a way that scales cleanly with portfolio growth.',
+    detail: 'Portfolio structure clarity',
     icon: <Building2 className="h-5 w-5" />,
   },
+]
+
+const workspacePillars = [
   {
-    title: 'Support Ticket System',
-    description: 'Capture, prioritize, and resolve maintenance issues with status tracking from start to finish.',
-    detail: 'Structured issue lifecycle.',
-    icon: <MessageSquare className="h-5 w-5" />,
+    title: 'Owners',
+    description: 'Run operations, approvals, and collections cadence from a single command layer.',
   },
   {
-    title: 'Rent Reminder System',
-    description: 'Automated reminder schedules reduce manual follow-up and keep payment communication timely.',
-    detail: 'Consistent reminder cadence.',
-    icon: <ClipboardList className="h-5 w-5" />,
+    title: 'Tenants',
+    description: 'Access a cleaner support and rent experience with fewer back-and-forth touchpoints.',
   },
   {
-    title: 'Notifications',
-    description: 'Receive owner notifications for ticket events, reminder runs, and important tenant updates.',
-    detail: 'Actionable alerts in real time.',
-    icon: <BellRing className="h-5 w-5" />,
-  },
-  {
-    title: 'Tenant Access ID',
-    description: 'Generate secure access IDs for tenant login without exposing owner-level controls.',
-    detail: 'Role-safe account access.',
-    icon: <KeyRound className="h-5 w-5" />,
+    title: 'Operations',
+    description: 'Keep approvals, reminders, and service workflows moving through one measured operating rhythm.',
   },
 ]
 
 export function FeaturesPage() {
   usePageSeo({
-    title: 'Features',
+    title: 'Platform Features',
     description:
-      'Explore TenantFlow features including owner dashboard, tenant portal, support tickets, reminders, and notifications.',
+      'Explore Prophives features for owners and residents across AI workflows, rent operations, and portfolio visibility.',
     canonicalPath: ROUTES.features,
     structuredData: {
       '@context': 'https://schema.org',
       '@type': 'ItemList',
-      name: 'TenantFlow Features',
+      name: 'Prophives Features',
       itemListElement: featureItems.map((feature, index) => ({
         '@type': 'ListItem',
         position: index + 1,
@@ -70,21 +79,26 @@ export function FeaturesPage() {
 
   return (
     <>
-      <SectionContainer size="wide">
+      <SectionContainer size="wide" tone="navy">
         <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">Features</p>
-          <h1 className="mt-2 font-[Space_Grotesk] text-4xl font-semibold text-slate-950 md:text-5xl">Purpose-built for property operations</h1>
-          <p className="mt-4 max-w-3xl text-slate-600">
-            TenantFlow combines tenant management, owner workflows, and support operations into a single SaaS platform designed for portfolios of any size.
+          <span className="ph-kicker">Platform Features</span>
+          <h1 className="ph-title mt-5 text-4xl font-semibold text-[var(--ph-text)] md:text-6xl">
+            Purpose-built for premium property operations
+          </h1>
+          <p className="mt-4 max-w-3xl text-base leading-relaxed text-[var(--ph-text-muted)] md:text-lg">
+            Prophives combines owner oversight, resident service, and AI-assisted workflow management into one
+            polished system designed for serious B2B real estate teams.
           </p>
         </motion.div>
+      </SectionContainer>
 
+      <SectionContainer size="wide">
         <motion.div
           variants={staggerVariants}
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="mt-9 grid gap-4 md:grid-cols-2 xl:grid-cols-3"
+          className="grid gap-4 md:grid-cols-2 xl:grid-cols-3"
         >
           {featureItems.map((feature) => (
             <FeatureCard
@@ -98,14 +112,41 @@ export function FeaturesPage() {
         </motion.div>
       </SectionContainer>
 
+      <SectionContainer size="wide" tone="panel">
+        <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
+          <span className="ph-kicker">Workspace Design</span>
+          <h2 className="ph-title mt-5 text-3xl font-semibold text-[var(--ph-text)] md:text-4xl">
+            One system with clear access and role separation
+          </h2>
+        </motion.div>
+
+        <motion.div
+          variants={staggerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          className="mt-8 grid gap-4 md:grid-cols-3"
+        >
+          {workspacePillars.map((pillar) => (
+            <motion.article
+              key={pillar.title}
+              variants={revealVariants}
+              className="rounded-[1.5rem] border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-5"
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">{pillar.title}</p>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--ph-text-muted)]">{pillar.description}</p>
+            </motion.article>
+          ))}
+        </motion.div>
+      </SectionContainer>
+
       <CTASection
-        title="See these features in your own workflow"
-        description="Set up your owner account and test the end-to-end tenant experience in a few minutes."
-        primaryAction={{ label: 'Owner Login', href: ROUTES.ownerLogin }}
+        eyebrow="Rollout Design"
+        title="See these features mapped to your portfolio workflow"
+        description="We can help you shape the owner and resident experience so the platform feels premium from day one."
+        primaryAction={{ label: 'Book Private Demo', href: ROUTES.contact }}
         secondaryAction={{ label: 'View Pricing', href: ROUTES.pricing }}
       />
     </>
   )
 }
-
-

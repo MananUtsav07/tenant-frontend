@@ -78,11 +78,14 @@ export function TenantDashboardPage() {
 
   return (
     <section className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold text-slate-900">Tenant Dashboard</h2>
-        <p className="text-sm text-slate-400">Your rent and support overview.</p>
+      <div className="ph-surface-card-strong rounded-[1.9rem] p-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f1cb85]">Resident Workspace</p>
+        <h2 className="ph-title mt-3 text-3xl font-semibold text-[var(--ph-text)]">Your property overview</h2>
+        <p className="mt-2 text-sm leading-relaxed text-[var(--ph-text-muted)]">
+          Stay on top of support activity, rent actions, and lease details from one focused resident surface.
+        </p>
         {authTenant?.organization ? (
-          <div className="mt-2">
+          <div className="mt-4">
             <OrganizationBadge name={authTenant.organization.name} slug={authTenant.organization.slug} />
           </div>
         ) : null}
@@ -117,25 +120,25 @@ export function TenantDashboardPage() {
       ) : null}
 
       {!loading && rentPaymentState?.is_visible ? (
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="text-lg font-semibold text-slate-900">Rent Payment Verification</h3>
-          <p className="mt-1 text-sm text-slate-500">
-            Available from 7 days before due date and remains until approved by your owner.
+        <div className="ph-surface-card rounded-[1.75rem] p-5">
+          <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">Rent payment verification</h3>
+          <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
+            Available from 7 days before due date and remains visible until approved by your owner.
           </p>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
             <div>
-              <p className="text-xs uppercase text-slate-400">Due Date</p>
-              <p className="text-sm font-medium text-slate-800">{formatDate(rentPaymentState.due_date)}</p>
+              <p className="text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">Due Date</p>
+              <p className="text-sm font-medium text-[var(--ph-text)]">{formatDate(rentPaymentState.due_date)}</p>
             </div>
             <div>
-              <p className="text-xs uppercase text-slate-400">Amount</p>
-              <p className="text-sm font-medium text-slate-800">
+              <p className="text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">Amount</p>
+              <p className="text-sm font-medium text-[var(--ph-text)]">
                 {formatCurrency(rentPaymentState.amount_paid, rentPaymentState.currency_code)}
               </p>
             </div>
             <div>
-              <p className="text-xs uppercase text-slate-400">Status</p>
+              <p className="text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">Status</p>
               {rentPaymentState.status === 'eligible' ? (
                 <StatusBadge status="pending" />
               ) : rentPaymentState.status === 'approved' ? (
@@ -148,71 +151,73 @@ export function TenantDashboardPage() {
 
           {rentPaymentState.status === 'eligible' ? (
             <div className="mt-4">
-              <Button type="button" variant="secondary" disabled={markingPaid} onClick={() => void handleMarkRentPaid()}>
+              <Button type="button" variant="primary" disabled={markingPaid} onClick={() => void handleMarkRentPaid()}>
                 {markingPaid ? 'Submitting...' : 'Mark Rent as Paid'}
               </Button>
             </div>
           ) : null}
 
           {rentPaymentState.status === 'awaiting_owner_approval' ? (
-            <p className="mt-4 text-sm font-medium text-violet-700">Waiting for owner verification.</p>
+            <p className="mt-4 text-sm font-medium text-[#f3d49a]">Waiting for owner verification.</p>
           ) : null}
 
           {rentPaymentState.status === 'rejected' ? (
             <div className="mt-4 space-y-3">
-              <p className="text-sm font-medium text-rose-700">Owner rejected this confirmation.</p>
+              <p className="text-sm font-medium text-red-200">Owner rejected this confirmation.</p>
               {rentPaymentState.rejection_reason ? (
-                <p className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
+                <p className="rounded-xl border border-red-500/26 bg-red-500/10 px-3 py-2 text-sm text-red-200">
                   Reason: {rentPaymentState.rejection_reason}
                 </p>
               ) : null}
-              <Button type="button" variant="secondary" disabled={markingPaid} onClick={() => void handleMarkRentPaid()}>
+              <Button type="button" variant="primary" disabled={markingPaid} onClick={() => void handleMarkRentPaid()}>
                 {markingPaid ? 'Resubmitting...' : 'Resubmit Mark as Paid'}
               </Button>
             </div>
           ) : null}
 
           {rentPaymentState.status === 'approved' ? (
-            <p className="mt-4 text-sm font-medium text-emerald-700">Rent payment marked as paid for this cycle.</p>
+            <p className="mt-4 text-sm font-medium text-emerald-200">Rent payment marked as paid for this cycle.</p>
           ) : null}
         </div>
       ) : null}
 
-      {!loading && tenant ? (
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="text-lg font-semibold text-slate-900">Lease & Payment Details</h3>
-          <div className="mt-3 grid gap-3 md:grid-cols-3">
-            <div>
-              <p className="text-xs uppercase text-slate-400">Payment Status</p>
-              <StatusBadge status={tenant.payment_status} />
-            </div>
-            <div>
-              <p className="text-xs uppercase text-slate-400">Lease Start</p>
-              <p className="text-sm text-slate-800">{formatDate(tenant.lease_start_date)}</p>
-            </div>
-            <div>
-              <p className="text-xs uppercase text-slate-400">Lease End</p>
-              <p className="text-sm text-slate-800">{formatDate(tenant.lease_end_date)}</p>
-            </div>
-            <div>
-              <p className="text-xs uppercase text-slate-400">Next Due Date</p>
-              <p className="text-sm text-slate-800">{formatDate(summary?.next_due_date)}</p>
+      <div className="grid gap-4 lg:grid-cols-2">
+        {!loading && tenant ? (
+          <div className="ph-surface-card rounded-[1.75rem] p-5">
+            <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">Lease & payment details</h3>
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
+              <div>
+                <p className="text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">Payment Status</p>
+                <StatusBadge status={tenant.payment_status} />
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">Lease Start</p>
+                <p className="text-sm text-[var(--ph-text)]">{formatDate(tenant.lease_start_date)}</p>
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">Lease End</p>
+                <p className="text-sm text-[var(--ph-text)]">{formatDate(tenant.lease_end_date)}</p>
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">Next Due Date</p>
+                <p className="text-sm text-[var(--ph-text)]">{formatDate(summary?.next_due_date)}</p>
+              </div>
             </div>
           </div>
-        </div>
-      ) : null}
+        ) : null}
 
-      {!loading && property ? (
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="text-lg font-semibold text-slate-900">Property</h3>
-          <p className="mt-2 inline-flex items-center gap-2 text-sm text-slate-700">
-            <Home className="h-4 w-4 text-blue-600" />
-            {property.property_name}
-          </p>
-          <p className="text-sm text-slate-400">{property.address}</p>
-          {property.unit_number ? <p className="text-sm text-slate-400">Unit: {property.unit_number}</p> : null}
-        </div>
-      ) : null}
+        {!loading && property ? (
+          <div className="ph-surface-card rounded-[1.75rem] p-5">
+            <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">Property</h3>
+            <p className="mt-3 inline-flex items-center gap-2 text-sm text-[var(--ph-text)]">
+              <Home className="h-4 w-4 text-[var(--ph-accent)]" />
+              {property.property_name}
+            </p>
+            <p className="mt-2 text-sm text-[var(--ph-text-muted)]">{property.address}</p>
+            {property.unit_number ? <p className="text-sm text-[var(--ph-text-muted)]">Unit: {property.unit_number}</p> : null}
+          </div>
+        ) : null}
+      </div>
     </section>
   )
 }

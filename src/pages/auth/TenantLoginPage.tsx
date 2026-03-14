@@ -1,6 +1,6 @@
-﻿import { useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { motion } from 'framer-motion'
-import { KeyRound, LogIn } from 'lucide-react'
+import { KeyRound, LogIn, ShieldCheck } from 'lucide-react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 
 import { Button } from '../../components/common/Button'
@@ -24,8 +24,8 @@ export function TenantLoginPage() {
   const revealVariants = useMotionVariants(revealUp)
 
   usePageSeo({
-    title: 'Tenant Login',
-    description: 'Login to the tenant portal using your tenant access ID and password.',
+    title: 'Resident Login',
+    description: 'Access your Prophives resident workspace using your tenant access ID and password.',
   })
 
   if (tenant) {
@@ -51,73 +51,95 @@ export function TenantLoginPage() {
   }
 
   return (
-    <SectionContainer className="py-12">
-      <motion.div
-        variants={revealVariants}
-        initial="hidden"
-        whileInView="show"
-        viewport={viewportOnce}
-        className="mx-auto max-w-xl rounded-3xl border border-slate-200 bg-white p-7 shadow-[0_25px_60px_-40px_rgba(15,23,42,0.55)]"
-      >
-        <h1 className="font-[Space_Grotesk] text-3xl font-semibold text-slate-900">Tenant Login</h1>
-        <p className="mt-2 text-sm text-slate-600">Access your property support dashboard.</p>
+    <SectionContainer size="wide" className="py-12">
+      <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce} className="ph-surface-navy ph-hex-bg rounded-[1.8rem] p-6 sm:p-7">
+          <span className="ph-kicker">Resident Workspace</span>
+          <h1 className="ph-title mt-5 text-4xl font-semibold text-[var(--ph-text)]">A cleaner support and rent experience for residents</h1>
+          <p className="mt-4 text-base leading-relaxed text-[var(--ph-text-muted)]">
+            Use your access ID to enter the Prophives resident workspace, view rent status, and follow support activity without operational noise.
+          </p>
+          <div className="mt-6 space-y-3 text-sm text-[var(--ph-text-soft)]">
+            <p className="inline-flex items-center gap-2">
+              <KeyRound className="h-4 w-4 text-[var(--ph-accent)]" />
+              Secure resident access through owner-issued credentials
+            </p>
+            <p className="inline-flex items-center gap-2">
+              <LogIn className="h-4 w-4 text-[var(--ph-accent)]" />
+              Support requests, rent actions, and property detail visibility
+            </p>
+            <p className="inline-flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-[var(--ph-accent)]" />
+              Separate resident workspace with no owner-level exposure
+            </p>
+          </div>
+        </motion.div>
 
-        <form className="mt-5 space-y-4" onSubmit={handleSubmit}>
-          <FormInput
-            label="Tenant Access ID"
-            variant="light"
-            name="tenant_access_id"
-            autoComplete="username"
-            value={tenantAccessId}
-            onChange={(event) => setTenantAccessId(event.target.value)}
-            required
-          />
-          <FormInput
-            label="Email (optional)"
-            type="email"
-            variant="light"
-            name="tenant_email"
-            autoComplete="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-          <FormInput
-            label="Password"
-            type="password"
-            variant="light"
-            name="tenant_password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
-          />
+        <motion.div
+          variants={revealVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          className="ph-surface-card-strong rounded-[1.9rem] p-7"
+        >
+          <h2 className="ph-title text-3xl font-semibold text-[var(--ph-text)]">Resident Login</h2>
+          <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Access your property support workspace.</p>
 
-          {error ? <ErrorState message={error} variant="light" /> : null}
+          <form className="mt-5 space-y-4" onSubmit={handleSubmit}>
+            <FormInput
+              label="Tenant Access ID"
+              variant="light"
+              name="tenant_access_id"
+              autoComplete="username"
+              value={tenantAccessId}
+              onChange={(event) => setTenantAccessId(event.target.value)}
+              required
+            />
+            <FormInput
+              label="Email (optional)"
+              type="email"
+              variant="light"
+              name="tenant_email"
+              autoComplete="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+            <FormInput
+              label="Password"
+              type="password"
+              variant="light"
+              name="tenant_password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              required
+            />
 
-          <Button
-            type="submit"
-            disabled={busy}
-            variant="secondary"
-            className="w-full justify-center"
-            iconLeft={<LogIn className="h-4 w-4" />}
-          >
-            {busy ? 'Please wait...' : 'Login'}
-          </Button>
-        </form>
+            {error ? <ErrorState message={error} variant="light" /> : null}
 
-        <p className="mt-4 text-sm text-slate-600">
-          Owner?{' '}
-          <Link className="font-semibold text-blue-700 hover:text-blue-600" to={ROUTES.ownerLogin}>
-            Login here
-          </Link>
-        </p>
-        <p className="mt-5 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-slate-600">
-          <KeyRound className="h-3.5 w-3.5 text-blue-700" />
-          Use the tenant access ID shared by your property owner.
-        </p>
-      </motion.div>
+            <Button
+              type="submit"
+              disabled={busy}
+              variant="primary"
+              className="w-full justify-center"
+              iconLeft={<LogIn className="h-4 w-4" />}
+            >
+              {busy ? 'Please wait...' : 'Login'}
+            </Button>
+          </form>
+
+          <p className="mt-4 text-sm text-[var(--ph-text-muted)]">
+            Owner?{' '}
+            <Link className="ph-link font-semibold" to={ROUTES.ownerLogin}>
+              Login here
+            </Link>
+          </p>
+          <p className="mt-5 inline-flex items-center gap-2 rounded-full border border-[rgba(83,88,100,0.42)] bg-white/[0.03] px-4 py-2 text-xs text-[var(--ph-text-muted)]">
+            <KeyRound className="h-3.5 w-3.5 text-[var(--ph-accent)]" />
+            Use the access ID shared by your property owner.
+          </p>
+        </motion.div>
+      </div>
     </SectionContainer>
   )
 }
-
-

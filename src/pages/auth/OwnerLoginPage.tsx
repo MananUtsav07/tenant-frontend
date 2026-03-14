@@ -1,6 +1,6 @@
 import { useMemo, useState, type FormEvent } from 'react'
 import { motion } from 'framer-motion'
-import { Building2, UserRound, UserRoundPlus } from 'lucide-react'
+import { Building2, ShieldCheck, Sparkles, UserRound, UserRoundPlus } from 'lucide-react'
 import countryList from 'react-select-country-list'
 import ReactCountryFlag from 'react-country-flag'
 import Select, { type StylesConfig } from 'react-select'
@@ -27,44 +27,52 @@ type CountrySelectOption = {
 const countrySelectStyles: StylesConfig<CountrySelectOption, false> = {
   control: (baseStyles, state) => ({
     ...baseStyles,
-    minHeight: '44px',
-    borderRadius: '0.75rem',
-    borderColor: state.isFocused ? '#60a5fa' : '#c6d3e6',
-    boxShadow: state.isFocused ? '0 0 0 3px rgba(147, 197, 253, 0.42)' : 'none',
-    backgroundColor: '#ffffff',
+    minHeight: '48px',
+    borderRadius: '1rem',
+    borderColor: state.isFocused ? '#f0a323' : 'rgba(83, 88, 100, 0.56)',
+    boxShadow: state.isFocused ? '0 0 0 3px rgba(240, 163, 35, 0.16)' : 'none',
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
     '&:hover': {
-      borderColor: '#adc2e2',
+      borderColor: 'rgba(151, 105, 34, 0.48)',
     },
   }),
   placeholder: (baseStyles) => ({
     ...baseStyles,
-    color: '#64748b',
+    color: '#97999e',
   }),
   input: (baseStyles) => ({
     ...baseStyles,
-    color: '#0f172a',
+    color: '#eeeff0',
   }),
   singleValue: (baseStyles) => ({
     ...baseStyles,
-    color: '#0f172a',
+    color: '#eeeff0',
   }),
   menu: (baseStyles) => ({
     ...baseStyles,
-    borderRadius: '0.75rem',
-    border: '1px solid #d9e2f0',
-    boxShadow: '0 12px 28px -18px rgba(15, 23, 42, 0.35)',
+    borderRadius: '1rem',
+    border: '1px solid rgba(83, 88, 100, 0.56)',
+    boxShadow: '0 18px 34px -20px rgba(0, 0, 0, 0.72)',
+    backgroundColor: '#161c2c',
     overflow: 'hidden',
   }),
   option: (baseStyles, state) => ({
     ...baseStyles,
     fontSize: '0.925rem',
-    backgroundColor: state.isFocused ? '#f1f5f9' : '#ffffff',
-    color: state.isDisabled ? '#94a3b8' : '#0f172a',
+    backgroundColor: state.isFocused ? 'rgba(240, 163, 35, 0.08)' : '#161c2c',
+    color: state.isDisabled ? '#7b7f88' : '#eeeff0',
     cursor: state.isDisabled ? 'not-allowed' : 'pointer',
   }),
   indicatorSeparator: (baseStyles) => ({
     ...baseStyles,
-    backgroundColor: '#d9e2f0',
+    backgroundColor: 'rgba(83, 88, 100, 0.56)',
+  }),
+  dropdownIndicator: (baseStyles) => ({
+    ...baseStyles,
+    color: '#97999e',
+    '&:hover': {
+      color: '#f0a323',
+    },
   }),
 }
 
@@ -110,7 +118,7 @@ export function OwnerLoginPage() {
 
   usePageSeo({
     title: 'Owner Login',
-    description: 'Login or register as a property owner to manage tenants, tickets, and reminders.',
+    description: 'Login or register as a property owner to run premium resident operations inside Prophives.',
   })
 
   if (owner) {
@@ -162,151 +170,179 @@ export function OwnerLoginPage() {
   }
 
   return (
-    <SectionContainer className="py-12">
-      <motion.div
-        variants={revealVariants}
-        initial="hidden"
-        whileInView="show"
-        viewport={viewportOnce}
-        className="mx-auto max-w-xl rounded-3xl border border-slate-200 bg-white p-7 shadow-[0_25px_60px_-40px_rgba(15,23,42,0.55)]"
-      >
-        <h1 className="font-[Space_Grotesk] text-3xl font-semibold text-slate-900">Owner Access</h1>
-        <p className="mt-2 text-sm text-slate-600">Login or create your owner account.</p>
+    <SectionContainer size="wide" className="py-12">
+      <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
+        <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce} className="ph-surface-navy ph-hex-bg rounded-[1.8rem] p-6 sm:p-7">
+          <span className="ph-kicker">Owner Workspace</span>
+          <h1 className="ph-title mt-5 text-4xl font-semibold text-[var(--ph-text)]">Operate your portfolio with more control and less noise</h1>
+          <p className="mt-4 text-base leading-relaxed text-[var(--ph-text-muted)]">
+            Prophives gives owners a premium command center for resident support, rent workflows, reminders, and approvals.
+          </p>
+          <div className="mt-6 space-y-3 text-sm text-[var(--ph-text-soft)]">
+            <p className="inline-flex items-center gap-2">
+              <Building2 className="h-4 w-4 text-[var(--ph-accent)]" />
+              Structured property and resident operations
+            </p>
+            <p className="inline-flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-[var(--ph-accent)]" />
+              AI-assisted reminders with human oversight
+            </p>
+            <p className="inline-flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-[var(--ph-accent)]" />
+              Secure owner, resident, and admin workspace separation
+            </p>
+          </div>
+        </motion.div>
 
-        <div className="mt-5 inline-flex rounded-lg border border-slate-200 bg-slate-50 p-1">
-          <button
-            type="button"
-            onClick={() => setMode('login')}
-            className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm ${
-              mode === 'login' ? 'bg-slate-900 text-white' : 'text-slate-600'
-            }`}
-          >
-            <UserRound className="h-4 w-4" />
-            Login
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode('register')}
-            className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm ${
-              mode === 'register' ? 'bg-slate-900 text-white' : 'text-slate-600'
-            }`}
-          >
-            <UserRoundPlus className="h-4 w-4" />
-            Register
-          </button>
-        </div>
+        <motion.div
+          variants={revealVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          className="ph-surface-card-strong rounded-[1.9rem] p-7"
+        >
+          <h2 className="ph-title text-3xl font-semibold text-[var(--ph-text)]">Owner Access</h2>
+          <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Login or create your Prophives owner account.</p>
 
-        <form className="mt-5 space-y-4" onSubmit={handleSubmit}>
-          <FormInput
-            label="Email"
-            type="email"
-            variant="light"
-            name="owner_email"
-            autoComplete="email"
-            value={form.email}
-            onChange={(event) => updateField('email', event.target.value)}
-            required
-          />
-          <FormInput
-            label="Password"
-            type="password"
-            variant="light"
-            name="owner_password"
-            autoComplete={mode === 'register' ? 'new-password' : 'current-password'}
-            value={form.password}
-            onChange={(event) => updateField('password', event.target.value)}
-            required
-          />
+          <div className="mt-5 inline-flex rounded-full border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-1">
+            <button
+              type="button"
+              onClick={() => setMode('login')}
+              className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm ${
+                mode === 'login'
+                  ? 'border border-[rgba(240,163,35,0.2)] bg-[rgba(240,163,35,0.08)] text-[#f4d298]'
+                  : 'text-[var(--ph-text-muted)]'
+              }`}
+            >
+              <UserRound className="h-4 w-4" />
+              Login
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode('register')}
+              className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm ${
+                mode === 'register'
+                  ? 'border border-[rgba(240,163,35,0.2)] bg-[rgba(240,163,35,0.08)] text-[#f4d298]'
+                  : 'text-[var(--ph-text-muted)]'
+              }`}
+            >
+              <UserRoundPlus className="h-4 w-4" />
+              Register
+            </button>
+          </div>
 
-          {mode === 'register' ? (
-            <>
-              <FormInput
-                label="Full Name"
-                variant="light"
-                name="owner_full_name"
-                autoComplete="name"
-                value={form.full_name}
-                onChange={(event) => updateField('full_name', event.target.value)}
-              />
-              <FormInput
-                label="Company Name"
-                variant="light"
-                name="owner_company_name"
-                autoComplete="organization"
-                value={form.company_name}
-                onChange={(event) => updateField('company_name', event.target.value)}
-              />
-              <FormInput
-                label="Support Email"
-                type="email"
-                variant="light"
-                name="owner_support_email"
-                autoComplete="email"
-                value={form.support_email}
-                onChange={(event) => updateField('support_email', event.target.value)}
-              />
-              <FormInput
-                label="Support WhatsApp"
-                variant="light"
-                name="owner_support_whatsapp"
-                autoComplete="tel"
-                value={form.support_whatsapp}
-                onChange={(event) => updateField('support_whatsapp', event.target.value)}
-              />
+          <form className="mt-5 space-y-4" onSubmit={handleSubmit}>
+            <FormInput
+              label="Email"
+              type="email"
+              variant="light"
+              name="owner_email"
+              autoComplete="email"
+              value={form.email}
+              onChange={(event) => updateField('email', event.target.value)}
+              required
+            />
+            <FormInput
+              label="Password"
+              type="password"
+              variant="light"
+              name="owner_password"
+              autoComplete={mode === 'register' ? 'new-password' : 'current-password'}
+              value={form.password}
+              onChange={(event) => updateField('password', event.target.value)}
+              required
+            />
 
-              <label className="block space-y-2">
-                <span className="text-sm font-medium text-slate-600">Country where your properties are located</span>
-                <Select<CountrySelectOption, false>
-                  inputId="owner_country_code"
-                  name="owner_country_code"
-                  options={countryOptions}
-                  value={selectedCountry}
-                  onChange={(option) => updateField('country_code', option?.value ?? '')}
-                  placeholder="Type to search country..."
-                  noOptionsMessage={() => 'No country found'}
-                  isSearchable
-                  styles={countrySelectStyles}
-                  isOptionDisabled={(option) => !option.isSupported}
-                  formatOptionLabel={(option) => (
-                    <span className="flex items-center gap-2">
-                      <ReactCountryFlag
-                        countryCode={option.value}
-                        svg
-                        aria-label={option.label}
-                        style={{ width: '1.1em', height: '1.1em' }}
-                      />
-                      <span>{option.isSupported ? option.label : `${option.label} (Coming soon)`}</span>
-                    </span>
-                  )}
+            {mode === 'register' ? (
+              <>
+                <FormInput
+                  label="Full Name"
+                  variant="light"
+                  name="owner_full_name"
+                  autoComplete="name"
+                  value={form.full_name}
+                  onChange={(event) => updateField('full_name', event.target.value)}
                 />
-                <span className="text-xs text-slate-500">
-                  Used to set your rent currency now and regional pricing later. Countries marked "Coming soon" are
-                  listed for visibility and cannot be selected yet.
-                </span>
-              </label>
-            </>
-          ) : null}
+                <FormInput
+                  label="Company Name"
+                  variant="light"
+                  name="owner_company_name"
+                  autoComplete="organization"
+                  value={form.company_name}
+                  onChange={(event) => updateField('company_name', event.target.value)}
+                />
+                <FormInput
+                  label="Support Email"
+                  type="email"
+                  variant="light"
+                  name="owner_support_email"
+                  autoComplete="email"
+                  value={form.support_email}
+                  onChange={(event) => updateField('support_email', event.target.value)}
+                />
+                <FormInput
+                  label="Support WhatsApp"
+                  variant="light"
+                  name="owner_support_whatsapp"
+                  autoComplete="tel"
+                  value={form.support_whatsapp}
+                  onChange={(event) => updateField('support_whatsapp', event.target.value)}
+                />
 
-          {error ? <ErrorState message={error} variant="light" /> : null}
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-[var(--ph-text-muted)]">Country where your properties are located</span>
+                  <Select<CountrySelectOption, false>
+                    inputId="owner_country_code"
+                    name="owner_country_code"
+                    options={countryOptions}
+                    value={selectedCountry}
+                    onChange={(option) => updateField('country_code', option?.value ?? '')}
+                    placeholder="Type to search country..."
+                    noOptionsMessage={() => 'No country found'}
+                    isSearchable
+                    styles={countrySelectStyles}
+                    isOptionDisabled={(option) => !option.isSupported}
+                    formatOptionLabel={(option) => (
+                      <span className="flex items-center gap-2">
+                        <ReactCountryFlag
+                          countryCode={option.value}
+                          svg
+                          aria-label={option.label}
+                          style={{ width: '1.1em', height: '1.1em' }}
+                        />
+                        <span>{option.isSupported ? option.label : `${option.label} (Coming soon)`}</span>
+                      </span>
+                    )}
+                  />
+                  <span className="text-xs text-[var(--ph-text-muted)]">
+                    Used to set your rent currency now and regional pricing later. Countries marked "Coming soon" are
+                    listed for visibility and cannot be selected yet.
+                  </span>
+                </label>
+              </>
+            ) : null}
 
-          <Button
-            type="submit"
-            disabled={busy}
-            variant="secondary"
-            className="w-full justify-center"
-            iconLeft={mode === 'login' ? <UserRound className="h-4 w-4" /> : <Building2 className="h-4 w-4" />}
-          >
-            {busy ? 'Please wait...' : mode === 'login' ? 'Login' : 'Create Account'}
-          </Button>
-        </form>
+            {error ? <ErrorState message={error} variant="light" /> : null}
 
-        <p className="mt-4 text-sm text-slate-600">
-          Tenant?{' '}
-          <Link className="font-semibold text-blue-700 hover:text-blue-600" to={ROUTES.tenantLogin}>
-            Login here
-          </Link>
-        </p>
-      </motion.div>
+            <Button
+              type="submit"
+              disabled={busy}
+              variant="primary"
+              className="w-full justify-center"
+              iconLeft={mode === 'login' ? <UserRound className="h-4 w-4" /> : <Building2 className="h-4 w-4" />}
+            >
+              {busy ? 'Please wait...' : mode === 'login' ? 'Login' : 'Create Account'}
+            </Button>
+          </form>
+
+          <p className="mt-4 text-sm text-[var(--ph-text-muted)]">
+            Resident?{' '}
+            <Link className="ph-link font-semibold" to={ROUTES.tenantLogin}>
+              Login here
+            </Link>
+          </p>
+        </motion.div>
+      </div>
     </SectionContainer>
   )
 }

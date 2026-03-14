@@ -91,7 +91,9 @@ function AppRoutes() {
           path={ROUTES.adminRoot}
           element={
             adminLoading ? (
-              <div className="p-6 text-slate-500">Loading admin session...</div>
+              <div className="flex min-h-screen items-center justify-center bg-[var(--ph-bg)] px-6 text-sm text-[var(--ph-text-muted)]">
+                Loading admin session...
+              </div>
             ) : (
               <Navigate to={admin ? ROUTES.adminDashboard : ROUTES.adminLogin} replace />
             )
@@ -145,7 +147,13 @@ export function App() {
   usePageAnalytics()
 
   return (
-    <Suspense fallback={<div className="p-6 text-slate-500">Loading page...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-[var(--ph-bg)] px-6 text-sm text-[var(--ph-text-muted)]">
+          Loading page...
+        </div>
+      }
+    >
       <AppRoutes />
     </Suspense>
   )

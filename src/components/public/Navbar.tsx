@@ -3,7 +3,6 @@ import { Building2, ChevronDown, LogOut, Menu, UserRound, X } from 'lucide-react
 import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 
-import { useAdminAuth } from '../../hooks/useAdminAuth'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { useTenantAuth } from '../../hooks/useTenantAuth'
 import { ROUTES } from '../../routes/constants'
@@ -12,19 +11,19 @@ import { Button } from '../common/Button'
 
 const navItems = [
   { to: ROUTES.home, label: 'Home' },
-  { to: ROUTES.features, label: 'Features' },
-  { to: ROUTES.howItWorks, label: 'How It Works' },
+  { to: ROUTES.features, label: 'Platform' },
+  { to: ROUTES.howItWorks, label: 'Workflow' },
   { to: ROUTES.pricing, label: 'Pricing' },
-  { to: ROUTES.blog, label: 'Blog' },
+  { to: ROUTES.blog, label: 'Insights' },
   { to: ROUTES.docs, label: 'Docs' },
   { to: ROUTES.contact, label: 'Contact' },
 ]
 
 type ActiveSession = {
-  role: 'owner' | 'tenant' | 'admin'
+  role: 'owner' | 'tenant'
   name: string
-  dashboardTo: string | null
-  dashboardLabel: string | null
+  dashboardTo: string
+  dashboardLabel: string
   onLogout: () => void
 }
 
@@ -36,7 +35,7 @@ function getAvatarInitials(name: string) {
     .slice(0, 2)
 
   if (parts.length === 0) {
-    return 'U'
+    return 'P'
   }
 
   return parts.map((part) => part.charAt(0).toUpperCase()).join('')
@@ -48,7 +47,6 @@ export function Navbar() {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false)
   const profileMenuRef = useRef<HTMLDivElement | null>(null)
 
-  const { admin, logout: logoutAdmin } = useAdminAuth()
   const { owner, logout: logoutOwner } = useOwnerAuth()
   const { tenant, logout: logoutTenant } = useTenantAuth()
 
@@ -103,7 +101,7 @@ export function Navbar() {
         role: 'tenant',
         name: tenant.full_name || tenant.email || tenant.tenant_access_id,
         dashboardTo: ROUTES.tenantDashboard,
-        dashboardLabel: 'Tenant Dashboard',
+        dashboardLabel: 'Tenant Workspace',
         onLogout: logoutTenant,
       }
     : owner
@@ -111,18 +109,10 @@ export function Navbar() {
           role: 'owner',
           name: owner.full_name || owner.company_name || owner.email,
           dashboardTo: ROUTES.ownerDashboard,
-          dashboardLabel: 'Owner Dashboard',
+          dashboardLabel: 'Owner Workspace',
           onLogout: logoutOwner,
         }
-      : admin
-        ? {
-            role: 'admin',
-            name: admin.full_name || admin.email,
-            dashboardTo: null,
-            dashboardLabel: null,
-            onLogout: logoutAdmin,
-          }
-        : null
+      : null
 
   const avatarInitials = getAvatarInitials(activeSession?.name ?? '')
 
@@ -138,41 +128,38 @@ export function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-40 transition-all duration-200 ${
+      className={`sticky top-0 z-40 transition-all duration-300 ${
         scrolled
-          ? 'border-b border-slate-200/80 bg-white/88 shadow-[0_12px_40px_-35px_rgba(15,23,42,0.45)] backdrop-blur-xl'
+          ? 'border-b border-[rgba(83,88,100,0.36)] bg-[rgba(9,13,24,0.84)] shadow-[0_18px_50px_-34px_rgba(0,0,0,0.8)] backdrop-blur-2xl'
           : 'bg-transparent'
       }`}
     >
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <Link to={ROUTES.home} className="inline-flex items-center gap-2">
-          <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-blue-700 text-sm font-bold text-white shadow-[0_12px_35px_-20px_rgba(37,99,235,0.9)]">
-            TF
+      <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-12 2xl:px-16">
+        <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between py-4">
+        <Link to={ROUTES.home} className="inline-flex items-center gap-3" onClick={() => setOpen(false)}>
+          <span className="relative inline-flex h-11 w-11 items-center justify-center rounded-[1rem] border border-[rgba(240,163,35,0.28)] bg-[linear-gradient(135deg,rgba(240,163,35,0.18),rgba(11,22,51,0.92))] shadow-[0_18px_40px_-24px_rgba(240,163,35,0.34)]">
+            <span className="absolute inset-[5px] rounded-[0.85rem] border border-white/8 bg-[rgba(11,22,51,0.58)]" />
+            <span className="ph-title relative z-10 text-base font-semibold text-[var(--ph-accent)]">P</span>
           </span>
-          <span className="font-[Space_Grotesk] text-lg font-semibold text-slate-900">TenantFlow</span>
+          <span>
+            <span className="ph-title block text-lg font-semibold text-[var(--ph-text)]">Prophives</span>
+            <span className="text-[11px] uppercase tracking-[0.24em] text-[var(--ph-text-muted)]">AI Real Estate Ops</span>
+          </span>
         </Link>
 
-        <nav className="hidden items-center gap-2 md:flex">
+        <nav className="hidden items-center gap-1 rounded-full border border-[rgba(83,88,100,0.36)] bg-white/[0.03] p-1.5 backdrop-blur md:flex">
           {navItems.map((item) => (
-            <NavLink key={item.to} to={item.to} className="relative px-3 py-2 text-sm font-medium">
+            <NavLink key={item.to} to={item.to} className="relative rounded-full px-4 py-2 text-sm font-medium">
               {({ isActive }) => (
-                <>
-                  <span
-                    className={
-                      isActive
-                        ? 'text-slate-950'
-                        : 'text-slate-600 transition-colors hover:text-slate-900'
-                    }
-                  >
-                    {item.label}
-                  </span>
-                  {isActive ? (
-                    <motion.span
-                      layoutId="nav-active-indicator"
-                      className="absolute inset-x-2 -bottom-0.5 h-0.5 rounded-full bg-blue-500"
-                    />
-                  ) : null}
-                </>
+                <span
+                  className={
+                    isActive
+                      ? 'text-[#f4d298]'
+                      : 'text-[var(--ph-text-muted)] transition-colors hover:text-[var(--ph-text)]'
+                  }
+                >
+                  {item.label}
+                </span>
               )}
             </NavLink>
           ))}
@@ -186,7 +173,7 @@ export function Navbar() {
               </Button>
               <Button
                 to={ROUTES.tenantLogin}
-                variant="outline"
+                variant="secondary"
                 size="sm"
                 iconLeft={<UserRound className="h-4 w-4" />}
               >
@@ -194,7 +181,7 @@ export function Navbar() {
               </Button>
             </>
           ) : null}
-          {activeSession?.dashboardTo && activeSession?.dashboardLabel ? (
+          {activeSession ? (
             <Button to={activeSession.dashboardTo} variant="secondary" size="sm">
               {activeSession.dashboardLabel}
             </Button>
@@ -203,19 +190,19 @@ export function Navbar() {
             <div className="relative" ref={profileMenuRef}>
               <button
                 type="button"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-2 py-1 shadow-[0_6px_16px_-12px_rgba(15,23,42,0.45)] transition hover:border-slate-300"
+                className="inline-flex items-center gap-2 rounded-full border border-[rgba(83,88,100,0.42)] bg-white/[0.04] px-2 py-1 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.72)] transition hover:border-[rgba(151,105,34,0.36)]"
                 onClick={() => setProfileMenuOpen((current) => !current)}
                 aria-expanded={profileMenuOpen}
                 aria-haspopup="menu"
               >
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-blue-700 text-xs font-semibold uppercase tracking-wide text-white">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[rgba(240,163,35,0.24)] bg-[rgba(240,163,35,0.12)] text-xs font-semibold uppercase tracking-wide text-[#f3d49a]">
                   {avatarInitials}
                 </span>
-                <span className="hidden max-w-[11rem] truncate text-sm font-medium text-slate-700 lg:block">
+                <span className="hidden max-w-[11rem] truncate text-sm font-medium text-[var(--ph-text)] lg:block">
                   {activeSession.name}
                 </span>
                 <ChevronDown
-                  className={`h-4 w-4 text-slate-500 transition-transform ${profileMenuOpen ? 'rotate-180' : ''}`}
+                  className={`h-4 w-4 text-[var(--ph-text-muted)] transition-transform ${profileMenuOpen ? 'rotate-180' : ''}`}
                 />
               </button>
 
@@ -226,12 +213,12 @@ export function Navbar() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.16 }}
-                    className="absolute right-0 mt-2 w-44 rounded-xl border border-slate-200 bg-white p-1 shadow-[0_16px_30px_-20px_rgba(15,23,42,0.55)]"
+                    className="absolute right-0 mt-2 w-48 rounded-2xl border border-[rgba(83,88,100,0.48)] bg-[linear-gradient(180deg,rgba(26,34,56,0.98),rgba(16,21,34,1))] p-1.5 shadow-[0_18px_34px_-22px_rgba(0,0,0,0.82)]"
                   >
                     <button
                       type="button"
                       onClick={handleLogout}
-                      className="inline-flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900"
+                      className="inline-flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-[var(--ph-text-soft)] transition hover:bg-white/[0.05] hover:text-[var(--ph-text)]"
                     >
                       <LogOut className="h-4 w-4" />
                       Logout
@@ -245,12 +232,13 @@ export function Navbar() {
 
         <button
           type="button"
-          className="rounded-lg border border-slate-300 bg-white/85 p-2 text-slate-700 md:hidden"
+          className="rounded-full border border-[rgba(83,88,100,0.42)] bg-white/[0.04] p-2 text-[var(--ph-text)] md:hidden"
           aria-expanded={open}
           onClick={() => setOpen((current) => !current)}
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -261,7 +249,7 @@ export function Navbar() {
             exit="hidden"
             variants={menuVariants}
             viewport={viewportOnce}
-            className="border-t border-slate-200 bg-white/95 px-4 py-4 shadow-[0_20px_30px_-20px_rgba(15,23,42,0.45)] backdrop-blur md:hidden"
+            className="border-t border-[rgba(83,88,100,0.36)] bg-[rgba(9,13,24,0.96)] px-4 py-4 shadow-[0_20px_30px_-20px_rgba(0,0,0,0.72)] backdrop-blur md:hidden"
           >
             <nav className="space-y-2">
               {navItems.map((item) => (
@@ -270,10 +258,10 @@ export function Navbar() {
                   to={item.to}
                   onClick={() => setOpen(false)}
                   className={({ isActive }) =>
-                    `block rounded-lg px-3 py-2 text-sm ${
+                    `block rounded-2xl px-4 py-3 text-sm ${
                       isActive
-                        ? 'bg-blue-600 text-white'
-                        : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                        ? 'border border-[rgba(240,163,35,0.2)] bg-[rgba(240,163,35,0.08)] text-[#f4d298]'
+                        : 'text-[var(--ph-text-soft)] hover:bg-white/[0.04] hover:text-[var(--ph-text)]'
                     }`
                   }
                 >
@@ -281,7 +269,7 @@ export function Navbar() {
                 </NavLink>
               ))}
             </nav>
-            <div className="mt-3 grid gap-2">
+            <div className="mt-4 grid gap-2">
               {!activeSession ? (
                 <>
                   <Button
@@ -294,7 +282,7 @@ export function Navbar() {
                   </Button>
                   <Button
                     to={ROUTES.tenantLogin}
-                    variant="outline"
+                    variant="secondary"
                     onClick={() => setOpen(false)}
                     iconLeft={<UserRound className="h-4 w-4" />}
                   >
@@ -302,20 +290,20 @@ export function Navbar() {
                   </Button>
                 </>
               ) : null}
-              {activeSession?.dashboardTo && activeSession?.dashboardLabel ? (
-                <Button to={activeSession.dashboardTo} variant="secondary" onClick={() => setOpen(false)}>
-                  {activeSession.dashboardLabel}
-                </Button>
-              ) : null}
               {activeSession ? (
                 <>
-                  <div className="mt-1 inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-blue-700 text-xs font-semibold uppercase tracking-wide text-white">
+                  <Button to={activeSession.dashboardTo} variant="secondary" onClick={() => setOpen(false)}>
+                    {activeSession.dashboardLabel}
+                  </Button>
+                  <div className="mt-1 inline-flex items-center gap-3 rounded-2xl border border-[rgba(83,88,100,0.4)] bg-white/[0.03] px-4 py-3">
+                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(240,163,35,0.24)] bg-[rgba(240,163,35,0.12)] text-xs font-semibold uppercase tracking-wide text-[#f3d49a]">
                       {avatarInitials}
                     </span>
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-slate-800">{activeSession.name}</p>
-                      <p className="text-xs uppercase tracking-wide text-slate-500">{activeSession.role} session</p>
+                      <p className="truncate text-sm font-medium text-[var(--ph-text)]">{activeSession.name}</p>
+                      <p className="text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">
+                        {activeSession.role} session
+                      </p>
                     </div>
                   </div>
                   <Button
