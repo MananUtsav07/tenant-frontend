@@ -1,14 +1,70 @@
-import { Bell, Inbox } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Bell, Inbox, Send } from 'lucide-react'
 
 import { Button } from '../../components/common/Button'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
 import { NotificationList } from '../../components/common/NotificationList'
+import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { useOwnerNotifications } from '../../hooks/useOwnerNotifications'
+import { api } from '../../services/api'
+import type { TelegramOnboardingState } from '../../types/api'
 
 export function OwnerNotificationsPage() {
-  const { notifications, unreadCount, loading, error, markRead, markAllRead, refresh } = useOwnerNotifications()
+  const { token } = useOwnerAuth()
+  const { notifications, unreadCount, loading, error: notificationsError, refresh, markRead, markAllRead } =
+    useOwnerNotifications()
+  const [telegramOnboarding, setTelegramOnboarding] = useState<TelegramOnboardingState | null>(null)
+  const [telegramError, setTelegramError] = useState<string | null>(null)
+  const [disconnectingTelegram, setDisconnectingTelegram] = useState(false)
+
+  const loadTelegramStatus = useCallback(async () => {
+    if (!token) {
+      setTelegramOnboarding(null)
+      setTelegramError(null)
+      return
+    }
+
+    try {
+      setTelegramError(null)
+      const response = await api.getOwnerTelegramOnboarding(token)
+      setTelegramOnboarding(response.onboarding)
+    } catch (loadError) {
+      setTelegramError(loadError instanceof Error ? loadError.message : 'Failed to load Telegram status')
+    }
+  }, [token])
+
+  useEffect(() => {
+    void loadTelegramStatus()
+  }, [loadTelegramStatus])
+
+  const connectTelegram = () => {
+    if (!telegramOnboarding?.connect_url) {
+      return
+    }
+
+    window.open(telegramOnboarding.connect_url, '_blank', 'noopener,noreferrer')
+  }
+
+  const disconnectTelegram = async () => {
+    if (!token) {
+      return
+    }
+
+    try {
+      setDisconnectingTelegram(true)
+      setTelegramError(null)
+      await api.disconnectOwnerTelegram(token)
+      await loadTelegramStatus()
+    } catch (disconnectError) {
+      setTelegramError(disconnectError instanceof Error ? disconnectError.message : 'Failed to disconnect Telegram')
+    } finally {
+      setDisconnectingTelegram(false)
+    }
+  }
+
+  const pageError = useMemo(() => notificationsError ?? telegramError, [notificationsError, telegramError])
 
   return (
     <section className="space-y-6">
@@ -41,7 +97,52 @@ export function OwnerNotificationsPage() {
         </div>
       </div>
 
-      {error ? <ErrorState message={error} /> : null}
+      {!loading && telegramOnboarding ? (
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h3 className="inline-flex items-center gap-2 text-lg font-semibold text-slate-900">
+            <Send className="h-5 w-5 text-sky-600" />
+            Telegram Alerts
+          </h3>
+          <p className="mt-2 text-sm text-slate-600">
+            {telegramOnboarding.connected
+              ? `Connected${telegramOnboarding.linked_chat?.username ? ` as @${telegramOnboarding.linked_chat.username}` : ''}.`
+              : 'Connect Telegram to receive instant owner alerts.'}
+          </p>
+          <p className="mt-1 text-xs text-slate-500">Open bot, tap Start once, then click Refresh status.</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {!telegramOnboarding.connected ? (
+              <button
+                type="button"
+                className="rounded-xl border border-sky-600 bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-500 disabled:cursor-not-allowed disabled:opacity-60"
+                onClick={connectTelegram}
+                disabled={!telegramOnboarding.connect_url}
+              >
+                Connect Telegram
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                onClick={() => void disconnectTelegram()}
+                disabled={disconnectingTelegram}
+              >
+                {disconnectingTelegram ? 'Disconnecting...' : 'Disconnect Telegram'}
+              </button>
+            )}
+            <button
+              type="button"
+              className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+              onClick={() => {
+                void loadTelegramStatus()
+              }}
+            >
+              Refresh status
+            </button>
+          </div>
+        </div>
+      ) : null}
+
+      {pageError ? <ErrorState message={pageError} /> : null}
       {loading ? <LoadingState message="Loading notifications..." rows={4} /> : null}
 
       {!loading && notifications.length === 0 ? (

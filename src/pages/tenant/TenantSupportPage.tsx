@@ -1,5 +1,5 @@
-﻿import { useEffect, useState } from 'react'
-import { Building2, Inbox, Mail, MessageSquare, Phone } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Building2, Inbox, Mail, MessageSquare, Phone, Send } from 'lucide-react'
 
 import { Button } from '../../components/common/Button'
 import { EmptyState } from '../../components/common/EmptyState'
@@ -9,14 +9,16 @@ import { TicketTable } from '../../components/common/TicketTable'
 import { useTenantAuth } from '../../hooks/useTenantAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
-import type { TenantOwnerContact, TenantTicket } from '../../types/api'
+import type { TelegramOnboardingState, TenantOwnerContact, TenantTicket } from '../../types/api'
 
 export function TenantSupportPage() {
   const { token } = useTenantAuth()
   const [ownerContact, setOwnerContact] = useState<TenantOwnerContact | null>(null)
   const [tickets, setTickets] = useState<TenantTicket[]>([])
+  const [telegramOnboarding, setTelegramOnboarding] = useState<TelegramOnboardingState | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [disconnectingTelegram, setDisconnectingTelegram] = useState(false)
 
   useEffect(() => {
     const load = async () => {
@@ -26,12 +28,14 @@ export function TenantSupportPage() {
 
       try {
         setError(null)
-        const [contactResponse, ticketsResponse] = await Promise.all([
+        const [contactResponse, ticketsResponse, telegramResponse] = await Promise.all([
           api.getTenantOwnerContact(token),
           api.getTenantTickets(token),
+          api.getTenantTelegramOnboarding(token),
         ])
         setOwnerContact(contactResponse.owner)
         setTickets(ticketsResponse.tickets)
+        setTelegramOnboarding(telegramResponse.onboarding)
       } catch (loadError) {
         setError(loadError instanceof Error ? loadError.message : 'Failed to load support details')
       } finally {
@@ -42,6 +46,44 @@ export function TenantSupportPage() {
     void load()
   }, [token])
 
+  const refreshTelegramStatus = async () => {
+    if (!token) {
+      return
+    }
+
+    try {
+      setError(null)
+      const response = await api.getTenantTelegramOnboarding(token)
+      setTelegramOnboarding(response.onboarding)
+    } catch (refreshError) {
+      setError(refreshError instanceof Error ? refreshError.message : 'Failed to refresh Telegram status')
+    }
+  }
+
+  const connectTelegram = () => {
+    if (!telegramOnboarding?.connect_url) {
+      return
+    }
+    window.open(telegramOnboarding.connect_url, '_blank', 'noopener,noreferrer')
+  }
+
+  const disconnectTelegram = async () => {
+    if (!token) {
+      return
+    }
+
+    try {
+      setDisconnectingTelegram(true)
+      setError(null)
+      await api.disconnectTenantTelegram(token)
+      await refreshTelegramStatus()
+    } catch (disconnectError) {
+      setError(disconnectError instanceof Error ? disconnectError.message : 'Failed to disconnect Telegram')
+    } finally {
+      setDisconnectingTelegram(false)
+    }
+  }
+
   return (
     <section className="space-y-6">
       <div>
@@ -51,6 +93,51 @@ export function TenantSupportPage() {
         </h2>
         <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Owner support contact and recent support activity.</p>
       </div>
+
+      {!loading && telegramOnboarding ? (
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h3 className="inline-flex items-center gap-2 text-lg font-semibold text-slate-900">
+            <Send className="h-5 w-5 text-sky-600" />
+            Telegram Alerts
+          </h3>
+          <p className="mt-2 text-sm text-slate-600">
+            {telegramOnboarding.connected
+              ? `Connected${telegramOnboarding.linked_chat?.username ? ` as @${telegramOnboarding.linked_chat.username}` : ''}.`
+              : 'Connect Telegram to receive support and rent update alerts.'}
+          </p>
+          <p className="mt-1 text-xs text-slate-500">Open bot, tap Start once, then click Refresh status.</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {!telegramOnboarding.connected ? (
+              <button
+                type="button"
+                className="rounded-xl border border-sky-600 bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-500 disabled:cursor-not-allowed disabled:opacity-60"
+                onClick={connectTelegram}
+                disabled={!telegramOnboarding.connect_url}
+              >
+                Connect Telegram
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                onClick={disconnectTelegram}
+                disabled={disconnectingTelegram}
+              >
+                {disconnectingTelegram ? 'Disconnecting...' : 'Disconnect Telegram'}
+              </button>
+            )}
+            <button
+              type="button"
+              className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+              onClick={() => {
+                void refreshTelegramStatus()
+              }}
+            >
+              Refresh status
+            </button>
+          </div>
+        </div>
+      ) : null}
 
       {error ? <ErrorState message={error} /> : null}
       {loading ? <LoadingState message="Loading support details..." rows={4} /> : null}
@@ -97,7 +184,3 @@ export function TenantSupportPage() {
     </section>
   )
 }
-
-
-
-

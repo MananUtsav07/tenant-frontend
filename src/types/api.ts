@@ -180,6 +180,19 @@ export type TenantOwnerContact = {
   support_whatsapp: string | null
 }
 
+export type TelegramOnboardingState = {
+  connected: boolean
+  bot_username: string | null
+  connect_url: string | null
+  linked_chat: {
+    chat_id: string
+    username: string | null
+    first_name: string | null
+    last_name: string | null
+    linked_at: string
+  } | null
+}
+
 export type TenantAuthPayload = {
   token: string
   tenant: {
