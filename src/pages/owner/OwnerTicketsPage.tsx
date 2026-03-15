@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from 'react'
-import { LifeBuoy, MessageSquareReply, TicketX } from 'lucide-react'
+import { ArrowUpRight, LifeBuoy, MessageSquareReply, TicketX } from 'lucide-react'
+import { useSearchParams } from 'react-router-dom'
 
 import { Button } from '../../components/common/Button'
 import { EmptyState } from '../../components/common/EmptyState'
@@ -12,7 +13,6 @@ import { TicketTable } from '../../components/common/TicketTable'
 import { dashboardFormPanelClassName } from '../../components/common/formTheme'
 import { TicketReplyComposer } from '../../components/tickets/TicketReplyComposer'
 import { TicketThreadTimeline } from '../../components/tickets/TicketThreadTimeline'
-import { MaintenanceWorkflowOwnerPanel } from '../../components/tickets/MaintenanceWorkflowOwnerPanel'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
@@ -23,10 +23,12 @@ const ownerTicketStatuses: TenantTicket['status'][] = ['open', 'in_progress', 'r
 
 export function OwnerTicketsPage() {
   const { token } = useOwnerAuth()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const selectedTicketParam = searchParams.get('ticket')
   const [tickets, setTickets] = useState<TenantTicket[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null)
+  const [selectedTicketId, setSelectedTicketId] = useState<string | null>(selectedTicketParam)
   const [thread, setThread] = useState<SupportTicketThread | null>(null)
   const [threadLoading, setThreadLoading] = useState(false)
   const [threadError, setThreadError] = useState<string | null>(null)
@@ -63,10 +65,19 @@ export function OwnerTicketsPage() {
       return
     }
 
-    if (!selectedTicketId || !tickets.some((ticket) => ticket.id === selectedTicketId)) {
-      setSelectedTicketId(tickets[0].id)
+    if (selectedTicketParam && tickets.some((ticket) => ticket.id === selectedTicketParam)) {
+      if (selectedTicketId !== selectedTicketParam) {
+        setSelectedTicketId(selectedTicketParam)
+      }
+      return
     }
-  }, [tickets, selectedTicketId])
+
+    if (!selectedTicketId || !tickets.some((ticket) => ticket.id === selectedTicketId)) {
+      const nextTicketId = tickets[0].id
+      setSelectedTicketId(nextTicketId)
+      setSearchParams({ ticket: nextTicketId }, { replace: true })
+    }
+  }, [selectedTicketId, selectedTicketParam, setSearchParams, tickets])
 
   const loadThread = useCallback(
     async (ticketId: string) => {
@@ -154,6 +165,11 @@ export function OwnerTicketsPage() {
     }
   }, [thread])
 
+  const handleSelectTicket = (ticketId: string) => {
+    setSelectedTicketId(ticketId)
+    setSearchParams({ ticket: ticketId })
+  }
+
   return (
     <section className="space-y-6">
       <div>
@@ -185,7 +201,7 @@ export function OwnerTicketsPage() {
               type="button"
               variant={selectedTicketId === ticket.id ? 'secondary' : 'outline'}
               size="sm"
-              onClick={() => setSelectedTicketId(ticket.id)}
+              onClick={() => handleSelectTicket(ticket.id)}
             >
               {selectedTicketId === ticket.id ? 'Viewing' : 'View thread'}
             </Button>
@@ -210,7 +226,17 @@ export function OwnerTicketsPage() {
                   <span>Opened: {formatDateTime(thread.ticket.created_at)}</span>
                 </div>
               </div>
-              <StatusBadge status={thread.ticket.status} />
+              <div className="flex flex-wrap items-center gap-2">
+                <StatusBadge status={thread.ticket.status} />
+                <Button
+                  to={`${ROUTES.ownerMaintenance}?ticket=${thread.ticket.id}`}
+                  variant="outline"
+                  size="sm"
+                  iconRight={<ArrowUpRight className="h-4 w-4" />}
+                >
+                  Open in Maintenance
+                </Button>
+              </div>
             </div>
           </article>
 
@@ -221,16 +247,6 @@ export function OwnerTicketsPage() {
             </div>
             <TicketThreadTimeline messages={thread.messages} />
           </article>
-
-          {token ? (
-            <MaintenanceWorkflowOwnerPanel
-              token={token}
-              ticketId={thread.ticket.id}
-              onWorkflowChanged={async () => {
-                await Promise.all([loadTickets(), loadThread(thread.ticket.id)])
-              }}
-            />
-          ) : null}
 
           {thread.ticket.status !== 'closed' ? (
             <TicketReplyComposer

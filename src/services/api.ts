@@ -29,8 +29,6 @@ import type {
   OwnerMaintenanceWorkflowOverview,
   OwnerCashFlowOverview,
   OwnerPortfolioVisibilityOverview,
-  OwnerScreeningOverview,
-  OwnerVacancyOverview,
   OwnerAutomationSettings,
   OwnerAuthPayload,
   OwnerAiSettingsResponse,
@@ -40,7 +38,6 @@ import type {
   OwnerTelegramDeliveryLog,
   OwnerSummary,
   Property,
-  ScreeningApplicantDetail,
   SupportTicketThread,
   TenantMaintenanceWorkflowOverview,
   Tenant,
@@ -285,22 +282,6 @@ export const api = {
 
   deleteOwnerProperty: (token: string, propertyId: string) =>
     request<{ ok: true }>(`/api/owners/properties/${propertyId}`, { method: 'DELETE', token }),
-
-  createOwnerPropertyVacancyCampaign: (
-    token: string,
-    propertyId: string,
-    body: {
-      source_type?: 'tenant_notice' | 'lease_expiry' | 'manual'
-      expected_vacancy_date: string
-      vacancy_state?: 'pre_vacant' | 'vacant' | 'relisting_in_progress'
-      trigger_notes?: string | null
-      actual_vacancy_date?: string | null
-    },
-  ) =>
-    request<{ ok: true; campaign: import('../types/api').VacancyCampaign; created: boolean }>(
-      `/api/owners/properties/${propertyId}/vacancy-campaigns`,
-      { method: 'POST', token, body },
-    ),
 
   getOwnerTenants: (token: string) => request<{ ok: true; tenants: Tenant[] }>('/api/owners/tenants', { token }),
 
@@ -642,9 +623,6 @@ export const api = {
   getOwnerAutomationCashFlow: (token: string) =>
     request<{ ok: true; cash_flow: OwnerCashFlowOverview }>('/api/owners/automation/cash-flow', { token }),
 
-  getOwnerAutomationVacancy: (token: string) =>
-    request<{ ok: true; vacancy: OwnerVacancyOverview }>('/api/owners/automation/vacancy', { token }),
-
   generateOwnerAutomationCashFlow: (
     token: string,
     body: {
@@ -669,205 +647,6 @@ export const api = {
       method: 'POST',
       token,
       body,
-    }),
-
-  getOwnerVacancyCampaigns: (token: string) =>
-    request<{ ok: true; vacancy: OwnerVacancyOverview }>('/api/owners/vacancy-campaigns', { token }),
-
-  getOwnerVacancyCampaign: (token: string, campaignId: string) =>
-    request<{ ok: true; campaign: import('../types/api').VacancyCampaign }>(`/api/owners/vacancy-campaigns/${campaignId}`, {
-      token,
-    }),
-
-  updateOwnerVacancyCampaignDraft: (
-    token: string,
-    campaignId: string,
-    body: Partial<{
-      listing_title: string
-      listing_description: string
-      listing_features: string[]
-      availability_label: string | null
-      expected_vacancy_date: string
-      vacancy_state: 'pre_vacant' | 'vacant' | 'relisting_in_progress'
-      trigger_notes: string | null
-    }>,
-  ) =>
-    request<{ ok: true; campaign: import('../types/api').VacancyCampaign }>(`/api/owners/vacancy-campaigns/${campaignId}/draft`, {
-      method: 'PATCH',
-      token,
-      body,
-    }),
-
-  approveOwnerVacancyCampaign: (
-    token: string,
-    campaignId: string,
-    body: Partial<{
-      listing_title: string
-      listing_description: string
-      listing_features: string[]
-      availability_label: string | null
-    }> = {},
-  ) =>
-    request<{ ok: true; campaign: import('../types/api').VacancyCampaign }>(`/api/owners/vacancy-campaigns/${campaignId}/approve`, {
-      method: 'POST',
-      token,
-      body,
-    }),
-
-  createOwnerVacancyLead: (
-    token: string,
-    campaignId: string,
-    body: {
-      full_name: string
-      email?: string | null
-      phone?: string | null
-      source?: string
-      status?: 'new' | 'qualified' | 'viewing_scheduled' | 'application_submitted' | 'inactive'
-      notes?: string | null
-    },
-  ) =>
-    request<{ ok: true; campaign: import('../types/api').VacancyCampaign }>(`/api/owners/vacancy-campaigns/${campaignId}/leads`, {
-      method: 'POST',
-      token,
-      body,
-    }),
-
-  createOwnerVacancyViewing: (
-    token: string,
-    campaignId: string,
-    body: {
-      lead_id?: string | null
-      scheduled_start_at: string
-      scheduled_end_at?: string | null
-      booking_status?: 'scheduled' | 'completed' | 'cancelled' | 'no_show'
-      notes?: string | null
-    },
-  ) =>
-    request<{ ok: true; campaign: import('../types/api').VacancyCampaign }>(`/api/owners/vacancy-campaigns/${campaignId}/viewings`, {
-      method: 'POST',
-      token,
-      body,
-    }),
-
-  createOwnerVacancyApplication: (
-    token: string,
-    campaignId: string,
-    body: {
-      lead_id?: string | null
-      applicant_name: string
-      desired_move_in_date?: string | null
-      monthly_salary?: number | null
-      status?: 'submitted' | 'under_review' | 'approved' | 'rejected'
-      notes?: string | null
-    },
-  ) =>
-    request<{ ok: true; campaign: import('../types/api').VacancyCampaign }>(`/api/owners/vacancy-campaigns/${campaignId}/applications`, {
-      method: 'POST',
-      token,
-      body,
-    }),
-
-  getOwnerScreeningApplicants: (
-    token: string,
-    query: Pick<ListQueryInput, 'page' | 'page_size'> & {
-      recommendation_category?: 'green' | 'amber' | 'red' | 'unscored'
-      final_disposition?: 'in_review' | 'rejected' | 'viewing' | 'lease_prep' | 'withdrawn' | 'approved'
-    } = {},
-  ) => request<{ ok: true; screening: OwnerScreeningOverview }>(`/api/owners/screening/applicants${toQueryString(query)}`, { token }),
-
-  getOwnerScreeningApplicant: (token: string, applicantId: string) =>
-    request<{ ok: true; applicant: ScreeningApplicantDetail }>(`/api/owners/screening/applicants/${applicantId}`, { token }),
-
-  createOwnerScreeningApplicant: (
-    token: string,
-    body: {
-      property_id?: string | null
-      vacancy_campaign_id?: string | null
-      vacancy_application_id?: string | null
-      enquiry_source?: 'manual_owner' | 'manual_admin' | 'listing' | 'whatsapp' | 'vacancy_campaign' | 'webhook' | 'other'
-      source_reference?: string | null
-      applicant_name: string
-      email?: string | null
-      phone?: string | null
-      employer?: string | null
-      monthly_salary?: number | null
-      current_residence?: string | null
-      reason_for_moving?: string | null
-      number_of_occupants?: number | null
-      desired_move_in_date?: string | null
-      target_rent_amount?: number | null
-      identification_status?: 'pending' | 'submitted' | 'verified' | 'failed' | 'not_provided'
-      employment_verification_status?: 'pending' | 'submitted' | 'verified' | 'failed' | 'not_provided'
-    },
-  ) => request<{ ok: true; applicant: ScreeningApplicantDetail }>('/api/owners/screening/applicants', { method: 'POST', token, body }),
-
-  updateOwnerScreeningApplicant: (
-    token: string,
-    applicantId: string,
-    body: Partial<{
-      property_id: string | null
-      vacancy_campaign_id: string | null
-      source_reference: string | null
-      applicant_name: string
-      email: string | null
-      phone: string | null
-      employer: string | null
-      monthly_salary: number | null
-      current_residence: string | null
-      reason_for_moving: string | null
-      number_of_occupants: number | null
-      desired_move_in_date: string | null
-      target_rent_amount: number | null
-      identification_status: 'pending' | 'submitted' | 'verified' | 'failed' | 'not_provided'
-      employment_verification_status: 'pending' | 'submitted' | 'verified' | 'failed' | 'not_provided'
-    }>,
-  ) =>
-    request<{ ok: true; applicant: ScreeningApplicantDetail }>(`/api/owners/screening/applicants/${applicantId}`, {
-      method: 'PATCH',
-      token,
-      body,
-    }),
-
-  addOwnerScreeningApplicantDocument: (
-    token: string,
-    applicantId: string,
-    body: {
-      document_type: 'emirates_id' | 'salary_slip' | 'employment_letter' | 'passport' | 'visa' | 'other'
-      file_name: string
-      storage_path?: string | null
-      public_url?: string | null
-      mime_type?: string | null
-      file_size_bytes?: number | null
-      verification_status?: 'pending' | 'submitted' | 'verified' | 'failed' | 'not_provided'
-      notes?: string | null
-    },
-  ) =>
-    request<{ ok: true; applicant: ScreeningApplicantDetail }>(`/api/owners/screening/applicants/${applicantId}/documents`, {
-      method: 'POST',
-      token,
-      body,
-    }),
-
-  updateOwnerScreeningApplicantDecision: (
-    token: string,
-    applicantId: string,
-    body: Partial<{
-      viewing_decision: 'pending' | 'approved' | 'rejected' | 'scheduled'
-      final_disposition: 'in_review' | 'rejected' | 'viewing' | 'lease_prep' | 'withdrawn' | 'approved'
-      owner_decision_notes: string | null
-    }>,
-  ) =>
-    request<{ ok: true; applicant: ScreeningApplicantDetail }>(`/api/owners/screening/applicants/${applicantId}/decision`, {
-      method: 'PATCH',
-      token,
-      body,
-    }),
-
-  refreshOwnerScreeningApplicant: (token: string, applicantId: string) =>
-    request<{ ok: true; applicant: ScreeningApplicantDetail }>(`/api/owners/screening/applicants/${applicantId}/refresh`, {
-      method: 'POST',
-      token,
-      body: {},
     }),
 
   getTenantSummary: (token: string) =>

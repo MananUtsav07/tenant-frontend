@@ -11,7 +11,6 @@ import {
   dashboardFormPanelClassName,
   dashboardInfoPanelClassName,
 } from '../../components/common/formTheme'
-import { VacancyCampaignWorkbench } from '../../components/properties/VacancyCampaignWorkbench'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
@@ -230,8 +229,6 @@ export function OwnerPropertiesPage() {
           </Button>
         </div>
       ) : null}
-
-      {token ? <VacancyCampaignWorkbench token={token} properties={properties} /> : null}
     </section>
   )
 }

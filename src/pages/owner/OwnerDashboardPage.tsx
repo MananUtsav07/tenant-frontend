@@ -13,14 +13,13 @@ import { SummaryCard } from '../../components/common/SummaryCard'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
-import type { OwnerPortfolioVisibilityOverview, OwnerRentPaymentApproval, OwnerSummary, OwnerVacancyOverview } from '../../types/api'
+import type { OwnerPortfolioVisibilityOverview, OwnerRentPaymentApproval, OwnerSummary } from '../../types/api'
 import { formatCurrency, formatDate, formatDateTime } from '../../utils/date'
 
 export function OwnerDashboardPage() {
   const { token, owner } = useOwnerAuth()
   const [summary, setSummary] = useState<OwnerSummary | null>(null)
   const [portfolioOverview, setPortfolioOverview] = useState<OwnerPortfolioVisibilityOverview | null>(null)
-  const [vacancyOverview, setVacancyOverview] = useState<OwnerVacancyOverview | null>(null)
   const [approvals, setApprovals] = useState<OwnerRentPaymentApproval[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -46,17 +45,6 @@ export function OwnerDashboardPage() {
           setPortfolioOverview(null)
         } else {
           throw portfolioError
-        }
-      }
-
-      try {
-        const vacancyResponse = await api.getOwnerAutomationVacancy(token)
-        setVacancyOverview(vacancyResponse.vacancy)
-      } catch (vacancyError) {
-        if (vacancyError instanceof Error && vacancyError.message.toLowerCase().includes('route not found')) {
-          setVacancyOverview(null)
-        } else {
-          throw vacancyError
         }
       }
 
@@ -327,70 +315,6 @@ export function OwnerDashboardPage() {
             </div>
           ) : null}
 
-          {vacancyOverview ? (
-            <article className="ph-surface-card rounded-[1.7rem] p-5">
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Vacancy Pipeline</p>
-                  <h3 className="mt-3 text-xl font-semibold text-[var(--ph-text)]">Re-letting in motion</h3>
-                  <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
-                    Upcoming vacancy, active campaigns, and listing readiness across your portfolio.
-                  </p>
-                </div>
-                <Button to={ROUTES.ownerProperties} variant="ghost" size="sm" className="px-0 hover:bg-transparent">
-                  Open properties
-                </Button>
-              </div>
-
-              <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">Active</p>
-                  <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">{vacancyOverview.summary.active_campaign_count}</p>
-                </div>
-                <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">Vacant</p>
-                  <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">{vacancyOverview.summary.vacant_count}</p>
-                </div>
-                <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">Viewings</p>
-                  <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">{vacancyOverview.summary.scheduled_viewings_count}</p>
-                </div>
-                <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">Applications</p>
-                  <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">{vacancyOverview.summary.applications_count}</p>
-                </div>
-              </div>
-
-              <div className="mt-5 space-y-3">
-                {vacancyOverview.campaigns.slice(0, 3).map((campaign) => (
-                  <div key={campaign.id} className="rounded-[1.2rem] border border-white/10 bg-white/[0.03] p-4">
-                    <div className="flex flex-wrap items-start justify-between gap-3">
-                      <div>
-                        <p className="font-medium text-[var(--ph-text)]">
-                          {campaign.property?.property_name ?? 'Property'}
-                          {campaign.property?.unit_number ? ` (${campaign.property.unit_number})` : ''}
-                        </p>
-                        <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
-                          Expected vacancy {formatDate(campaign.expected_vacancy_date)}. {campaign.next_action}
-                        </p>
-                      </div>
-                      <div className="flex gap-2">
-                        <StatusBadge status={campaign.campaign_status} />
-                        <StatusBadge status={campaign.vacancy_state} />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                {!vacancyOverview.campaigns.length ? (
-                  <EmptyState
-                    title="No vacancy campaigns active"
-                    description="Re-letting campaigns will show here when lease expiry or notice triggers are detected."
-                    icon={<TriangleAlert className="h-5 w-5" />}
-                  />
-                ) : null}
-              </div>
-            </article>
-          ) : null}
         </>
       ) : null}
 

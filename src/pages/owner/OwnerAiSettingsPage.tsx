@@ -92,7 +92,7 @@ export function OwnerAiSettingsPage() {
 
       setSettings(response.settings)
       setAiConfigured(response.ai_configured)
-      setSuccess('AI settings saved. Automation remains in preparation mode.')
+      setSuccess('AI settings saved. Supported AI-assisted workflows can use your selected model when automation is enabled.')
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : 'Failed to save AI settings')
     } finally {
@@ -108,7 +108,7 @@ export function OwnerAiSettingsPage() {
           AI Settings
         </h2>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--ph-text-muted)]">
-          Infrastructure is ready for future AI workflows. No AI automation is active in live operations yet.
+          Configure the model and master toggle used by supported AI-assisted workflows and future releases.
         </p>
       </div>
 
@@ -169,12 +169,12 @@ export function OwnerAiSettingsPage() {
               )
             }
             disabled={!aiConfigured}
-            hint="Stored for rollout readiness. Live production workflows remain unchanged."
+            hint="Used as the preferred model for supported AI-assisted workflows in your organization."
           />
 
           <div className={dashboardInfoPanelClassName}>
-            Preparation mode keeps your preferred toggles and model selection ready for rollout while maintaining
-            human-led approvals and live workflow stability.
+            AI remains assistive here: owners still review outputs, and workflows keep their existing human approval
+            steps.
           </div>
 
           {success ? <div className={dashboardSuccessPanelClassName}>{success}</div> : null}

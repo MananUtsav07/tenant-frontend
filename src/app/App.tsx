@@ -51,7 +51,7 @@ const AdminLoginPage = lazyNamedPage(() => import('../pages/auth/AdminLoginPage'
 
 const OwnerDashboardPage = lazyNamedPage(() => import('../pages/owner/OwnerDashboardPage'), 'OwnerDashboardPage')
 const OwnerPropertiesPage = lazyNamedPage(() => import('../pages/owner/OwnerPropertiesPage'), 'OwnerPropertiesPage')
-const OwnerApplicantsPage = lazyNamedPage(() => import('../pages/owner/OwnerApplicantsPage'), 'OwnerApplicantsPage')
+const OwnerMaintenancePage = lazyNamedPage(() => import('../pages/owner/OwnerMaintenancePage'), 'OwnerMaintenancePage')
 const OwnerTenantsPage = lazyNamedPage(() => import('../pages/owner/OwnerTenantsPage'), 'OwnerTenantsPage')
 const OwnerTenantDetailPage = lazyNamedPage(() => import('../pages/owner/OwnerTenantDetailPage'), 'OwnerTenantDetailPage')
 const OwnerTicketsPage = lazyNamedPage(() => import('../pages/owner/OwnerTicketsPage'), 'OwnerTicketsPage')
@@ -129,14 +129,15 @@ function AppRoutes() {
         <Route element={<OwnerLayout />}>
           <Route path={ROUTES.ownerDashboard} element={<OwnerDashboardPage />} />
           <Route path={ROUTES.ownerProperties} element={<OwnerPropertiesPage />} />
-          <Route path={ROUTES.ownerApplicants} element={<OwnerApplicantsPage />} />
           <Route path={ROUTES.ownerTenants} element={<OwnerTenantsPage />} />
           <Route path={ROUTES.ownerTenantDetail} element={<OwnerTenantDetailPage />} />
           <Route path={ROUTES.ownerTickets} element={<OwnerTicketsPage />} />
+          <Route path={ROUTES.ownerMaintenance} element={<OwnerMaintenancePage />} />
           <Route path={ROUTES.ownerNotifications} element={<OwnerNotificationsPage />} />
           <Route path={ROUTES.ownerAutomation} element={<OwnerAutomationPage />} />
           <Route path={ROUTES.ownerAutomationActivity} element={<OwnerAutomationActivityPage />} />
           <Route path={ROUTES.ownerAiSettings} element={<OwnerAiSettingsPage />} />
+          <Route path="/owner/applicants" element={<Navigate to={ROUTES.ownerDashboard} replace />} />
         </Route>
       </Route>
 
