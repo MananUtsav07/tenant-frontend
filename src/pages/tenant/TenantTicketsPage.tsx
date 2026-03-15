@@ -11,6 +11,7 @@ import { TicketTable } from '../../components/common/TicketTable'
 import { dashboardFormPanelClassName } from '../../components/common/formTheme'
 import { TicketReplyComposer } from '../../components/tickets/TicketReplyComposer'
 import { TicketThreadTimeline } from '../../components/tickets/TicketThreadTimeline'
+import { MaintenanceWorkflowTenantPanel } from '../../components/tickets/MaintenanceWorkflowTenantPanel'
 import { useTenantAuth } from '../../hooks/useTenantAuth'
 import { api } from '../../services/api'
 import type { SupportTicketThread, TenantTicket } from '../../types/api'
@@ -232,6 +233,16 @@ export function TenantTicketsPage() {
               <TicketThreadTimeline messages={thread.messages} />
             </div>
           </article>
+
+          {token ? (
+            <MaintenanceWorkflowTenantPanel
+              token={token}
+              ticketId={thread.ticket.id}
+              onWorkflowChanged={async () => {
+                await Promise.all([loadTickets(), loadThread(thread.ticket.id)])
+              }}
+            />
+          ) : null}
 
           {canReply ? (
             <TicketReplyComposer

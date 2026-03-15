@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { BellRing, CalendarClock, CircleDollarSign, Home, LifeBuoy } from 'lucide-react'
 
 import { Button } from '../../components/common/Button'
+import { ConditionReportTenantPanel } from '../../components/condition-reports/ConditionReportTenantPanel'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
@@ -218,6 +219,8 @@ export function TenantDashboardPage() {
           </div>
         ) : null}
       </div>
+
+      {!loading && token ? <ConditionReportTenantPanel token={token} residentName={tenant?.full_name ?? authTenant?.full_name} /> : null}
     </section>
   )
 }

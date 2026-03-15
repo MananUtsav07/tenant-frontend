@@ -35,7 +35,7 @@ export function DashboardLayout({
   const motionEnabled = useMotionEnabled()
 
   return (
-    <div className="min-h-screen bg-[var(--ph-bg-deep)] text-[var(--ph-text)]">
+    <div className="ph-prophives-bg min-h-screen text-[var(--ph-text)]">
       {showTopNavbar ? <Navbar /> : null}
       <div className="grid min-h-screen w-full grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)]">
         <aside className="border-b border-[rgba(83,88,100,0.34)] bg-[linear-gradient(180deg,rgba(10,14,24,0.98),rgba(10,15,27,0.96))] p-5 backdrop-blur lg:min-h-screen lg:border-b-0 lg:border-r lg:border-[rgba(83,88,100,0.34)] lg:p-6">
@@ -78,7 +78,7 @@ export function DashboardLayout({
           </motion.button>
         </aside>
 
-        <main className="saas-grid-bg ph-hex-bg relative min-w-0 overflow-hidden">
+        <main className="relative min-w-0 overflow-hidden">
           <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-12 2xl:px-16">
             <div className="mx-auto w-full max-w-[1400px] py-6 lg:py-8">
               {headerActions ? (

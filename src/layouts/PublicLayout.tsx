@@ -14,7 +14,7 @@ export function PublicLayout() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[var(--ph-bg)] px-6 text-sm text-[var(--ph-text-muted)]">
+      <div className="ph-prophives-bg flex min-h-screen items-center justify-center px-6 text-sm text-[var(--ph-text-muted)]">
         Loading tenant session...
       </div>
     )
@@ -25,9 +25,9 @@ export function PublicLayout() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--ph-bg)] text-[var(--ph-text)]">
+    <div className="ph-prophives-bg min-h-screen text-[var(--ph-text)]">
       <Navbar />
-      <main className="saas-grid-bg relative isolate overflow-hidden">
+      <main className="relative overflow-hidden">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={location.pathname}

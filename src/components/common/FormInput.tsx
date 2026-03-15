@@ -8,7 +8,6 @@ type BaseProps = {
   hint?: ReactNode
   error?: string
   hideLabel?: boolean
-  variant?: 'dark' | 'light'
   leadingIcon?: ReactNode
   trailingAdornment?: ReactNode
   wrapperClassName?: string
@@ -33,7 +32,6 @@ export function FormInput(props: FormInputProps) {
     leadingIcon,
     trailingAdornment,
     wrapperClassName,
-    variant: _variant = 'light',
     id,
     required,
     ...rest

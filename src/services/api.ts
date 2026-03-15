@@ -1,6 +1,14 @@
 import type {
   AdminAnalyticsResponse,
   AdminAiStatus,
+  AdminAutomationHealth,
+  AdminCashFlowOverview,
+  AdminPortfolioVisibilityOverview,
+  AdminVacancyOverview,
+  AutomationJob,
+  CashFlowReportScope,
+  ComplianceOverview,
+  ContractorDirectoryEntry,
   AdminAuthPayload,
   AdminDashboardSummary,
   ApiMessageResponse,
@@ -17,6 +25,13 @@ import type {
   ContactMessage,
   ContactMessageReceipt,
   Owner,
+  OwnerAutomationActivityResponse,
+  OwnerMaintenanceWorkflowOverview,
+  OwnerCashFlowOverview,
+  OwnerPortfolioVisibilityOverview,
+  OwnerScreeningOverview,
+  OwnerVacancyOverview,
+  OwnerAutomationSettings,
   OwnerAuthPayload,
   OwnerAiSettingsResponse,
   OwnerNotification,
@@ -25,7 +40,9 @@ import type {
   OwnerTelegramDeliveryLog,
   OwnerSummary,
   Property,
+  ScreeningApplicantDetail,
   SupportTicketThread,
+  TenantMaintenanceWorkflowOverview,
   Tenant,
   TenantAuthPayload,
   TenantOwnerContact,
@@ -34,6 +51,7 @@ import type {
   TenantTicket,
   TelegramOnboardingState,
   PublicOperationsSnapshot,
+  AdminScreeningOverview,
 } from '../types/api'
 
 const rawApiBaseUrl = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim() ?? ''
@@ -67,6 +85,10 @@ type ListQueryInput = {
   sort_order?: 'asc' | 'desc'
   days?: number
   organization_id?: string
+  flow_name?: string
+  status?: string
+  job_type?: string
+  lifecycle_status?: string
 }
 
 type OwnerNotificationPreferencePatch = Partial<{
@@ -124,6 +146,18 @@ function toQueryString(params: ListQueryInput): string {
   }
   if (params.organization_id) {
     searchParams.set('organization_id', params.organization_id)
+  }
+  if (params.flow_name) {
+    searchParams.set('flow_name', params.flow_name)
+  }
+  if (params.status) {
+    searchParams.set('status', params.status)
+  }
+  if (params.job_type) {
+    searchParams.set('job_type', params.job_type)
+  }
+  if (params.lifecycle_status) {
+    searchParams.set('lifecycle_status', params.lifecycle_status)
   }
 
   const rendered = searchParams.toString()
@@ -252,6 +286,22 @@ export const api = {
   deleteOwnerProperty: (token: string, propertyId: string) =>
     request<{ ok: true }>(`/api/owners/properties/${propertyId}`, { method: 'DELETE', token }),
 
+  createOwnerPropertyVacancyCampaign: (
+    token: string,
+    propertyId: string,
+    body: {
+      source_type?: 'tenant_notice' | 'lease_expiry' | 'manual'
+      expected_vacancy_date: string
+      vacancy_state?: 'pre_vacant' | 'vacant' | 'relisting_in_progress'
+      trigger_notes?: string | null
+      actual_vacancy_date?: string | null
+    },
+  ) =>
+    request<{ ok: true; campaign: import('../types/api').VacancyCampaign; created: boolean }>(
+      `/api/owners/properties/${propertyId}/vacancy-campaigns`,
+      { method: 'POST', token, body },
+    ),
+
   getOwnerTenants: (token: string) => request<{ ok: true; tenants: Tenant[] }>('/api/owners/tenants', { token }),
 
   createOwnerTenant: (
@@ -291,6 +341,75 @@ export const api = {
       }>
     }>(`/api/owners/tenants/${tenantId}`, { token }),
 
+  getOwnerTenantConditionReports: (token: string, tenantId: string) =>
+    request<{ ok: true; condition_reports: import('../types/api').OwnerConditionReportOverview }>(
+      `/api/owners/tenants/${tenantId}/condition-reports`,
+      { token },
+    ),
+
+  createOwnerTenantConditionReport: (
+    token: string,
+    tenantId: string,
+    body: {
+      report_type: 'move_in' | 'move_out'
+      vacancy_campaign_id?: string | null
+      trigger_reference?: string | null
+    },
+  ) =>
+    request<{ ok: true; report: import('../types/api').ConditionReportDetail }>(
+      `/api/owners/tenants/${tenantId}/condition-reports`,
+      { method: 'POST', token, body },
+    ),
+
+  getOwnerConditionReport: (token: string, reportId: string) =>
+    request<{ ok: true; report: import('../types/api').ConditionReportDetail }>(`/api/owners/condition-reports/${reportId}`, {
+      token,
+    }),
+
+  updateOwnerConditionReportRoom: (
+    token: string,
+    reportId: string,
+    roomEntryId: string,
+    body: {
+      condition_rating?: 'not_reviewed' | 'good' | 'fair' | 'poor'
+      condition_notes?: string | null
+    },
+  ) =>
+    request<{ ok: true; report: import('../types/api').ConditionReportDetail }>(
+      `/api/owners/condition-reports/${reportId}/rooms/${roomEntryId}`,
+      { method: 'PATCH', token, body },
+    ),
+
+  addOwnerConditionReportMedia: (
+    token: string,
+    reportId: string,
+    body: {
+      room_entry_id: string
+      media_kind?: 'photo' | 'video' | 'document' | 'other'
+      media_url?: string | null
+      storage_path?: string | null
+      mime_type?: string | null
+      caption?: string | null
+    },
+  ) =>
+    request<{ ok: true; report: import('../types/api').ConditionReportDetail }>(
+      `/api/owners/condition-reports/${reportId}/media`,
+      { method: 'POST', token, body },
+    ),
+
+  confirmOwnerConditionReport: (
+    token: string,
+    reportId: string,
+    body: {
+      status: 'confirmed' | 'disputed'
+      note?: string | null
+    },
+  ) =>
+    request<{ ok: true; report: import('../types/api').ConditionReportDetail }>(
+      `/api/owners/condition-reports/${reportId}/confirm`,
+      { method: 'POST', token, body },
+    ),
+
   getOwnerTickets: (token: string) => request<{ ok: true; tickets: TenantTicket[] }>('/api/owners/tickets', { token }),
 
   getOwnerTicketDetail: (token: string, ticketId: string) =>
@@ -313,6 +432,126 @@ export const api = {
       token,
       body,
     }),
+
+  getOwnerTicketMaintenanceWorkflow: (token: string, ticketId: string) =>
+    request<{ ok: true; maintenance: OwnerMaintenanceWorkflowOverview }>(
+      `/api/owners/tickets/${ticketId}/maintenance-workflow`,
+      { token },
+    ),
+
+  triageOwnerTicketMaintenanceWorkflow: (
+    token: string,
+    ticketId: string,
+    body: {
+      category?: OwnerMaintenanceWorkflowOverview['suggested_triage']['category']
+      urgency?: OwnerMaintenanceWorkflowOverview['suggested_triage']['urgency']
+      classification_notes?: string
+    },
+  ) =>
+    request<{ ok: true; maintenance: OwnerMaintenanceWorkflowOverview }>(
+      `/api/owners/tickets/${ticketId}/maintenance-workflow/triage`,
+      {
+        method: 'POST',
+        token,
+        body,
+      },
+    ),
+
+  requestOwnerMaintenanceQuotes: (
+    token: string,
+    ticketId: string,
+    body: {
+      contractor_ids?: string[]
+      request_message?: string
+      expires_at?: string
+    },
+  ) =>
+    request<{ ok: true; maintenance: OwnerMaintenanceWorkflowOverview }>(
+      `/api/owners/tickets/${ticketId}/maintenance-workflow/request-quotes`,
+      {
+        method: 'POST',
+        token,
+        body,
+      },
+    ),
+
+  recordOwnerMaintenanceQuote: (
+    token: string,
+    ticketId: string,
+    body: {
+      contractor_id: string
+      quote_request_id?: string
+      amount: number
+      currency_code?: string
+      scope_of_work: string
+      availability_note?: string
+      estimated_start_at?: string
+      estimated_completion_at?: string
+    },
+  ) =>
+    request<{ ok: true; maintenance: OwnerMaintenanceWorkflowOverview }>(
+      `/api/owners/tickets/${ticketId}/maintenance-workflow/quotes`,
+      {
+        method: 'POST',
+        token,
+        body,
+      },
+    ),
+
+  approveOwnerMaintenanceQuote: (
+    token: string,
+    ticketId: string,
+    quoteId: string,
+    body: {
+      appointment_start_at?: string
+      appointment_end_at?: string
+      appointment_notes?: string
+    },
+  ) =>
+    request<{ ok: true; maintenance: OwnerMaintenanceWorkflowOverview }>(
+      `/api/owners/tickets/${ticketId}/maintenance-workflow/quotes/${quoteId}/approve`,
+      {
+        method: 'POST',
+        token,
+        body,
+      },
+    ),
+
+  updateOwnerMaintenanceAssignment: (
+    token: string,
+    ticketId: string,
+    body: {
+      booking_status: string
+      appointment_start_at?: string
+      appointment_end_at?: string
+      appointment_notes?: string
+      completion_notes?: string
+    },
+  ) =>
+    request<{ ok: true; maintenance: OwnerMaintenanceWorkflowOverview }>(
+      `/api/owners/tickets/${ticketId}/maintenance-workflow/assignment`,
+      {
+        method: 'PATCH',
+        token,
+        body,
+      },
+    ),
+
+  getOwnerContractors: (token: string) =>
+    request<{ ok: true; contractors: ContractorDirectoryEntry[] }>('/api/owners/contractors', { token }),
+
+  createOwnerContractor: (
+    token: string,
+    body: {
+      company_name: string
+      contact_name?: string
+      email?: string
+      phone?: string
+      whatsapp?: string
+      notes?: string
+      specialties: string[]
+    },
+  ) => request<{ ok: true; contractor: ContractorDirectoryEntry }>('/api/owners/contractors', { method: 'POST', token, body }),
 
   getOwnerNotifications: (token: string) =>
     request<{ ok: true; notifications: OwnerNotification[] }>('/api/owners/notifications', { token }),
@@ -362,6 +601,275 @@ export const api = {
       }
     }>('/api/owners/process-reminders', { method: 'POST', token }),
 
+  getOwnerAutomationSettings: (token: string) =>
+    request<{ ok: true; settings: OwnerAutomationSettings }>('/api/owners/automation/settings', { token }),
+
+  updateOwnerAutomationSettings: (
+    token: string,
+    body: Partial<{
+      compliance_alerts_enabled: boolean
+      rent_chasing_enabled: boolean
+      portfolio_visibility_enabled: boolean
+      cash_flow_reporting_enabled: boolean
+      daily_digest_enabled: boolean
+      weekly_digest_enabled: boolean
+      monthly_digest_enabled: boolean
+      status_command_enabled: boolean
+      yield_alert_threshold_percent: number | null
+      yield_alert_cooldown_days: number
+      quiet_hours_start: string | null
+      quiet_hours_end: string | null
+    }>,
+  ) =>
+    request<{ ok: true; settings: OwnerAutomationSettings }>('/api/owners/automation/settings', {
+      method: 'PUT',
+      token,
+      body,
+    }),
+
+  getOwnerAutomationActivity: (token: string, query: Pick<ListQueryInput, 'page' | 'page_size'> = {}) =>
+    request<OwnerAutomationActivityResponse>(`/api/owners/automation/activity${toQueryString(query)}`, { token }),
+
+  getOwnerAutomationCompliance: (token: string) =>
+    request<{ ok: true; compliance: ComplianceOverview }>('/api/owners/automation/compliance', { token }),
+
+  getOwnerAutomationPortfolioVisibility: (token: string) =>
+    request<{ ok: true; portfolio_visibility: OwnerPortfolioVisibilityOverview }>(
+      '/api/owners/automation/portfolio-visibility',
+      { token },
+    ),
+
+  getOwnerAutomationCashFlow: (token: string) =>
+    request<{ ok: true; cash_flow: OwnerCashFlowOverview }>('/api/owners/automation/cash-flow', { token }),
+
+  getOwnerAutomationVacancy: (token: string) =>
+    request<{ ok: true; vacancy: OwnerVacancyOverview }>('/api/owners/automation/vacancy', { token }),
+
+  generateOwnerAutomationCashFlow: (
+    token: string,
+    body: {
+      scope?: CashFlowReportScope
+      year?: number
+      month?: number
+    } = {},
+  ) =>
+    request<{
+      ok: true
+      result: {
+        owner_id: string
+        organization_id: string
+        scope: CashFlowReportScope
+        report_period: string
+        alerts_sent: number
+        cash_flow_snapshot_ids: string[]
+        skipped?: boolean
+        reason?: string
+      }
+    }>('/api/owners/automation/cash-flow/generate', {
+      method: 'POST',
+      token,
+      body,
+    }),
+
+  getOwnerVacancyCampaigns: (token: string) =>
+    request<{ ok: true; vacancy: OwnerVacancyOverview }>('/api/owners/vacancy-campaigns', { token }),
+
+  getOwnerVacancyCampaign: (token: string, campaignId: string) =>
+    request<{ ok: true; campaign: import('../types/api').VacancyCampaign }>(`/api/owners/vacancy-campaigns/${campaignId}`, {
+      token,
+    }),
+
+  updateOwnerVacancyCampaignDraft: (
+    token: string,
+    campaignId: string,
+    body: Partial<{
+      listing_title: string
+      listing_description: string
+      listing_features: string[]
+      availability_label: string | null
+      expected_vacancy_date: string
+      vacancy_state: 'pre_vacant' | 'vacant' | 'relisting_in_progress'
+      trigger_notes: string | null
+    }>,
+  ) =>
+    request<{ ok: true; campaign: import('../types/api').VacancyCampaign }>(`/api/owners/vacancy-campaigns/${campaignId}/draft`, {
+      method: 'PATCH',
+      token,
+      body,
+    }),
+
+  approveOwnerVacancyCampaign: (
+    token: string,
+    campaignId: string,
+    body: Partial<{
+      listing_title: string
+      listing_description: string
+      listing_features: string[]
+      availability_label: string | null
+    }> = {},
+  ) =>
+    request<{ ok: true; campaign: import('../types/api').VacancyCampaign }>(`/api/owners/vacancy-campaigns/${campaignId}/approve`, {
+      method: 'POST',
+      token,
+      body,
+    }),
+
+  createOwnerVacancyLead: (
+    token: string,
+    campaignId: string,
+    body: {
+      full_name: string
+      email?: string | null
+      phone?: string | null
+      source?: string
+      status?: 'new' | 'qualified' | 'viewing_scheduled' | 'application_submitted' | 'inactive'
+      notes?: string | null
+    },
+  ) =>
+    request<{ ok: true; campaign: import('../types/api').VacancyCampaign }>(`/api/owners/vacancy-campaigns/${campaignId}/leads`, {
+      method: 'POST',
+      token,
+      body,
+    }),
+
+  createOwnerVacancyViewing: (
+    token: string,
+    campaignId: string,
+    body: {
+      lead_id?: string | null
+      scheduled_start_at: string
+      scheduled_end_at?: string | null
+      booking_status?: 'scheduled' | 'completed' | 'cancelled' | 'no_show'
+      notes?: string | null
+    },
+  ) =>
+    request<{ ok: true; campaign: import('../types/api').VacancyCampaign }>(`/api/owners/vacancy-campaigns/${campaignId}/viewings`, {
+      method: 'POST',
+      token,
+      body,
+    }),
+
+  createOwnerVacancyApplication: (
+    token: string,
+    campaignId: string,
+    body: {
+      lead_id?: string | null
+      applicant_name: string
+      desired_move_in_date?: string | null
+      monthly_salary?: number | null
+      status?: 'submitted' | 'under_review' | 'approved' | 'rejected'
+      notes?: string | null
+    },
+  ) =>
+    request<{ ok: true; campaign: import('../types/api').VacancyCampaign }>(`/api/owners/vacancy-campaigns/${campaignId}/applications`, {
+      method: 'POST',
+      token,
+      body,
+    }),
+
+  getOwnerScreeningApplicants: (
+    token: string,
+    query: Pick<ListQueryInput, 'page' | 'page_size'> & {
+      recommendation_category?: 'green' | 'amber' | 'red' | 'unscored'
+      final_disposition?: 'in_review' | 'rejected' | 'viewing' | 'lease_prep' | 'withdrawn' | 'approved'
+    } = {},
+  ) => request<{ ok: true; screening: OwnerScreeningOverview }>(`/api/owners/screening/applicants${toQueryString(query)}`, { token }),
+
+  getOwnerScreeningApplicant: (token: string, applicantId: string) =>
+    request<{ ok: true; applicant: ScreeningApplicantDetail }>(`/api/owners/screening/applicants/${applicantId}`, { token }),
+
+  createOwnerScreeningApplicant: (
+    token: string,
+    body: {
+      property_id?: string | null
+      vacancy_campaign_id?: string | null
+      vacancy_application_id?: string | null
+      enquiry_source?: 'manual_owner' | 'manual_admin' | 'listing' | 'whatsapp' | 'vacancy_campaign' | 'webhook' | 'other'
+      source_reference?: string | null
+      applicant_name: string
+      email?: string | null
+      phone?: string | null
+      employer?: string | null
+      monthly_salary?: number | null
+      current_residence?: string | null
+      reason_for_moving?: string | null
+      number_of_occupants?: number | null
+      desired_move_in_date?: string | null
+      target_rent_amount?: number | null
+      identification_status?: 'pending' | 'submitted' | 'verified' | 'failed' | 'not_provided'
+      employment_verification_status?: 'pending' | 'submitted' | 'verified' | 'failed' | 'not_provided'
+    },
+  ) => request<{ ok: true; applicant: ScreeningApplicantDetail }>('/api/owners/screening/applicants', { method: 'POST', token, body }),
+
+  updateOwnerScreeningApplicant: (
+    token: string,
+    applicantId: string,
+    body: Partial<{
+      property_id: string | null
+      vacancy_campaign_id: string | null
+      source_reference: string | null
+      applicant_name: string
+      email: string | null
+      phone: string | null
+      employer: string | null
+      monthly_salary: number | null
+      current_residence: string | null
+      reason_for_moving: string | null
+      number_of_occupants: number | null
+      desired_move_in_date: string | null
+      target_rent_amount: number | null
+      identification_status: 'pending' | 'submitted' | 'verified' | 'failed' | 'not_provided'
+      employment_verification_status: 'pending' | 'submitted' | 'verified' | 'failed' | 'not_provided'
+    }>,
+  ) =>
+    request<{ ok: true; applicant: ScreeningApplicantDetail }>(`/api/owners/screening/applicants/${applicantId}`, {
+      method: 'PATCH',
+      token,
+      body,
+    }),
+
+  addOwnerScreeningApplicantDocument: (
+    token: string,
+    applicantId: string,
+    body: {
+      document_type: 'emirates_id' | 'salary_slip' | 'employment_letter' | 'passport' | 'visa' | 'other'
+      file_name: string
+      storage_path?: string | null
+      public_url?: string | null
+      mime_type?: string | null
+      file_size_bytes?: number | null
+      verification_status?: 'pending' | 'submitted' | 'verified' | 'failed' | 'not_provided'
+      notes?: string | null
+    },
+  ) =>
+    request<{ ok: true; applicant: ScreeningApplicantDetail }>(`/api/owners/screening/applicants/${applicantId}/documents`, {
+      method: 'POST',
+      token,
+      body,
+    }),
+
+  updateOwnerScreeningApplicantDecision: (
+    token: string,
+    applicantId: string,
+    body: Partial<{
+      viewing_decision: 'pending' | 'approved' | 'rejected' | 'scheduled'
+      final_disposition: 'in_review' | 'rejected' | 'viewing' | 'lease_prep' | 'withdrawn' | 'approved'
+      owner_decision_notes: string | null
+    }>,
+  ) =>
+    request<{ ok: true; applicant: ScreeningApplicantDetail }>(`/api/owners/screening/applicants/${applicantId}/decision`, {
+      method: 'PATCH',
+      token,
+      body,
+    }),
+
+  refreshOwnerScreeningApplicant: (token: string, applicantId: string) =>
+    request<{ ok: true; applicant: ScreeningApplicantDetail }>(`/api/owners/screening/applicants/${applicantId}/refresh`, {
+      method: 'POST',
+      token,
+      body: {},
+    }),
+
   getTenantSummary: (token: string) =>
     request<{ ok: true; summary: TenantSummary }>('/api/tenants/dashboard-summary', { token }),
 
@@ -377,6 +885,46 @@ export const api = {
   getTenantProperty: (token: string) =>
     request<{ ok: true; property: Property | null; tenant: Tenant }>('/api/tenants/property', { token }),
 
+  getTenantConditionReports: (token: string) =>
+    request<{ ok: true; condition_reports: import('../types/api').TenantConditionReportOverview }>('/api/tenants/condition-reports', {
+      token,
+    }),
+
+  getTenantConditionReport: (token: string, reportId: string) =>
+    request<{ ok: true; report: import('../types/api').ConditionReportDetail }>(`/api/tenants/condition-reports/${reportId}`, {
+      token,
+    }),
+
+  addTenantConditionReportMedia: (
+    token: string,
+    reportId: string,
+    body: {
+      room_entry_id: string
+      media_kind?: 'photo' | 'video' | 'document' | 'other'
+      media_url?: string | null
+      storage_path?: string | null
+      mime_type?: string | null
+      caption?: string | null
+    },
+  ) =>
+    request<{ ok: true; report: import('../types/api').ConditionReportDetail }>(
+      `/api/tenants/condition-reports/${reportId}/media`,
+      { method: 'POST', token, body },
+    ),
+
+  confirmTenantConditionReport: (
+    token: string,
+    reportId: string,
+    body: {
+      status: 'confirmed' | 'disputed'
+      note?: string | null
+    },
+  ) =>
+    request<{ ok: true; report: import('../types/api').ConditionReportDetail }>(
+      `/api/tenants/condition-reports/${reportId}/confirm`,
+      { method: 'POST', token, body },
+    ),
+
   getTenantTickets: (token: string) => request<{ ok: true; tickets: TenantTicket[] }>('/api/tenants/tickets', { token }),
 
   getTenantTicketDetail: (token: string, ticketId: string) =>
@@ -391,6 +939,30 @@ export const api = {
       token,
       body,
     }),
+
+  getTenantTicketMaintenanceWorkflow: (token: string, ticketId: string) =>
+    request<{ ok: true; maintenance: TenantMaintenanceWorkflowOverview }>(
+      `/api/tenants/tickets/${ticketId}/maintenance-workflow`,
+      { token },
+    ),
+
+  confirmTenantMaintenanceCompletion: (
+    token: string,
+    ticketId: string,
+    body: {
+      resolved: boolean
+      feedback_rating?: number
+      feedback_note?: string
+    },
+  ) =>
+    request<{ ok: true; maintenance: TenantMaintenanceWorkflowOverview }>(
+      `/api/tenants/tickets/${ticketId}/maintenance-workflow/completion`,
+      {
+        method: 'POST',
+        token,
+        body,
+      },
+    ),
 
   getTenantOwnerContact: (token: string) =>
     request<{ ok: true; owner: TenantOwnerContact }>('/api/tenants/owner-contact', { token }),
@@ -454,6 +1026,67 @@ export const api = {
 
   getAdminAiStatus: (token: string) =>
     request<{ ok: true; status: AdminAiStatus }>('/api/admin/ai-status', { token }),
+
+  getAdminAutomationHealth: (token: string) =>
+    request<{ ok: true; health: AdminAutomationHealth }>('/api/admin/automations/health', { token }),
+
+  getAdminAutomationCompliance: (token: string, query: Pick<ListQueryInput, 'organization_id'> = {}) =>
+    request<{ ok: true; compliance: ComplianceOverview }>(`/api/admin/automations/compliance${toQueryString(query)}`, {
+      token,
+    }),
+
+  getAdminAutomationPortfolioVisibility: (token: string, query: Pick<ListQueryInput, 'organization_id'> = {}) =>
+    request<{ ok: true; portfolio_visibility: AdminPortfolioVisibilityOverview }>(
+      `/api/admin/automations/portfolio-visibility${toQueryString(query)}`,
+      { token },
+    ),
+
+  getAdminAutomationCashFlow: (token: string, query: Pick<ListQueryInput, 'organization_id'> = {}) =>
+    request<{ ok: true; cash_flow: AdminCashFlowOverview }>(`/api/admin/automations/cash-flow${toQueryString(query)}`, {
+      token,
+    }),
+
+  getAdminAutomationVacancyCampaigns: (token: string, query: Pick<ListQueryInput, 'organization_id'> = {}) =>
+    request<{ ok: true; vacancy: AdminVacancyOverview }>(`/api/admin/automations/vacancy-campaigns${toQueryString(query)}`, {
+      token,
+    }),
+
+  getAdminAutomationScreening: (
+    token: string,
+    query: Pick<ListQueryInput, 'organization_id' | 'page' | 'page_size'> & {
+      recommendation_category?: 'green' | 'amber' | 'red' | 'unscored'
+      final_disposition?: 'in_review' | 'rejected' | 'viewing' | 'lease_prep' | 'withdrawn' | 'approved'
+    } = {},
+  ) => request<{ ok: true; screening: AdminScreeningOverview }>(`/api/admin/automations/screening${toQueryString(query)}`, { token }),
+
+  getAdminAutomationConditionReports: (
+    token: string,
+    query: Pick<ListQueryInput, 'organization_id' | 'page' | 'page_size'> & {
+      report_type?: 'move_in' | 'move_out'
+    } = {},
+  ) =>
+    request<{ ok: true; condition_reports: import('../types/api').AdminConditionReportOverview }>(
+      `/api/admin/automations/condition-reports${toQueryString(query)}`,
+      { token },
+    ),
+
+  getAdminAutomationJobs: (token: string, query: ListQueryInput = {}) =>
+    request<{ ok: true; items: AutomationJob[]; pagination: import('../types/api').PaginationMeta }>(
+      `/api/admin/automations/jobs${toQueryString(query)}`,
+      { token },
+    ),
+
+  getAdminAutomationRuns: (token: string, query: ListQueryInput = {}) =>
+    request<{ ok: true; items: import('../types/api').AutomationRun[]; pagination: import('../types/api').PaginationMeta }>(
+      `/api/admin/automations/runs${toQueryString(query)}`,
+      { token },
+    ),
+
+  getAdminAutomationErrors: (token: string, query: ListQueryInput = {}) =>
+    request<{ ok: true; items: import('../types/api').AutomationError[]; pagination: import('../types/api').PaginationMeta }>(
+      `/api/admin/automations/errors${toQueryString(query)}`,
+      { token },
+    ),
 
   getAdminBlogPosts: (token: string, query: ListQueryInput) =>
     request<AdminListResponse<BlogPost>>(`/api/admin/blog${toQueryString(query)}`, { token }),

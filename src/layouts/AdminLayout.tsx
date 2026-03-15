@@ -1,4 +1,4 @@
-import { Building2, ClipboardList, LayoutDashboard, Mail, MessageSquare, Users } from 'lucide-react'
+import { Bot, Building2, ClipboardList, LayoutDashboard, Mail, MessageSquare, Users } from 'lucide-react'
 
 import { useAdminAuth } from '../hooks/useAdminAuth'
 import { ROUTES } from '../routes/constants'
@@ -11,6 +11,7 @@ const adminLinks = [
   { to: ROUTES.adminTenants, label: 'Tenants', icon: <Users className="h-4 w-4" /> },
   { to: ROUTES.adminProperties, label: 'Properties', icon: <Building2 className="h-4 w-4" /> },
   { to: ROUTES.adminTickets, label: 'Tickets', icon: <MessageSquare className="h-4 w-4" /> },
+  { to: ROUTES.adminAutomations, label: 'Automations', icon: <Bot className="h-4 w-4" /> },
   { to: ROUTES.adminContactMessages, label: 'Contacts', icon: <Mail className="h-4 w-4" /> },
   { to: ROUTES.adminBlog, label: 'Blog', icon: <ClipboardList className="h-4 w-4" /> },
 ]

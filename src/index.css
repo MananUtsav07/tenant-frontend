@@ -30,7 +30,7 @@
 
 html {
   scroll-behavior: smooth;
-  background: var(--ph-bg);
+  background: #090d15;
 }
 
 * {
@@ -40,11 +40,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at 18% -10%, rgba(240, 163, 35, 0.12), transparent 24%),
-    radial-gradient(circle at 100% 0%, rgba(11, 22, 51, 0.82), transparent 32%),
-    radial-gradient(circle at 50% 120%, rgba(105, 76, 33, 0.16), transparent 36%),
-    linear-gradient(180deg, #121520 0%, #0f1422 48%, #0b1220 100%);
+  background: linear-gradient(180deg, #0b1018 0%, #090d15 100%);
   color: var(--ph-text);
   font-family: 'Manrope', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   text-rendering: optimizeLegibility;
@@ -231,42 +227,42 @@ a {
     linear-gradient(
       30deg,
       transparent 24%,
-      rgba(240, 163, 35, 0.05) 25%,
-      rgba(240, 163, 35, 0.05) 26%,
+      rgba(240, 163, 35, 0.018) 25%,
+      rgba(240, 163, 35, 0.018) 26%,
       transparent 27%,
       transparent 74%,
-      rgba(240, 163, 35, 0.05) 75%,
-      rgba(240, 163, 35, 0.05) 76%,
+      rgba(240, 163, 35, 0.018) 75%,
+      rgba(240, 163, 35, 0.018) 76%,
       transparent 77%,
       transparent
     ),
     linear-gradient(
       90deg,
       transparent 24%,
-      rgba(151, 105, 34, 0.04) 25%,
-      rgba(151, 105, 34, 0.04) 26%,
+      rgba(151, 105, 34, 0.014) 25%,
+      rgba(151, 105, 34, 0.014) 26%,
       transparent 27%,
       transparent 74%,
-      rgba(151, 105, 34, 0.04) 75%,
-      rgba(151, 105, 34, 0.04) 76%,
+      rgba(151, 105, 34, 0.014) 75%,
+      rgba(151, 105, 34, 0.014) 76%,
       transparent 77%,
       transparent
     ),
     linear-gradient(
       150deg,
       transparent 24%,
-      rgba(240, 163, 35, 0.04) 25%,
-      rgba(240, 163, 35, 0.04) 26%,
+      rgba(240, 163, 35, 0.018) 25%,
+      rgba(240, 163, 35, 0.018) 26%,
       transparent 27%,
       transparent 74%,
-      rgba(240, 163, 35, 0.04) 75%,
-      rgba(240, 163, 35, 0.04) 76%,
+      rgba(240, 163, 35, 0.018) 75%,
+      rgba(240, 163, 35, 0.018) 76%,
       transparent 77%,
       transparent
     );
-  background-size: 92px 158px;
-  opacity: 0.62;
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.86), transparent 95%);
+  background-size: 128px 222px;
+  opacity: 0.16;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.42), transparent 90%);
   pointer-events: none;
 }
 
@@ -276,9 +272,7 @@ a {
   inset: 0;
   z-index: -3;
   background:
-    radial-gradient(circle at 12% 8%, rgba(240, 163, 35, 0.08), transparent 22%),
-    radial-gradient(circle at 88% 18%, rgba(11, 22, 51, 0.4), transparent 24%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 45%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.016), transparent 40%);
   pointer-events: none;
 }
 

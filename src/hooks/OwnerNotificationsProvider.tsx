@@ -1,28 +1,9 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from 'react'
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 
 import { api } from '../services/api'
 import type { OwnerNotification } from '../types/api'
 import { useOwnerAuth } from './useOwnerAuth'
-
-type OwnerNotificationsContextValue = {
-  notifications: OwnerNotification[]
-  unreadCount: number
-  loading: boolean
-  error: string | null
-  refresh: (options?: { silent?: boolean }) => Promise<void>
-  markRead: (notificationId: string) => Promise<void>
-  markAllRead: () => Promise<void>
-}
-
-const OwnerNotificationsContext = createContext<OwnerNotificationsContextValue | null>(null)
+import { OwnerNotificationsContext, type OwnerNotificationsContextValue } from './ownerNotificationsContext'
 
 export function OwnerNotificationsProvider({ children }: { children: ReactNode }) {
   const { token } = useOwnerAuth()
@@ -119,12 +100,4 @@ export function OwnerNotificationsProvider({ children }: { children: ReactNode }
   )
 
   return <OwnerNotificationsContext.Provider value={value}>{children}</OwnerNotificationsContext.Provider>
-}
-
-export function useOwnerNotifications() {
-  const context = useContext(OwnerNotificationsContext)
-  if (!context) {
-    throw new Error('useOwnerNotifications must be used within OwnerNotificationsProvider')
-  }
-  return context
 }

@@ -51,10 +51,16 @@ const AdminLoginPage = lazyNamedPage(() => import('../pages/auth/AdminLoginPage'
 
 const OwnerDashboardPage = lazyNamedPage(() => import('../pages/owner/OwnerDashboardPage'), 'OwnerDashboardPage')
 const OwnerPropertiesPage = lazyNamedPage(() => import('../pages/owner/OwnerPropertiesPage'), 'OwnerPropertiesPage')
+const OwnerApplicantsPage = lazyNamedPage(() => import('../pages/owner/OwnerApplicantsPage'), 'OwnerApplicantsPage')
 const OwnerTenantsPage = lazyNamedPage(() => import('../pages/owner/OwnerTenantsPage'), 'OwnerTenantsPage')
 const OwnerTenantDetailPage = lazyNamedPage(() => import('../pages/owner/OwnerTenantDetailPage'), 'OwnerTenantDetailPage')
 const OwnerTicketsPage = lazyNamedPage(() => import('../pages/owner/OwnerTicketsPage'), 'OwnerTicketsPage')
 const OwnerNotificationsPage = lazyNamedPage(() => import('../pages/owner/OwnerNotificationsPage'), 'OwnerNotificationsPage')
+const OwnerAutomationPage = lazyNamedPage(() => import('../pages/owner/OwnerAutomationPage'), 'OwnerAutomationPage')
+const OwnerAutomationActivityPage = lazyNamedPage(
+  () => import('../pages/owner/OwnerAutomationActivityPage'),
+  'OwnerAutomationActivityPage',
+)
 const OwnerAiSettingsPage = lazyNamedPage(() => import('../pages/owner/OwnerAiSettingsPage'), 'OwnerAiSettingsPage')
 
 const TenantDashboardPage = lazyNamedPage(() => import('../pages/tenant/TenantDashboardPage'), 'TenantDashboardPage')
@@ -71,6 +77,7 @@ const AdminOwnersPage = lazyNamedPage(() => import('../pages/admin/AdminOwnersPa
 const AdminTenantsPage = lazyNamedPage(() => import('../pages/admin/AdminTenantsPage'), 'AdminTenantsPage')
 const AdminPropertiesPage = lazyNamedPage(() => import('../pages/admin/AdminPropertiesPage'), 'AdminPropertiesPage')
 const AdminTicketsPage = lazyNamedPage(() => import('../pages/admin/AdminTicketsPage'), 'AdminTicketsPage')
+const AdminAutomationsPage = lazyNamedPage(() => import('../pages/admin/AdminAutomationsPage'), 'AdminAutomationsPage')
 const AdminContactMessagesPage = lazyNamedPage(
   () => import('../pages/admin/AdminContactMessagesPage'),
   'AdminContactMessagesPage',
@@ -105,7 +112,7 @@ function AppRoutes() {
           path={ROUTES.adminRoot}
           element={
             adminLoading ? (
-              <div className="flex min-h-screen items-center justify-center bg-[var(--ph-bg)] px-6 text-sm text-[var(--ph-text-muted)]">
+              <div className="ph-prophives-bg flex min-h-screen items-center justify-center px-6 text-sm text-[var(--ph-text-muted)]">
                 Loading admin session...
               </div>
             ) : (
@@ -122,10 +129,13 @@ function AppRoutes() {
         <Route element={<OwnerLayout />}>
           <Route path={ROUTES.ownerDashboard} element={<OwnerDashboardPage />} />
           <Route path={ROUTES.ownerProperties} element={<OwnerPropertiesPage />} />
+          <Route path={ROUTES.ownerApplicants} element={<OwnerApplicantsPage />} />
           <Route path={ROUTES.ownerTenants} element={<OwnerTenantsPage />} />
           <Route path={ROUTES.ownerTenantDetail} element={<OwnerTenantDetailPage />} />
           <Route path={ROUTES.ownerTickets} element={<OwnerTicketsPage />} />
           <Route path={ROUTES.ownerNotifications} element={<OwnerNotificationsPage />} />
+          <Route path={ROUTES.ownerAutomation} element={<OwnerAutomationPage />} />
+          <Route path={ROUTES.ownerAutomationActivity} element={<OwnerAutomationActivityPage />} />
           <Route path={ROUTES.ownerAiSettings} element={<OwnerAiSettingsPage />} />
         </Route>
       </Route>
@@ -147,6 +157,7 @@ function AppRoutes() {
           <Route path={ROUTES.adminTenants} element={<AdminTenantsPage />} />
           <Route path={ROUTES.adminProperties} element={<AdminPropertiesPage />} />
           <Route path={ROUTES.adminTickets} element={<AdminTicketsPage />} />
+          <Route path={ROUTES.adminAutomations} element={<AdminAutomationsPage />} />
           <Route path={ROUTES.adminContactMessages} element={<AdminContactMessagesPage />} />
           <Route path={ROUTES.adminBlog} element={<AdminBlogPage />} />
         </Route>
@@ -163,7 +174,7 @@ export function App() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center bg-[var(--ph-bg)] px-6 text-sm text-[var(--ph-text-muted)]">
+        <div className="ph-prophives-bg flex min-h-screen items-center justify-center px-6 text-sm text-[var(--ph-text-muted)]">
           Loading page...
         </div>
       }

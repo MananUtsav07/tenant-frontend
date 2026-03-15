@@ -13,12 +13,14 @@ import { SummaryCard } from '../../components/common/SummaryCard'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
-import type { OwnerRentPaymentApproval, OwnerSummary } from '../../types/api'
+import type { OwnerPortfolioVisibilityOverview, OwnerRentPaymentApproval, OwnerSummary, OwnerVacancyOverview } from '../../types/api'
 import { formatCurrency, formatDate, formatDateTime } from '../../utils/date'
 
 export function OwnerDashboardPage() {
   const { token, owner } = useOwnerAuth()
   const [summary, setSummary] = useState<OwnerSummary | null>(null)
+  const [portfolioOverview, setPortfolioOverview] = useState<OwnerPortfolioVisibilityOverview | null>(null)
+  const [vacancyOverview, setVacancyOverview] = useState<OwnerVacancyOverview | null>(null)
   const [approvals, setApprovals] = useState<OwnerRentPaymentApproval[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -35,6 +37,28 @@ export function OwnerDashboardPage() {
       setError(null)
       const summaryResponse = await api.getOwnerSummary(token)
       setSummary(summaryResponse.summary)
+
+      try {
+        const portfolioResponse = await api.getOwnerAutomationPortfolioVisibility(token)
+        setPortfolioOverview(portfolioResponse.portfolio_visibility)
+      } catch (portfolioError) {
+        if (portfolioError instanceof Error && portfolioError.message.toLowerCase().includes('route not found')) {
+          setPortfolioOverview(null)
+        } else {
+          throw portfolioError
+        }
+      }
+
+      try {
+        const vacancyResponse = await api.getOwnerAutomationVacancy(token)
+        setVacancyOverview(vacancyResponse.vacancy)
+      } catch (vacancyError) {
+        if (vacancyError instanceof Error && vacancyError.message.toLowerCase().includes('route not found')) {
+          setVacancyOverview(null)
+        } else {
+          throw vacancyError
+        }
+      }
 
       try {
         const approvalsResponse = await api.getOwnerRentPaymentApprovals(token)
@@ -101,6 +125,9 @@ export function OwnerDashboardPage() {
   }
 
   const organizationLabel = owner?.organization?.name || owner?.company_name || owner?.full_name || 'Portfolio'
+  const portfolioSnapshot = portfolioOverview?.current_snapshot ?? null
+  const monthlyCashFlow = portfolioSnapshot?.payload.cash_flow_summary.latest_monthly_snapshot ?? null
+  const annualCashFlow = portfolioSnapshot?.payload.cash_flow_summary.latest_annual_snapshot ?? null
 
   return (
     <section className="space-y-6">
@@ -182,6 +209,188 @@ export function OwnerDashboardPage() {
               </ul>
             </article>
           </div>
+
+          {portfolioSnapshot ? (
+            <div className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+              <article className="ph-surface-card rounded-[1.7rem] p-5">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Portfolio Radar</p>
+                    <h3 className="mt-3 text-xl font-semibold text-[var(--ph-text)]">Current operating posture</h3>
+                    <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
+                      Live signals across rent exposure, service activity, compliance, and occupancy.
+                    </p>
+                  </div>
+                  <p className="text-xs text-[var(--ph-text-muted)]">
+                    Updated {formatDateTime(portfolioSnapshot.generated_at)}
+                  </p>
+                </div>
+
+                <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                  <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">Overdue Rent</p>
+                    <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">{portfolioSnapshot.overdue_rent_count}</p>
+                    <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
+                      {portfolioSnapshot.payload.overdue_rent_items[0]
+                        ? `${portfolioSnapshot.payload.overdue_rent_items[0].tenant_name} needs review`
+                        : 'No overdue residents currently flagged'}
+                    </p>
+                  </div>
+                  <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">Urgent Tickets</p>
+                    <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">
+                      {portfolioSnapshot.urgent_open_ticket_count}
+                    </p>
+                    <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
+                      {portfolioSnapshot.payload.ticket_highlights.urgent_open[0]
+                        ? portfolioSnapshot.payload.ticket_highlights.urgent_open[0].subject
+                        : 'No urgent maintenance or support signals'}
+                    </p>
+                  </div>
+                  <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">
+                      Compliance Horizon
+                    </p>
+                    <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">
+                      {portfolioSnapshot.upcoming_compliance_count}
+                    </p>
+                    <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
+                      {portfolioSnapshot.payload.compliance_highlights[0]
+                        ? `${portfolioSnapshot.payload.compliance_highlights[0].trigger_label} in ${portfolioSnapshot.payload.compliance_highlights[0].days_remaining} days`
+                        : 'No milestones inside the active reminder window'}
+                    </p>
+                  </div>
+                  <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">Occupancy</p>
+                    <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">
+                      {portfolioSnapshot.occupied_property_count}/{portfolioSnapshot.occupied_property_count + portfolioSnapshot.vacant_property_count}
+                    </p>
+                    <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
+                      {portfolioSnapshot.vacant_property_count > 0
+                        ? `${portfolioSnapshot.vacant_property_count} unit${portfolioSnapshot.vacant_property_count === 1 ? '' : 's'} currently vacant`
+                        : 'No current vacancy highlights'}
+                    </p>
+                  </div>
+                  <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">
+                      Latest Net Income
+                    </p>
+                    <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">
+                      {monthlyCashFlow
+                        ? formatCurrency(monthlyCashFlow.portfolio_net_income, monthlyCashFlow.currency_code)
+                        : 'N/A'}
+                    </p>
+                    <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
+                      {monthlyCashFlow?.report_label ?? 'Monthly cash-flow snapshot not generated yet'}
+                    </p>
+                  </div>
+                  <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">
+                      Trailing Yield
+                    </p>
+                    <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">
+                      {typeof annualCashFlow?.portfolio_yield_percent === 'number'
+                        ? `${annualCashFlow.portfolio_yield_percent}%`
+                        : 'N/A'}
+                    </p>
+                    <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
+                      {annualCashFlow?.report_label ?? 'Annual yield signal not generated yet'}
+                    </p>
+                  </div>
+                </div>
+              </article>
+
+              <article className="ph-surface-card rounded-[1.7rem] p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Recent Alerts</p>
+                <div className="mt-4 space-y-3">
+                  {portfolioOverview?.recent_alerts.length ? (
+                    portfolioOverview.recent_alerts.slice(0, 5).map((alert) => (
+                      <div key={alert.id} className="rounded-[1.15rem] border border-white/10 bg-white/[0.03] p-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-sm font-medium text-[var(--ph-text)]">{alert.title}</p>
+                            <p className="mt-1 text-sm leading-relaxed text-[var(--ph-text-muted)]">{alert.message}</p>
+                          </div>
+                          <p className="text-[11px] text-[var(--ph-text-muted)]">{formatDateTime(alert.created_at)}</p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <EmptyState
+                      title="No recent alerts"
+                      description="Portfolio alerts and digests will appear here as automation activity is generated."
+                      icon={<Bell className="h-5 w-5" />}
+                    />
+                  )}
+                </div>
+              </article>
+            </div>
+          ) : null}
+
+          {vacancyOverview ? (
+            <article className="ph-surface-card rounded-[1.7rem] p-5">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Vacancy Pipeline</p>
+                  <h3 className="mt-3 text-xl font-semibold text-[var(--ph-text)]">Re-letting in motion</h3>
+                  <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
+                    Upcoming vacancy, active campaigns, and listing readiness across your portfolio.
+                  </p>
+                </div>
+                <Button to={ROUTES.ownerProperties} variant="ghost" size="sm" className="px-0 hover:bg-transparent">
+                  Open properties
+                </Button>
+              </div>
+
+              <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">Active</p>
+                  <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">{vacancyOverview.summary.active_campaign_count}</p>
+                </div>
+                <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">Vacant</p>
+                  <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">{vacancyOverview.summary.vacant_count}</p>
+                </div>
+                <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">Viewings</p>
+                  <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">{vacancyOverview.summary.scheduled_viewings_count}</p>
+                </div>
+                <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">Applications</p>
+                  <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">{vacancyOverview.summary.applications_count}</p>
+                </div>
+              </div>
+
+              <div className="mt-5 space-y-3">
+                {vacancyOverview.campaigns.slice(0, 3).map((campaign) => (
+                  <div key={campaign.id} className="rounded-[1.2rem] border border-white/10 bg-white/[0.03] p-4">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <p className="font-medium text-[var(--ph-text)]">
+                          {campaign.property?.property_name ?? 'Property'}
+                          {campaign.property?.unit_number ? ` (${campaign.property.unit_number})` : ''}
+                        </p>
+                        <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
+                          Expected vacancy {formatDate(campaign.expected_vacancy_date)}. {campaign.next_action}
+                        </p>
+                      </div>
+                      <div className="flex gap-2">
+                        <StatusBadge status={campaign.campaign_status} />
+                        <StatusBadge status={campaign.vacancy_state} />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {!vacancyOverview.campaigns.length ? (
+                  <EmptyState
+                    title="No vacancy campaigns active"
+                    description="Re-letting campaigns will show here when lease expiry or notice triggers are detected."
+                    icon={<TriangleAlert className="h-5 w-5" />}
+                  />
+                ) : null}
+              </div>
+            </article>
+          ) : null}
         </>
       ) : null}
 

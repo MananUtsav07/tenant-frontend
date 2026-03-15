@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { ArrowLeft, Building2, Mail, Phone } from 'lucide-react'
 
 import { Button } from '../../components/common/Button'
+import { ConditionReportOwnerPanel } from '../../components/condition-reports/ConditionReportOwnerPanel'
 import { DataTable } from '../../components/common/DataTable'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
@@ -210,6 +211,8 @@ export function OwnerTenantDetailPage() {
               </DataTable>
             )}
           </div>
+
+          {token ? <ConditionReportOwnerPanel token={token} tenantId={detail.tenant.id} tenantName={detail.tenant.full_name} /> : null}
         </>
       ) : null}
     </section>

@@ -12,6 +12,7 @@ import { TicketTable } from '../../components/common/TicketTable'
 import { dashboardFormPanelClassName } from '../../components/common/formTheme'
 import { TicketReplyComposer } from '../../components/tickets/TicketReplyComposer'
 import { TicketThreadTimeline } from '../../components/tickets/TicketThreadTimeline'
+import { MaintenanceWorkflowOwnerPanel } from '../../components/tickets/MaintenanceWorkflowOwnerPanel'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
@@ -220,6 +221,16 @@ export function OwnerTicketsPage() {
             </div>
             <TicketThreadTimeline messages={thread.messages} />
           </article>
+
+          {token ? (
+            <MaintenanceWorkflowOwnerPanel
+              token={token}
+              ticketId={thread.ticket.id}
+              onWorkflowChanged={async () => {
+                await Promise.all([loadTickets(), loadThread(thread.ticket.id)])
+              }}
+            />
+          ) : null}
 
           {thread.ticket.status !== 'closed' ? (
             <TicketReplyComposer
