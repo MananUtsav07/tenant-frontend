@@ -48,23 +48,35 @@ export function TenantSupportPage() {
 
   const refreshTelegramStatus = async () => {
     if (!token) {
-      return
+      return false
     }
 
     try {
       setError(null)
       const response = await api.getTenantTelegramOnboarding(token)
       setTelegramOnboarding(response.onboarding)
+      return response.onboarding.connected
     } catch (refreshError) {
       setError(refreshError instanceof Error ? refreshError.message : 'Failed to refresh Telegram status')
+      return false
     }
   }
 
-  const connectTelegram = () => {
+  const connectTelegram = async () => {
     if (!telegramOnboarding?.connect_url) {
       return
     }
     window.open(telegramOnboarding.connect_url, '_blank', 'noopener,noreferrer')
+
+    for (let attempt = 0; attempt < 15; attempt += 1) {
+      await new Promise((resolve) => {
+        window.setTimeout(resolve, 2000)
+      })
+      const connected = await refreshTelegramStatus()
+      if (connected) {
+        break
+      }
+    }
   }
 
   const disconnectTelegram = async () => {
@@ -105,13 +117,15 @@ export function TenantSupportPage() {
               ? `Connected${telegramOnboarding.linked_chat?.username ? ` as @${telegramOnboarding.linked_chat.username}` : ''}.`
               : 'Connect Telegram to receive support and rent update alerts.'}
           </p>
-          <p className="mt-1 text-xs text-slate-500">Open bot, tap Start once, then click Refresh status.</p>
+          <p className="mt-1 text-xs text-slate-500">Open bot and tap Start once. Status sync runs automatically.</p>
           <div className="mt-4 flex flex-wrap gap-2">
             {!telegramOnboarding.connected ? (
               <button
                 type="button"
                 className="rounded-xl border border-sky-600 bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-500 disabled:cursor-not-allowed disabled:opacity-60"
-                onClick={connectTelegram}
+                onClick={() => {
+                  void connectTelegram()
+                }}
                 disabled={!telegramOnboarding.connect_url}
               >
                 Connect Telegram

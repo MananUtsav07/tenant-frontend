@@ -21,6 +21,8 @@ import type {
   OwnerAiSettingsResponse,
   OwnerNotification,
   OwnerRentPaymentApproval,
+  OwnerNotificationPreferences,
+  OwnerTelegramDeliveryLog,
   OwnerSummary,
   Property,
   SupportTicketThread,
@@ -66,6 +68,15 @@ type ListQueryInput = {
   days?: number
   organization_id?: string
 }
+
+type OwnerNotificationPreferencePatch = Partial<{
+  ticket_created_email: boolean
+  ticket_created_telegram: boolean
+  ticket_reply_email: boolean
+  ticket_reply_telegram: boolean
+  rent_payment_awaiting_approval_email: boolean
+  rent_payment_awaiting_approval_telegram: boolean
+}>
 
 async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, {
@@ -306,6 +317,16 @@ export const api = {
   getOwnerNotifications: (token: string) =>
     request<{ ok: true; notifications: OwnerNotification[] }>('/api/owners/notifications', { token }),
 
+  getOwnerNotificationPreferences: (token: string) =>
+    request<{ ok: true; preferences: OwnerNotificationPreferences }>('/api/owners/notifications/preferences', { token }),
+
+  updateOwnerNotificationPreferences: (token: string, body: OwnerNotificationPreferencePatch) =>
+    request<{ ok: true; preferences: OwnerNotificationPreferences }>('/api/owners/notifications/preferences', {
+      method: 'PUT',
+      token,
+      body,
+    }),
+
   markAllOwnerNotificationsRead: (token: string) =>
     request<{ ok: true }>('/api/owners/notifications/read-all', { method: 'PATCH', token }),
 
@@ -317,6 +338,18 @@ export const api = {
 
   disconnectOwnerTelegram: (token: string) =>
     request<{ ok: true; disconnected: boolean }>('/api/owners/telegram/disconnect', { method: 'POST', token, body: {} }),
+
+  getOwnerTelegramDeliveryLogs: (token: string, query: { page?: number; page_size?: number } = {}) =>
+    request<{
+      ok: true
+      items: OwnerTelegramDeliveryLog[]
+      pagination: {
+        page: number
+        page_size: number
+        total: number
+        total_pages: number
+      }
+    }>(`/api/owners/telegram/delivery-logs${toQueryString(query)}`, { token }),
 
   processOwnerReminders: (token: string) =>
     request<{

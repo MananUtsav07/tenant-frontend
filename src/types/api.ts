@@ -238,6 +238,32 @@ export type TelegramOnboardingState = {
   } | null
 }
 
+export type OwnerNotificationPreferences = {
+  id: string
+  organization_id: string
+  owner_id: string
+  ticket_created_email: boolean
+  ticket_created_telegram: boolean
+  ticket_reply_email: boolean
+  ticket_reply_telegram: boolean
+  rent_payment_awaiting_approval_email: boolean
+  rent_payment_awaiting_approval_telegram: boolean
+  created_at: string
+  updated_at: string
+}
+
+export type OwnerTelegramDeliveryLog = {
+  id: string
+  event_type: string
+  status: 'success' | 'failed'
+  attempts: number
+  recipient_chat_id: string
+  error_message: string | null
+  metadata: Record<string, unknown>
+  created_at: string
+  updated_at: string
+}
+
 export type TenantAuthPayload = {
   token: string
   tenant: {
