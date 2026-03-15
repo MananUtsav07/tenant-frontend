@@ -8,6 +8,7 @@ type BaseProps = {
   hint?: ReactNode
   error?: string
   hideLabel?: boolean
+  variant?: 'default' | 'light'
   leadingIcon?: ReactNode
   trailingAdornment?: ReactNode
   wrapperClassName?: string
@@ -29,6 +30,7 @@ export function FormInput(props: FormInputProps) {
     hint,
     error,
     hideLabel = false,
+    variant = 'default',
     leadingIcon,
     trailingAdornment,
     wrapperClassName,
@@ -66,6 +68,7 @@ export function FormInput(props: FormInputProps) {
               'ph-form-textarea',
               (rest as TextareaHTMLAttributes<HTMLTextAreaElement>).className,
               {
+                variant,
                 hasLeadingIcon,
                 hasTrailingAdornment,
               },
@@ -80,6 +83,7 @@ export function FormInput(props: FormInputProps) {
               'ph-form-control',
               (rest as InputHTMLAttributes<HTMLInputElement>).className,
               {
+                variant,
                 hasLeadingIcon,
                 hasTrailingAdornment,
               },

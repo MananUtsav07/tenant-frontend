@@ -20,6 +20,7 @@ export function getDashboardControlClassName(
   baseClassName: string,
   className?: string,
   options?: {
+    variant?: 'default' | 'light'
     hasLeadingIcon?: boolean
     hasTrailingAdornment?: boolean
   },
