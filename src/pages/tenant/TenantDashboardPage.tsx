@@ -11,7 +11,7 @@ import { SummaryCard } from '../../components/common/SummaryCard'
 import { StatusBadge } from '../../components/common/StatusBadge'
 import { useTenantAuth } from '../../hooks/useTenantAuth'
 import { api } from '../../services/api'
-import type { Property, Tenant, TenantRentPaymentState, TenantSummary } from '../../types/api'
+import type { Property, Tenant, TenantLeaseRenewalIntentState, TenantRentPaymentState, TenantSummary } from '../../types/api'
 import { formatCurrency, formatDate } from '../../utils/date'
 
 export function TenantDashboardPage() {
@@ -20,9 +20,11 @@ export function TenantDashboardPage() {
   const [property, setProperty] = useState<Property | null>(null)
   const [tenant, setTenant] = useState<Tenant | null>(null)
   const [rentPaymentState, setRentPaymentState] = useState<TenantRentPaymentState | null>(null)
+  const [leaseRenewalIntentState, setLeaseRenewalIntentState] = useState<TenantLeaseRenewalIntentState | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [markingPaid, setMarkingPaid] = useState(false)
+  const [submittingLeasePreference, setSubmittingLeasePreference] = useState(false)
 
   const loadDashboard = useCallback(async () => {
     if (!token) {
@@ -49,6 +51,17 @@ export function TenantDashboardPage() {
         }
         throw rentPaymentError
       }
+
+      try {
+        const leaseRenewalResponse = await api.getTenantLeaseRenewalIntentState(token)
+        setLeaseRenewalIntentState(leaseRenewalResponse.state)
+      } catch (leaseRenewalError) {
+        if (leaseRenewalError instanceof Error && leaseRenewalError.message.toLowerCase().includes('route not found')) {
+          setLeaseRenewalIntentState(null)
+          return
+        }
+        throw leaseRenewalError
+      }
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : 'Failed to load tenant dashboard')
     } finally {
@@ -74,6 +87,24 @@ export function TenantDashboardPage() {
       setError(markError instanceof Error ? markError.message : 'Failed to mark rent as paid')
     } finally {
       setMarkingPaid(false)
+    }
+  }
+
+  const handleLeasePreferenceSubmit = async (decision: 'yes' | 'no') => {
+    if (!token) {
+      return
+    }
+
+    try {
+      setSubmittingLeasePreference(true)
+      setError(null)
+      await api.submitTenantLeaseRenewalIntent(token, { decision })
+      const leaseRenewalResponse = await api.getTenantLeaseRenewalIntentState(token)
+      setLeaseRenewalIntentState(leaseRenewalResponse.state)
+    } catch (submitError) {
+      setError(submitError instanceof Error ? submitError.message : 'Failed to submit lease preference')
+    } finally {
+      setSubmittingLeasePreference(false)
     }
   }
 
@@ -178,6 +209,49 @@ export function TenantDashboardPage() {
 
           {rentPaymentState.status === 'approved' ? (
             <p className="mt-4 text-sm font-medium text-emerald-200">Rent payment marked as paid for this cycle.</p>
+          ) : null}
+        </div>
+      ) : null}
+
+      {!loading && leaseRenewalIntentState?.eligible ? (
+        <div className="ph-surface-card rounded-[1.75rem] p-5">
+          <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">Lease continuation preference</h3>
+          <p className="mt-2 text-sm text-[var(--ph-text-muted)]">
+            Your lease ends on <span className="font-semibold text-[var(--ph-text)]">{formatDate(leaseRenewalIntentState.lease_end_date)}</span>.
+            Please confirm whether you wish to continue after this lease period.
+          </p>
+          <p className="mt-2 text-xs uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">
+            This response is shared by email with your owner and assigned broker (if available).
+          </p>
+
+          {leaseRenewalIntentState.already_responded ? (
+            <p className="mt-4 rounded-xl border border-[rgba(83,88,100,0.42)] bg-[rgba(255,255,255,0.03)] px-3 py-2 text-sm text-[var(--ph-text)]">
+              Response submitted:{' '}
+              <span className="font-semibold">
+                {leaseRenewalIntentState.current_response === 'yes' ? 'Yes, I want to continue' : 'No, I do not want to continue'}
+              </span>
+            </p>
+          ) : null}
+
+          {!leaseRenewalIntentState.already_responded ? (
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Button
+                type="button"
+                variant="primary"
+                disabled={submittingLeasePreference}
+                onClick={() => void handleLeasePreferenceSubmit('yes')}
+              >
+                {submittingLeasePreference ? 'Submitting...' : 'Yes, I want to continue'}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                disabled={submittingLeasePreference}
+                onClick={() => void handleLeasePreferenceSubmit('no')}
+              >
+                {submittingLeasePreference ? 'Submitting...' : 'No, I do not want to continue'}
+              </Button>
+            </div>
           ) : null}
         </div>
       ) : null}

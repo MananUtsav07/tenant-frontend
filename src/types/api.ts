@@ -1174,6 +1174,16 @@ export type TenantRentPaymentState = {
   reviewed_at: string | null
 }
 
+export type TenantLeaseRenewalIntentState = {
+  eligible: boolean
+  lease_end_date: string | null
+  days_remaining: number | null
+  window_days: number
+  already_responded: boolean
+  current_response: 'yes' | 'no' | null
+  responded_at: string | null
+}
+
 export type OwnerRentPaymentApproval = {
   id: string
   organization_id: string

@@ -46,6 +46,7 @@ import type {
   TenantOwnerContact,
   TenantSummary,
   TenantRentPaymentState,
+  TenantLeaseRenewalIntentState,
   TenantTicket,
   TelegramOnboardingState,
   PublicOperationsSnapshot,
@@ -684,6 +685,20 @@ export const api = {
 
   getTenantSummary: (token: string) =>
     request<{ ok: true; summary: TenantSummary }>('/api/tenants/dashboard-summary', { token }),
+
+  getTenantLeaseRenewalIntentState: (token: string) =>
+    request<{ ok: true; state: TenantLeaseRenewalIntentState }>('/api/tenants/lease-renewal-intent-state', { token }),
+
+  submitTenantLeaseRenewalIntent: (token: string, body: { decision: 'yes' | 'no' }) =>
+    request<{
+      ok: true
+      intent: {
+        id: string
+        decision: 'yes' | 'no'
+        lease_end_date: string
+        responded_at: string
+      }
+    }>('/api/tenants/lease-renewal-intent', { method: 'POST', token, body }),
 
   getTenantRentPaymentState: (token: string) =>
     request<{ ok: true; state: TenantRentPaymentState }>('/api/tenants/rent-payment-state', { token }),
