@@ -35,12 +35,12 @@ export function HowItWorksSection() {
   const staggerVariants = useMotionVariants(staggerParent)
 
   return (
-    <SectionContainer className="py-10 md:py-12" size="wide" tone="navy">
+    <SectionContainer size="wide" tone="navy">
       <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <span className="ph-kicker">Operating Flow</span>
-            <h2 className="ph-title mt-5 text-3xl font-semibold text-[var(--ph-text)] md:text-4xl">
+            <h2 className="ph-title mt-6 max-w-4xl text-3xl font-semibold text-[var(--ph-text)] md:text-4xl">
               A disciplined workflow from onboarding to ongoing service
             </h2>
           </div>
@@ -55,16 +55,16 @@ export function HowItWorksSection() {
         initial="hidden"
         whileInView="show"
         viewport={viewportOnce}
-        className="mt-10 grid gap-4 md:grid-cols-2"
+        className="mt-12 grid gap-4 lg:gap-5 md:grid-cols-2"
       >
         {steps.map((step, index) => (
           <motion.li
             key={step.title}
             variants={revealVariants}
-            className="rounded-[1.6rem] border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-5"
+            className="rounded-[1.45rem] border border-[rgba(83,88,100,0.34)] bg-white/[0.025] p-5 sm:p-6"
           >
             <div className="flex items-center justify-between gap-3">
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-[rgba(240,163,35,0.18)] bg-[rgba(240,163,35,0.08)] text-[var(--ph-accent)]">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-[1rem] border border-[rgba(240,163,35,0.16)] bg-[rgba(240,163,35,0.06)] text-[var(--ph-accent)]">
                 {step.icon}
               </span>
               <span className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--ph-text-muted)]">

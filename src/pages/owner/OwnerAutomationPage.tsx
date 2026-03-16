@@ -175,7 +175,7 @@ export function OwnerAutomationPage() {
   }
 
   return (
-    <section className="space-y-6">
+    <section className="ph-page-shell">
       <div className="ph-surface-card-strong rounded-[1.9rem] p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-3xl">

@@ -35,7 +35,7 @@ export function FaqSection() {
     <SectionContainer size="wide">
       <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
         <span className="ph-kicker">FAQ</span>
-        <h2 className="ph-title mt-5 text-3xl font-semibold text-[var(--ph-text)] md:text-5xl">
+        <h2 className="ph-title mt-6 max-w-4xl text-3xl font-semibold text-[var(--ph-text)] md:text-5xl">
           Questions teams ask before rollout
         </h2>
       </motion.div>
@@ -45,17 +45,17 @@ export function FaqSection() {
         initial="hidden"
         whileInView="show"
         viewport={viewportOnce}
-        className="mt-10 space-y-4"
+        className="mt-12 space-y-3.5"
       >
         {faqs.map((faq) => (
           <motion.details
             key={faq.question}
             variants={revealVariants}
-            className="group rounded-[1.5rem] border border-[rgba(83,88,100,0.42)] bg-white/[0.02] p-5"
+            className="group rounded-[1.4rem] border border-[rgba(83,88,100,0.34)] bg-white/[0.02] p-5 sm:p-6"
           >
             <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-left">
               <span className="ph-title text-lg font-semibold text-[var(--ph-text)]">{faq.question}</span>
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(240,163,35,0.18)] bg-[rgba(240,163,35,0.08)] text-[var(--ph-accent)]">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(240,163,35,0.14)] bg-[rgba(240,163,35,0.05)] text-[var(--ph-accent)]">
                 <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
               </span>
             </summary>

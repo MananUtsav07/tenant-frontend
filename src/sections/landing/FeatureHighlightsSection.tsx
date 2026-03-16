@@ -52,10 +52,10 @@ export function FeatureHighlightsSection() {
     <SectionContainer id="feature-highlights" size="wide">
       <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
         <span className="ph-kicker">Platform Architecture</span>
-        <h2 className="ph-title mt-5 text-3xl font-semibold text-[var(--ph-text)] md:text-5xl">
+        <h2 className="ph-title mt-6 max-w-4xl text-3xl font-semibold text-[var(--ph-text)] md:text-[3.2rem]">
           Everything a premium property team needs to run calmer operations
         </h2>
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-[var(--ph-text-muted)] md:text-lg">
+        <p className="mt-5 max-w-3xl text-base leading-relaxed text-[var(--ph-text-muted)] md:text-lg">
           Prophives is built for luxury real estate teams that want structure, clarity, and AI assistance without
           sacrificing control.
         </p>
@@ -66,7 +66,7 @@ export function FeatureHighlightsSection() {
         initial="hidden"
         whileInView="show"
         viewport={viewportOnce}
-        className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3"
+        className="mt-12 grid gap-4 lg:gap-5 md:grid-cols-2 xl:grid-cols-3"
       >
         {features.map((feature) => (
           <FeatureCard

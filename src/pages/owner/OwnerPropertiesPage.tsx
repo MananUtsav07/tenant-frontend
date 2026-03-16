@@ -116,38 +116,51 @@ export function OwnerPropertiesPage() {
   }
 
   return (
-    <section className="space-y-6">
-      <div>
-        <h2 className="ph-title text-2xl font-semibold text-[var(--ph-text)]">Properties</h2>
-        <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Create and manage your properties.</p>
+    <section className="ph-page-shell">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="ph-page-header">
+          <p className="ph-page-eyebrow">Owner Properties</p>
+          <h2 className="ph-page-heading">Properties</h2>
+          <p className="ph-page-description">Create and manage your properties with a cleaner intake flow and less visual clutter.</p>
+        </div>
+        <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(83,88,100,0.42)] bg-[rgba(255,255,255,0.04)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">
+          <Building2 className="h-3.5 w-3.5 text-[var(--ph-accent)]" />
+          {properties.length} total
+        </span>
       </div>
 
-      <form onSubmit={handleSubmit} className={`${dashboardFormPanelClassName} grid gap-4 md:grid-cols-3`}>
-        <FormInput
-          label="Property Name"
-          name="property_name"
-          autoComplete="off"
-          value={form.property_name}
-          onChange={(event) => setForm((current) => ({ ...current, property_name: event.target.value }))}
-          required
-        />
-        <FormInput
-          label="Address"
-          name="property_address"
-          autoComplete="off"
-          value={form.address}
-          onChange={(event) => setForm((current) => ({ ...current, address: event.target.value }))}
-          required
-        />
-        <FormInput
-          label="Unit Number"
-          name="property_unit_number"
-          autoComplete="off"
-          value={form.unit_number}
-          onChange={(event) => setForm((current) => ({ ...current, unit_number: event.target.value }))}
-        />
+      <form onSubmit={handleSubmit} className={`${dashboardFormPanelClassName} space-y-5`}>
+        <div>
+          <p className="text-sm font-semibold text-[var(--ph-text)]">{editingPropertyId ? 'Edit property' : 'Add property'}</p>
+          <p className="mt-1 text-xs text-[var(--ph-text-muted)]">Keep the core property setup focused before tenants and workflows attach to it.</p>
+        </div>
+        <div className="grid gap-4 lg:grid-cols-2">
+          <FormInput
+            label="Property Name"
+            name="property_name"
+            autoComplete="off"
+            value={form.property_name}
+            onChange={(event) => setForm((current) => ({ ...current, property_name: event.target.value }))}
+            required
+          />
+          <FormInput
+            label="Address"
+            name="property_address"
+            autoComplete="off"
+            value={form.address}
+            onChange={(event) => setForm((current) => ({ ...current, address: event.target.value }))}
+            required
+          />
+          <FormInput
+            label="Unit Number"
+            name="property_unit_number"
+            autoComplete="off"
+            value={form.unit_number}
+            onChange={(event) => setForm((current) => ({ ...current, unit_number: event.target.value }))}
+          />
+        </div>
 
-        <div className="flex flex-wrap gap-2 md:col-span-3">
+        <div className="flex flex-wrap gap-2">
           <Button
             type="submit"
             disabled={busy}

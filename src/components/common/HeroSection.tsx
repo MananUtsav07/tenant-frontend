@@ -37,15 +37,15 @@ export function HeroSection({
   const staggerVariants = useMotionVariants(staggerParent)
   const motionEnabled = useMotionEnabled()
   const hasSidePanel = Boolean(sidePanel)
-  const layoutClassName = hasSidePanel ? 'grid gap-10 lg:grid-cols-[1.2fr_0.9fr]' : 'grid gap-10'
+  const layoutClassName = hasSidePanel ? 'grid gap-12 lg:grid-cols-[1.15fr_0.85fr]' : 'grid gap-12'
 
   return (
     <SectionContainer
       className="relative"
       contentClassName={
         fullViewport
-          ? 'flex min-h-[calc(100svh-5rem)] flex-col justify-center py-8 md:py-10'
-          : 'py-14 md:py-18'
+          ? 'flex min-h-[calc(100svh-5rem)] flex-col justify-center py-10 md:py-14'
+          : 'py-16 md:py-20 lg:py-24'
       }
       padded={false}
       size="wide"
@@ -106,11 +106,11 @@ export function HeroSection({
           <span className="ph-kicker">
             {badge}
           </span>
-          <h1 className="ph-title mt-6 max-w-4xl text-4xl font-semibold leading-[1.02] text-[var(--ph-text)] sm:text-5xl lg:text-7xl">
+          <h1 className="ph-title mt-6 max-w-4xl text-4xl font-semibold leading-[1.02] text-[var(--ph-text)] sm:text-5xl lg:text-6xl xl:text-[4.6rem]">
             {heading}
           </h1>
-          <div className="mt-5 max-w-2xl text-lg leading-relaxed text-[var(--ph-text-muted)] md:text-xl">{subheading}</div>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-6 max-w-2xl text-base leading-relaxed text-[var(--ph-text-muted)] md:text-lg">{subheading}</div>
+          <div className="mt-9 flex flex-wrap gap-3">
             {actions.map((action, index) => (
               <motion.div key={action.label} variants={fadeVariants} transition={{ delay: index * 0.05 }}>
                 <Button
@@ -126,14 +126,14 @@ export function HeroSection({
               </motion.div>
             ))}
           </div>
-          <ul className="mt-8 grid gap-3 text-sm text-[var(--ph-text-soft)] sm:grid-cols-2">
+          <ul className="mt-10 grid gap-2.5 text-sm text-[var(--ph-text-soft)] sm:grid-cols-2">
             {highlights.map((highlight) => (
               <motion.li
                 key={highlight}
                 variants={fadeVariants}
-                className="flex items-start gap-3 rounded-2xl border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-3 backdrop-blur"
+                className="flex items-start gap-3 rounded-[1.2rem] border border-[rgba(83,88,100,0.3)] bg-white/[0.025] px-4 py-3 backdrop-blur"
               >
-                <span className="mt-1.5 h-2 w-2 rounded-full bg-[var(--ph-accent)] shadow-[0_0_0_5px_rgba(240,163,35,0.12)]" />
+                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[var(--ph-accent)] shadow-[0_0_0_4px_rgba(240,163,35,0.1)]" />
                 <span>{highlight}</span>
               </motion.li>
             ))}
@@ -163,7 +163,7 @@ export function HeroSection({
           >
             <div
               className={clsx(
-                'ph-surface-card-strong ph-hex-bg h-full p-6 text-[var(--ph-text)] shadow-[0_35px_90px_-62px_rgba(0,0,0,0.72)] sm:p-7',
+                'ph-surface-card-strong ph-hex-bg h-full p-6 text-[var(--ph-text)] shadow-[0_32px_82px_-60px_rgba(0,0,0,0.72)] sm:p-7 lg:p-8',
                 fullViewport && 'min-h-[420px] lg:min-h-0',
               )}
             >

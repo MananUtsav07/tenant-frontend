@@ -206,10 +206,10 @@ export function AdminTicketsPage() {
   }, [thread])
 
   return (
-    <section className="space-y-4">
-      <div>
+    <section className="ph-page-shell">
+      <div className="ph-page-header">
         <h2 className="ph-title text-2xl font-semibold text-[var(--ph-text)]">Support Tickets</h2>
-        <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Review full ticket conversations and step in when needed.</p>
+        <p className="text-sm leading-relaxed text-[var(--ph-text-muted)]">Review full ticket conversations and step in when needed.</p>
       </div>
 
       <AdminListToolbar
@@ -302,7 +302,7 @@ export function AdminTicketsPage() {
 
       {!threadLoading && thread ? (
         <div className="space-y-4">
-          <article className="ph-surface-card-strong rounded-[1.8rem] p-6">
+          <article className="ph-surface-card-strong rounded-[1.6rem] p-6 sm:p-7">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f1cb85]">Selected ticket</p>
@@ -318,7 +318,7 @@ export function AdminTicketsPage() {
             </div>
           </article>
 
-          <article className="ph-surface-card rounded-[1.8rem] p-6">
+          <article className="ph-surface-card rounded-[1.5rem] p-6 sm:p-7">
             <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">Conversation</h3>
             <p className="mt-2 text-sm text-[var(--ph-text-muted)]">
               Admin replies appear in the same audited conversation thread seen by the tenant and owner.

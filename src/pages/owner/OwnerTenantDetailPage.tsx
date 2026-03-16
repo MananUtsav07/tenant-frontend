@@ -11,6 +11,7 @@ import { LoadingState } from '../../components/common/LoadingState'
 import { StatusBadge } from '../../components/common/StatusBadge'
 import { TicketTable } from '../../components/common/TicketTable'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
+import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
 import type { TenantTicket } from '../../types/api'
 import { formatCurrency, formatDate, formatDateTime } from '../../utils/date'
@@ -103,21 +104,25 @@ export function OwnerTenantDetailPage() {
   )
 
   return (
-    <section className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-semibold text-slate-900">Tenant Detail</h2>
-          <p className="text-sm text-slate-400">Lease, ticket and reminder details for this tenant.</p>
-        </div>
+    <section className="ph-page-shell">
+      <div className="ph-surface-card-strong rounded-[1.8rem] p-6 sm:p-7 lg:p-8">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="max-w-3xl">
+            <p className="ph-page-eyebrow">Tenant Workspace</p>
+            <h2 className="ph-page-heading">Tenant detail</h2>
+            <p className="ph-page-description">
+              Lease, rent, support, and reminder history for this resident in one structured owner view.
+            </p>
+          </div>
         <Button
-          to="/owner/tenants"
+            to={ROUTES.ownerTenants}
           variant="outline"
           size="sm"
-          className="border-slate-300 bg-white text-slate-700"
           iconLeft={<ArrowLeft className="h-4 w-4" />}
         >
           Back to tenants
         </Button>
+        </div>
       </div>
 
       {error ? <ErrorState message={error} /> : null}
@@ -125,92 +130,112 @@ export function OwnerTenantDetailPage() {
 
       {!loading && detail ? (
         <>
-          <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-5">
-            <p className="text-lg font-semibold text-slate-900">{detail.tenant.full_name}</p>
-            <div className="mt-3 grid gap-3 md:grid-cols-3">
+          <article className="ph-surface-card rounded-[1.7rem] p-5 sm:p-6">
+            <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p className="text-xs uppercase text-slate-400">Tenant Access ID</p>
-                <p className="text-sm text-slate-800">{detail.tenant.tenant_access_id}</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Resident Overview</p>
+                <h3 className="ph-title mt-3 text-2xl font-semibold text-[var(--ph-text)]">{detail.tenant.full_name}</h3>
+                <p className="mt-2 text-sm text-[var(--ph-text-muted)]">
+                  Access ID {detail.tenant.tenant_access_id} with current property, lease, and billing posture.
+                </p>
               </div>
-              <div>
-                <p className="text-xs uppercase text-slate-400">Rent</p>
-                <p className="text-sm text-slate-800">
+              <div className="flex flex-wrap items-center gap-2">
+                <StatusBadge status={detail.tenant.payment_status} />
+                <StatusBadge status={detail.tenant.status} />
+              </div>
+            </div>
+
+            <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="rounded-[1.2rem] border border-[rgba(83,88,100,0.34)] bg-white/[0.025] px-4 py-3">
+                <p className="text-xs uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Monthly rent</p>
+                <p className="mt-2 text-sm font-medium text-[var(--ph-text)]">
                   {formatCurrency(detail.tenant.monthly_rent, owner?.organization?.currency_code)}
                 </p>
               </div>
-              <div>
-                <p className="text-xs uppercase text-slate-400">Payment Status</p>
-                <StatusBadge status={detail.tenant.payment_status} />
+              <div className="rounded-[1.2rem] border border-[rgba(83,88,100,0.34)] bg-white/[0.025] px-4 py-3">
+                <p className="text-xs uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Next due date</p>
+                <p className="mt-2 text-sm font-medium text-[var(--ph-text)]">
+                  {formatDate(getNextDueDate(detail.tenant.payment_due_day).toISOString())}
+                </p>
               </div>
-              <div>
-                <p className="text-xs uppercase text-slate-400">Due Date</p>
-                <p className="text-sm text-slate-800">{formatDate(getNextDueDate(detail.tenant.payment_due_day).toISOString())}</p>
-              </div>
-              <div>
-                <p className="text-xs uppercase text-slate-400">Lease</p>
-                <p className="text-sm text-slate-800">
+              <div className="rounded-[1.2rem] border border-[rgba(83,88,100,0.34)] bg-white/[0.025] px-4 py-3">
+                <p className="text-xs uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Lease term</p>
+                <p className="mt-2 text-sm font-medium text-[var(--ph-text)]">
                   {formatDate(detail.tenant.lease_start_date)} - {formatDate(detail.tenant.lease_end_date)}
                 </p>
               </div>
-              <div>
-                <p className="text-xs uppercase text-slate-400">Property</p>
-                <p className="inline-flex items-center gap-2 text-sm text-slate-800">
-                  <Building2 className="h-4 w-4 text-blue-600" />
+              <div className="rounded-[1.2rem] border border-[rgba(83,88,100,0.34)] bg-white/[0.025] px-4 py-3">
+                <p className="text-xs uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Property</p>
+                <p className="mt-2 inline-flex items-center gap-2 text-sm font-medium text-[var(--ph-text)]">
+                  <Building2 className="h-4 w-4 text-[var(--ph-accent)]" />
                   {detail.tenant.properties?.property_name || '-'}
                 </p>
               </div>
-              <div>
-                <p className="text-xs uppercase text-slate-400">Address</p>
-                <p className="text-sm text-slate-800">{detail.tenant.properties?.address || '-'}</p>
+              <div className="rounded-[1.2rem] border border-[rgba(83,88,100,0.34)] bg-white/[0.025] px-4 py-3">
+                <p className="text-xs uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Address</p>
+                <p className="mt-2 text-sm font-medium text-[var(--ph-text)]">{detail.tenant.properties?.address || '-'}</p>
               </div>
-              <div>
-                <p className="text-xs uppercase text-slate-400">Email</p>
-                <p className="inline-flex items-center gap-2 text-sm text-slate-800">
-                  <Mail className="h-4 w-4 text-blue-600" />
+              <div className="rounded-[1.2rem] border border-[rgba(83,88,100,0.34)] bg-white/[0.025] px-4 py-3">
+                <p className="text-xs uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Email</p>
+                <p className="mt-2 inline-flex items-center gap-2 text-sm font-medium text-[var(--ph-text)]">
+                  <Mail className="h-4 w-4 text-[var(--ph-accent)]" />
                   {tenantContact.email}
                 </p>
               </div>
-              <div>
-                <p className="text-xs uppercase text-slate-400">Phone</p>
-                <p className="inline-flex items-center gap-2 text-sm text-slate-800">
-                  <Phone className="h-4 w-4 text-blue-600" />
+              <div className="rounded-[1.2rem] border border-[rgba(83,88,100,0.34)] bg-white/[0.025] px-4 py-3">
+                <p className="text-xs uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Phone</p>
+                <p className="mt-2 inline-flex items-center gap-2 text-sm font-medium text-[var(--ph-text)]">
+                  <Phone className="h-4 w-4 text-[var(--ph-accent)]" />
                   {tenantContact.phone}
                 </p>
               </div>
+              <div className="rounded-[1.2rem] border border-[rgba(83,88,100,0.34)] bg-white/[0.025] px-4 py-3">
+                <p className="text-xs uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Unit</p>
+                <p className="mt-2 text-sm font-medium text-[var(--ph-text)]">{detail.tenant.properties?.unit_number || '-'}</p>
+              </div>
             </div>
-          </div>
+          </article>
 
-          <div>
-            <h3 className="mb-3 text-lg font-semibold text-slate-900">Support Tickets</h3>
-            {detail.tickets.length === 0 ? (
-              <EmptyState
-                title="No tickets"
-                description="Tenant has not raised any support tickets yet."
-              />
-            ) : (
-              <TicketTable tickets={detail.tickets} />
-            )}
-          </div>
+          <article className="ph-surface-card rounded-[1.6rem] p-5 sm:p-6">
+            <div className="ph-page-header">
+              <p className="ph-page-eyebrow">Support</p>
+              <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">Ticket history</h3>
+              <p className="text-sm text-[var(--ph-text-muted)]">All tickets raised by this tenant remain visible here without changing the existing support flow.</p>
+            </div>
+            <div className="mt-5">
+              {detail.tickets.length === 0 ? (
+                <EmptyState title="No tickets" description="Tenant has not raised any support tickets yet." />
+              ) : (
+                <TicketTable tickets={detail.tickets} />
+              )}
+            </div>
+          </article>
 
-          <div>
-            <h3 className="mb-3 text-lg font-semibold text-slate-900">Rent Reminders</h3>
-            {detail.reminders.length === 0 ? (
-              <EmptyState title="No reminders" description="Run reminder processing from owner dashboard." />
-            ) : (
-              <DataTable headers={['Type', 'Scheduled For', 'Status', 'Sent At']}>
-                {detail.reminders.map((reminder) => (
-                  <tr key={reminder.id}>
-                    <td className="px-4 py-3 text-slate-800">{reminder.reminder_type.replaceAll('_', ' ')}</td>
-                    <td className="px-4 py-3 text-slate-600">{formatDateTime(reminder.scheduled_for)}</td>
-                    <td className="px-4 py-3">
-                      <StatusBadge status={reminder.status} />
-                    </td>
-                    <td className="px-4 py-3 text-slate-400">{formatDateTime(reminder.sent_at)}</td>
-                  </tr>
-                ))}
-              </DataTable>
-            )}
-          </div>
+          <article className="ph-surface-card rounded-[1.6rem] p-5 sm:p-6">
+            <div className="ph-page-header">
+              <p className="ph-page-eyebrow">Reminders</p>
+              <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">Rent reminders</h3>
+              <p className="text-sm text-[var(--ph-text-muted)]">Scheduled reminder entries tied to this tenant’s rent cycle.</p>
+            </div>
+            <div className="mt-5">
+              {detail.reminders.length === 0 ? (
+                <EmptyState title="No reminders" description="Run reminder processing from owner dashboard." />
+              ) : (
+                <DataTable headers={['Type', 'Scheduled For', 'Status', 'Sent At']}>
+                  {detail.reminders.map((reminder) => (
+                    <tr key={reminder.id}>
+                      <td className="px-4 py-3 text-[var(--ph-text)]">{reminder.reminder_type.replaceAll('_', ' ')}</td>
+                      <td className="px-4 py-3 text-[var(--ph-text-soft)]">{formatDateTime(reminder.scheduled_for)}</td>
+                      <td className="px-4 py-3">
+                        <StatusBadge status={reminder.status} />
+                      </td>
+                      <td className="px-4 py-3 text-[var(--ph-text-muted)]">{formatDateTime(reminder.sent_at)}</td>
+                    </tr>
+                  ))}
+                </DataTable>
+              )}
+            </div>
+          </article>
 
           {token ? <ConditionReportOwnerPanel token={token} tenantId={detail.tenant.id} tenantName={detail.tenant.full_name} /> : null}
         </>

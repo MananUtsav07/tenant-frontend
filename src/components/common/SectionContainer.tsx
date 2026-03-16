@@ -13,9 +13,9 @@ type SectionContainerProps = {
 }
 
 const containerWidths: Record<NonNullable<SectionContainerProps['size']>, string> = {
-  narrow: 'max-w-[1120px]',
-  default: 'max-w-[1280px]',
-  wide: 'max-w-[1400px]',
+  narrow: 'max-w-[1040px]',
+  default: 'max-w-[1320px]',
+  wide: 'max-w-[1440px]',
 }
 
 export function SectionContainer({
@@ -46,7 +46,7 @@ export function SectionContainer({
           className={clsx(
             'mx-auto w-full',
             containerWidths[size],
-            padded ? 'py-16 md:py-24' : undefined,
+            padded ? 'py-18 md:py-24 lg:py-28' : undefined,
             contentClassName,
           )}
         >

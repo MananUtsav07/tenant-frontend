@@ -173,7 +173,7 @@ export function OwnerMaintenancePage() {
   const likelyMaintenanceCount = visibleTickets.filter((entry) => entry.score > 0).length
 
   return (
-    <section className="space-y-6">
+    <section className="ph-page-shell">
       <div className="ph-surface-card-strong rounded-[1.9rem] p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
@@ -188,7 +188,7 @@ export function OwnerMaintenancePage() {
             </p>
           </div>
 
-          <div className="grid min-w-[220px] gap-3 sm:grid-cols-2">
+          <div className="grid w-full gap-3 sm:w-auto sm:min-w-[240px] sm:grid-cols-2">
             <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Active tickets</p>
               <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">{visibleTickets.length}</p>
@@ -215,9 +215,14 @@ export function OwnerMaintenancePage() {
       ) : null}
 
       {!loading && visibleTickets.length > 0 ? (
-        <div className="grid gap-6 xl:grid-cols-[360px_minmax(0,1fr)]">
-          <aside className="space-y-4">
+        <div className="grid gap-6 xl:grid-cols-[340px_minmax(0,1fr)]">
+          <aside>
             <article className="ph-surface-card rounded-[1.8rem] p-5">
+              <div className="mb-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#f1cb85]">Ticket Queue</p>
+                <p className="mt-1 text-sm text-[var(--ph-text-muted)]">Choose a ticket to open the maintenance workflow.</p>
+              </div>
+
               <FormInput
                 label="Search maintenance tickets"
                 hideLabel
@@ -226,15 +231,8 @@ export function OwnerMaintenancePage() {
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
               />
-            </article>
 
-            <article className="ph-surface-card rounded-[1.8rem] p-4">
-              <div className="mb-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#f1cb85]">Ticket Queue</p>
-                <p className="mt-1 text-sm text-[var(--ph-text-muted)]">Choose a ticket to open the maintenance workflow.</p>
-              </div>
-
-              <div className="space-y-3">
+              <div className="mt-5 space-y-3">
                 {visibleTickets.map(({ ticket, score }) => {
                   const isSelected = selectedTicketId === ticket.id
 

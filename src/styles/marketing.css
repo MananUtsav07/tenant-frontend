@@ -2,7 +2,7 @@
 .saas-grid-bg {
   position: relative;
   isolation: isolate;
-  background: linear-gradient(180deg, #090d15 0%, #0a1018 52%, #0b1321 100%);
+  background: linear-gradient(180deg, #090d15 0%, #0a1018 48%, #0a1220 100%);
 }
 
 .ph-prophives-bg::before,
@@ -12,10 +12,10 @@
   inset: 0;
   z-index: -2;
   background:
-    radial-gradient(circle at 16% 0%, rgba(18, 31, 54, 0.34), transparent 20%),
-    radial-gradient(circle at 82% 12%, rgba(151, 105, 34, 0.045), transparent 14%),
-    radial-gradient(circle at 50% 100%, rgba(9, 21, 42, 0.18), transparent 20%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.012), rgba(255, 255, 255, 0));
+    radial-gradient(circle at 16% 0%, rgba(18, 31, 54, 0.28), transparent 20%),
+    radial-gradient(circle at 82% 12%, rgba(151, 105, 34, 0.035), transparent 14%),
+    radial-gradient(circle at 50% 100%, rgba(9, 21, 42, 0.12), transparent 20%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0));
   pointer-events: none;
 }
 
@@ -62,8 +62,8 @@
       transparent 76.2%,
       transparent
     );
-  background-size: 156px 270px;
-  opacity: 0.28;
+  background-size: 164px 284px;
+  opacity: 0.2;
   pointer-events: none;
 }
 
@@ -86,5 +86,5 @@
   border-radius: inherit;
   background: linear-gradient(120deg, rgba(151, 105, 34, 0.45), rgba(240, 163, 35, 0.18), rgba(11, 22, 51, 0.24));
   z-index: -1;
-  opacity: 0.95;
+  opacity: 0.72;
 }

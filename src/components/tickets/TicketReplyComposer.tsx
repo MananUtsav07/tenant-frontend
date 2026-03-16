@@ -31,10 +31,10 @@ export function TicketReplyComposer({
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f1cb85]">Thread reply</p>
-          <h3 className="ph-title mt-2 text-lg font-semibold text-[var(--ph-text)]">{title}</h3>
-          <p className="mt-2 max-w-2xl text-sm text-[var(--ph-text-muted)]">{description}</p>
+          <h3 className="ph-title mt-3 text-lg font-semibold text-[var(--ph-text)]">{title}</h3>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--ph-text-muted)]">{description}</p>
         </div>
-        <span className="rounded-full border border-[rgba(240,163,35,0.18)] bg-[rgba(240,163,35,0.08)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#f3d49a]">
+        <span className="rounded-full border border-[rgba(83,88,100,0.3)] bg-white/[0.025] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#f3d49a]">
           Audited history
         </span>
       </div>
@@ -52,7 +52,9 @@ export function TicketReplyComposer({
       />
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-xs text-[var(--ph-text-muted)]">Replies stay attached to the ticket timeline for owners, tenants, and admins with access.</p>
+        <p className="max-w-2xl text-xs leading-relaxed text-[var(--ph-text-muted)]">
+          Replies stay attached to the ticket timeline for owners, tenants, and admins with access.
+        </p>
         <Button
           type="submit"
           disabled={disabled || busy || value.trim().length === 0}

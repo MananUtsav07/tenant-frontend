@@ -109,13 +109,15 @@ export function TenantDashboardPage() {
   }
 
   return (
-    <section className="space-y-6">
-      <div className="ph-surface-card-strong rounded-[1.9rem] p-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f1cb85]">Resident Workspace</p>
-        <h2 className="ph-title mt-3 text-3xl font-semibold text-[var(--ph-text)]">Your property overview</h2>
-        <p className="mt-2 text-sm leading-relaxed text-[var(--ph-text-muted)]">
+    <section className="ph-page-shell">
+      <div className="ph-surface-card-strong rounded-[1.7rem] p-6 sm:p-7 lg:p-8">
+        <div className="ph-page-header">
+          <p className="ph-page-eyebrow">Resident Workspace</p>
+          <h2 className="ph-page-heading">Your property overview</h2>
+          <p className="ph-page-description max-w-2xl text-sm">
           Stay on top of support activity, rent actions, and lease details from one focused resident surface.
-        </p>
+          </p>
+        </div>
         {authTenant?.organization ? (
           <div className="mt-4">
             <OrganizationBadge name={authTenant.organization.name} slug={authTenant.organization.slug} />
@@ -152,7 +154,7 @@ export function TenantDashboardPage() {
       ) : null}
 
       {!loading && rentPaymentState?.is_visible ? (
-        <div className="ph-surface-card rounded-[1.75rem] p-5">
+        <div className="ph-surface-card rounded-[1.5rem] p-5 sm:p-6">
           <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">Rent payment verification</h3>
           <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
             Available from 7 days before due date and remains visible until approved by your owner.
@@ -214,7 +216,7 @@ export function TenantDashboardPage() {
       ) : null}
 
       {!loading && leaseRenewalIntentState?.eligible ? (
-        <div className="ph-surface-card rounded-[1.75rem] p-5">
+        <div className="ph-surface-card rounded-[1.5rem] p-5 sm:p-6">
           <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">Lease continuation preference</h3>
           <p className="mt-2 text-sm text-[var(--ph-text-muted)]">
             Your lease ends on <span className="font-semibold text-[var(--ph-text)]">{formatDate(leaseRenewalIntentState.lease_end_date)}</span>.
@@ -256,9 +258,9 @@ export function TenantDashboardPage() {
         </div>
       ) : null}
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
         {!loading && tenant ? (
-          <div className="ph-surface-card rounded-[1.75rem] p-5">
+          <div className="ph-surface-card rounded-[1.5rem] p-5 sm:p-6">
             <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">Lease & payment details</h3>
             <div className="mt-4 grid gap-3 md:grid-cols-2">
               <div>
@@ -282,7 +284,7 @@ export function TenantDashboardPage() {
         ) : null}
 
         {!loading && property ? (
-          <div className="ph-surface-card rounded-[1.75rem] p-5">
+          <div className="ph-surface-card rounded-[1.5rem] p-5 sm:p-6">
             <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">Property</h3>
             <p className="mt-3 inline-flex items-center gap-2 text-sm text-[var(--ph-text)]">
               <Home className="h-4 w-4 text-[var(--ph-accent)]" />

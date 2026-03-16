@@ -171,13 +171,13 @@ export function OwnerTicketsPage() {
   }
 
   return (
-    <section className="space-y-6">
-      <div>
+    <section className="ph-page-shell">
+      <div className="ph-page-header">
         <h2 className="ph-title inline-flex items-center gap-2 text-2xl font-semibold text-[var(--ph-text)]">
           <LifeBuoy className="h-6 w-6 text-[var(--ph-accent)]" />
           Support Tickets
         </h2>
-        <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Track tenant requests, reply in thread, and close with context.</p>
+        <p className="text-sm leading-relaxed text-[var(--ph-text-muted)]">Track tenant requests, reply in thread, and close with context.</p>
       </div>
 
       {error ? <ErrorState message={error} /> : null}
@@ -214,7 +214,7 @@ export function OwnerTicketsPage() {
 
       {!threadLoading && thread ? (
         <div className="space-y-4">
-          <article className="ph-surface-card-strong rounded-[1.8rem] p-6">
+          <article className="ph-surface-card-strong rounded-[1.6rem] p-6 sm:p-7">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f1cb85]">Selected ticket</p>
@@ -240,7 +240,7 @@ export function OwnerTicketsPage() {
             </div>
           </article>
 
-          <article className="ph-surface-card rounded-[1.8rem] p-6">
+          <article className="ph-surface-card rounded-[1.5rem] p-6 sm:p-7">
             <div className="mb-4 flex items-center gap-2">
               <MessageSquareReply className="h-5 w-5 text-[var(--ph-accent)]" />
               <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">Conversation</h3>

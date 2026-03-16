@@ -52,7 +52,7 @@ function HeroPanel({
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
-        <div className="rounded-[1.35rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.04] p-4">
+        <div className="rounded-[1.15rem] border border-[rgba(83,88,100,0.3)] bg-white/[0.025] p-4">
           <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">
             <MessageSquare className="h-3.5 w-3.5 text-[var(--ph-accent)]" />
             Open Tickets
@@ -60,7 +60,7 @@ function HeroPanel({
           <p className="mt-3 text-3xl font-semibold text-[var(--ph-text)]">{openTickets}</p>
         </div>
 
-        <div className="rounded-[1.35rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.04] p-4">
+        <div className="rounded-[1.15rem] border border-[rgba(83,88,100,0.3)] bg-white/[0.025] p-4">
           <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">
             <Users className="h-3.5 w-3.5 text-[var(--ph-accent)]" />
             Active Residents
@@ -68,7 +68,7 @@ function HeroPanel({
           <p className="mt-3 text-3xl font-semibold text-[var(--ph-text)]">{tenantCount}</p>
         </div>
 
-        <div className="rounded-[1.35rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.04] p-4 sm:col-span-2">
+        <div className="rounded-[1.15rem] border border-[rgba(83,88,100,0.3)] bg-white/[0.025] p-4 sm:col-span-2">
           <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">
             <BellRing className="h-3.5 w-3.5 text-[var(--ph-accent)]" />
             {mode === 'owner' ? 'Pending Reminder Actions' : 'Collections Due This Week'}
@@ -77,7 +77,7 @@ function HeroPanel({
         </div>
       </div>
 
-      <div className="rounded-[1.35rem] border border-[rgba(240,163,35,0.18)] bg-[rgba(240,163,35,0.06)] p-4">
+      <div className="rounded-[1.15rem] border border-[rgba(240,163,35,0.14)] bg-[rgba(240,163,35,0.05)] p-4">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Automation Layer</p>
         <ul className="mt-3 space-y-2 text-sm text-[var(--ph-text-soft)]">
           <li className="flex items-center gap-2">

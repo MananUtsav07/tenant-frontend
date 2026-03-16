@@ -2,10 +2,10 @@ import clsx from 'clsx'
 import type { GroupBase, StylesConfig } from 'react-select'
 
 export const dashboardFormPanelClassName =
-  'ph-form-panel rounded-[1.75rem] p-5 sm:p-6'
+  'ph-form-panel rounded-[1.65rem] p-5 sm:p-6 lg:p-7'
 
 export const dashboardFormToolbarClassName =
-  'ph-form-toolbar rounded-[1.5rem] p-4 sm:p-5'
+  'ph-form-toolbar rounded-[1.45rem] p-4 sm:p-5 lg:p-6'
 
 export const dashboardInfoPanelClassName =
   'rounded-[1.4rem] border border-[rgba(83,88,100,0.42)] bg-[rgba(255,255,255,0.03)] p-4 text-sm text-[var(--ph-text-soft)] shadow-[0_18px_42px_-34px_rgba(0,0,0,0.72)]'

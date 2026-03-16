@@ -118,16 +118,16 @@ export function OwnerDashboardPage() {
   const annualCashFlow = portfolioSnapshot?.payload.cash_flow_summary.latest_annual_snapshot ?? null
 
   return (
-    <section className="space-y-6">
-      <div className="ph-surface-card-strong rounded-[1.9rem] p-6">
+    <section className="ph-page-shell">
+      <div className="ph-surface-card-strong rounded-[1.7rem] p-6 sm:p-7 lg:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f1cb85]">Owner Command Center</p>
-            <h2 className="ph-title mt-3 text-3xl font-semibold text-[var(--ph-text)]">Portfolio overview</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--ph-text-muted)]">
+          <div className="ph-page-header">
+            <p className="ph-page-eyebrow">Owner Command Center</p>
+            <h2 className="ph-page-heading">Portfolio overview</h2>
+            <p className="ph-page-description max-w-2xl text-sm">
               Monitor residents, support requests, reminders, and approvals from a calmer control surface.
             </p>
-            <div className="mt-4">
+            <div className="pt-1">
               <OrganizationBadge name={organizationLabel} slug={owner?.organization?.slug} />
             </div>
           </div>
@@ -148,7 +148,7 @@ export function OwnerDashboardPage() {
 
       {!loading && summary ? (
         <>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-6">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             <SummaryCard label="Active Residents" value={summary.active_tenants} icon={<Users className="h-4 w-4" />} />
             <SummaryCard label="Open Tickets" value={summary.open_tickets} icon={<LifeBuoy className="h-4 w-4" />} />
             <SummaryCard label="Overdue Rent" value={summary.overdue_rent} icon={<TriangleAlert className="h-4 w-4" />} />
@@ -166,7 +166,7 @@ export function OwnerDashboardPage() {
           </div>
 
           <div className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
-            <article className="ph-surface-card rounded-[1.7rem] p-5">
+            <article className="ph-surface-card rounded-[1.5rem] p-5 sm:p-6">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Operational Focus</p>
               <div className="mt-4 space-y-4 text-sm text-[var(--ph-text-soft)]">
                 <div>
@@ -188,7 +188,7 @@ export function OwnerDashboardPage() {
               </div>
             </article>
 
-            <article className="ph-surface-card rounded-[1.7rem] p-5">
+            <article className="ph-surface-card rounded-[1.5rem] p-5 sm:p-6">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Automation Notes</p>
               <ul className="mt-4 space-y-3 text-sm text-[var(--ph-text-soft)]">
                 <li>Reminder processing keeps scheduled follow-up disciplined across rent cycles.</li>
@@ -200,7 +200,7 @@ export function OwnerDashboardPage() {
 
           {portfolioSnapshot ? (
             <div className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
-              <article className="ph-surface-card rounded-[1.7rem] p-5">
+              <article className="ph-surface-card rounded-[1.5rem] p-5 sm:p-6">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Portfolio Radar</p>
@@ -214,8 +214,8 @@ export function OwnerDashboardPage() {
                   </p>
                 </div>
 
-                <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                  <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
+                <div className="mt-5 grid gap-3 sm:grid-cols-2 2xl:grid-cols-3">
+                  <div className="rounded-[1.15rem] border border-white/8 bg-white/[0.025] p-4">
                     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">Overdue Rent</p>
                     <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">{portfolioSnapshot.overdue_rent_count}</p>
                     <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
@@ -224,7 +224,7 @@ export function OwnerDashboardPage() {
                         : 'No overdue residents currently flagged'}
                     </p>
                   </div>
-                  <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
+                  <div className="rounded-[1.15rem] border border-white/8 bg-white/[0.025] p-4">
                     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">Urgent Tickets</p>
                     <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">
                       {portfolioSnapshot.urgent_open_ticket_count}
@@ -235,7 +235,7 @@ export function OwnerDashboardPage() {
                         : 'No urgent maintenance or support signals'}
                     </p>
                   </div>
-                  <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
+                  <div className="rounded-[1.15rem] border border-white/8 bg-white/[0.025] p-4">
                     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">
                       Compliance Horizon
                     </p>
@@ -248,7 +248,7 @@ export function OwnerDashboardPage() {
                         : 'No milestones inside the active reminder window'}
                     </p>
                   </div>
-                  <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
+                  <div className="rounded-[1.15rem] border border-white/8 bg-white/[0.025] p-4">
                     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">Occupancy</p>
                     <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">
                       {portfolioSnapshot.occupied_property_count}/{portfolioSnapshot.occupied_property_count + portfolioSnapshot.vacant_property_count}
@@ -259,7 +259,7 @@ export function OwnerDashboardPage() {
                         : 'No current vacancy highlights'}
                     </p>
                   </div>
-                  <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
+                  <div className="rounded-[1.15rem] border border-white/8 bg-white/[0.025] p-4">
                     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">
                       Latest Net Income
                     </p>
@@ -272,7 +272,7 @@ export function OwnerDashboardPage() {
                       {monthlyCashFlow?.report_label ?? 'Monthly cash-flow snapshot not generated yet'}
                     </p>
                   </div>
-                  <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
+                  <div className="rounded-[1.15rem] border border-white/8 bg-white/[0.025] p-4">
                     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">
                       Trailing Yield
                     </p>
@@ -288,12 +288,12 @@ export function OwnerDashboardPage() {
                 </div>
               </article>
 
-              <article className="ph-surface-card rounded-[1.7rem] p-5">
+              <article className="ph-surface-card rounded-[1.5rem] p-5 sm:p-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Recent Alerts</p>
                 <div className="mt-4 space-y-3">
                   {portfolioOverview?.recent_alerts.length ? (
                     portfolioOverview.recent_alerts.slice(0, 5).map((alert) => (
-                      <div key={alert.id} className="rounded-[1.15rem] border border-white/10 bg-white/[0.03] p-3">
+                      <div key={alert.id} className="rounded-[1.05rem] border border-white/8 bg-white/[0.025] p-3.5">
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <p className="text-sm font-medium text-[var(--ph-text)]">{alert.title}</p>
@@ -329,7 +329,7 @@ export function OwnerDashboardPage() {
       ) : null}
 
       {!loading ? (
-        <div className="space-y-3">
+        <div className="space-y-4">
           <div>
             <h3 className="ph-title text-2xl font-semibold text-[var(--ph-text)]">Awaiting approvals</h3>
             <p className="text-sm text-[var(--ph-text-muted)]">

@@ -41,8 +41,8 @@ export function AdminListToolbar({
 
   return (
     <div
-      className={`${dashboardFormToolbarClassName} grid gap-3 ${
-        organizationFilterEnabled ? 'md:grid-cols-4' : 'md:grid-cols-3'
+      className={`${dashboardFormToolbarClassName} grid gap-4 ${
+        organizationFilterEnabled ? 'xl:grid-cols-[minmax(0,1.4fr)_minmax(0,0.9fr)]' : 'lg:grid-cols-[minmax(0,1.4fr)_minmax(0,0.7fr)]'
       }`}
     >
       <SearchInput
@@ -50,7 +50,7 @@ export function AdminListToolbar({
         value={search}
         onChange={(event) => onSearchChange(event.target.value)}
         placeholder="Search records, names, emails, or notes..."
-        wrapperClassName="md:col-span-2"
+        wrapperClassName="min-w-0"
       />
 
       <div className={`grid gap-3 ${organizationFilterEnabled ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>

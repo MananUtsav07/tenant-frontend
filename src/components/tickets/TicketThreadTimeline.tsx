@@ -30,15 +30,15 @@ function roleIcon(message: SupportTicketMessage) {
 
 function roleBadgeClass(message: SupportTicketMessage) {
   if (message.sender_role === 'tenant') {
-    return 'border-sky-400/18 bg-sky-400/10 text-sky-200'
+    return 'border-[rgba(140,154,182,0.22)] bg-[rgba(140,154,182,0.1)] text-[#d8deea]'
   }
 
   if (message.sender_role === 'admin') {
-    return 'border-violet-400/20 bg-violet-400/10 text-violet-200'
+    return 'border-[rgba(151,105,34,0.22)] bg-[rgba(151,105,34,0.1)] text-[#e8c689]'
   }
 
   if (message.message_type === 'closing_note') {
-    return 'border-emerald-400/20 bg-emerald-400/10 text-emerald-200'
+    return 'border-[rgba(139,208,181,0.22)] bg-[rgba(139,208,181,0.1)] text-[#cfeede]'
   }
 
   if (message.sender_role === 'system') {
@@ -50,15 +50,15 @@ function roleBadgeClass(message: SupportTicketMessage) {
 
 function timelineNodeClass(message: SupportTicketMessage) {
   if (message.message_type === 'closing_note') {
-    return 'border-emerald-400/28 bg-emerald-400/14 text-emerald-200 shadow-[0_0_0_8px_rgba(16,185,129,0.08)]'
+    return 'border-[rgba(139,208,181,0.26)] bg-[rgba(139,208,181,0.12)] text-[#cfeede] shadow-[0_0_0_8px_rgba(139,208,181,0.06)]'
   }
 
   if (message.sender_role === 'tenant') {
-    return 'border-sky-400/24 bg-sky-400/12 text-sky-200 shadow-[0_0_0_8px_rgba(56,189,248,0.07)]'
+    return 'border-[rgba(140,154,182,0.26)] bg-[rgba(140,154,182,0.12)] text-[#d8deea] shadow-[0_0_0_8px_rgba(140,154,182,0.05)]'
   }
 
   if (message.sender_role === 'admin') {
-    return 'border-violet-400/24 bg-violet-400/12 text-violet-200 shadow-[0_0_0_8px_rgba(167,139,250,0.08)]'
+    return 'border-[rgba(151,105,34,0.26)] bg-[rgba(151,105,34,0.12)] text-[#e8c689] shadow-[0_0_0_8px_rgba(151,105,34,0.05)]'
   }
 
   return 'border-[rgba(240,163,35,0.28)] bg-[rgba(240,163,35,0.12)] text-[#f3d49a] shadow-[0_0_0_8px_rgba(240,163,35,0.08)]'
@@ -83,7 +83,7 @@ function messageTypeLabel(message: SupportTicketMessage) {
 export function TicketThreadTimeline({ messages }: { messages: SupportTicketMessage[] }) {
   if (messages.length === 0) {
     return (
-      <div className="rounded-[1.5rem] border border-dashed border-[rgba(83,88,100,0.42)] bg-[linear-gradient(180deg,rgba(16,21,34,0.8),rgba(10,14,24,0.92))] px-5 py-8 text-center">
+      <div className="rounded-[1.45rem] border border-[rgba(83,88,100,0.34)] bg-[linear-gradient(180deg,rgba(16,21,34,0.82),rgba(10,14,24,0.92))] px-5 py-8 text-center">
         <p className="text-sm font-medium text-[var(--ph-text)]">No thread activity yet</p>
         <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Replies and closing notes will appear here in a structured operations timeline.</p>
       </div>
@@ -91,7 +91,7 @@ export function TicketThreadTimeline({ messages }: { messages: SupportTicketMess
   }
 
   return (
-    <div className="relative space-y-4 pl-5 before:absolute before:bottom-2 before:left-[0.62rem] before:top-2 before:w-px before:bg-[linear-gradient(180deg,rgba(240,163,35,0.26),rgba(103,115,148,0.08),rgba(240,163,35,0.14))]">
+    <div className="relative space-y-4 pl-5 before:absolute before:bottom-2 before:left-[0.62rem] before:top-2 before:w-px before:bg-[linear-gradient(180deg,rgba(240,163,35,0.22),rgba(103,115,148,0.08),rgba(240,163,35,0.1))]">
       {messages.map((message) => (
         <div key={message.id} className="relative pl-5">
           <span
@@ -105,12 +105,12 @@ export function TicketThreadTimeline({ messages }: { messages: SupportTicketMess
 
           <article
             className={clsx(
-              'rounded-[1.5rem] border p-4 shadow-[0_24px_56px_-40px_rgba(0,0,0,0.78)]',
+              'rounded-[1.4rem] border p-4 shadow-[0_20px_46px_-38px_rgba(0,0,0,0.76)] sm:p-5',
               message.message_type === 'closing_note'
-                ? 'border-emerald-400/20 bg-[linear-gradient(180deg,rgba(17,39,31,0.92),rgba(9,24,20,0.98))]'
+                ? 'border-[rgba(139,208,181,0.18)] bg-[linear-gradient(180deg,rgba(17,39,31,0.88),rgba(9,24,20,0.96))]'
                 : message.message_type === 'initial_message'
-                  ? 'border-[rgba(240,163,35,0.24)] bg-[linear-gradient(180deg,rgba(28,24,18,0.96),rgba(14,18,28,1))]'
-                  : 'border-[rgba(83,88,100,0.42)] bg-[linear-gradient(180deg,rgba(24,30,46,0.96),rgba(12,17,28,1))]',
+                  ? 'border-[rgba(240,163,35,0.2)] bg-[linear-gradient(180deg,rgba(26,24,18,0.94),rgba(14,18,28,1))]'
+                  : 'border-[rgba(83,88,100,0.34)] bg-[linear-gradient(180deg,rgba(20,26,40,0.96),rgba(12,17,28,1))]',
             )}
           >
             <div className="flex flex-wrap items-start justify-between gap-3">

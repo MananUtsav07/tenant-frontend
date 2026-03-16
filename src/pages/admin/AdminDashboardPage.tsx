@@ -42,13 +42,13 @@ export function AdminDashboardPage() {
   }, [token])
 
   return (
-    <section className="space-y-6">
-      <div className="ph-surface-card-strong rounded-[1.9rem] p-6">
+    <section className="ph-page-shell">
+      <div className="ph-surface-card-strong rounded-[1.7rem] p-6 sm:p-7 lg:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f1cb85]">Admin Observatory</p>
-            <h2 className="ph-title mt-3 text-3xl font-semibold text-[var(--ph-text)]">Platform overview</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--ph-text-muted)]">
+          <div className="ph-page-header">
+            <p className="ph-page-eyebrow">Admin Observatory</p>
+            <h2 className="ph-page-heading">Platform overview</h2>
+            <p className="ph-page-description max-w-2xl text-sm">
               Monitor organizations, adoption, contact flow, analytics activity, and system health from one secure observatory.
             </p>
           </div>
@@ -65,7 +65,7 @@ export function AdminDashboardPage() {
 
       {!loading && summary ? (
         <>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-6">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             <SummaryCard label="Organizations" value={summary.total_organizations} icon={<Building2 className="h-4 w-4" />} />
             <SummaryCard label="Total Owners" value={summary.total_owners} icon={<Users className="h-4 w-4" />} />
             <SummaryCard label="Total Residents" value={summary.total_tenants} icon={<Users className="h-4 w-4" />} />
@@ -75,14 +75,14 @@ export function AdminDashboardPage() {
           </div>
 
           <div className="grid gap-4 lg:grid-cols-2">
-            <article className="ph-surface-card rounded-[1.7rem] p-5">
+            <article className="ph-surface-card rounded-[1.5rem] p-5 sm:p-6">
               <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">Recent contact messages</h3>
               {summary.recent_contact_messages.length === 0 ? (
                 <p className="mt-3 text-sm text-[var(--ph-text-muted)]">No contact messages received recently.</p>
               ) : (
                 <ul className="mt-4 space-y-3">
                   {summary.recent_contact_messages.map((message) => (
-                    <li key={message.id} className="rounded-[1.2rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.03] p-4">
+                    <li key={message.id} className="rounded-[1.05rem] border border-[rgba(83,88,100,0.3)] bg-white/[0.025] p-4">
                       <p className="text-sm font-medium text-[var(--ph-text)]">{message.name}</p>
                       <p className="text-xs text-[var(--ph-text-muted)]">{message.email}</p>
                       <p className="mt-2 text-sm text-[var(--ph-text-soft)]">{message.message}</p>
@@ -93,14 +93,14 @@ export function AdminDashboardPage() {
               )}
             </article>
 
-            <article className="ph-surface-card rounded-[1.7rem] p-5">
+            <article className="ph-surface-card rounded-[1.5rem] p-5 sm:p-6">
               <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">Recent registrations</h3>
               {summary.recent_registrations.length === 0 ? (
                 <p className="mt-3 text-sm text-[var(--ph-text-muted)]">No recent registrations found.</p>
               ) : (
                 <ul className="mt-4 space-y-3">
                   {summary.recent_registrations.map((entry) => (
-                    <li key={`${entry.user_type}-${entry.id}`} className="rounded-[1.2rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.03] p-4">
+                    <li key={`${entry.user_type}-${entry.id}`} className="rounded-[1.05rem] border border-[rgba(83,88,100,0.3)] bg-white/[0.025] p-4">
                       <p className="text-sm font-medium text-[var(--ph-text)]">{entry.label}</p>
                       <p className="text-xs uppercase tracking-[0.18em] text-[#f1cb85]">{entry.user_type}</p>
                       <p className="text-xs text-[var(--ph-text-muted)]">{entry.email ?? 'No email'}</p>
@@ -112,14 +112,14 @@ export function AdminDashboardPage() {
             </article>
           </div>
 
-          <article className="ph-surface-card rounded-[1.7rem] p-5">
+          <article className="ph-surface-card rounded-[1.5rem] p-5 sm:p-6">
             <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">Top analytics events (7 days)</h3>
             {summary.top_events.length === 0 ? (
               <p className="mt-3 text-sm text-[var(--ph-text-muted)]">No analytics events recorded in the last 7 days.</p>
             ) : (
               <ul className="mt-4 grid gap-3 md:grid-cols-2">
                 {summary.top_events.map((event) => (
-                  <li key={event.event_name} className="rounded-[1.2rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.03] p-4">
+                  <li key={event.event_name} className="rounded-[1.05rem] border border-[rgba(83,88,100,0.3)] bg-white/[0.025] p-4">
                     <p className="text-sm font-medium text-[var(--ph-text)]">{event.event_name}</p>
                     <p className="text-xs text-[var(--ph-text-muted)]">{event.count} events</p>
                   </li>
@@ -135,7 +135,7 @@ export function AdminDashboardPage() {
       ) : null}
 
       {!loading && health ? (
-        <article className="ph-surface-card rounded-[1.7rem] p-5">
+        <article className="ph-surface-card rounded-[1.5rem] p-5 sm:p-6">
           <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">System health</h3>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <p className="text-sm text-[var(--ph-text-soft)]">Status: {health.status}</p>

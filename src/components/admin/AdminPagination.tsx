@@ -9,8 +9,8 @@ type AdminPaginationProps = {
 
 export function AdminPagination({ page, totalPages, totalItems, onPageChange }: AdminPaginationProps) {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white/95 shadow-sm p-4">
-      <p className="text-sm text-slate-600">
+    <div className="ph-form-toolbar flex flex-wrap items-center justify-between gap-3 rounded-[1.5rem] p-4 sm:p-5">
+      <p className="text-sm text-[var(--ph-text-muted)]">
         Page {page} of {totalPages} - {totalItems} total
       </p>
       <div className="flex items-center gap-2">
@@ -18,7 +18,6 @@ export function AdminPagination({ page, totalPages, totalItems, onPageChange }: 
           type="button"
           variant="outline"
           size="sm"
-          className="border-slate-300 bg-white text-slate-700"
           onClick={() => onPageChange(page - 1)}
           disabled={page <= 1}
         >
@@ -28,7 +27,6 @@ export function AdminPagination({ page, totalPages, totalItems, onPageChange }: 
           type="button"
           variant="outline"
           size="sm"
-          className="border-slate-300 bg-white text-slate-700"
           onClick={() => onPageChange(page + 1)}
           disabled={page >= totalPages}
         >

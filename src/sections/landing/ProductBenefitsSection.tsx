@@ -33,10 +33,10 @@ export function ProductBenefitsSection() {
 
   return (
     <SectionContainer size="wide">
-      <div className="grid gap-6 lg:grid-cols-[0.95fr_1.15fr]">
+      <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
         <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
           <span className="ph-kicker">Why Prophives</span>
-          <h2 className="ph-title mt-5 text-3xl font-semibold text-[var(--ph-text)] md:text-5xl">
+          <h2 className="ph-title mt-6 max-w-xl text-3xl font-semibold text-[var(--ph-text)] md:text-5xl">
             Built for teams managing premium assets, not generic rentals
           </h2>
           <p className="mt-4 text-base leading-relaxed text-[var(--ph-text-muted)] md:text-lg">
@@ -50,19 +50,19 @@ export function ProductBenefitsSection() {
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="grid gap-4 sm:grid-cols-2"
+          className="grid gap-4 lg:gap-5 sm:grid-cols-2"
         >
           {benefits.map((benefit) => (
             <motion.article
               key={benefit.title}
               variants={revealVariants}
-              className="ph-surface-card-soft rounded-[1.5rem] p-5"
+              className="ph-surface-card-soft rounded-[1.35rem] p-5 sm:p-6"
             >
-              <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-[rgba(240,163,35,0.18)] bg-[rgba(240,163,35,0.08)] text-[var(--ph-accent)]">
+              <div className="inline-flex h-10 w-10 items-center justify-center rounded-[1rem] border border-[rgba(240,163,35,0.16)] bg-[rgba(240,163,35,0.06)] text-[var(--ph-accent)]">
                 {benefit.icon}
               </div>
-              <h3 className="ph-title mt-4 text-lg font-semibold text-[var(--ph-text)]">{benefit.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-[var(--ph-text-muted)]">{benefit.description}</p>
+              <h3 className="ph-title mt-5 text-lg font-semibold text-[var(--ph-text)]">{benefit.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--ph-text-muted)]">{benefit.description}</p>
             </motion.article>
           ))}
         </motion.div>
