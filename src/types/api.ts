@@ -39,6 +39,7 @@ export type Tenant = {
   organization_id: string
   owner_id: string
   property_id: string
+  broker_id?: string | null
   full_name: string
   email: string | null
   phone: string | null
@@ -50,7 +51,29 @@ export type Tenant = {
   payment_status: 'pending' | 'paid' | 'overdue' | 'partial'
   status: 'active' | 'inactive' | 'terminated'
   organization?: Organization | null
+  brokers?: {
+    id: string
+    full_name: string
+    email: string
+    phone: string | null
+    agency_name: string | null
+    is_active: boolean
+  } | null
   created_at: string
+}
+
+export type Broker = {
+  id: string
+  organization_id: string
+  owner_id: string | null
+  full_name: string
+  email: string
+  phone: string | null
+  agency_name: string | null
+  notes: string | null
+  is_active: boolean
+  created_at: string
+  updated_at: string
 }
 
 export type TenantTicket = {

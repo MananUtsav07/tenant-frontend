@@ -33,6 +33,7 @@ export const ROUTES = {
   adminBlog: '/admin/blog',
   ownerDashboard: '/owner/dashboard',
   ownerProperties: '/owner/properties',
+  ownerBrokers: '/owner/brokers',
   ownerTenants: '/owner/tenants',
   ownerTenantDetail: '/owner/tenants/:id',
   ownerTickets: '/owner/tickets',

@@ -51,6 +51,7 @@ const AdminLoginPage = lazyNamedPage(() => import('../pages/auth/AdminLoginPage'
 
 const OwnerDashboardPage = lazyNamedPage(() => import('../pages/owner/OwnerDashboardPage'), 'OwnerDashboardPage')
 const OwnerPropertiesPage = lazyNamedPage(() => import('../pages/owner/OwnerPropertiesPage'), 'OwnerPropertiesPage')
+const OwnerBrokersPage = lazyNamedPage(() => import('../pages/owner/OwnerBrokersPage'), 'OwnerBrokersPage')
 const OwnerMaintenancePage = lazyNamedPage(() => import('../pages/owner/OwnerMaintenancePage'), 'OwnerMaintenancePage')
 const OwnerTenantsPage = lazyNamedPage(() => import('../pages/owner/OwnerTenantsPage'), 'OwnerTenantsPage')
 const OwnerTenantDetailPage = lazyNamedPage(() => import('../pages/owner/OwnerTenantDetailPage'), 'OwnerTenantDetailPage')
@@ -129,6 +130,7 @@ function AppRoutes() {
         <Route element={<OwnerLayout />}>
           <Route path={ROUTES.ownerDashboard} element={<OwnerDashboardPage />} />
           <Route path={ROUTES.ownerProperties} element={<OwnerPropertiesPage />} />
+          <Route path={ROUTES.ownerBrokers} element={<OwnerBrokersPage />} />
           <Route path={ROUTES.ownerTenants} element={<OwnerTenantsPage />} />
           <Route path={ROUTES.ownerTenantDetail} element={<OwnerTenantDetailPage />} />
           <Route path={ROUTES.ownerTickets} element={<OwnerTicketsPage />} />

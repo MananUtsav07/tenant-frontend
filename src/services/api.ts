@@ -22,6 +22,7 @@ import type {
   AdminTicketRow,
   BlogListResponse,
   BlogPost,
+  Broker,
   ContactMessage,
   ContactMessageReceipt,
   Owner,
@@ -289,6 +290,7 @@ export const api = {
     token: string,
     body: {
       property_id: string
+      broker_id?: string
       full_name: string
       email?: string
       phone?: string
@@ -307,6 +309,37 @@ export const api = {
 
   deleteOwnerTenant: (token: string, tenantId: string) =>
     request<{ ok: true }>(`/api/owners/tenants/${tenantId}`, { method: 'DELETE', token }),
+
+  getOwnerBrokers: (token: string) =>
+    request<{ ok: true; brokers: Broker[] }>('/api/owners/brokers', { token }),
+
+  createOwnerBroker: (
+    token: string,
+    body: {
+      full_name: string
+      email: string
+      phone?: string
+      agency_name?: string
+      notes?: string
+      is_active?: boolean
+    },
+  ) => request<{ ok: true; broker: Broker }>('/api/owners/brokers', { method: 'POST', token, body }),
+
+  updateOwnerBroker: (
+    token: string,
+    brokerId: string,
+    body: Partial<{
+      full_name: string
+      email: string
+      phone: string | null
+      agency_name: string | null
+      notes: string | null
+      is_active: boolean
+    }>,
+  ) => request<{ ok: true; broker: Broker }>(`/api/owners/brokers/${brokerId}`, { method: 'PATCH', token, body }),
+
+  deleteOwnerBroker: (token: string, brokerId: string) =>
+    request<{ ok: true }>(`/api/owners/brokers/${brokerId}`, { method: 'DELETE', token }),
 
   getOwnerTenantDetail: (token: string, tenantId: string) =>
     request<{

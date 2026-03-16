@@ -1,4 +1,4 @@
-import { Bell, Bot, Building2, Hammer, LayoutDashboard, LifeBuoy, Sparkles, Users } from 'lucide-react'
+import { Bell, Bot, Briefcase, Building2, Hammer, LayoutDashboard, LifeBuoy, Sparkles, Users } from 'lucide-react'
 
 import { OwnerNotificationBell } from '../components/owner/OwnerNotificationBell'
 import { OwnerNotificationsProvider } from '../hooks/OwnerNotificationsProvider'
@@ -10,6 +10,7 @@ import { ROUTES } from '../routes/constants'
 const ownerLinks = [
   { to: ROUTES.ownerDashboard, label: 'Dashboard', icon: <LayoutDashboard className="h-4 w-4" /> },
   { to: ROUTES.ownerProperties, label: 'Properties', icon: <Building2 className="h-4 w-4" /> },
+  { to: ROUTES.ownerBrokers, label: 'Brokers', icon: <Briefcase className="h-4 w-4" /> },
   { to: ROUTES.ownerTenants, label: 'Tenants', icon: <Users className="h-4 w-4" /> },
   { to: ROUTES.ownerTickets, label: 'Tickets', icon: <LifeBuoy className="h-4 w-4" /> },
   { to: ROUTES.ownerMaintenance, label: 'Maintenance', icon: <Hammer className="h-4 w-4" /> },

@@ -16,7 +16,7 @@ import {
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
-import type { Property, Tenant } from '../../types/api'
+import type { Broker, Property, Tenant } from '../../types/api'
 import { formatCurrency, formatDate, formatDateTime, getCurrencyMarker } from '../../utils/date'
 
 function getNextDueDate(dayOfMonth: number, now = new Date()): Date {
@@ -41,6 +41,7 @@ function getNextDueDate(dayOfMonth: number, now = new Date()): Date {
 function buildEmptyTenantForm(defaultPropertyId = '') {
   return {
     property_id: defaultPropertyId,
+    broker_id: '',
     full_name: '',
     email: '',
     phone: '',
@@ -71,6 +72,7 @@ export function OwnerTenantsPage() {
   const { token, owner } = useOwnerAuth()
   const [tenants, setTenants] = useState<Tenant[]>([])
   const [properties, setProperties] = useState<Property[]>([])
+  const [brokers, setBrokers] = useState<Broker[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
@@ -87,12 +89,14 @@ export function OwnerTenantsPage() {
 
     try {
       setError(null)
-      const [tenantResponse, propertyResponse] = await Promise.all([
+      const [tenantResponse, propertyResponse, brokerResponse] = await Promise.all([
         api.getOwnerTenants(token),
         api.getOwnerProperties(token),
+        api.getOwnerBrokers(token),
       ])
       setTenants(tenantResponse.tenants)
       setProperties(propertyResponse.properties)
+      setBrokers(brokerResponse.brokers.filter((broker) => broker.is_active))
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : 'Failed to load tenants')
     } finally {
@@ -166,6 +170,7 @@ export function OwnerTenantsPage() {
       if (editingTenantId) {
         await api.updateOwnerTenant(token, editingTenantId, {
           property_id: form.property_id,
+          broker_id: form.broker_id || null,
           full_name: trimmedFullName,
           email: trimmedEmail || null,
           phone: trimmedPhone || null,
@@ -180,6 +185,7 @@ export function OwnerTenantsPage() {
       } else {
         await api.createOwnerTenant(token, {
           property_id: form.property_id,
+          broker_id: form.broker_id || undefined,
           full_name: trimmedFullName,
           email: trimmedEmail || undefined,
           phone: trimmedPhone || undefined,
@@ -223,6 +229,7 @@ export function OwnerTenantsPage() {
     setEditingTenantId(tenant.id)
     setForm({
       property_id: tenant.property_id,
+      broker_id: tenant.broker_id ?? '',
       full_name: tenant.full_name,
       email: tenant.email ?? '',
       phone: tenant.phone ?? '',
@@ -310,6 +317,20 @@ export function OwnerTenantsPage() {
             {properties.map((property) => (
               <option key={property.id} value={property.id}>
                 {property.property_name}
+              </option>
+            ))}
+          </FormSelect>
+          <FormSelect
+            label="Broker (optional)"
+            name="tenant_broker_id"
+            autoComplete="off"
+            value={form.broker_id}
+            onChange={(event) => setForm((current) => ({ ...current, broker_id: event.target.value }))}
+          >
+            <option value="">No broker assigned</option>
+            {brokers.map((broker) => (
+              <option key={broker.id} value={broker.id}>
+                {broker.full_name} ({broker.email})
               </option>
             ))}
           </FormSelect>
@@ -473,12 +494,22 @@ export function OwnerTenantsPage() {
       ) : null}
 
       {!loading && tenants.length > 0 ? (
-        <DataTable headers={['Name', 'Access ID', 'Rent', 'Due Date', 'Lease', 'Status', 'Created', 'Actions']}>
+        <DataTable headers={['Name', 'Broker', 'Access ID', 'Rent', 'Due Date', 'Lease', 'Status', 'Created', 'Actions']}>
           {tenants.map((tenant) => (
             <tr key={tenant.id}>
               <td className="px-4 py-3">
                 <p className="font-medium text-[var(--ph-text)]">{tenant.full_name}</p>
                 <p className="text-xs text-[var(--ph-text-muted)]">{tenant.email || 'No email'}</p>
+              </td>
+              <td className="px-4 py-3 text-[var(--ph-text-soft)]">
+                {tenant.brokers ? (
+                  <>
+                    <p className="font-medium text-[var(--ph-text)]">{tenant.brokers.full_name}</p>
+                    <p className="text-xs text-[var(--ph-text-muted)]">{tenant.brokers.email}</p>
+                  </>
+                ) : (
+                  'Direct owner'
+                )}
               </td>
               <td className="px-4 py-3 text-[var(--ph-text-soft)]">{tenant.tenant_access_id}</td>
               <td className="px-4 py-3 text-[var(--ph-text-soft)]">{formatCurrency(tenant.monthly_rent, ownerCurrencyCode)}</td>
