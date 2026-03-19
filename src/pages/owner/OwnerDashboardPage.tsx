@@ -167,7 +167,6 @@ export function OwnerDashboardPage() {
     <section className="ph-page-shell">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="ph-page-header">
-          <p className="ph-page-eyebrow">Portfolio Overview</p>
           <h2 className="ph-page-heading">Dashboard</h2>
           {summary ? (
             <div className="space-y-1 text-sm text-[var(--ph-text-muted)]">
@@ -224,77 +223,75 @@ export function OwnerDashboardPage() {
             <div className="space-y-4">
               <p className="text-xs text-[var(--ph-text-muted)]">Portfolio snapshot · Updated {formatDateTime(portfolioSnapshot.generated_at)}</p>
 
-              <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
-                <div className="rounded-lg border border-white/8 bg-white/[0.025] p-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--ph-text-muted)]">Overdue Rent</p>
-                  <p className="mt-1.5 text-xl font-semibold text-[var(--ph-text)]">{portfolioSnapshot.overdue_rent_count}</p>
-                  <p className="mt-1 text-xs text-[var(--ph-text-muted)]">
+              <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2 xl:grid-cols-3">
+                <div>
+                  <p className="text-sm font-medium text-[var(--ph-text-muted)]">Overdue Rent</p>
+                  <p className="mt-1 font-heading text-2xl font-semibold text-[var(--ph-text)]">{portfolioSnapshot.overdue_rent_count}</p>
+                  <p className="mt-0.5 text-xs text-[var(--ph-text-muted)]">
                     {portfolioSnapshot.payload.overdue_rent_items[0]
                       ? `${portfolioSnapshot.payload.overdue_rent_items[0].tenant_name} needs review`
                       : 'No overdue residents flagged'}
                   </p>
                 </div>
-                <div className="rounded-lg border border-white/8 bg-white/[0.025] p-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--ph-text-muted)]">Urgent Tickets</p>
-                  <p className="mt-1.5 text-xl font-semibold text-[var(--ph-text)]">{portfolioSnapshot.urgent_open_ticket_count}</p>
-                  <p className="mt-1 text-xs text-[var(--ph-text-muted)]">
+                <div>
+                  <p className="text-sm font-medium text-[var(--ph-text-muted)]">Urgent Tickets</p>
+                  <p className="mt-1 font-heading text-2xl font-semibold text-[var(--ph-text)]">{portfolioSnapshot.urgent_open_ticket_count}</p>
+                  <p className="mt-0.5 text-xs text-[var(--ph-text-muted)]">
                     {portfolioSnapshot.payload.ticket_highlights.urgent_open[0]
                       ? portfolioSnapshot.payload.ticket_highlights.urgent_open[0].subject
                       : 'No urgent signals'}
                   </p>
                 </div>
-                <div className="rounded-lg border border-white/8 bg-white/[0.025] p-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--ph-text-muted)]">Compliance</p>
-                  <p className="mt-1.5 text-xl font-semibold text-[var(--ph-text)]">{portfolioSnapshot.upcoming_compliance_count}</p>
-                  <p className="mt-1 text-xs text-[var(--ph-text-muted)]">
+                <div>
+                  <p className="text-sm font-medium text-[var(--ph-text-muted)]">Compliance</p>
+                  <p className="mt-1 font-heading text-2xl font-semibold text-[var(--ph-text)]">{portfolioSnapshot.upcoming_compliance_count}</p>
+                  <p className="mt-0.5 text-xs text-[var(--ph-text-muted)]">
                     {portfolioSnapshot.payload.compliance_highlights[0]
                       ? `${portfolioSnapshot.payload.compliance_highlights[0].trigger_label} in ${portfolioSnapshot.payload.compliance_highlights[0].days_remaining}d`
                       : 'No upcoming milestones'}
                   </p>
                 </div>
-                <div className="rounded-lg border border-white/8 bg-white/[0.025] p-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--ph-text-muted)]">Occupancy</p>
-                  <p className="mt-1.5 text-xl font-semibold text-[var(--ph-text)]">
+                <div>
+                  <p className="text-sm font-medium text-[var(--ph-text-muted)]">Occupancy</p>
+                  <p className="mt-1 font-heading text-2xl font-semibold text-[var(--ph-text)]">
                     {portfolioSnapshot.occupied_property_count}/{portfolioSnapshot.occupied_property_count + portfolioSnapshot.vacant_property_count}
                   </p>
-                  <p className="mt-1 text-xs text-[var(--ph-text-muted)]">
+                  <p className="mt-0.5 text-xs text-[var(--ph-text-muted)]">
                     {portfolioSnapshot.vacant_property_count > 0 ? `${portfolioSnapshot.vacant_property_count} vacant` : 'Fully occupied'}
                   </p>
                 </div>
-                <div className="rounded-lg border border-white/8 bg-white/[0.025] p-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--ph-text-muted)]">Net Income</p>
-                  <p className="mt-1.5 text-xl font-semibold text-[var(--ph-text)]">
+                <div>
+                  <p className="text-sm font-medium text-[var(--ph-text-muted)]">Net Income</p>
+                  <p className="mt-1 font-heading text-2xl font-semibold text-[var(--ph-text)]">
                     {monthlyCashFlow ? formatCurrency(monthlyCashFlow.portfolio_net_income, monthlyCashFlow.currency_code) : 'N/A'}
                   </p>
-                  <p className="mt-1 text-xs text-[var(--ph-text-muted)]">{monthlyCashFlow?.report_label ?? 'Not generated yet'}</p>
+                  <p className="mt-0.5 text-xs text-[var(--ph-text-muted)]">{monthlyCashFlow?.report_label ?? 'Not generated yet'}</p>
                 </div>
-                <div className="rounded-lg border border-white/8 bg-white/[0.025] p-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--ph-text-muted)]">Yield</p>
-                  <p className="mt-1.5 text-xl font-semibold text-[var(--ph-text)]">
+                <div>
+                  <p className="text-sm font-medium text-[var(--ph-text-muted)]">Yield</p>
+                  <p className="mt-1 font-heading text-2xl font-semibold text-[var(--ph-text)]">
                     {typeof annualCashFlow?.portfolio_yield_percent === 'number' ? `${annualCashFlow.portfolio_yield_percent}%` : 'N/A'}
                   </p>
-                  <p className="mt-1 text-xs text-[var(--ph-text-muted)]">{annualCashFlow?.report_label ?? 'Not generated yet'}</p>
+                  <p className="mt-0.5 text-xs text-[var(--ph-text-muted)]">{annualCashFlow?.report_label ?? 'Not generated yet'}</p>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <p className="text-xs text-[var(--ph-text-muted)]">Recent alerts</p>
+              <div>
+                <p className="mb-3 text-xs font-medium text-[var(--ph-text-muted)]">Recent alerts</p>
                 {portfolioOverview?.recent_alerts.length ? (
-                  portfolioOverview.recent_alerts.slice(0, 5).map((alert) => (
-                    <div key={alert.id} className="rounded-lg border border-white/8 bg-white/[0.025] p-3">
-                      <div className="flex items-start justify-between gap-3">
+                  <div className="divide-y divide-[rgba(83,88,100,0.1)]">
+                    {portfolioOverview.recent_alerts.slice(0, 5).map((alert) => (
+                      <div key={alert.id} className="flex items-start justify-between gap-3 py-3 first:pt-0 last:pb-0">
                         <div>
                           <p className="text-sm font-medium text-[var(--ph-text)]">{alert.title}</p>
                           <p className="mt-0.5 text-xs leading-relaxed text-[var(--ph-text-muted)]">{alert.message}</p>
                         </div>
-                        <p className="text-[10px] text-[var(--ph-text-muted)]">{formatDateTime(alert.created_at)}</p>
+                        <p className="shrink-0 text-[10px] text-[var(--ph-text-muted)]">{formatDateTime(alert.created_at)}</p>
                       </div>
-                    </div>
-                  ))
+                    ))}
+                  </div>
                 ) : (
-                  <p className="rounded-lg border border-white/8 bg-white/[0.025] px-3 py-2 text-sm text-[var(--ph-text-muted)]">
-                    No recent alerts yet.
-                  </p>
+                  <p className="text-sm text-[var(--ph-text-muted)]">No recent alerts yet.</p>
                 )}
               </div>
             </div>
@@ -327,7 +324,7 @@ export function OwnerDashboardPage() {
 
           {isApprovalsExpanded ? (
             approvals.length === 0 ? (
-              <p className="rounded-lg border border-white/8 bg-white/[0.025] px-3 py-2 text-sm text-[var(--ph-text-muted)]">
+              <p className="py-4 text-sm text-[var(--ph-text-muted)]">
                 No rent approvals are pending right now.
               </p>
             ) : (

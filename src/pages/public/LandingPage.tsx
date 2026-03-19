@@ -16,7 +16,7 @@ import type { OwnerSummary, PublicOperationsSnapshot } from '../../types/api'
 
 type SnapshotMode = 'public' | 'owner'
 
-function HeroPanel({
+function LiveMetricsStrip({
   mode,
   snapshot,
   ownerSummary,
@@ -27,79 +27,71 @@ function HeroPanel({
   ownerSummary: OwnerSummary | null
   loading: boolean
 }) {
-  const renderCount = (value: number | null) => (value === null ? (loading ? '...' : '--') : value.toLocaleString('en-AE'))
+  const renderCount = (value: number | null) =>
+    value === null ? (loading ? '·' : '--') : value.toLocaleString('en-AE')
 
-  const openTickets = renderCount(
-    mode === 'owner' ? ownerSummary?.open_tickets ?? null : snapshot?.open_tickets ?? null,
-  )
-  const tenantCount = renderCount(
-    mode === 'owner' ? ownerSummary?.active_tenants ?? null : snapshot?.active_tenants ?? null,
-  )
-  const actionCount = renderCount(
-    mode === 'owner' ? ownerSummary?.reminders_pending ?? null : snapshot?.due_this_week ?? null,
-  )
+  const openTickets = renderCount(mode === 'owner' ? ownerSummary?.open_tickets ?? null : snapshot?.open_tickets ?? null)
+  const tenantCount = renderCount(mode === 'owner' ? ownerSummary?.active_tenants ?? null : snapshot?.active_tenants ?? null)
+  const actionCount = renderCount(mode === 'owner' ? ownerSummary?.reminders_pending ?? null : snapshot?.due_this_week ?? null)
+
+  const metrics = [
+    { icon: <MessageSquare className="h-4 w-4" />, label: 'Open Tickets', value: openTickets },
+    { icon: <Users className="h-4 w-4" />, label: 'Active Residents', value: tenantCount },
+    { icon: <BellRing className="h-4 w-4" />, label: mode === 'owner' ? 'Pending Reminders' : 'Collections Due', value: actionCount },
+  ]
+
+  const features = [
+    { icon: <Sparkles className="h-3.5 w-3.5" />, label: 'Resident support triage and status orchestration' },
+    { icon: <CircleDollarSign className="h-3.5 w-3.5" />, label: 'Rent reminder timing with human approvals intact' },
+    { icon: <Activity className="h-3.5 w-3.5" />, label: 'Dashboard visibility for owners, operators, and residents' },
+  ]
 
   return (
-    <div className="flex h-full min-h-[420px] flex-col gap-5 lg:min-h-[540px] lg:justify-between">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f1cb85]">Live Portfolio Pulse</p>
-          <h2 className="ph-title mt-2 text-2xl font-semibold text-[var(--ph-text)]">Signals from the command center</h2>
-        </div>
-        <span className="rounded-full border border-[rgba(240,163,35,0.22)] bg-[rgba(240,163,35,0.08)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">
-          {mode === 'owner' ? 'Private View' : 'Public Benchmark'}
-        </span>
-      </div>
+    <div className="border-y border-[rgba(83,88,100,0.14)] bg-[rgba(9,13,21,0.72)] backdrop-blur-sm">
+      <div className="mx-auto max-w-7xl px-6 py-5 lg:px-10">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:gap-0 lg:divide-x lg:divide-[rgba(83,88,100,0.14)]">
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div className="rounded-[1.15rem] border border-[rgba(83,88,100,0.3)] bg-white/[0.025] p-4">
-          <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">
-            <MessageSquare className="h-3.5 w-3.5 text-[var(--ph-accent)]" />
-            Open Tickets
+          {/* Live pulse label */}
+          <div className="flex items-center gap-3 lg:pr-8">
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--ph-accent)]" style={{ animation: 'ph-dot-blink 2s ease-in-out infinite' }} />
+              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--ph-text-muted)]">Live Portfolio Pulse</span>
+            </span>
+            <span className="rounded-full border border-[rgba(240,163,35,0.18)] bg-[rgba(240,163,35,0.06)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#f1cb85]">
+              {mode === 'owner' ? 'Private' : 'Benchmark'}
+            </span>
+          </div>
+
+          {/* Metrics */}
+          <div className="flex flex-wrap gap-6 lg:flex-1 lg:justify-center lg:px-8">
+            {metrics.map((m) => (
+              <div key={m.label} className="flex items-center gap-3">
+                <span className="text-[var(--ph-text-muted)]">{m.icon}</span>
+                <div>
+                  <p className="font-heading text-xl font-semibold leading-none text-[var(--ph-text)]">{m.value}</p>
+                  <p className="mt-0.5 text-[11px] text-[var(--ph-text-muted)]">{m.label}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Automation features */}
+          <div className="flex flex-col gap-1.5 lg:pl-8">
+            {features.map((f) => (
+              <div key={f.label} className="flex items-center gap-2 text-[11px] text-[var(--ph-text-muted)]">
+                <span className="shrink-0 text-[var(--ph-accent)]">{f.icon}</span>
+                {f.label}
+              </div>
+            ))}
+          </div>
+
+        </div>
+        {mode === 'public' && snapshot?.generated_at ? (
+          <p className="mt-3 text-[10px] text-[var(--ph-text-muted)] opacity-60">
+            Updated {new Date(snapshot.generated_at).toLocaleString('en-AE')}
           </p>
-          <p className="mt-3 text-3xl font-semibold text-[var(--ph-text)]">{openTickets}</p>
-        </div>
-
-        <div className="rounded-[1.15rem] border border-[rgba(83,88,100,0.3)] bg-white/[0.025] p-4">
-          <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">
-            <Users className="h-3.5 w-3.5 text-[var(--ph-accent)]" />
-            Active Residents
-          </p>
-          <p className="mt-3 text-3xl font-semibold text-[var(--ph-text)]">{tenantCount}</p>
-        </div>
-
-        <div className="rounded-[1.15rem] border border-[rgba(83,88,100,0.3)] bg-white/[0.025] p-4 sm:col-span-2">
-          <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">
-            <BellRing className="h-3.5 w-3.5 text-[var(--ph-accent)]" />
-            {mode === 'owner' ? 'Pending Reminder Actions' : 'Collections Due This Week'}
-          </p>
-          <p className="mt-3 text-3xl font-semibold text-[var(--ph-text)]">{actionCount}</p>
-        </div>
+        ) : null}
       </div>
-
-      <div className="rounded-[1.15rem] border border-[rgba(240,163,35,0.14)] bg-[rgba(240,163,35,0.05)] p-4">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Automation Layer</p>
-        <ul className="mt-3 space-y-2 text-sm text-[var(--ph-text-soft)]">
-          <li className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-[var(--ph-accent)]" />
-            Resident support triage and status orchestration
-          </li>
-          <li className="flex items-center gap-2">
-            <CircleDollarSign className="h-4 w-4 text-[var(--ph-accent)]" />
-            Rent reminder timing with human approvals intact
-          </li>
-          <li className="flex items-center gap-2">
-            <Activity className="h-4 w-4 text-[var(--ph-accent)]" />
-            Dashboard visibility for owners, operators, and residents
-          </li>
-        </ul>
-      </div>
-
-      {mode === 'public' && snapshot?.generated_at ? (
-        <p className="text-xs text-[var(--ph-text-muted)]">
-          Updated {new Date(snapshot.generated_at).toLocaleString('en-AE')}
-        </p>
-      ) : null}
     </div>
   )
 }
@@ -206,14 +198,13 @@ export function LandingPage() {
           'AI-assisted reminders, service workflows, and approval handling',
           'Conversion-focused rollout for luxury portfolios in Dubai',
         ]}
-        sidePanel={
-          <HeroPanel
-            mode={snapshotMode}
-            snapshot={snapshot}
-            ownerSummary={ownerSummary}
-            loading={snapshotLoading}
-          />
-        }
+      />
+
+      <LiveMetricsStrip
+        mode={snapshotMode}
+        snapshot={snapshot}
+        ownerSummary={ownerSummary}
+        loading={snapshotLoading}
       />
 
       <FeatureHighlightsSection />

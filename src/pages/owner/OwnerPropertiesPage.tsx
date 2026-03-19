@@ -118,7 +118,6 @@ export function OwnerPropertiesPage() {
     <section className="ph-page-shell">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="ph-page-header">
-          <p className="ph-page-eyebrow">Properties</p>
           <h2 className="ph-page-heading">Properties</h2>
         </div>
         <div className="flex items-center gap-3">

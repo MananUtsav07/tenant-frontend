@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from 'react'
-import { ArrowUpRight, LifeBuoy, MessageSquareReply, TicketX } from 'lucide-react'
+import { ArrowUpRight, LifeBuoy, TicketX } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
 
 import { Button } from '../../components/common/Button'
@@ -212,39 +212,34 @@ export function OwnerTicketsPage() {
       {threadLoading ? <LoadingState message="Loading ticket thread..." rows={4} /> : null}
 
       {!threadLoading && thread ? (
-        <div className="space-y-4">
-          <article className="ph-surface-card p-5 sm:p-6">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">{thread.ticket.subject}</h3>
-                <div className="mt-2 flex flex-wrap gap-4 text-sm text-[var(--ph-text-muted)]">
-                  <span>Tenant: {ticketSummary?.tenantLabel}</span>
-                  <span>Property: {ticketSummary?.propertyLabel}</span>
-                  <span>Unit: {ticketSummary?.unitLabel}</span>
-                  <span>Opened: {formatDateTime(thread.ticket.created_at)}</span>
-                </div>
-              </div>
-              <div className="flex flex-wrap items-center gap-2">
-                <StatusBadge status={thread.ticket.status} />
-                <Button
-                  to={`${ROUTES.ownerMaintenance}?ticket=${thread.ticket.id}`}
-                  variant="outline"
-                  size="sm"
-                  iconRight={<ArrowUpRight className="h-4 w-4" />}
-                >
-                  Open in Maintenance
-                </Button>
+        <div className="space-y-6">
+          <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[rgba(83,88,100,0.14)] pb-5">
+            <div>
+              <h3 className="font-heading text-lg font-semibold text-[var(--ph-text)]">{thread.ticket.subject}</h3>
+              <div className="mt-2 flex flex-wrap gap-4 text-sm text-[var(--ph-text-muted)]">
+                <span>Tenant: {ticketSummary?.tenantLabel}</span>
+                <span>Property: {ticketSummary?.propertyLabel}</span>
+                <span>Unit: {ticketSummary?.unitLabel}</span>
+                <span>Opened: {formatDateTime(thread.ticket.created_at)}</span>
               </div>
             </div>
-          </article>
+            <div className="flex flex-wrap items-center gap-2">
+              <StatusBadge status={thread.ticket.status} />
+              <Button
+                to={`${ROUTES.ownerMaintenance}?ticket=${thread.ticket.id}`}
+                variant="outline"
+                size="sm"
+                iconRight={<ArrowUpRight className="h-4 w-4" />}
+              >
+                Open in Maintenance
+              </Button>
+            </div>
+          </div>
 
-          <article className="ph-surface-card p-5 sm:p-6">
-            <div className="mb-3 flex items-center gap-2">
-              <MessageSquareReply className="h-4 w-4 text-[var(--ph-accent)]" />
-              <h3 className="ph-title text-base font-semibold text-[var(--ph-text)]">Conversation</h3>
-            </div>
+          <div>
+            <p className="mb-4 text-sm font-medium text-[var(--ph-text-muted)]">Conversation</p>
             <TicketThreadTimeline messages={thread.messages} />
-          </article>
+          </div>
 
           {thread.ticket.status !== 'closed' ? (
             <TicketReplyComposer

@@ -128,6 +128,12 @@ a {
   border-radius: 999px;
   background: var(--ph-accent);
   box-shadow: 0 0 0 4px rgba(240, 163, 35, 0.1);
+  animation: ph-dot-blink 2s ease-in-out infinite;
+}
+
+@keyframes ph-dot-blink {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 4px rgba(240, 163, 35, 0.1); }
+  50% { opacity: 0.25; box-shadow: 0 0 0 6px rgba(240, 163, 35, 0.04); }
 }
 
 .ph-highlight {
@@ -153,18 +159,27 @@ a {
 
 .ph-page-eyebrow {
   font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.22em;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #f1cb85;
+  color: var(--ph-text-muted);
 }
 
 .ph-page-heading {
   font-family: 'Sora', ui-sans-serif, system-ui, sans-serif;
-  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-size: 1.5rem;
   font-weight: 600;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.03em;
   color: var(--ph-text);
+}
+
+.font-heading {
+  font-family: 'Sora', ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.03em;
+}
+
+.font-body {
+  font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif;
 }
 
 .ph-page-description {
@@ -180,35 +195,37 @@ a {
   }
 }
 
+/* Flat surface — transparent, no border. Content carries all hierarchy. */
+.ph-surface {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+}
+
 .ph-surface-card,
 .tf-panel {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(83, 88, 100, 0.3);
-  border-radius: 0.875rem;
-  background: rgba(19, 24, 38, 0.94);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24);
+  border: 1px solid rgba(83, 88, 100, 0.18);
+  border-radius: 0.75rem;
+  background: rgba(19, 24, 38, 0.72);
 }
 
 .ph-surface-card-soft,
 .tf-panel-soft {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(83, 88, 100, 0.3);
-  border-radius: 0.875rem;
-  background: rgba(17, 23, 37, 0.92);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(83, 88, 100, 0.15);
+  border-radius: 0.75rem;
+  background: rgba(17, 23, 37, 0.6);
 }
 
 .ph-surface-card-strong {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(240, 163, 35, 0.12);
-  border-radius: 0.875rem;
-  background:
-    radial-gradient(circle at 0% 0%, rgba(240, 163, 35, 0.06), transparent 30%),
-    rgba(19, 26, 42, 0.96);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(240, 163, 35, 0.1);
+  border-radius: 0.75rem;
+  background: rgba(19, 26, 42, 0.88);
 }
 
 .ph-surface-panel {
@@ -309,19 +326,17 @@ a {
 .ph-form-panel {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(83, 88, 100, 0.3);
-  border-radius: 0.875rem;
-  background: rgba(18, 23, 37, 0.96);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24);
+  border: 1px solid rgba(83, 88, 100, 0.2);
+  border-radius: 0.75rem;
+  background: rgba(18, 23, 37, 0.88);
 }
 
 .ph-form-toolbar {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(83, 88, 100, 0.28);
-  border-radius: 0.875rem;
-  background: rgba(18, 24, 38, 0.92);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(83, 88, 100, 0.18);
+  border-radius: 0.75rem;
+  background: rgba(18, 24, 38, 0.88);
 }
 
 .tf-panel-inset {
