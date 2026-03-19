@@ -1,4 +1,4 @@
-import { Building2, MapPin, Pencil, Plus, Trash2 } from 'lucide-react'
+import { Building2, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState, type FormEvent } from 'react'
 
 import { Button } from '../../components/common/Button'
@@ -9,10 +9,8 @@ import { FormInput } from '../../components/common/FormInput'
 import { LoadingState } from '../../components/common/LoadingState'
 import {
   dashboardFormPanelClassName,
-  dashboardInfoPanelClassName,
 } from '../../components/common/formTheme'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
-import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
 import type { Property } from '../../types/api'
 import { formatDateTime } from '../../utils/date'
@@ -31,6 +29,7 @@ export function OwnerPropertiesPage() {
   })
 
   const [editingPropertyId, setEditingPropertyId] = useState<string | null>(null)
+  const [showForm, setShowForm] = useState(false)
 
   const loadProperties = useCallback(async () => {
     if (!token) {
@@ -119,17 +118,24 @@ export function OwnerPropertiesPage() {
     <section className="ph-page-shell">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="ph-page-header">
-          <p className="ph-page-eyebrow">Owner Properties</p>
+          <p className="ph-page-eyebrow">Properties</p>
           <h2 className="ph-page-heading">Properties</h2>
-          <p className="ph-page-description">Create and manage your properties with a cleaner intake flow and less visual clutter.</p>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(83,88,100,0.42)] bg-[rgba(255,255,255,0.04)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">
-          <Building2 className="h-3.5 w-3.5 text-[var(--ph-accent)]" />
-          {properties.length} total
-        </span>
+        <div className="flex items-center gap-3">
+          <span className="inline-flex items-center gap-1.5 rounded-lg border border-[rgba(83,88,100,0.3)] bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-[var(--ph-text-muted)]">
+            <Building2 className="h-3.5 w-3.5 text-[var(--ph-accent)]" />
+            {properties.length} total
+          </span>
+          {!showForm && !editingPropertyId ? (
+            <Button type="button" onClick={() => setShowForm(true)} variant="secondary" size="sm" iconLeft={<Plus className="h-4 w-4" />}>
+              Add Property
+            </Button>
+          ) : null}
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className={`${dashboardFormPanelClassName} space-y-5`}>
+      {showForm || editingPropertyId ? (
+      <form onSubmit={handleSubmit} className={`${dashboardFormPanelClassName} space-y-4`}>
         <div>
           <p className="text-sm font-semibold text-[var(--ph-text)]">{editingPropertyId ? 'Edit property' : 'Add property'}</p>
           <p className="mt-1 text-xs text-[var(--ph-text-muted)]">Keep the core property setup focused before tenants and workflows attach to it.</p>
@@ -170,12 +176,17 @@ export function OwnerPropertiesPage() {
             {editingPropertyId ? 'Save Property' : 'Create Property'}
           </Button>
           {editingPropertyId ? (
-            <Button type="button" onClick={resetForm} variant="outline">
-              Cancel Edit
+            <Button type="button" onClick={() => { resetForm(); setShowForm(false) }} variant="outline">
+              Cancel
             </Button>
-          ) : null}
+          ) : (
+            <Button type="button" onClick={() => setShowForm(false)} variant="ghost">
+              Cancel
+            </Button>
+          )}
         </div>
       </form>
+      ) : null}
 
       {error ? <ErrorState message={error} /> : null}
       {loading ? <LoadingState message="Loading properties..." rows={4} /> : null}
@@ -231,17 +242,7 @@ export function OwnerPropertiesPage() {
         </DataTable>
       ) : null}
 
-      {!loading && properties.length > 0 ? (
-        <div className={dashboardInfoPanelClassName}>
-          <p className="inline-flex items-center gap-2">
-            <MapPin className="h-4 w-4 text-[var(--ph-accent)]" />
-            Properties are used across tenants, tickets, and reminders.
-          </p>
-          <Button to={ROUTES.ownerTenants} variant="ghost" size="sm" className="mt-2 px-0 hover:bg-transparent">
-            Go to Tenants
-          </Button>
-        </div>
-      ) : null}
+
     </section>
   )
 }

@@ -173,11 +173,10 @@ export function OwnerTicketsPage() {
   return (
     <section className="ph-page-shell">
       <div className="ph-page-header">
-        <h2 className="ph-title inline-flex items-center gap-2 text-2xl font-semibold text-[var(--ph-text)]">
-          <LifeBuoy className="h-6 w-6 text-[var(--ph-accent)]" />
+        <h2 className="ph-title inline-flex items-center gap-2 text-xl font-semibold text-[var(--ph-text)]">
+          <LifeBuoy className="h-5 w-5 text-[var(--ph-accent)]" />
           Support Tickets
         </h2>
-        <p className="text-sm leading-relaxed text-[var(--ph-text-muted)]">Track tenant requests, reply in thread, and close with context.</p>
       </div>
 
       {error ? <ErrorState message={error} /> : null}
@@ -214,12 +213,11 @@ export function OwnerTicketsPage() {
 
       {!threadLoading && thread ? (
         <div className="space-y-4">
-          <article className="ph-surface-card-strong rounded-[1.6rem] p-6 sm:p-7">
+          <article className="ph-surface-card p-5 sm:p-6">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f1cb85]">Selected ticket</p>
-                <h3 className="ph-title mt-3 text-2xl font-semibold text-[var(--ph-text)]">{thread.ticket.subject}</h3>
-                <div className="mt-3 flex flex-wrap gap-4 text-sm text-[var(--ph-text-muted)]">
+                <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">{thread.ticket.subject}</h3>
+                <div className="mt-2 flex flex-wrap gap-4 text-sm text-[var(--ph-text-muted)]">
                   <span>Tenant: {ticketSummary?.tenantLabel}</span>
                   <span>Property: {ticketSummary?.propertyLabel}</span>
                   <span>Unit: {ticketSummary?.unitLabel}</span>
@@ -240,10 +238,10 @@ export function OwnerTicketsPage() {
             </div>
           </article>
 
-          <article className="ph-surface-card rounded-[1.5rem] p-6 sm:p-7">
-            <div className="mb-4 flex items-center gap-2">
-              <MessageSquareReply className="h-5 w-5 text-[var(--ph-accent)]" />
-              <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">Conversation</h3>
+          <article className="ph-surface-card p-5 sm:p-6">
+            <div className="mb-3 flex items-center gap-2">
+              <MessageSquareReply className="h-4 w-4 text-[var(--ph-accent)]" />
+              <h3 className="ph-title text-base font-semibold text-[var(--ph-text)]">Conversation</h3>
             </div>
             <TicketThreadTimeline messages={thread.messages} />
           </article>

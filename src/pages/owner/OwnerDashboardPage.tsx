@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
-import { Bell, CheckCheck, Clock3, LifeBuoy, TriangleAlert, Users } from 'lucide-react'
+﻿import { useCallback, useEffect, useMemo, useState } from 'react'
+import { ChevronDown, Clock3, TriangleAlert } from 'lucide-react'
 
 import { Button } from '../../components/common/Button'
 import { DataTable } from '../../components/common/DataTable'
@@ -26,6 +26,7 @@ export function OwnerDashboardPage() {
   const [processing, setProcessing] = useState(false)
   const [reviewingApprovalId, setReviewingApprovalId] = useState<string | null>(null)
   const [rejectionNotes, setRejectionNotes] = useState<Record<string, string>>({})
+  const [approvalsExpanded, setApprovalsExpanded] = useState<boolean | null>(null)
 
   const loadDashboard = useCallback(async () => {
     if (!token) {
@@ -68,6 +69,12 @@ export function OwnerDashboardPage() {
   useEffect(() => {
     void loadDashboard()
   }, [loadDashboard])
+
+  useEffect(() => {
+    if (approvals.length === 0) {
+      setApprovalsExpanded(null)
+    }
+  }, [approvals.length])
 
   const handleProcessReminders = async () => {
     if (!token) {
@@ -116,31 +123,79 @@ export function OwnerDashboardPage() {
   const portfolioSnapshot = portfolioOverview?.current_snapshot ?? null
   const monthlyCashFlow = portfolioSnapshot?.payload.cash_flow_summary.latest_monthly_snapshot ?? null
   const annualCashFlow = portfolioSnapshot?.payload.cash_flow_summary.latest_annual_snapshot ?? null
+  const summaryItems = useMemo(
+    () =>
+      summary
+        ? [
+            {
+              label: 'Active Residents',
+              value: summary.active_tenants,
+              hint: summary.active_tenants > 0 ? 'Live tenancies across the portfolio' : 'No active residents yet',
+            },
+            {
+              label: 'Open Tickets',
+              value: summary.open_tickets,
+              hint: summary.open_tickets > 0 ? 'Support issues currently in motion' : 'Support queue is quiet',
+            },
+            {
+              label: 'Overdue Rent',
+              value: summary.overdue_rent,
+              hint: summary.overdue_rent > 0 ? 'Collections need a review pass' : 'Collections are stable',
+            },
+            {
+              label: 'Reminders Pending',
+              value: summary.reminders_pending,
+              hint: summary.reminders_pending > 0 ? 'Scheduled follow-up still queued' : 'Reminder cycle is clear',
+            },
+            {
+              label: 'Unread Notices',
+              value: summary.unread_notifications,
+              hint: summary.unread_notifications > 0 ? 'Owner inbox has unread activity' : 'Inbox is fully reviewed',
+            },
+            {
+              label: 'Awaiting Approvals',
+              value: summary.awaiting_approvals,
+              hint: summary.awaiting_approvals > 0 ? 'Payment confirmations need review' : 'Approval queue is clear',
+            },
+          ]
+        : [],
+    [summary],
+  )
+  const isApprovalsExpanded = approvalsExpanded ?? approvals.length > 0
 
   return (
     <section className="ph-page-shell">
-      <div className="ph-surface-card-strong rounded-[1.7rem] p-6 sm:p-7 lg:p-8">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="ph-page-header">
-            <p className="ph-page-eyebrow">Owner Command Center</p>
-            <h2 className="ph-page-heading">Portfolio overview</h2>
-            <p className="ph-page-description max-w-2xl text-sm">
-              Monitor residents, support requests, reminders, and approvals from a calmer control surface.
-            </p>
-            <div className="pt-1">
-              <OrganizationBadge name={organizationLabel} slug={owner?.organization?.slug} />
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="ph-page-header">
+          <p className="ph-page-eyebrow">Portfolio Overview</p>
+          <h2 className="ph-page-heading">Dashboard</h2>
+          {summary ? (
+            <div className="space-y-1 text-sm text-[var(--ph-text-muted)]">
+              <p>
+                {summary.overdue_rent > 0
+                  ? `${summary.overdue_rent} overdue rent item${summary.overdue_rent === 1 ? '' : 's'} need review.`
+                  : 'Collections stable with no overdue rent items.'}
+              </p>
+              <p>
+                {summary.awaiting_approvals > 0
+                  ? `${summary.awaiting_approvals} payment approval${summary.awaiting_approvals === 1 ? '' : 's'} waiting for review.`
+                  : 'Approval queue is currently clear.'}
+              </p>
             </div>
+          ) : null}
+          <div className="pt-1">
+            <OrganizationBadge name={organizationLabel} slug={owner?.organization?.slug} />
           </div>
-          <Button
-            type="button"
-            onClick={() => void handleProcessReminders()}
-            disabled={processing}
-            variant="secondary"
-            iconLeft={<Clock3 className="h-4 w-4" />}
-          >
-            {processing ? 'Processing...' : 'Process reminder cycle'}
-          </Button>
         </div>
+        <Button
+          type="button"
+          onClick={() => void handleProcessReminders()}
+          disabled={processing}
+          variant="secondary"
+          iconLeft={<Clock3 className="h-4 w-4" />}
+        >
+          {processing ? 'Processing...' : 'Process reminders'}
+        </Button>
       </div>
 
       {error ? <ErrorState message={error} /> : null}
@@ -148,173 +203,102 @@ export function OwnerDashboardPage() {
 
       {!loading && summary ? (
         <>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            <SummaryCard label="Active Residents" value={summary.active_tenants} icon={<Users className="h-4 w-4" />} />
-            <SummaryCard label="Open Tickets" value={summary.open_tickets} icon={<LifeBuoy className="h-4 w-4" />} />
-            <SummaryCard label="Overdue Rent" value={summary.overdue_rent} icon={<TriangleAlert className="h-4 w-4" />} />
-            <SummaryCard label="Reminders Pending" value={summary.reminders_pending} icon={<Clock3 className="h-4 w-4" />} />
-            <SummaryCard
-              label="Unread Notices"
-              value={summary.unread_notifications}
-              icon={<Bell className="h-4 w-4" />}
-            />
-            <SummaryCard
-              label="Awaiting Approvals"
-              value={summary.awaiting_approvals}
-              icon={<CheckCheck className="h-4 w-4" />}
-            />
-          </div>
-
-          <div className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
-            <article className="ph-surface-card rounded-[1.5rem] p-5 sm:p-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Operational Focus</p>
-              <div className="mt-4 space-y-4 text-sm text-[var(--ph-text-soft)]">
-                <div>
-                  <p className="text-[var(--ph-text)]">{summary.overdue_rent > 0 ? 'Collections need attention' : 'Collections are currently stable'}</p>
-                  <p className="mt-1 text-[var(--ph-text-muted)]">
-                    {summary.overdue_rent > 0
-                      ? `${summary.overdue_rent} rent items are overdue and should be reviewed.`
-                      : 'No overdue rent items are currently flagged.'}
-                  </p>
+          <article className="ph-surface-card overflow-hidden p-0">
+            <div className="grid grid-cols-2 sm:grid-cols-3">
+              {summaryItems.map((item, index) => (
+                <div
+                  key={item.label}
+                  className={`min-w-0 border-[rgba(83,88,100,0.15)] ${
+                    index % 2 === 0 ? 'border-r' : ''
+                  } ${index < 4 ? 'border-b' : ''} ${index % 3 !== 2 ? 'sm:border-r' : 'sm:border-r-0'} ${
+                    index < 3 ? 'sm:border-b' : 'sm:border-b-0'
+                  }`}
+                >
+                  <SummaryCard label={item.label} value={item.value} hint={item.hint} />
                 </div>
-                <div>
-                  <p className="text-[var(--ph-text)]">{summary.awaiting_approvals > 0 ? 'Approval queue is active' : 'Approval queue is clear'}</p>
-                  <p className="mt-1 text-[var(--ph-text-muted)]">
-                    {summary.awaiting_approvals > 0
-                      ? `${summary.awaiting_approvals} resident payment confirmations are waiting for review.`
-                      : 'No resident payment confirmations are waiting for review.'}
-                  </p>
-                </div>
-              </div>
-            </article>
-
-            <article className="ph-surface-card rounded-[1.5rem] p-5 sm:p-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Automation Notes</p>
-              <ul className="mt-4 space-y-3 text-sm text-[var(--ph-text-soft)]">
-                <li>Reminder processing keeps scheduled follow-up disciplined across rent cycles.</li>
-                <li>Unread notices surface resident-facing activity that still needs attention.</li>
-                <li>Payment approvals stay human-led even when reminders and notifications are automated.</li>
-              </ul>
-            </article>
-          </div>
+              ))}
+            </div>
+          </article>
 
           {portfolioSnapshot ? (
-            <div className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
-              <article className="ph-surface-card rounded-[1.5rem] p-5 sm:p-6">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Portfolio Radar</p>
-                    <h3 className="mt-3 text-xl font-semibold text-[var(--ph-text)]">Current operating posture</h3>
-                    <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
-                      Live signals across rent exposure, service activity, compliance, and occupancy.
-                    </p>
-                  </div>
-                  <p className="text-xs text-[var(--ph-text-muted)]">
-                    Updated {formatDateTime(portfolioSnapshot.generated_at)}
+            <div className="space-y-4">
+              <p className="text-xs text-[var(--ph-text-muted)]">Portfolio snapshot · Updated {formatDateTime(portfolioSnapshot.generated_at)}</p>
+
+              <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                <div className="rounded-lg border border-white/8 bg-white/[0.025] p-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--ph-text-muted)]">Overdue Rent</p>
+                  <p className="mt-1.5 text-xl font-semibold text-[var(--ph-text)]">{portfolioSnapshot.overdue_rent_count}</p>
+                  <p className="mt-1 text-xs text-[var(--ph-text-muted)]">
+                    {portfolioSnapshot.payload.overdue_rent_items[0]
+                      ? `${portfolioSnapshot.payload.overdue_rent_items[0].tenant_name} needs review`
+                      : 'No overdue residents flagged'}
                   </p>
                 </div>
-
-                <div className="mt-5 grid gap-3 sm:grid-cols-2 2xl:grid-cols-3">
-                  <div className="rounded-[1.15rem] border border-white/8 bg-white/[0.025] p-4">
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">Overdue Rent</p>
-                    <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">{portfolioSnapshot.overdue_rent_count}</p>
-                    <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
-                      {portfolioSnapshot.payload.overdue_rent_items[0]
-                        ? `${portfolioSnapshot.payload.overdue_rent_items[0].tenant_name} needs review`
-                        : 'No overdue residents currently flagged'}
-                    </p>
-                  </div>
-                  <div className="rounded-[1.15rem] border border-white/8 bg-white/[0.025] p-4">
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">Urgent Tickets</p>
-                    <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">
-                      {portfolioSnapshot.urgent_open_ticket_count}
-                    </p>
-                    <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
-                      {portfolioSnapshot.payload.ticket_highlights.urgent_open[0]
-                        ? portfolioSnapshot.payload.ticket_highlights.urgent_open[0].subject
-                        : 'No urgent maintenance or support signals'}
-                    </p>
-                  </div>
-                  <div className="rounded-[1.15rem] border border-white/8 bg-white/[0.025] p-4">
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">
-                      Compliance Horizon
-                    </p>
-                    <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">
-                      {portfolioSnapshot.upcoming_compliance_count}
-                    </p>
-                    <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
-                      {portfolioSnapshot.payload.compliance_highlights[0]
-                        ? `${portfolioSnapshot.payload.compliance_highlights[0].trigger_label} in ${portfolioSnapshot.payload.compliance_highlights[0].days_remaining} days`
-                        : 'No milestones inside the active reminder window'}
-                    </p>
-                  </div>
-                  <div className="rounded-[1.15rem] border border-white/8 bg-white/[0.025] p-4">
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">Occupancy</p>
-                    <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">
-                      {portfolioSnapshot.occupied_property_count}/{portfolioSnapshot.occupied_property_count + portfolioSnapshot.vacant_property_count}
-                    </p>
-                    <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
-                      {portfolioSnapshot.vacant_property_count > 0
-                        ? `${portfolioSnapshot.vacant_property_count} unit${portfolioSnapshot.vacant_property_count === 1 ? '' : 's'} currently vacant`
-                        : 'No current vacancy highlights'}
-                    </p>
-                  </div>
-                  <div className="rounded-[1.15rem] border border-white/8 bg-white/[0.025] p-4">
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">
-                      Latest Net Income
-                    </p>
-                    <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">
-                      {monthlyCashFlow
-                        ? formatCurrency(monthlyCashFlow.portfolio_net_income, monthlyCashFlow.currency_code)
-                        : 'N/A'}
-                    </p>
-                    <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
-                      {monthlyCashFlow?.report_label ?? 'Monthly cash-flow snapshot not generated yet'}
-                    </p>
-                  </div>
-                  <div className="rounded-[1.15rem] border border-white/8 bg-white/[0.025] p-4">
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ph-text-muted)]">
-                      Trailing Yield
-                    </p>
-                    <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">
-                      {typeof annualCashFlow?.portfolio_yield_percent === 'number'
-                        ? `${annualCashFlow.portfolio_yield_percent}%`
-                        : 'N/A'}
-                    </p>
-                    <p className="mt-1 text-sm text-[var(--ph-text-muted)]">
-                      {annualCashFlow?.report_label ?? 'Annual yield signal not generated yet'}
-                    </p>
-                  </div>
+                <div className="rounded-lg border border-white/8 bg-white/[0.025] p-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--ph-text-muted)]">Urgent Tickets</p>
+                  <p className="mt-1.5 text-xl font-semibold text-[var(--ph-text)]">{portfolioSnapshot.urgent_open_ticket_count}</p>
+                  <p className="mt-1 text-xs text-[var(--ph-text-muted)]">
+                    {portfolioSnapshot.payload.ticket_highlights.urgent_open[0]
+                      ? portfolioSnapshot.payload.ticket_highlights.urgent_open[0].subject
+                      : 'No urgent signals'}
+                  </p>
                 </div>
-              </article>
+                <div className="rounded-lg border border-white/8 bg-white/[0.025] p-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--ph-text-muted)]">Compliance</p>
+                  <p className="mt-1.5 text-xl font-semibold text-[var(--ph-text)]">{portfolioSnapshot.upcoming_compliance_count}</p>
+                  <p className="mt-1 text-xs text-[var(--ph-text-muted)]">
+                    {portfolioSnapshot.payload.compliance_highlights[0]
+                      ? `${portfolioSnapshot.payload.compliance_highlights[0].trigger_label} in ${portfolioSnapshot.payload.compliance_highlights[0].days_remaining}d`
+                      : 'No upcoming milestones'}
+                  </p>
+                </div>
+                <div className="rounded-lg border border-white/8 bg-white/[0.025] p-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--ph-text-muted)]">Occupancy</p>
+                  <p className="mt-1.5 text-xl font-semibold text-[var(--ph-text)]">
+                    {portfolioSnapshot.occupied_property_count}/{portfolioSnapshot.occupied_property_count + portfolioSnapshot.vacant_property_count}
+                  </p>
+                  <p className="mt-1 text-xs text-[var(--ph-text-muted)]">
+                    {portfolioSnapshot.vacant_property_count > 0 ? `${portfolioSnapshot.vacant_property_count} vacant` : 'Fully occupied'}
+                  </p>
+                </div>
+                <div className="rounded-lg border border-white/8 bg-white/[0.025] p-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--ph-text-muted)]">Net Income</p>
+                  <p className="mt-1.5 text-xl font-semibold text-[var(--ph-text)]">
+                    {monthlyCashFlow ? formatCurrency(monthlyCashFlow.portfolio_net_income, monthlyCashFlow.currency_code) : 'N/A'}
+                  </p>
+                  <p className="mt-1 text-xs text-[var(--ph-text-muted)]">{monthlyCashFlow?.report_label ?? 'Not generated yet'}</p>
+                </div>
+                <div className="rounded-lg border border-white/8 bg-white/[0.025] p-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--ph-text-muted)]">Yield</p>
+                  <p className="mt-1.5 text-xl font-semibold text-[var(--ph-text)]">
+                    {typeof annualCashFlow?.portfolio_yield_percent === 'number' ? `${annualCashFlow.portfolio_yield_percent}%` : 'N/A'}
+                  </p>
+                  <p className="mt-1 text-xs text-[var(--ph-text-muted)]">{annualCashFlow?.report_label ?? 'Not generated yet'}</p>
+                </div>
+              </div>
 
-              <article className="ph-surface-card rounded-[1.5rem] p-5 sm:p-6">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Recent Alerts</p>
-                <div className="mt-4 space-y-3">
-                  {portfolioOverview?.recent_alerts.length ? (
-                    portfolioOverview.recent_alerts.slice(0, 5).map((alert) => (
-                      <div key={alert.id} className="rounded-[1.05rem] border border-white/8 bg-white/[0.025] p-3.5">
-                        <div className="flex items-start justify-between gap-3">
-                          <div>
-                            <p className="text-sm font-medium text-[var(--ph-text)]">{alert.title}</p>
-                            <p className="mt-1 text-sm leading-relaxed text-[var(--ph-text-muted)]">{alert.message}</p>
-                          </div>
-                          <p className="text-[11px] text-[var(--ph-text-muted)]">{formatDateTime(alert.created_at)}</p>
+              <div className="space-y-2">
+                <p className="text-xs text-[var(--ph-text-muted)]">Recent alerts</p>
+                {portfolioOverview?.recent_alerts.length ? (
+                  portfolioOverview.recent_alerts.slice(0, 5).map((alert) => (
+                    <div key={alert.id} className="rounded-lg border border-white/8 bg-white/[0.025] p-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-medium text-[var(--ph-text)]">{alert.title}</p>
+                          <p className="mt-0.5 text-xs leading-relaxed text-[var(--ph-text-muted)]">{alert.message}</p>
                         </div>
+                        <p className="text-[10px] text-[var(--ph-text-muted)]">{formatDateTime(alert.created_at)}</p>
                       </div>
-                    ))
-                  ) : (
-                    <EmptyState
-                      title="No recent alerts"
-                      description="Portfolio alerts and digests will appear here as automation activity is generated."
-                      icon={<Bell className="h-5 w-5" />}
-                    />
-                  )}
-                </div>
-              </article>
+                    </div>
+                  ))
+                ) : (
+                  <p className="rounded-lg border border-white/8 bg-white/[0.025] px-3 py-2 text-sm text-[var(--ph-text-muted)]">
+                    No recent alerts yet.
+                  </p>
+                )}
+              </div>
             </div>
           ) : null}
-
         </>
       ) : null}
 
@@ -329,83 +313,87 @@ export function OwnerDashboardPage() {
       ) : null}
 
       {!loading ? (
-        <div className="space-y-4">
-          <div>
-            <h3 className="ph-title text-2xl font-semibold text-[var(--ph-text)]">Awaiting approvals</h3>
-            <p className="text-sm text-[var(--ph-text-muted)]">
-              Review resident rent payment confirmations pending your verification.
-            </p>
-          </div>
+        <div className="space-y-3">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="justify-start px-0 text-sm font-semibold text-[var(--ph-text)] hover:bg-transparent"
+            onClick={() => setApprovalsExpanded((current) => !(current ?? (approvals.length > 0)))}
+            iconRight={<ChevronDown className={`h-4 w-4 transition-transform ${isApprovalsExpanded ? 'rotate-180' : ''}`} />}
+          >
+            Pending Approvals ({approvals.length})
+          </Button>
 
-          {approvals.length === 0 ? (
-            <EmptyState
-              title="No rent approvals pending"
-              description="Resident payment confirmations will appear here when submitted."
-              icon={<CheckCheck className="h-5 w-5" />}
-            />
-          ) : (
-            <DataTable headers={['Resident', 'Property', 'Due Date', 'Amount', 'Requested', 'Status', 'Actions']}>
-              {approvals.map((approval) => (
-                <tr key={approval.id}>
-                  <td className="px-4 py-3">
-                    <p className="font-medium text-[var(--ph-text)]">{approval.tenants?.full_name ?? '-'}</p>
-                    <p className="text-xs text-[var(--ph-text-muted)]">{approval.tenants?.tenant_access_id ?? '-'}</p>
-                  </td>
-                  <td className="px-4 py-3 text-[var(--ph-text-soft)]">
-                    {approval.properties?.property_name ?? '-'}
-                    {approval.properties?.unit_number ? ` (${approval.properties.unit_number})` : ''}
-                  </td>
-                  <td className="px-4 py-3 text-[var(--ph-text-soft)]">{formatDate(approval.due_date)}</td>
-                  <td className="px-4 py-3 text-[var(--ph-text-soft)]">
-                    {formatCurrency(approval.amount_paid, owner?.organization?.currency_code)}
-                  </td>
-                  <td className="px-4 py-3 text-[var(--ph-text-muted)]">{formatDateTime(approval.created_at)}</td>
-                  <td className="px-4 py-3">
-                    <StatusBadge status={approval.status} />
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex min-w-[280px] flex-col gap-2">
-                      <FormInput
-                        label="Reject note"
-                        hideLabel
-                        wrapperClassName="gap-0"
-                        className="min-h-11 rounded-xl px-3 py-2 text-sm"
-                        placeholder="Optional reject note"
-                        value={rejectionNotes[approval.id] ?? ''}
-                        onChange={(event) =>
-                          setRejectionNotes((current) => ({
-                            ...current,
-                            [approval.id]: event.target.value,
-                          }))
-                        }
-                      />
-                      <div className="flex gap-2">
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="primary"
-                          disabled={reviewingApprovalId === approval.id}
-                          onClick={() => void handleReviewApproval(approval.id, 'approve')}
-                        >
-                          Approve
-                        </Button>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="outline"
-                          className="border-red-500/28 bg-red-500/10 text-red-200 hover:bg-red-500/16"
-                          disabled={reviewingApprovalId === approval.id}
-                          onClick={() => void handleReviewApproval(approval.id, 'reject')}
-                        >
-                          Reject
-                        </Button>
+          {isApprovalsExpanded ? (
+            approvals.length === 0 ? (
+              <p className="rounded-lg border border-white/8 bg-white/[0.025] px-3 py-2 text-sm text-[var(--ph-text-muted)]">
+                No rent approvals are pending right now.
+              </p>
+            ) : (
+              <DataTable headers={['Resident', 'Property', 'Due Date', 'Amount', 'Requested', 'Status', 'Actions']}>
+                {approvals.map((approval) => (
+                  <tr key={approval.id}>
+                    <td className="px-4 py-3">
+                      <p className="font-medium text-[var(--ph-text)]">{approval.tenants?.full_name ?? '-'}</p>
+                      <p className="text-xs text-[var(--ph-text-muted)]">{approval.tenants?.tenant_access_id ?? '-'}</p>
+                    </td>
+                    <td className="px-4 py-3 text-[var(--ph-text-soft)]">
+                      {approval.properties?.property_name ?? '-'}
+                      {approval.properties?.unit_number ? ` (${approval.properties.unit_number})` : ''}
+                    </td>
+                    <td className="px-4 py-3 text-[var(--ph-text-soft)]">{formatDate(approval.due_date)}</td>
+                    <td className="px-4 py-3 text-[var(--ph-text-soft)]">
+                      {formatCurrency(approval.amount_paid, owner?.organization?.currency_code)}
+                    </td>
+                    <td className="px-4 py-3 text-[var(--ph-text-muted)]">{formatDateTime(approval.created_at)}</td>
+                    <td className="px-4 py-3">
+                      <StatusBadge status={approval.status} />
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex min-w-[280px] flex-col gap-2">
+                        <FormInput
+                          label="Reject note"
+                          hideLabel
+                          wrapperClassName="gap-0"
+                          className="min-h-11 rounded-xl px-3 py-2 text-sm"
+                          placeholder="Optional reject note"
+                          value={rejectionNotes[approval.id] ?? ''}
+                          onChange={(event) =>
+                            setRejectionNotes((current) => ({
+                              ...current,
+                              [approval.id]: event.target.value,
+                            }))
+                          }
+                        />
+                        <div className="flex gap-2">
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="primary"
+                            disabled={reviewingApprovalId === approval.id}
+                            onClick={() => void handleReviewApproval(approval.id, 'approve')}
+                          >
+                            Approve
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            className="border-red-500/28 bg-red-500/10 text-red-200 hover:bg-red-500/16"
+                            disabled={reviewingApprovalId === approval.id}
+                            onClick={() => void handleReviewApproval(approval.id, 'reject')}
+                          >
+                            Reject
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </DataTable>
-          )}
+                    </td>
+                  </tr>
+                ))}
+              </DataTable>
+            )
+          ) : null}
         </div>
       ) : null}
     </section>

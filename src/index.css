@@ -142,17 +142,17 @@ a {
 
 .ph-page-shell {
   display: grid;
-  gap: 1.75rem;
+  gap: 2rem;
 }
 
 .ph-page-header {
   display: grid;
-  gap: 0.8rem;
+  gap: 0.5rem;
   max-width: 60rem;
 }
 
 .ph-page-eyebrow {
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -161,7 +161,7 @@ a {
 
 .ph-page-heading {
   font-family: 'Sora', ui-sans-serif, system-ui, sans-serif;
-  font-size: clamp(1.9rem, 4vw, 3rem);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
   font-weight: 600;
   letter-spacing: -0.04em;
   color: var(--ph-text);
@@ -170,13 +170,13 @@ a {
 .ph-page-description {
   max-width: 50rem;
   color: var(--ph-text-muted);
-  font-size: 0.98rem;
-  line-height: 1.75;
+  font-size: 0.9rem;
+  line-height: 1.7;
 }
 
 @media (min-width: 1024px) {
   .ph-page-shell {
-    gap: 2.25rem;
+    gap: 2.5rem;
   }
 }
 
@@ -184,43 +184,31 @@ a {
 .tf-panel {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(83, 88, 100, 0.44);
-  border-radius: 1.4rem;
-  background: linear-gradient(180deg, rgba(23, 29, 46, 0.94), rgba(13, 18, 30, 0.98));
-  box-shadow: var(--ph-shadow-card);
-  backdrop-filter: blur(18px);
-}
-
-.ph-surface-card::after,
-.tf-panel::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 18%);
-  pointer-events: none;
+  border: 1px solid rgba(83, 88, 100, 0.3);
+  border-radius: 0.875rem;
+  background: rgba(19, 24, 38, 0.94);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24);
 }
 
 .ph-surface-card-soft,
 .tf-panel-soft {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(83, 88, 100, 0.48);
-  border-radius: 1.3rem;
-  background: linear-gradient(180deg, rgba(17, 23, 37, 0.92), rgba(12, 16, 27, 0.94));
-  box-shadow: var(--ph-shadow-soft);
-  backdrop-filter: blur(14px);
+  border: 1px solid rgba(83, 88, 100, 0.3);
+  border-radius: 0.875rem;
+  background: rgba(17, 23, 37, 0.92);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .ph-surface-card-strong {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(240, 163, 35, 0.16);
-  border-radius: 1.6rem;
+  border: 1px solid rgba(240, 163, 35, 0.12);
+  border-radius: 0.875rem;
   background:
-    radial-gradient(circle at 0% 0%, rgba(240, 163, 35, 0.1), transparent 28%),
-    linear-gradient(155deg, rgba(27, 36, 58, 0.98), rgba(11, 22, 51, 0.9) 42%, rgba(12, 17, 32, 0.98));
-  box-shadow: var(--ph-shadow-card), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    radial-gradient(circle at 0% 0%, rgba(240, 163, 35, 0.06), transparent 30%),
+    rgba(19, 26, 42, 0.96);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .ph-surface-panel {
@@ -321,32 +309,25 @@ a {
 .ph-form-panel {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(83, 88, 100, 0.4);
-  background:
-    radial-gradient(circle at 0% 0%, rgba(240, 163, 35, 0.06), transparent 24%),
-    linear-gradient(180deg, rgba(18, 23, 37, 0.96), rgba(11, 15, 27, 0.98));
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 24px 60px -52px rgba(0, 0, 0, 0.84);
-  backdrop-filter: blur(18px);
+  border: 1px solid rgba(83, 88, 100, 0.3);
+  border-radius: 0.875rem;
+  background: rgba(18, 23, 37, 0.96);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24);
 }
 
 .ph-form-toolbar {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(83, 88, 100, 0.38);
-  background:
-    linear-gradient(180deg, rgba(18, 24, 38, 0.92), rgba(11, 16, 28, 0.96));
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 20px 48px -40px rgba(0, 0, 0, 0.78);
-  backdrop-filter: blur(16px);
+  border: 1px solid rgba(83, 88, 100, 0.28);
+  border-radius: 0.875rem;
+  background: rgba(18, 24, 38, 0.92);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .tf-panel-inset {
-  border: 1px solid rgba(83, 88, 100, 0.38);
+  border: 1px solid rgba(83, 88, 100, 0.28);
   background: rgba(255, 255, 255, 0.025);
-  border-radius: 1rem;
+  border-radius: 0.625rem;
 }
 
 .ph-form-control,
@@ -354,30 +335,26 @@ a {
 .ph-form-textarea,
 .tf-field {
   width: 100%;
-  border: 1px solid rgba(83, 88, 100, 0.48);
-  border-radius: 1.15rem;
-  background:
-    linear-gradient(180deg, rgba(12, 19, 34, 0.9), rgba(10, 14, 25, 0.98));
+  border: 1px solid rgba(83, 88, 100, 0.38);
+  border-radius: 0.625rem;
+  background: rgba(12, 19, 34, 0.92);
   color: var(--ph-text);
-  min-height: 3.35rem;
-  padding: 0.88rem 1rem;
+  min-height: 2.75rem;
+  padding: 0.625rem 0.875rem;
   outline: none;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    0 14px 30px -26px rgba(0, 0, 0, 0.72);
+  box-shadow: none;
   appearance: none;
   -webkit-appearance: none;
   color-scheme: dark;
   transition:
     border-color 160ms ease,
     box-shadow 160ms ease,
-    background-color 160ms ease,
-    transform 160ms ease;
+    background-color 160ms ease;
 }
 
 .ph-form-textarea,
 textarea.tf-field {
-  min-height: 8rem;
+  min-height: 6rem;
   resize: vertical;
 }
 
@@ -392,22 +369,17 @@ textarea.tf-field {
 .ph-form-select:hover,
 .ph-form-textarea:hover,
 .tf-field:hover {
-  border-color: rgba(151, 105, 34, 0.42);
-  background:
-    linear-gradient(180deg, rgba(13, 21, 37, 0.94), rgba(10, 14, 25, 1));
+  border-color: rgba(151, 105, 34, 0.38);
+  background: rgba(13, 21, 37, 0.96);
 }
 
 .ph-form-control:focus,
 .ph-form-select:focus,
 .ph-form-textarea:focus,
 .tf-field:focus {
-  border-color: rgba(240, 163, 35, 0.68);
-  box-shadow:
-    0 0 0 3px rgba(240, 163, 35, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 22px 42px -30px rgba(0, 0, 0, 0.84);
-  background:
-    linear-gradient(180deg, rgba(14, 22, 38, 0.98), rgba(10, 14, 25, 1));
+  border-color: rgba(240, 163, 35, 0.6);
+  box-shadow: 0 0 0 2px rgba(240, 163, 35, 0.12);
+  background: rgba(14, 22, 38, 0.98);
 }
 
 .ph-form-control:disabled,
@@ -415,11 +387,10 @@ textarea.tf-field {
 .ph-form-textarea:disabled,
 .tf-field:disabled {
   cursor: not-allowed;
-  border-color: rgba(83, 88, 100, 0.32);
+  border-color: rgba(83, 88, 100, 0.24);
   color: rgba(151, 153, 158, 0.88);
-  background:
-    linear-gradient(180deg, rgba(12, 17, 28, 0.82), rgba(10, 14, 25, 0.92));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  background: rgba(12, 17, 28, 0.82);
+  box-shadow: none;
 }
 
 .ph-form-control::-webkit-calendar-picker-indicator,
