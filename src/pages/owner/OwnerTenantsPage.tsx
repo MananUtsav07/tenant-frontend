@@ -267,7 +267,7 @@ export function OwnerTenantsPage() {
                   'tenants.csv',
                   ['Name', 'Email', 'Phone', 'Property', 'Monthly Rent', 'Payment Status', 'Lease Start', 'Lease End'],
                   tenants.map((t) => [
-                    t.full_name, t.email ?? '', t.phone ?? '', t.property_name ?? '',
+                    t.full_name, t.email ?? '', t.phone ?? '', properties.find((p) => p.id === t.property_id)?.property_name ?? '',
                     String(t.monthly_rent), t.payment_status, t.lease_start_date ?? '', t.lease_end_date ?? '',
                   ]),
                 )
