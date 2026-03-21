@@ -131,7 +131,7 @@ export function FeaturesPage() {
             <motion.article
               key={pillar.title}
               variants={revealVariants}
-              className="rounded-[1.5rem] border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-5"
+              className="rounded-xl border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-5"
             >
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">{pillar.title}</p>
               <p className="mt-3 text-sm leading-relaxed text-[var(--ph-text-muted)]">{pillar.description}</p>

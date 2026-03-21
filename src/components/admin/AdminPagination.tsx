@@ -9,7 +9,7 @@ type AdminPaginationProps = {
 
 export function AdminPagination({ page, totalPages, totalItems, onPageChange }: AdminPaginationProps) {
   return (
-    <div className="ph-form-toolbar flex flex-wrap items-center justify-between gap-3 rounded-[1.5rem] p-4 sm:p-5">
+    <div className="ph-form-toolbar flex flex-wrap items-center justify-between gap-3 rounded-xl p-4 sm:p-5">
       <p className="text-sm text-[var(--ph-text-muted)]">
         Page {page} of {totalPages} - {totalItems} total
       </p>

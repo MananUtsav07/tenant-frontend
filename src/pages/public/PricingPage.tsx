@@ -111,7 +111,7 @@ export function PricingPage() {
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="mt-8 grid gap-3 rounded-[1.6rem] border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-5 md:grid-cols-2"
+          className="mt-8 grid gap-3 rounded-xl border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-5 md:grid-cols-2"
         >
           {inclusions.map((item) => (
             <p key={item} className="text-sm text-[var(--ph-text-soft)]">

@@ -56,7 +56,7 @@ export function ProductBenefitsSection() {
             <motion.article
               key={benefit.title}
               variants={revealVariants}
-              className="ph-surface-card-soft rounded-[1.35rem] p-5 sm:p-6"
+              className="ph-surface-card-soft rounded-lg p-5 sm:p-6"
             >
               <div className="inline-flex h-10 w-10 items-center justify-center rounded-[1rem] border border-[rgba(240,163,35,0.16)] bg-[rgba(240,163,35,0.06)] text-[var(--ph-accent)]">
                 {benefit.icon}

@@ -7,7 +7,7 @@ import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { FormInput } from '../../components/common/FormInput'
 import { LoadingState } from '../../components/common/LoadingState'
-import { dashboardFormPanelClassName } from '../../components/common/formTheme'
+import { Modal } from '../../components/common/Modal'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { api } from '../../services/api'
 import type { Broker } from '../../types/api'
@@ -150,30 +150,26 @@ export function OwnerBrokersPage() {
         </div>
         <Button
           type="button"
-          variant={showForm ? 'secondary' : 'primary'}
+          variant="primary"
           size="sm"
-          onClick={() => {
-            if (showForm) {
-              resetForm()
-              return
-            }
-            setShowForm(true)
-          }}
+          onClick={() => setShowForm(true)}
         >
           <UserRoundPlus className="h-4 w-4" />
-          {showForm ? 'Cancel' : 'Add Broker'}
+          Add Broker
         </Button>
       </div>
 
       {error ? <ErrorState message={error} /> : null}
       {loading ? <LoadingState message="Loading brokers..." rows={4} /> : null}
 
-      {showForm ? (
-        <form className={`${dashboardFormPanelClassName} rounded-[1.5rem] p-5`} onSubmit={(event) => void handleSubmit(event)}>
-          <h3 className="ph-title text-lg font-semibold text-[var(--ph-text)]">
-            {editingBrokerId ? 'Edit Broker' : 'Add Broker'}
-          </h3>
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
+      <Modal
+        isOpen={showForm}
+        onClose={resetForm}
+        title={editingBrokerId ? 'Edit Broker' : 'Add Broker'}
+        size="md"
+      >
+        <form onSubmit={(event) => void handleSubmit(event)} className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2">
             <FormInput
               label="Broker Name"
               name="broker_full_name"
@@ -207,9 +203,8 @@ export function OwnerBrokersPage() {
             name="broker_notes"
             value={form.notes}
             onChange={(event) => setForm((current) => ({ ...current, notes: event.target.value }))}
-            className="mt-4"
           />
-          <label className="mt-4 inline-flex items-center gap-2 text-sm text-[var(--ph-text-soft)]">
+          <label className="inline-flex items-center gap-2 text-sm text-[var(--ph-text-soft)]">
             <input
               type="checkbox"
               checked={form.is_active}
@@ -217,16 +212,13 @@ export function OwnerBrokersPage() {
             />
             Broker is active
           </label>
-          <div className="mt-5 flex justify-end gap-2">
-            <Button type="button" variant="secondary" size="sm" onClick={resetForm}>
-              Cancel
-            </Button>
+          <div className="flex justify-end">
             <Button type="submit" size="sm" disabled={busy}>
               {busy ? 'Saving...' : editingBrokerId ? 'Save Broker' : 'Create Broker'}
             </Button>
           </div>
         </form>
-      ) : null}
+      </Modal>
 
       {!loading && brokers.length === 0 ? (
         <EmptyState

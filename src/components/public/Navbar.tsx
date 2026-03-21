@@ -213,7 +213,7 @@ export function Navbar() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -6 }}
                       transition={{ duration: 0.16 }}
-                      className="absolute right-0 mt-2 w-48 rounded-[1.25rem] border border-[rgba(83,88,100,0.38)] bg-[linear-gradient(180deg,rgba(20,26,40,0.98),rgba(11,16,27,1))] p-1.5 shadow-[0_18px_34px_-22px_rgba(0,0,0,0.82)]"
+                      className="absolute right-0 mt-2 w-48 rounded-lg border border-[rgba(83,88,100,0.38)] bg-[linear-gradient(180deg,rgba(20,26,40,0.98),rgba(11,16,27,1))] p-1.5 shadow-[0_18px_34px_-22px_rgba(0,0,0,0.82)]"
                     >
                       <button
                         type="button"
@@ -258,7 +258,7 @@ export function Navbar() {
                   to={item.to}
                   onClick={() => setOpen(false)}
                   className={({ isActive }) =>
-                    `block rounded-[1.1rem] px-4 py-3 text-sm ${
+                    `block rounded-lg px-4 py-3 text-sm ${
                       isActive
                         ? 'border border-[rgba(240,163,35,0.18)] bg-[rgba(240,163,35,0.06)] text-[#f4d298]'
                         : 'text-[var(--ph-text-soft)] hover:bg-white/[0.03] hover:text-[var(--ph-text)]'
@@ -295,7 +295,7 @@ export function Navbar() {
                   <Button to={activeSession.dashboardTo} variant="secondary" onClick={() => setOpen(false)}>
                     {activeSession.dashboardLabel}
                   </Button>
-                  <div className="mt-1 inline-flex items-center gap-3 rounded-[1.1rem] border border-[rgba(83,88,100,0.32)] bg-white/[0.025] px-4 py-3">
+                  <div className="mt-1 inline-flex items-center gap-3 rounded-lg border border-[rgba(83,88,100,0.32)] bg-white/[0.025] px-4 py-3">
                     <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(240,163,35,0.24)] bg-[rgba(240,163,35,0.12)] text-xs font-semibold uppercase tracking-wide text-[#f3d49a]">
                       {avatarInitials}
                     </span>

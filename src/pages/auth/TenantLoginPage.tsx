@@ -53,7 +53,7 @@ export function TenantLoginPage() {
   return (
     <SectionContainer size="wide" className="py-12">
       <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-        <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce} className="ph-surface-navy ph-hex-bg rounded-[1.8rem] p-6 sm:p-7">
+        <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce} className="ph-surface-navy ph-hex-bg rounded-xl p-6 sm:p-7">
           <span className="ph-kicker">Resident Workspace</span>
           <h1 className="ph-title mt-5 text-4xl font-semibold text-[var(--ph-text)]">A cleaner support and rent experience for residents</h1>
           <p className="mt-4 text-base leading-relaxed text-[var(--ph-text-muted)]">
@@ -80,7 +80,7 @@ export function TenantLoginPage() {
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="ph-surface-card-strong rounded-[1.9rem] p-7"
+          className="ph-surface-card-strong rounded-xl p-7"
         >
           <h2 className="ph-title text-3xl font-semibold text-[var(--ph-text)]">Resident Login</h2>
           <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Access your property support workspace.</p>

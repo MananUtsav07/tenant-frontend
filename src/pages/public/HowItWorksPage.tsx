@@ -77,7 +77,7 @@ export function HowItWorksPage() {
             <motion.li
               key={step.title}
               variants={revealVariants}
-              className="ph-surface-card rounded-[1.7rem] p-5 sm:pl-20"
+              className="ph-surface-card rounded-xl p-5 sm:pl-20"
             >
               <div className="mb-3 flex items-center gap-3 sm:absolute sm:left-4 sm:top-5">
                 <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-[rgba(240,163,35,0.18)] bg-[rgba(240,163,35,0.08)] text-[var(--ph-accent)]">

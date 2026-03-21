@@ -1,6 +1,7 @@
 import { lazy, Suspense, type ComponentType } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
+import { ErrorBoundary } from '../components/common/ErrorBoundary'
 import { usePageAnalytics } from '../hooks/usePageAnalytics'
 import { useAdminAuth } from '../hooks/useAdminAuth'
 import { AdminLayout } from '../layouts/AdminLayout'
@@ -175,14 +176,16 @@ export function App() {
   usePageAnalytics()
 
   return (
-    <Suspense
-      fallback={
-        <div className="ph-prophives-bg flex min-h-screen items-center justify-center px-6 text-sm text-[var(--ph-text-muted)]">
-          Loading page...
-        </div>
-      }
-    >
-      <AppRoutes />
-    </Suspense>
+    <ErrorBoundary>
+      <Suspense
+        fallback={
+          <div className="ph-prophives-bg flex min-h-screen items-center justify-center px-6 text-sm text-[var(--ph-text-muted)]">
+            Loading page...
+          </div>
+        }
+      >
+        <AppRoutes />
+      </Suspense>
+    </ErrorBoundary>
   )
 }

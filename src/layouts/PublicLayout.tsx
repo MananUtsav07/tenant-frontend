@@ -25,9 +25,9 @@ export function PublicLayout() {
   }
 
   return (
-    <div className="ph-prophives-bg min-h-screen text-[var(--ph-text)]">
+    <div className="ph-prophives-bg flex min-h-screen flex-col text-[var(--ph-text)]">
       <Navbar />
-      <main className="relative overflow-hidden">
+      <main className="relative flex-1 overflow-hidden">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={location.pathname}

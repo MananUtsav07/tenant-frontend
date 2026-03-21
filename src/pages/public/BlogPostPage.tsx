@@ -75,9 +75,9 @@ export function BlogPostPage() {
       {loading ? <div className="mt-6"><LoadingState message="Loading article..." variant="message" /></div> : null}
 
       {!loading && post ? (
-        <article className="ph-surface-card mt-6 rounded-[1.8rem] p-6 md:p-8">
+        <article className="ph-surface-card mt-6 rounded-xl p-6 md:p-8">
           {post.cover_image ? (
-            <img src={post.cover_image} alt={post.title} loading="lazy" className="mb-6 h-64 w-full rounded-[1.4rem] object-cover" />
+            <img src={post.cover_image} alt={post.title} loading="lazy" className="mb-6 h-64 w-full rounded-xl object-cover" />
           ) : null}
 
           <p className="text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">{formatDate(post.created_at)}</p>

@@ -10,7 +10,7 @@ export function LoadingState({ message = 'Loading...', variant = 'skeleton', row
     <div
       className={`rounded-2xl border p-6 text-sm ${
         tone === 'light'
-          ? 'border-[rgba(83,88,100,0.56)] bg-[linear-gradient(180deg,rgba(26,34,56,0.94),rgba(16,21,34,0.98))] text-[var(--ph-text)] shadow-[0_16px_42px_-34px_rgba(0,0,0,0.72)]'
+          ? 'border-[rgba(83,88,100,0.18)] bg-[var(--ph-surface)] text-[var(--ph-text)]'
           : 'border-slate-800 bg-slate-900/60 text-slate-300'
       }`}
     >

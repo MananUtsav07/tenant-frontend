@@ -176,7 +176,7 @@ export function OwnerAutomationPage() {
 
   return (
     <section className="ph-page-shell">
-      <div className="ph-surface-card-strong rounded-[1.9rem] p-6">
+      <div className="ph-surface-card-strong rounded-xl p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f1cb85]">Automation Center</p>
@@ -391,7 +391,7 @@ export function OwnerAutomationPage() {
                 icon={<Mail className="h-5 w-5" />}
               >
                 <div className="space-y-3">
-                  <div className="rounded-[1.25rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
+                  <div className="rounded-lg border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
                     <div className="flex items-center justify-between gap-3">
                       <div>
                         <p className="text-sm font-semibold text-[var(--ph-text)]">Email delivery</p>
@@ -400,7 +400,7 @@ export function OwnerAutomationPage() {
                       <AutomationStatusBadge status="healthy" label="Live" />
                     </div>
                   </div>
-                  <div className="rounded-[1.25rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
+                  <div className="rounded-lg border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
                     <div className="flex items-center justify-between gap-3">
                       <div>
                         <p className="text-sm font-semibold text-[var(--ph-text)]">Dashboard notifications</p>
@@ -409,7 +409,7 @@ export function OwnerAutomationPage() {
                       <AutomationStatusBadge status="healthy" label="Live" />
                     </div>
                   </div>
-                  <div className="rounded-[1.25rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
+                  <div className="rounded-lg border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
                     <div className="flex items-center justify-between gap-3">
                       <div>
                         <p className="text-sm font-semibold text-[var(--ph-text)]">WhatsApp abstraction</p>
@@ -421,7 +421,7 @@ export function OwnerAutomationPage() {
                       />
                     </div>
                   </div>
-                  <div className="rounded-[1.25rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
+                  <div className="rounded-lg border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
                     <div className="flex items-center justify-between gap-3">
                       <div>
                         <p className="text-sm font-semibold text-[var(--ph-text)]">Internal command surfaces</p>
@@ -445,7 +445,7 @@ export function OwnerAutomationPage() {
                 }
               >
                 <div className="grid gap-3 sm:grid-cols-2">
-                  <div className="rounded-[1.25rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
+                  <div className="rounded-lg border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
                     <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Last run</p>
                     <p className="mt-2 text-sm font-semibold text-[var(--ph-text)]">
                       {lastRun ? formatDateTime(lastRun.completed_at ?? lastRun.started_at) : 'No runs recorded'}
@@ -454,7 +454,7 @@ export function OwnerAutomationPage() {
                       {lastRun ? `${lastRun.flow_name.replaceAll('_', ' ')} processed ${lastRun.processed_count}` : 'The scheduler has not logged an org-scoped run yet.'}
                     </p>
                   </div>
-                  <div className="rounded-[1.25rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
+                  <div className="rounded-lg border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
                     <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Next cadence</p>
                     <p className="mt-2 text-sm font-semibold text-[var(--ph-text)]">{getExpectedNextCycle(settings)}</p>
                     <p className="mt-1 text-xs text-[var(--ph-text-muted)]">

@@ -139,7 +139,7 @@ export function OwnerAutomationActivityPage() {
 
   return (
     <section className="ph-page-shell">
-      <div className="ph-surface-card-strong rounded-[1.9rem] p-6">
+      <div className="ph-surface-card-strong rounded-xl p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f1cb85]">Automation Activity</p>
@@ -201,7 +201,7 @@ export function OwnerAutomationActivityPage() {
           </div>
 
           <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-            <article className="ph-form-panel rounded-[1.75rem] p-5 sm:p-6">
+            <article className="ph-form-panel rounded-xl p-5 sm:p-6">
               <div>
                 <h3 className="text-xl font-semibold text-[var(--ph-text)]">Run history</h3>
                 <p className="mt-1 text-sm text-[var(--ph-text-muted)]">

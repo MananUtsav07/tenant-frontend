@@ -37,7 +37,7 @@ export function PricingCard({
       whileInView="show"
       viewport={viewportOnce}
       whileHover={motionEnabled ? { y: -6 } : undefined}
-      className={`relative overflow-hidden rounded-[1.75rem] border p-7 ${
+      className={`relative overflow-hidden rounded-xl border p-7 ${
         highlighted
           ? 'border-[rgba(240,163,35,0.28)] bg-[linear-gradient(160deg,rgba(31,40,66,0.98),rgba(11,22,51,0.94),rgba(18,21,32,0.98))] text-[var(--ph-text)] shadow-[0_28px_72px_-44px_rgba(240,163,35,0.34)]'
           : 'border-[rgba(83,88,100,0.56)] bg-[linear-gradient(180deg,rgba(19,24,38,0.96),rgba(14,18,30,0.98))] text-[var(--ph-text)] shadow-[0_24px_60px_-48px_rgba(0,0,0,0.74)]'

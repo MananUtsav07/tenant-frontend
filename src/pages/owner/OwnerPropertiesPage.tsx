@@ -1,4 +1,4 @@
-import { Building2, Pencil, Plus, Trash2 } from 'lucide-react'
+import { Building2, Download, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState, type FormEvent } from 'react'
 
 import { Button } from '../../components/common/Button'
@@ -7,13 +7,12 @@ import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { FormInput } from '../../components/common/FormInput'
 import { LoadingState } from '../../components/common/LoadingState'
-import {
-  dashboardFormPanelClassName,
-} from '../../components/common/formTheme'
+import { Modal } from '../../components/common/Modal'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { api } from '../../services/api'
 import type { Property } from '../../types/api'
 import { formatDateTime } from '../../utils/date'
+import { exportToCsv } from '../../utils/export'
 
 export function OwnerPropertiesPage() {
   const { token } = useOwnerAuth()
@@ -125,67 +124,75 @@ export function OwnerPropertiesPage() {
             <Building2 className="h-3.5 w-3.5 text-[var(--ph-accent)]" />
             {properties.length} total
           </span>
-          {!showForm && !editingPropertyId ? (
-            <Button type="button" onClick={() => setShowForm(true)} variant="secondary" size="sm" iconLeft={<Plus className="h-4 w-4" />}>
-              Add Property
+          {properties.length > 0 ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              iconLeft={<Download className="h-3.5 w-3.5" />}
+              onClick={() =>
+                exportToCsv(
+                  'properties.csv',
+                  ['Name', 'Address', 'Unit', 'Created'],
+                  properties.map((p) => [p.property_name, p.address, p.unit_number ?? '', formatDateTime(p.created_at)]),
+                )
+              }
+            >
+              Export CSV
             </Button>
           ) : null}
+          <Button type="button" onClick={() => setShowForm(true)} variant="secondary" size="sm" iconLeft={<Plus className="h-4 w-4" />}>
+            Add Property
+          </Button>
         </div>
       </div>
 
-      {showForm || editingPropertyId ? (
-      <form onSubmit={handleSubmit} className={`${dashboardFormPanelClassName} space-y-4`}>
-        <div>
-          <p className="text-sm font-semibold text-[var(--ph-text)]">{editingPropertyId ? 'Edit property' : 'Add property'}</p>
-          <p className="mt-1 text-xs text-[var(--ph-text-muted)]">Keep the core property setup focused before tenants and workflows attach to it.</p>
-        </div>
-        <div className="grid gap-4 lg:grid-cols-2">
-          <FormInput
-            label="Property Name"
-            name="property_name"
-            autoComplete="off"
-            value={form.property_name}
-            onChange={(event) => setForm((current) => ({ ...current, property_name: event.target.value }))}
-            required
-          />
-          <FormInput
-            label="Address"
-            name="property_address"
-            autoComplete="off"
-            value={form.address}
-            onChange={(event) => setForm((current) => ({ ...current, address: event.target.value }))}
-            required
-          />
-          <FormInput
-            label="Unit Number"
-            name="property_unit_number"
-            autoComplete="off"
-            value={form.unit_number}
-            onChange={(event) => setForm((current) => ({ ...current, unit_number: event.target.value }))}
-          />
-        </div>
+      <Modal
+        isOpen={showForm || !!editingPropertyId}
+        onClose={() => { resetForm(); setShowForm(false) }}
+        title={editingPropertyId ? 'Edit Property' : 'Add Property'}
+        size="md"
+      >
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <p className="text-xs text-[var(--ph-text-muted)]">Keep the core property setup focused before tenants and workflows attach to it.</p>
+          <div className="grid gap-4 lg:grid-cols-2">
+            <FormInput
+              label="Property Name"
+              name="property_name"
+              autoComplete="off"
+              value={form.property_name}
+              onChange={(event) => setForm((current) => ({ ...current, property_name: event.target.value }))}
+              required
+            />
+            <FormInput
+              label="Address"
+              name="property_address"
+              autoComplete="off"
+              value={form.address}
+              onChange={(event) => setForm((current) => ({ ...current, address: event.target.value }))}
+              required
+            />
+            <FormInput
+              label="Unit Number"
+              name="property_unit_number"
+              autoComplete="off"
+              value={form.unit_number}
+              onChange={(event) => setForm((current) => ({ ...current, unit_number: event.target.value }))}
+            />
+          </div>
 
-        <div className="flex flex-wrap gap-2">
-          <Button
-            type="submit"
-            disabled={busy}
-            variant="secondary"
-            iconLeft={editingPropertyId ? <Pencil className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-          >
-            {editingPropertyId ? 'Save Property' : 'Create Property'}
-          </Button>
-          {editingPropertyId ? (
-            <Button type="button" onClick={() => { resetForm(); setShowForm(false) }} variant="outline">
-              Cancel
+          <div className="flex flex-wrap gap-2">
+            <Button
+              type="submit"
+              disabled={busy}
+              variant="secondary"
+              iconLeft={editingPropertyId ? <Pencil className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+            >
+              {editingPropertyId ? 'Save Property' : 'Create Property'}
             </Button>
-          ) : (
-            <Button type="button" onClick={() => setShowForm(false)} variant="ghost">
-              Cancel
-            </Button>
-          )}
-        </div>
-      </form>
-      ) : null}
+          </div>
+        </form>
+      </Modal>
 
       {error ? <ErrorState message={error} /> : null}
       {loading ? <LoadingState message="Loading properties..." rows={4} /> : null}
@@ -196,10 +203,7 @@ export function OwnerPropertiesPage() {
           description="Create your first property to onboard tenants and start tracking rent and support."
           icon={<Building2 className="h-5 w-5" />}
           actionLabel="Add Property"
-          onAction={() => {
-            const propertyInput = document.querySelector<HTMLInputElement>('input[name="property_name"]')
-            propertyInput?.focus()
-          }}
+          onAction={() => setShowForm(true)}
         />
       ) : null}
 

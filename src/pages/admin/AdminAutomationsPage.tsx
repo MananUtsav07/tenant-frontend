@@ -179,7 +179,7 @@ export function AdminAutomationsPage() {
 
   return (
     <section className="space-y-6">
-      <div className="ph-surface-card-strong rounded-[1.9rem] p-6">
+      <div className="ph-surface-card-strong rounded-xl p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f1cb85]">Automation Observatory</p>
@@ -392,22 +392,22 @@ export function AdminAutomationsPage() {
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-[1.25rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
+                <div className="rounded-lg border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
                   <p className="text-xs uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Compliance items</p>
                   <p className="mt-2 text-xl font-semibold text-[var(--ph-text)]">{compliance?.upcoming_items.length ?? 0}</p>
                   <p className="mt-1 text-xs text-[var(--ph-text-muted)]">{compliance?.sent_reminders.length ?? 0} reminders sent recently</p>
                 </div>
-                <div className="rounded-[1.25rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
+                <div className="rounded-lg border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
                   <p className="text-xs uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Cash-flow snapshots</p>
                   <p className="mt-2 text-xl font-semibold text-[var(--ph-text)]">{cashFlow?.recent_snapshots.length ?? 0}</p>
                   <p className="mt-1 text-xs text-[var(--ph-text-muted)]">Latest report history across owner portfolios</p>
                 </div>
-                <div className="rounded-[1.25rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
+                <div className="rounded-lg border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
                   <p className="text-xs uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Vacancy campaigns</p>
                   <p className="mt-2 text-xl font-semibold text-[var(--ph-text)]">{vacancy?.campaigns.length ?? 0}</p>
                   <p className="mt-1 text-xs text-[var(--ph-text-muted)]">Re-letting workflows currently tracked</p>
                 </div>
-                <div className="rounded-[1.25rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
+                <div className="rounded-lg border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-4">
                   <p className="text-xs uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Condition reports</p>
                   <p className="mt-2 text-xl font-semibold text-[var(--ph-text)]">{conditionReports?.summary.total_reports ?? 0}</p>
                   <p className="mt-1 text-xs text-[var(--ph-text-muted)]">{conditionReports?.summary.pending_confirmations_count ?? 0} pending confirmations</p>
@@ -453,7 +453,7 @@ export function AdminAutomationsPage() {
               {portfolioVisibility?.recent_snapshots.length || cashFlow?.recent_snapshots.length ? (
                 <div className="space-y-3">
                   {portfolioVisibility?.recent_snapshots.slice(0, 3).map((snapshot) => (
-                    <div key={snapshot.id} className="rounded-[1.25rem] border border-[rgba(83,88,100,0.36)] bg-white/[0.03] px-4 py-4">
+                    <div key={snapshot.id} className="rounded-lg border border-[rgba(83,88,100,0.36)] bg-white/[0.03] px-4 py-4">
                       <p className="text-sm font-semibold text-[var(--ph-text)]">{snapshot.snapshot_label}</p>
                       <p className="mt-1 text-sm text-[var(--ph-text-soft)]">
                         {snapshot.overdue_rent_count} overdue rent items, {snapshot.open_ticket_count} open tickets, {snapshot.upcoming_compliance_count} compliance milestones.
@@ -463,7 +463,7 @@ export function AdminAutomationsPage() {
                   ))}
 
                   {cashFlow?.recent_snapshots.slice(0, 3).map((snapshot) => (
-                    <div key={snapshot.id} className="rounded-[1.25rem] border border-[rgba(83,88,100,0.36)] bg-white/[0.03] px-4 py-4">
+                    <div key={snapshot.id} className="rounded-lg border border-[rgba(83,88,100,0.36)] bg-white/[0.03] px-4 py-4">
                       <p className="text-sm font-semibold text-[var(--ph-text)]">{snapshot.report_label}</p>
                       <p className="mt-1 text-sm text-[var(--ph-text-soft)]">
                         Net income {formatCurrency(snapshot.portfolio_net_income, snapshot.currency_code)}

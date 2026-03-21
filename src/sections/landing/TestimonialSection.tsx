@@ -51,7 +51,7 @@ export function TestimonialSection() {
           <motion.article
             key={testimonial.name}
             variants={revealVariants}
-            className="rounded-[1.45rem] border border-[rgba(83,88,100,0.34)] bg-white/[0.025] p-6 sm:p-7"
+            className="rounded-xl border border-[rgba(83,88,100,0.34)] bg-white/[0.025] p-6 sm:p-7"
           >
             <p className="text-lg leading-relaxed text-[var(--ph-text-soft)]">"{testimonial.quote}"</p>
             <div className="mt-6 border-t border-[rgba(83,88,100,0.28)] pt-4">

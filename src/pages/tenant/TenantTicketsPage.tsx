@@ -213,7 +213,7 @@ export function TenantTicketsPage() {
 
       {!threadLoading && thread ? (
         <div className="space-y-4">
-          <article className="ph-surface-card-strong rounded-[1.6rem] p-6 sm:p-7">
+          <article className="ph-surface-card-strong rounded-xl p-6 sm:p-7">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f1cb85]">Selected ticket</p>
@@ -224,7 +224,7 @@ export function TenantTicketsPage() {
             </div>
           </article>
 
-          <article className="ph-surface-card rounded-[1.5rem] p-6 sm:p-7">
+          <article className="ph-surface-card rounded-xl p-6 sm:p-7">
             <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">Conversation</h3>
             <p className="mt-2 text-sm text-[var(--ph-text-muted)]">
               The original ticket, owner replies, and closing notes all appear here in order.

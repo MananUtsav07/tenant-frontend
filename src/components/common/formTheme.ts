@@ -2,19 +2,19 @@ import clsx from 'clsx'
 import type { GroupBase, StylesConfig } from 'react-select'
 
 export const dashboardFormPanelClassName =
-  'ph-form-panel rounded-[1.65rem] p-5 sm:p-6 lg:p-7'
+  'ph-form-panel rounded-xl p-5 sm:p-6 lg:p-7'
 
 export const dashboardFormToolbarClassName =
-  'ph-form-toolbar rounded-[1.45rem] p-4 sm:p-5 lg:p-6'
+  'ph-form-toolbar rounded-xl p-4 sm:p-5 lg:p-6'
 
 export const dashboardInfoPanelClassName =
-  'rounded-[1.4rem] border border-[rgba(83,88,100,0.42)] bg-[rgba(255,255,255,0.03)] p-4 text-sm text-[var(--ph-text-soft)] shadow-[0_18px_42px_-34px_rgba(0,0,0,0.72)]'
+  'rounded-xl border border-[rgba(83,88,100,0.42)] bg-[rgba(255,255,255,0.03)] p-4 text-sm text-[var(--ph-text-soft)] shadow-[0_18px_42px_-34px_rgba(0,0,0,0.72)]'
 
 export const dashboardDangerPanelClassName =
-  'rounded-[1.2rem] border border-[rgba(244,163,163,0.28)] bg-[rgba(120,28,28,0.18)] px-4 py-3 text-sm text-red-200 shadow-[0_16px_34px_-28px_rgba(127,29,29,0.72)]'
+  'rounded-lg border border-[rgba(244,163,163,0.28)] bg-[rgba(120,28,28,0.18)] px-4 py-3 text-sm text-red-200 shadow-[0_16px_34px_-28px_rgba(127,29,29,0.72)]'
 
 export const dashboardSuccessPanelClassName =
-  'rounded-[1.2rem] border border-[rgba(139,208,181,0.26)] bg-[rgba(22,101,52,0.18)] px-4 py-3 text-sm text-[var(--ph-success)] shadow-[0_16px_34px_-28px_rgba(22,101,52,0.72)]'
+  'rounded-lg border border-[rgba(139,208,181,0.26)] bg-[rgba(22,101,52,0.18)] px-4 py-3 text-sm text-[var(--ph-success)] shadow-[0_16px_34px_-28px_rgba(22,101,52,0.72)]'
 
 export function getDashboardControlClassName(
   baseClassName: string,
@@ -42,7 +42,7 @@ export function getProphivesReactSelectStyles<
     control: (baseStyles, state) => ({
       ...baseStyles,
       minHeight: '56px',
-      borderRadius: '1.15rem',
+      borderRadius: '0.75rem',
       borderColor: state.isFocused ? 'rgba(240, 163, 35, 0.54)' : 'rgba(83, 88, 100, 0.48)',
       background:
         'linear-gradient(180deg, rgba(12, 19, 34, 0.9), rgba(10, 14, 25, 0.98))',
@@ -73,7 +73,7 @@ export function getProphivesReactSelectStyles<
       ...baseStyles,
       overflow: 'hidden',
       border: '1px solid rgba(83, 88, 100, 0.48)',
-      borderRadius: '1rem',
+      borderRadius: '0.75rem',
       background:
         'linear-gradient(180deg, rgba(18, 24, 38, 0.98), rgba(10, 14, 25, 1))',
       boxShadow: '0 28px 54px -30px rgba(0, 0, 0, 0.82)',
@@ -84,7 +84,7 @@ export function getProphivesReactSelectStyles<
     }),
     option: (baseStyles, state) => ({
       ...baseStyles,
-      borderRadius: '0.85rem',
+      borderRadius: '0.5rem',
       padding: '0.7rem 0.85rem',
       fontSize: '0.925rem',
       cursor: state.isDisabled ? 'not-allowed' : 'pointer',

@@ -164,7 +164,7 @@ export function OwnerNotificationBell() {
         ? createPortal(
             <div
               ref={dropdownRef}
-              className="fixed z-[500] rounded-[1.6rem] border border-[rgba(83,88,100,0.42)] bg-[linear-gradient(180deg,rgba(18,24,38,0.98),rgba(10,14,25,1))] p-4 shadow-[0_36px_80px_-36px_rgba(0,0,0,0.88)] backdrop-blur"
+              className="fixed z-[500] rounded-xl border border-[rgba(83,88,100,0.42)] bg-[linear-gradient(180deg,rgba(18,24,38,0.98),rgba(10,14,25,1))] p-4 shadow-[0_36px_80px_-36px_rgba(0,0,0,0.88)] backdrop-blur"
               style={{
                 top: dropdownPosition.top,
                 left: dropdownPosition.left,
@@ -192,19 +192,19 @@ export function OwnerNotificationBell() {
 
                 <div className="mt-4 flex-1 space-y-2 overflow-y-auto pr-1">
                   {loading ? (
-                    <div className="rounded-[1.2rem] border border-[rgba(83,88,100,0.32)] bg-white/[0.03] px-4 py-5 text-sm text-[var(--ph-text-muted)]">
+                    <div className="rounded-lg border border-[rgba(83,88,100,0.32)] bg-white/[0.03] px-4 py-5 text-sm text-[var(--ph-text-muted)]">
                       Loading notifications...
                     </div>
                   ) : null}
 
                   {!loading && error ? (
-                    <div className="rounded-[1.2rem] border border-[rgba(244,163,163,0.26)] bg-[rgba(120,28,28,0.18)] px-4 py-4 text-sm text-red-200">
+                    <div className="rounded-lg border border-[rgba(244,163,163,0.26)] bg-[rgba(120,28,28,0.18)] px-4 py-4 text-sm text-red-200">
                       {error}
                     </div>
                   ) : null}
 
                   {!loading && !error && recentNotifications.length === 0 ? (
-                    <div className="rounded-[1.2rem] border border-[rgba(83,88,100,0.32)] bg-white/[0.03] px-4 py-5 text-sm text-[var(--ph-text-muted)]">
+                    <div className="rounded-lg border border-[rgba(83,88,100,0.32)] bg-white/[0.03] px-4 py-5 text-sm text-[var(--ph-text-muted)]">
                       <div className="inline-flex items-center gap-2">
                         <Inbox className="h-4 w-4 text-[var(--ph-accent)]" />
                         No notifications yet.
@@ -218,7 +218,7 @@ export function OwnerNotificationBell() {
                           key={notification.id}
                           type="button"
                           onClick={() => void handleNotificationClick(notification)}
-                          className={`w-full rounded-[1.2rem] border p-3 text-left transition ${
+                          className={`w-full rounded-lg border p-3 text-left transition ${
                             notification.is_read
                               ? 'border-[rgba(83,88,100,0.32)] bg-white/[0.02] hover:border-[rgba(151,105,34,0.3)]'
                               : 'border-[rgba(240,163,35,0.22)] bg-[rgba(240,163,35,0.07)] hover:bg-[rgba(240,163,35,0.1)]'

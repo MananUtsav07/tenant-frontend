@@ -71,7 +71,7 @@ export function BlogPage() {
           {posts.map((post) => (
             <article
               key={post.id}
-              className="ph-surface-card overflow-hidden rounded-[1.7rem]"
+              className="ph-surface-card overflow-hidden rounded-xl"
             >
               {post.cover_image ? (
                 <img src={post.cover_image} alt={post.title} loading="lazy" className="h-44 w-full object-cover" />
@@ -95,7 +95,7 @@ export function BlogPage() {
         </div>
       ) : null}
 
-      <div className="mt-10 rounded-[1.75rem] border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-6">
+      <div className="mt-10 rounded-xl border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-6">
         <h3 className="ph-title text-2xl font-semibold text-[var(--ph-text)]">Need help translating these ideas into rollout decisions?</h3>
         <p className="mt-2 text-[var(--ph-text-muted)]">Talk with our team to map your portfolio process in Prophives.</p>
         <Button to={ROUTES.contact} variant="primary" className="mt-4" analyticsEvent="cta_click" analyticsMetadata={{ location: 'blog_footer_contact' }}>

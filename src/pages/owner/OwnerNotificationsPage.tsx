@@ -164,10 +164,9 @@ export function OwnerNotificationsPage() {
 
   return (
     <section className="ph-page-shell">
-      <div className="ph-surface-card-strong rounded-[1.8rem] p-6 sm:p-7 lg:p-8">
+      <div className="ph-surface-card-strong rounded-xl p-6 sm:p-7 lg:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-2xl">
-            <p className="ph-page-eyebrow">Owner Notifications</p>
             <h2 className="ph-page-heading inline-flex items-center gap-2">
               <Bell className="h-6 w-6 text-[var(--ph-accent)]" />
               Activity inbox
@@ -200,7 +199,7 @@ export function OwnerNotificationsPage() {
         <>
           <div className="grid gap-5 xl:grid-cols-[1.05fr_0.95fr]">
             {telegramOnboarding ? (
-              <article className="ph-surface-card rounded-[1.6rem] p-5 sm:p-6">
+              <article className="ph-surface-card rounded-xl p-5 sm:p-6">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div className="max-w-xl">
                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Delivery Channel</p>
@@ -257,7 +256,7 @@ export function OwnerNotificationsPage() {
             ) : null}
 
             {preferences ? (
-              <article className="ph-surface-card rounded-[1.6rem] p-5 sm:p-6">
+              <article className="ph-surface-card rounded-xl p-5 sm:p-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Preferences</p>
                 <h3 className="ph-title mt-3 text-xl font-semibold text-[var(--ph-text)]">Delivery preferences</h3>
                 <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Choose which channels should receive owner automation alerts.</p>
@@ -279,7 +278,7 @@ export function OwnerNotificationsPage() {
             ) : null}
           </div>
 
-          <article className="ph-surface-card rounded-[1.6rem] p-5 sm:p-6">
+          <article className="ph-surface-card rounded-xl p-5 sm:p-6">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Delivery Logs</p>
             <h3 className="ph-title mt-3 text-xl font-semibold text-[var(--ph-text)]">Recent Telegram deliveries</h3>
             <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Latest 10 Telegram delivery attempts for this owner account.</p>
@@ -314,7 +313,6 @@ export function OwnerNotificationsPage() {
           ) : (
             <article className="space-y-4">
               <div className="ph-page-header">
-                <p className="ph-page-eyebrow">Recent Activity</p>
                 <h3 className="ph-title text-xl font-semibold text-[var(--ph-text)]">Unread and recent events</h3>
                 <p className="text-sm text-[var(--ph-text-muted)]">The bell dropdown and this page use the same notification source of truth.</p>
               </div>

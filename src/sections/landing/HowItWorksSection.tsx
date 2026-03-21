@@ -61,7 +61,7 @@ export function HowItWorksSection() {
           <motion.li
             key={step.title}
             variants={revealVariants}
-            className="rounded-[1.45rem] border border-[rgba(83,88,100,0.34)] bg-white/[0.025] p-5 sm:p-6"
+            className="rounded-xl border border-[rgba(83,88,100,0.34)] bg-white/[0.025] p-5 sm:p-6"
           >
             <div className="flex items-center justify-between gap-3">
               <span className="inline-flex h-10 w-10 items-center justify-center rounded-[1rem] border border-[rgba(240,163,35,0.16)] bg-[rgba(240,163,35,0.06)] text-[var(--ph-accent)]">

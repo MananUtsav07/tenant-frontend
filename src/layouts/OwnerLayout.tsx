@@ -26,8 +26,7 @@ function OwnerLayoutContent() {
 
   return (
     <DashboardLayout
-      title="Owner Command Center"
-      subtitle="Luxury operations control for properties, residents, and automation"
+      title="Prophives"
       identityPrimary={organizationName}
       identitySecondary={owner?.email || undefined}
       navItems={ownerLinks}

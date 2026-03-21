@@ -71,7 +71,7 @@ export function ContactPage() {
             viewport={viewportOnce}
             className="mt-8 space-y-3"
           >
-            <motion.div variants={revealVariants} className="ph-surface-card rounded-[1.5rem] p-5">
+            <motion.div variants={revealVariants} className="ph-surface-card rounded-xl p-5">
               <p className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--ph-text)]">
                 <Mail className="h-4 w-4 text-[var(--ph-accent)]" />
                 Email
@@ -79,7 +79,7 @@ export function ContactPage() {
               <p className="mt-2 text-sm text-[var(--ph-text-muted)]">support@prophives.com</p>
             </motion.div>
 
-            <motion.div variants={revealVariants} className="ph-surface-card rounded-[1.5rem] p-5">
+            <motion.div variants={revealVariants} className="ph-surface-card rounded-xl p-5">
               <p className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--ph-text)]">
                 <Clock3 className="h-4 w-4 text-[var(--ph-accent)]" />
                 Response Window
@@ -89,7 +89,7 @@ export function ContactPage() {
               </p>
             </motion.div>
 
-            <motion.div variants={revealVariants} className="ph-surface-card rounded-[1.5rem] p-5">
+            <motion.div variants={revealVariants} className="ph-surface-card rounded-xl p-5">
               <p className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--ph-text)]">
                 <ShieldCheck className="h-4 w-4 text-[var(--ph-accent)]" />
                 Rollout Focus
@@ -107,7 +107,7 @@ export function ContactPage() {
           whileInView="show"
           viewport={viewportOnce}
           onSubmit={handleSubmit}
-          className="ph-surface-card-strong rounded-[1.75rem] p-6 sm:p-7"
+          className="ph-surface-card-strong rounded-xl p-6 sm:p-7"
         >
           <p className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--ph-text)]">
             <MessageSquareMore className="h-4 w-4 text-[var(--ph-accent)]" />

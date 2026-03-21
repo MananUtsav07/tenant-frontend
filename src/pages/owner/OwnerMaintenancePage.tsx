@@ -174,7 +174,7 @@ export function OwnerMaintenancePage() {
 
   return (
     <section className="ph-page-shell">
-      <div className="ph-surface-card-strong rounded-[1.9rem] p-6">
+      <div className="ph-surface-card-strong rounded-xl p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f1cb85]">Owner Maintenance Desk</p>
@@ -189,11 +189,11 @@ export function OwnerMaintenancePage() {
           </div>
 
           <div className="grid w-full gap-3 sm:w-auto sm:min-w-[240px] sm:grid-cols-2">
-            <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
+            <div className="rounded-lg border border-white/10 bg-white/[0.03] p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Active tickets</p>
               <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">{visibleTickets.length}</p>
             </div>
-            <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4">
+            <div className="rounded-lg border border-white/10 bg-white/[0.03] p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Likely maintenance</p>
               <p className="mt-2 text-2xl font-semibold text-[var(--ph-text)]">{likelyMaintenanceCount}</p>
             </div>
@@ -217,7 +217,7 @@ export function OwnerMaintenancePage() {
       {!loading && visibleTickets.length > 0 ? (
         <div className="grid gap-6 xl:grid-cols-[340px_minmax(0,1fr)]">
           <aside>
-            <article className="ph-surface-card rounded-[1.8rem] p-5">
+            <article className="ph-surface-card rounded-xl p-5">
               <div className="mb-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#f1cb85]">Ticket Queue</p>
                 <p className="mt-1 text-sm text-[var(--ph-text-muted)]">Choose a ticket to open the maintenance workflow.</p>
@@ -241,7 +241,7 @@ export function OwnerMaintenancePage() {
                       key={ticket.id}
                       type="button"
                       onClick={() => handleSelectTicket(ticket.id)}
-                      className={`w-full rounded-[1.35rem] border p-4 text-left transition ${
+                      className={`w-full rounded-lg border p-4 text-left transition ${
                         isSelected
                           ? 'border-[rgba(240,163,35,0.28)] bg-[rgba(240,163,35,0.08)] shadow-[0_24px_52px_-36px_rgba(240,163,35,0.38)]'
                           : 'border-white/10 bg-white/[0.03] hover:border-[rgba(151,105,34,0.34)] hover:bg-white/[0.05]'
@@ -280,7 +280,7 @@ export function OwnerMaintenancePage() {
 
             {!threadLoading && thread ? (
               <>
-                <article className="ph-surface-card rounded-[1.8rem] p-6">
+                <article className="ph-surface-card rounded-xl p-6">
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#f1cb85]">Selected issue</p>
@@ -303,7 +303,7 @@ export function OwnerMaintenancePage() {
                     </div>
                   </div>
 
-                  <div className="mt-5 rounded-[1.25rem] border border-white/10 bg-[rgba(9,14,26,0.72)] p-4">
+                  <div className="mt-5 rounded-lg border border-white/10 bg-[rgba(9,14,26,0.72)] p-4">
                     <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Ticket context</p>
                     <p className="mt-2 text-sm leading-relaxed text-[var(--ph-text-soft)]">{thread.ticket.message}</p>
                   </div>

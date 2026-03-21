@@ -255,7 +255,7 @@ export function ConditionReportOwnerPanel({ token, tenantId, tenantName }: Props
         {summaryItems.length ? (
           <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             {summaryItems.map((item) => (
-              <div key={item.label} className="rounded-[1.2rem] border border-[rgba(83,88,100,0.42)] bg-white/[0.03] px-4 py-3">
+              <div key={item.label} className="rounded-lg border border-[rgba(83,88,100,0.42)] bg-white/[0.03] px-4 py-3">
                 <p className="text-xs uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">{item.label}</p>
                 <p className="mt-2 text-xl font-semibold text-[var(--ph-text)]">{item.value}</p>
               </div>
@@ -283,7 +283,7 @@ export function ConditionReportOwnerPanel({ token, tenantId, tenantName }: Props
                 key={report.id}
                 type="button"
                 onClick={() => setSelectedReportId(report.id)}
-                className={`w-full rounded-[1.25rem] border px-4 py-4 text-left transition ${
+                className={`w-full rounded-lg border px-4 py-4 text-left transition ${
                   selectedReportId === report.id
                     ? 'border-[rgba(240,163,35,0.42)] bg-[rgba(240,163,35,0.08)]'
                     : 'border-[rgba(83,88,100,0.42)] bg-white/[0.03] hover:bg-white/[0.05]'
@@ -348,7 +348,7 @@ export function ConditionReportOwnerPanel({ token, tenantId, tenantName }: Props
                   </div>
 
                   {detail.rooms.map((room) => (
-                    <div key={room.id} className="rounded-[1.25rem] border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-4">
+                    <div key={room.id} className="rounded-lg border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-4">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <div>
                           <p className="font-medium text-[var(--ph-text)]">{room.room_label_display}</p>
@@ -460,7 +460,7 @@ export function ConditionReportOwnerPanel({ token, tenantId, tenantName }: Props
                   {detail.media.length ? (
                     <div className="grid gap-3 md:grid-cols-2">
                       {detail.media.map((item) => (
-                        <div key={item.id} className="rounded-[1.15rem] border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-4">
+                        <div key={item.id} className="rounded-lg border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-4">
                           <p className="font-medium text-[var(--ph-text)]">{item.room_label.replaceAll('_', ' ')}</p>
                           <p className="mt-1 text-xs text-[var(--ph-text-muted)]">{item.caption || 'No caption added'}</p>
                           <p className="mt-2 break-all text-xs text-[var(--ph-text-soft)]">{item.media_url || item.storage_path || 'Linked asset'}</p>
@@ -503,7 +503,7 @@ export function ConditionReportOwnerPanel({ token, tenantId, tenantName }: Props
                   {detail.events.length ? (
                     <div className="space-y-3">
                       {detail.events.slice(0, 8).map((event) => (
-                        <div key={event.id} className="rounded-[1.15rem] border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-4">
+                        <div key={event.id} className="rounded-lg border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-4">
                           <div className="flex flex-wrap items-center justify-between gap-3">
                             <p className="font-medium text-[var(--ph-text)]">{event.title}</p>
                             <p className="text-xs text-[var(--ph-text-muted)]">{formatDateTime(event.created_at)}</p>

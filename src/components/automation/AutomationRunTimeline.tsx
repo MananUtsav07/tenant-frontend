@@ -19,7 +19,7 @@ export function AutomationRunTimeline({
 }) {
   if (runs.length === 0) {
     return (
-      <div className="rounded-[1.35rem] border border-[rgba(83,88,100,0.32)] bg-[rgba(255,255,255,0.02)] px-4 py-5">
+      <div className="rounded-lg border border-[rgba(83,88,100,0.32)] bg-[rgba(255,255,255,0.02)] px-4 py-5">
         <p className="text-sm font-medium text-[var(--ph-text)]">{emptyTitle}</p>
         <p className="mt-1 text-sm text-[var(--ph-text-muted)]">{emptyDescription}</p>
       </div>
@@ -31,7 +31,7 @@ export function AutomationRunTimeline({
       {runs.map((run) => (
         <li
           key={run.id}
-          className="rounded-[1.35rem] border border-[rgba(83,88,100,0.36)] bg-white/[0.03] px-4 py-4 shadow-[0_18px_38px_-32px_rgba(0,0,0,0.72)]"
+          className="rounded-lg border border-[rgba(83,88,100,0.36)] bg-white/[0.03] px-4 py-4 shadow-[0_18px_38px_-32px_rgba(0,0,0,0.72)]"
         >
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="flex min-w-0 items-start gap-3">

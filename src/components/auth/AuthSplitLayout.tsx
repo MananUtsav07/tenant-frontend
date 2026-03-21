@@ -36,7 +36,7 @@ export function AuthSplitLayout({
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="ph-surface-navy ph-hex-bg rounded-[1.65rem] p-6 sm:p-7 lg:p-8"
+          className="ph-surface-navy ph-hex-bg rounded-xl p-6 sm:p-7 lg:p-8"
         >
           <span className="ph-kicker">{eyebrow}</span>
           <h1 className="ph-title mt-6 max-w-xl text-4xl font-semibold text-[var(--ph-text)]">{title}</h1>
@@ -56,7 +56,7 @@ export function AuthSplitLayout({
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="ph-surface-card-strong rounded-[1.75rem] p-6 sm:p-7 lg:p-8"
+          className="ph-surface-card-strong rounded-xl p-6 sm:p-7 lg:p-8"
         >
           <h2 className="ph-title text-3xl font-semibold text-[var(--ph-text)]">{panelTitle}</h2>
           <p className="mt-2 text-sm text-[var(--ph-text-muted)]">{panelDescription}</p>

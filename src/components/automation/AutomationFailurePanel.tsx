@@ -11,7 +11,7 @@ export function AutomationFailurePanel({
   description?: string
 }) {
   return (
-    <article className="ph-form-panel rounded-[1.75rem] p-5 sm:p-6">
+    <article className="ph-form-panel rounded-xl p-5 sm:p-6">
       <div>
         <h3 className="text-xl font-semibold text-[var(--ph-text)]">{title}</h3>
         <p className="mt-1 text-sm text-[var(--ph-text-muted)]">{description}</p>
@@ -19,7 +19,7 @@ export function AutomationFailurePanel({
 
       <div className="mt-5 space-y-3">
         {failures.length === 0 ? (
-          <div className="rounded-[1.35rem] border border-[rgba(83,88,100,0.32)] bg-[rgba(255,255,255,0.02)] px-4 py-5">
+          <div className="rounded-lg border border-[rgba(83,88,100,0.32)] bg-[rgba(255,255,255,0.02)] px-4 py-5">
             <p className="text-sm font-medium text-[var(--ph-text)]">No recent failures</p>
             <p className="mt-1 text-sm text-[var(--ph-text-muted)]">Captured automation errors will appear here if a handler or delivery step fails.</p>
           </div>
@@ -27,7 +27,7 @@ export function AutomationFailurePanel({
           failures.map((failure) => (
             <div
               key={failure.id}
-              className="rounded-[1.35rem] border border-[rgba(244,163,163,0.22)] bg-[rgba(120,28,28,0.14)] px-4 py-4"
+              className="rounded-lg border border-[rgba(244,163,163,0.22)] bg-[rgba(120,28,28,0.14)] px-4 py-4"
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>

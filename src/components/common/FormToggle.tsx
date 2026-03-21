@@ -21,7 +21,7 @@ export function FormToggle({
   return (
     <div
       className={clsx(
-        'rounded-[1.35rem] border border-[rgba(83,88,100,0.42)] bg-[rgba(255,255,255,0.03)] p-4 shadow-[0_16px_36px_-30px_rgba(0,0,0,0.72)]',
+        'rounded-lg border border-[rgba(83,88,100,0.42)] bg-[rgba(255,255,255,0.03)] p-4 shadow-[0_16px_36px_-30px_rgba(0,0,0,0.72)]',
         className,
       )}
     >

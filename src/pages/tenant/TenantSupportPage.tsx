@@ -115,7 +115,7 @@ export function TenantSupportPage() {
         <div className="grid gap-5 xl:grid-cols-[0.82fr_1.18fr]">
           <div className="space-y-5">
             {!loading && telegramOnboarding ? (
-              <article className="ph-surface-card rounded-[1.6rem] p-5 sm:p-6">
+              <article className="ph-surface-card rounded-xl p-5 sm:p-6">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div className="max-w-xl">
                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Delivery Channel</p>
@@ -165,7 +165,7 @@ export function TenantSupportPage() {
             ) : null}
 
             {!loading && ownerContact ? (
-              <article className="ph-form-panel rounded-[1.6rem] p-5 sm:p-6">
+              <article className="ph-form-panel rounded-xl p-5 sm:p-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Support Contact</p>
                 <h3 className="ph-title mt-3 text-xl font-semibold text-[var(--ph-text)]">Owner contact</h3>
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -196,7 +196,7 @@ export function TenantSupportPage() {
           </div>
 
           <div className="space-y-5">
-            <article className="ph-surface-card rounded-[1.6rem] p-5 sm:p-6">
+            <article className="ph-surface-card rounded-xl p-5 sm:p-6">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Support Activity</p>

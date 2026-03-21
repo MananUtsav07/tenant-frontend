@@ -51,7 +51,7 @@ export function FaqSection() {
           <motion.details
             key={faq.question}
             variants={revealVariants}
-            className="group rounded-[1.4rem] border border-[rgba(83,88,100,0.34)] bg-white/[0.02] p-5 sm:p-6"
+            className="group rounded-xl border border-[rgba(83,88,100,0.34)] bg-white/[0.02] p-5 sm:p-6"
           >
             <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-left">
               <span className="ph-title text-lg font-semibold text-[var(--ph-text)]">{faq.question}</span>

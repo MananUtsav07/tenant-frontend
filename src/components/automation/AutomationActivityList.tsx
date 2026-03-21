@@ -24,7 +24,7 @@ export function AutomationActivityList({
   emptyDescription: string
 }) {
   return (
-    <article className="ph-form-panel rounded-[1.75rem] p-5 sm:p-6">
+    <article className="ph-form-panel rounded-xl p-5 sm:p-6">
       <div>
         <h3 className="text-xl font-semibold text-[var(--ph-text)]">{title}</h3>
         <p className="mt-1 text-sm text-[var(--ph-text-muted)]">{description}</p>
@@ -32,7 +32,7 @@ export function AutomationActivityList({
 
       <div className="mt-5 space-y-3">
         {items.length === 0 ? (
-          <div className="rounded-[1.35rem] border border-[rgba(83,88,100,0.32)] bg-[rgba(255,255,255,0.02)] px-4 py-5">
+          <div className="rounded-lg border border-[rgba(83,88,100,0.32)] bg-[rgba(255,255,255,0.02)] px-4 py-5">
             <p className="text-sm font-medium text-[var(--ph-text)]">{emptyTitle}</p>
             <p className="mt-1 text-sm text-[var(--ph-text-muted)]">{emptyDescription}</p>
           </div>
@@ -40,7 +40,7 @@ export function AutomationActivityList({
           items.map((item) => (
             <div
               key={item.id}
-              className="rounded-[1.35rem] border border-[rgba(83,88,100,0.36)] bg-white/[0.03] px-4 py-4 shadow-[0_18px_38px_-32px_rgba(0,0,0,0.72)]"
+              className="rounded-lg border border-[rgba(83,88,100,0.36)] bg-white/[0.03] px-4 py-4 shadow-[0_18px_38px_-32px_rgba(0,0,0,0.72)]"
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">

@@ -39,7 +39,7 @@ export function DocsArticleLayout({ title, description, markdown, canonicalPath 
         </Link>
       </nav>
 
-      <article className="ph-surface-card ph-rich-markdown mt-8 rounded-[1.8rem] p-6 shadow-[0_25px_60px_-45px_rgba(0,0,0,0.72)] [&_h1]:text-3xl [&_h1]:font-semibold [&_h2]:text-2xl [&_h2]:font-semibold [&_h3]:text-xl [&_h3]:font-semibold [&_li]:ml-5 [&_li]:list-disc [&_p]:leading-relaxed">
+      <article className="ph-surface-card ph-rich-markdown mt-8 rounded-xl p-6 shadow-[0_25px_60px_-45px_rgba(0,0,0,0.72)] [&_h1]:text-3xl [&_h1]:font-semibold [&_h2]:text-2xl [&_h2]:font-semibold [&_h3]:text-xl [&_h3]:font-semibold [&_li]:ml-5 [&_li]:list-disc [&_p]:leading-relaxed">
         <ReactMarkdown>{markdown}</ReactMarkdown>
       </article>
     </SectionContainer>

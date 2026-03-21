@@ -47,7 +47,7 @@ export function AdminOrganizationDetailPage() {
 
   return (
     <section className="ph-page-shell">
-      <div className="ph-surface-card-strong rounded-[1.8rem] p-6 sm:p-7 lg:p-8">
+      <div className="ph-surface-card-strong rounded-xl p-6 sm:p-7 lg:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-3xl">
             <p className="ph-page-eyebrow">Admin Organization View</p>
@@ -71,7 +71,7 @@ export function AdminOrganizationDetailPage() {
 
       {!loading && detail ? (
         <>
-          <div className="ph-surface-card rounded-[1.6rem] p-5 sm:p-6">
+          <div className="ph-surface-card rounded-xl p-5 sm:p-6">
             <OrganizationBadge name={detail.organization.name} slug={detail.organization.slug} />
             <p className="mt-3 text-sm text-[var(--ph-text-muted)]">
               Plan: <span className="font-medium text-[var(--ph-text)]">{detail.organization.plan_code || 'starter'}</span>
@@ -88,7 +88,7 @@ export function AdminOrganizationDetailPage() {
           </div>
 
           <div className="grid gap-4 xl:grid-cols-2">
-            <article className="ph-surface-card rounded-[1.6rem] p-5">
+            <article className="ph-surface-card rounded-xl p-5">
               <h3 className="text-lg font-semibold text-[var(--ph-text)]">Owners</h3>
               <DataTable headers={['Name', 'Email', 'Company', 'Created']}>
                 {detail.owners.map((owner) => (
@@ -102,7 +102,7 @@ export function AdminOrganizationDetailPage() {
               </DataTable>
             </article>
 
-            <article className="ph-surface-card rounded-[1.6rem] p-5">
+            <article className="ph-surface-card rounded-xl p-5">
               <h3 className="text-lg font-semibold text-[var(--ph-text)]">Subscriptions</h3>
               <DataTable headers={['Plan', 'Status', 'Subscription ID', 'Period End']}>
                 {detail.subscriptions.map((subscription) => (
@@ -120,7 +120,7 @@ export function AdminOrganizationDetailPage() {
           </div>
 
           <div className="grid gap-4 xl:grid-cols-2">
-            <article className="ph-surface-card rounded-[1.6rem] p-5">
+            <article className="ph-surface-card rounded-xl p-5">
               <h3 className="text-lg font-semibold text-[var(--ph-text)]">Properties</h3>
               <DataTable headers={['Property', 'Address', 'Created']}>
                 {detail.properties.map((property) => (
@@ -133,7 +133,7 @@ export function AdminOrganizationDetailPage() {
               </DataTable>
             </article>
 
-            <article className="ph-surface-card rounded-[1.6rem] p-5">
+            <article className="ph-surface-card rounded-xl p-5">
               <h3 className="text-lg font-semibold text-[var(--ph-text)]">Tickets</h3>
               <DataTable headers={['Subject', 'Status', 'Created']}>
                 {detail.tickets.map((ticket) => (
@@ -149,7 +149,7 @@ export function AdminOrganizationDetailPage() {
             </article>
           </div>
 
-          <article className="ph-surface-card rounded-[1.6rem] p-5">
+          <article className="ph-surface-card rounded-xl p-5">
             <h3 className="text-lg font-semibold text-[var(--ph-text)]">Tenants</h3>
             <DataTable headers={['Tenant', 'Access ID', 'Status', 'Created']}>
               {detail.tenants.map((tenant) => (

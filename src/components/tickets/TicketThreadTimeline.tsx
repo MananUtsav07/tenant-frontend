@@ -83,7 +83,7 @@ function messageTypeLabel(message: SupportTicketMessage) {
 export function TicketThreadTimeline({ messages }: { messages: SupportTicketMessage[] }) {
   if (messages.length === 0) {
     return (
-      <div className="rounded-[1.45rem] border border-[rgba(83,88,100,0.34)] bg-[linear-gradient(180deg,rgba(16,21,34,0.82),rgba(10,14,24,0.92))] px-5 py-8 text-center">
+      <div className="rounded-xl border border-[rgba(83,88,100,0.34)] bg-[linear-gradient(180deg,rgba(16,21,34,0.82),rgba(10,14,24,0.92))] px-5 py-8 text-center">
         <p className="text-sm font-medium text-[var(--ph-text)]">No thread activity yet</p>
         <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Replies and closing notes will appear here in a structured operations timeline.</p>
       </div>
@@ -105,7 +105,7 @@ export function TicketThreadTimeline({ messages }: { messages: SupportTicketMess
 
           <article
             className={clsx(
-              'rounded-[1.4rem] border p-4 shadow-[0_20px_46px_-38px_rgba(0,0,0,0.76)] sm:p-5',
+              'rounded-xl border p-4 shadow-[0_20px_46px_-38px_rgba(0,0,0,0.76)] sm:p-5',
               message.message_type === 'closing_note'
                 ? 'border-[rgba(139,208,181,0.18)] bg-[linear-gradient(180deg,rgba(17,39,31,0.88),rgba(9,24,20,0.96))]'
                 : message.message_type === 'initial_message'
