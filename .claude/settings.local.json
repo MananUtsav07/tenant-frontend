@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(ls /c/Users/tusha/Desktop/tenant-backend/src/services/telegram*)",
+      "Read(//c/Users/tusha/Desktop/tenant-backend/**)",
+      "Bash(npx tsc:*)",
+      "Bash(pushd \"c:\\\\Users\\\\tusha\\\\Desktop\\\\tenant-backend\")"
     ]
   }
 }
