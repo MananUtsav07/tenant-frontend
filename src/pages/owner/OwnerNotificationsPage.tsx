@@ -5,6 +5,7 @@ import { Button } from '../../components/common/Button'
 import { DataTable } from '../../components/common/DataTable'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
+import { FormInput } from '../../components/common/FormInput'
 import { FormToggle } from '../../components/common/FormToggle'
 import { LoadingState } from '../../components/common/LoadingState'
 import { NotificationList } from '../../components/common/NotificationList'
@@ -31,7 +32,7 @@ const preferenceLabels: Array<{ key: PreferenceKey; label: string }> = [
 ]
 
 export function OwnerNotificationsPage() {
-  const { token } = useOwnerAuth()
+  const { token, owner, refresh: refreshOwnerProfile } = useOwnerAuth()
   const { notifications, unreadCount, loading, error: notificationsError, refresh, markRead, markAllRead } =
     useOwnerNotifications()
   const [telegramOnboarding, setTelegramOnboarding] = useState<TelegramOnboardingState | null>(null)
@@ -41,6 +42,13 @@ export function OwnerNotificationsPage() {
   const [telegramError, setTelegramError] = useState<string | null>(null)
   const [disconnectingTelegram, setDisconnectingTelegram] = useState(false)
   const [loadingDeliveryLogs, setLoadingDeliveryLogs] = useState(false)
+  const [whatsappNumber, setWhatsappNumber] = useState('')
+  const [savingWhatsapp, setSavingWhatsapp] = useState(false)
+  const [whatsappStatus, setWhatsappStatus] = useState<string | null>(null)
+
+  useEffect(() => {
+    setWhatsappNumber(owner?.support_whatsapp ?? '')
+  }, [owner?.support_whatsapp])
 
   const loadTelegramStatus = useCallback(async () => {
     if (!token) {
@@ -162,6 +170,28 @@ export function OwnerNotificationsPage() {
 
   const pageError = useMemo(() => notificationsError ?? telegramError, [notificationsError, telegramError])
 
+  const saveWhatsappNumber = async () => {
+    if (!token) {
+      return
+    }
+
+    try {
+      setSavingWhatsapp(true)
+      setWhatsappStatus(null)
+      setTelegramError(null)
+      const nextValue = whatsappNumber.trim()
+      await api.patchOwnerMe(token, {
+        support_whatsapp: nextValue.length > 0 ? nextValue : null,
+      })
+      await refreshOwnerProfile()
+      setWhatsappStatus(nextValue.length > 0 ? 'WhatsApp number saved.' : 'WhatsApp number cleared.')
+    } catch (saveError) {
+      setTelegramError(saveError instanceof Error ? saveError.message : 'Failed to save WhatsApp number')
+    } finally {
+      setSavingWhatsapp(false)
+    }
+  }
+
   return (
     <section className="ph-page-shell">
       <div className="ph-surface-card-strong rounded-xl p-6 sm:p-7 lg:p-8">
@@ -254,6 +284,44 @@ export function OwnerNotificationsPage() {
                 </div>
               </article>
             ) : null}
+
+            <article className="ph-surface-card rounded-xl p-5 sm:p-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">WhatsApp Bot Link</p>
+              <h3 className="ph-title mt-3 text-xl font-semibold text-[var(--ph-text)]">Owner WhatsApp number</h3>
+              <p className="mt-2 text-sm text-[var(--ph-text-muted)]">
+                Set the number that will send commands to the bot. Use E.164 format, for example `+9198XXXXXXX`.
+              </p>
+              <div className="mt-4 space-y-3">
+                <FormInput
+                  label="Support WhatsApp"
+                  value={whatsappNumber}
+                  onChange={(event) => setWhatsappNumber(event.target.value)}
+                  placeholder="+15551234567"
+                  autoComplete="tel"
+                />
+                <div className="flex flex-wrap gap-2">
+                  <Button type="button" variant="secondary" size="sm" onClick={() => void saveWhatsappNumber()} disabled={savingWhatsapp}>
+                    {savingWhatsapp ? 'Saving...' : 'Save WhatsApp Number'}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setWhatsappNumber(owner?.support_whatsapp ?? '')
+                      setWhatsappStatus(null)
+                    }}
+                    disabled={savingWhatsapp}
+                  >
+                    Reset
+                  </Button>
+                </div>
+                <p className="text-xs text-[var(--ph-text-muted)]">
+                  After saving, send `help` from this same number to your Meta test number on WhatsApp to verify bot replies.
+                </p>
+                {whatsappStatus ? <p className="text-xs text-[var(--ph-success)]">{whatsappStatus}</p> : null}
+              </div>
+            </article>
 
             {preferences ? (
               <article className="ph-surface-card rounded-xl p-5 sm:p-6">

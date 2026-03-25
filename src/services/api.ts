@@ -201,6 +201,13 @@ export const api = {
     request<ApiMessageResponse>('/api/auth/owner/reset-password', { method: 'POST', body }),
 
   ownerMe: (token: string) => request<{ ok: true; owner: Owner }>('/api/auth/owner/me', { token }),
+  patchOwnerMe: (
+    token: string,
+    body: Partial<{
+      support_email: string | null
+      support_whatsapp: string | null
+    }>,
+  ) => request<{ ok: true; owner: Owner }>('/api/auth/owner/me', { method: 'PATCH', token, body }),
 
   tenantLogin: (body: { tenant_access_id: string; password: string; email?: string }) =>
     request<TenantAuthPayload & { ok: true }>('/api/auth/tenant/login', { method: 'POST', body }),
