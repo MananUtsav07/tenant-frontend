@@ -193,97 +193,59 @@ export function OwnerNotificationsPage() {
   }
 
   return (
-    <section className="ph-page-shell">
-      <div className="ph-surface-card-strong rounded-xl p-6 sm:p-7 lg:p-8">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="max-w-2xl">
-            <h2 className="ph-page-heading inline-flex items-center gap-2">
-              <Bell className="h-6 w-6 text-[var(--ph-accent)]" />
-              Activity inbox
-            </h2>
-            <p className="ph-page-description">
-              Review support and payment events, tune delivery channels, and keep notifications disciplined from one quieter workspace.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-3 py-1 text-xs text-[var(--ph-text-muted)]">
-              {unreadCount > 0 ? `${unreadCount} unread` : 'All notifications read'}
-            </span>
-            <Button type="button" variant="secondary" size="sm" onClick={() => void refresh({ silent: false })}>
-              Refresh
-            </Button>
-            {unreadCount > 0 ? (
-              <Button type="button" variant="outline" size="sm" onClick={() => void markAllRead()}>
-                Mark all as read
-              </Button>
-            ) : null}
-          </div>
-        </div>
+    <section className="space-y-6">
+      <div>
+        <h2 className="inline-flex items-center gap-2 text-2xl font-semibold text-[#1A1A1A]">
+          <Bell className="h-6 w-6 text-[#FED609]" />
+          Notifications
+        </h2>
+        <p className="text-sm text-[#6B7280]">Ticket and reminder events from tenants.</p>
       </div>
 
-      {pageError ? <ErrorState message={pageError} /> : null}
-      {loading ? <LoadingState message="Loading notifications..." rows={4} /> : null}
-
-      {!loading ? (
-        <>
-          <div className="grid gap-5 xl:grid-cols-[1.05fr_0.95fr]">
-            {telegramOnboarding ? (
-              <article className="ph-surface-card rounded-xl p-5 sm:p-6">
-                <div className="flex flex-wrap items-start justify-between gap-4">
-                  <div className="max-w-xl">
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Delivery Channel</p>
-                    <h3 className="ph-title mt-3 inline-flex items-center gap-2 text-xl font-semibold text-[var(--ph-text)]">
-                      <Send className="h-5 w-5 text-[var(--ph-accent)]" />
-                      Telegram alerts
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-[var(--ph-text-muted)]">
-                      {telegramOnboarding.connected
-                        ? `Connected${telegramOnboarding.linked_chat?.username ? ` as @${telegramOnboarding.linked_chat.username}` : ''}.`
-                        : 'Connect Telegram to receive instant owner alerts.'}
-                    </p>
-                    <p className="mt-2 text-xs text-[var(--ph-text-muted)]">Open the bot and tap Start once. Status sync runs automatically.</p>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    {!telegramOnboarding.connected ? (
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => {
-                          void connectTelegram()
-                        }}
-                        disabled={!telegramOnboarding.connect_url}
-                      >
-                        Connect Telegram
-                      </Button>
-                    ) : (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => void disconnectTelegram()}
-                        disabled={disconnectingTelegram}
-                      >
-                        {disconnectingTelegram ? 'Disconnecting...' : 'Disconnect Telegram'}
-                      </Button>
-                    )}
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        void loadTelegramStatus()
-                        void loadDeliveryLogs()
-                      }}
-                    >
-                      Refresh status
-                    </Button>
-                  </div>
-                </div>
-              </article>
-            ) : null}
+      {!loading && telegramOnboarding ? (
+        <div className="rounded-xl border border-[#0088cc]/20 bg-[#f0f9ff] p-5 shadow-sm">
+          <h3 className="inline-flex items-center gap-2 text-lg font-semibold text-[#1A1A1A]">
+            <Send className="h-5 w-5 text-[#0088cc]" />
+            Telegram Alerts
+          </h3>
+          <p className="mt-2 text-sm text-[#4B5563]">
+            {telegramOnboarding.connected
+              ? `Connected${telegramOnboarding.linked_chat?.username ? ` as @${telegramOnboarding.linked_chat.username}` : ''}.`
+              : 'Connect Telegram to receive instant owner alerts.'}
+          </p>
+          <p className="mt-1 text-xs text-[#6B7280]">Open bot, tap Start once, then click Refresh status.</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {!telegramOnboarding.connected ? (
+              <button
+                type="button"
+                className="rounded-xl border border-[#0088cc] bg-[#0088cc] px-4 py-2 text-sm font-semibold text-white hover:bg-[#006fa1] disabled:cursor-not-allowed disabled:opacity-60"
+                onClick={connectTelegram}
+                disabled={!telegramOnboarding.connect_url}
+              >
+                Connect Telegram
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white px-4 py-2 text-sm font-semibold text-[#4B5563] hover:bg-[#FEFAEF] disabled:cursor-not-allowed disabled:opacity-60"
+                onClick={disconnectTelegram}
+                disabled={disconnectingTelegram}
+              >
+                {disconnectingTelegram ? 'Disconnecting...' : 'Disconnect Telegram'}
+              </button>
+            )}
+            <button
+              type="button"
+              className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white px-4 py-2 text-sm font-semibold text-[#4B5563] hover:bg-[#FEFAEF]"
+              onClick={() => {
+                void loadNotifications()
+              }}
+            >
+              Refresh status
+            </button>
+          </div>
+        </div>
+      ) : null}
 
             <article className="ph-surface-card rounded-xl p-5 sm:p-6">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">WhatsApp Bot Link</p>

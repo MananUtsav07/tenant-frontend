@@ -1,4 +1,4 @@
-﻿import type { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
 
 import { revealScale, useMotionEnabled, useMotionVariants, viewportOnce } from '../../utils/motion'
@@ -20,20 +20,19 @@ export function FeatureCard({ icon, title, description, detail }: FeatureCardPro
       initial="hidden"
       whileInView="show"
       viewport={viewportOnce}
-      whileHover={motionEnabled ? { y: -3 } : undefined}
-      className="ph-surface-card group h-full p-6 sm:p-7"
+      whileHover={motionEnabled ? { y: -4 } : undefined}
+      className="group h-full rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-6 shadow-sm transition-all hover:border-[rgba(254,214,9,0.3)] hover:shadow-md"
     >
-      <div className="inline-flex h-11 w-11 items-center justify-center rounded-[1rem] border border-[rgba(240,163,35,0.16)] bg-[rgba(240,163,35,0.06)] text-[var(--ph-text)] transition-transform duration-200 group-hover:scale-[1.03]">
+      <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[rgba(254,214,9,0.12)] text-[#92700A] transition-transform duration-200 group-hover:scale-105">
         {icon}
       </div>
-      <h3 className="ph-title mt-6 text-xl font-semibold text-[var(--ph-text)]">{title}</h3>
-      <p className="mt-3 text-sm leading-relaxed text-[var(--ph-text-muted)]">{description}</p>
+      <h3 className="ph-title mt-4 text-lg font-bold text-[#1A1A1A]">{title}</h3>
+      <p className="mt-2 text-sm leading-relaxed text-[#6B7280]">{description}</p>
       {detail ? (
-        <p className="mt-6 inline-flex rounded-full border border-[rgba(83,88,100,0.3)] bg-white/[0.025] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">
+        <p className="ph-badge ph-badge-gold mt-4">
           {detail}
         </p>
       ) : null}
     </motion.article>
   )
 }
-

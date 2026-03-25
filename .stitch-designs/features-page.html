@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Features - Prophives AI Property Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Manrope:wght@400;500;600&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FED609",
+                        "primary-hover": "#FFD70B",
+                        cream: "#FEFAEF",
+                        ivory: "#FFFAE2",
+                        dark: "#1A1A1A",
+                        muted: "#6B7280"
+                    },
+                    fontFamily: {
+                        "headline": ["Sora"],
+                        "body": ["Manrope"],
+                        "label": ["DM Sans"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #FEFAEF;
+            color: #1A1A1A;
+        }
+        h1, h2, h3 {
+            font-family: 'Sora', sans-serif;
+        }
+        .nav-label {
+            font-family: 'DM Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-cream text-dark antialiased">
+<!-- TopNavBar -->
+<header class="bg-[#FEFAEF] dark:bg-gray-900 border-b border-[#FED609]/10 shadow-sm sticky top-0 z-50">
+<nav class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="text-2xl font-bold text-[#1A1A1A] dark:text-white">Prophives</div>
+<div class="hidden md:flex items-center space-gap-8 gap-8">
+<a class="text-[#FED609] font-bold border-b-2 border-[#FED609] pb-1 nav-label text-sm transition-colors" href="#">Features</a>
+<a class="text-[#1A1A1A] dark:text-gray-300 hover:text-[#FFD70B] nav-label text-sm transition-colors" href="#">How It Works</a>
+<a class="text-[#1A1A1A] dark:text-gray-300 hover:text-[#FFD70B] nav-label text-sm transition-colors" href="#">Solutions</a>
+<a class="text-[#1A1A1A] dark:text-gray-300 hover:text-[#FFD70B] nav-label text-sm transition-colors" href="#">Pricing</a>
+<a class="text-[#1A1A1A] dark:text-gray-300 hover:text-[#FFD70B] nav-label text-sm transition-colors" href="#">Contact</a>
+<a class="text-[#1A1A1A] dark:text-gray-300 hover:text-[#FFD70B] nav-label text-sm transition-colors" href="#">Blog</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden md:block text-sm font-bold text-dark nav-label hover:opacity-80 transition-opacity">Login</button>
+<button class="bg-[#FED609] text-dark px-6 py-2.5 rounded-full font-bold text-sm nav-label active:scale-95 duration-150 hover:bg-[#FFD70B] transition-colors shadow-sm">Get Started</button>
+</div>
+</nav>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="py-20 md:py-32 px-6">
+<div class="max-w-4xl mx-auto text-center">
+<h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
+                    Everything You Need to <span class="text-primary">Manage Properties</span>
+</h1>
+<p class="text-lg md:text-xl text-muted font-medium max-w-2xl mx-auto">
+                    Experience the future of real estate management in Dubai with our AI-driven platform designed for efficiency, clarity, and total control.
+                </p>
+</div>
+</section>
+<!-- Feature Showcase -->
+<section class="max-w-7xl mx-auto px-6 space-y-24 pb-24">
+<!-- AI-Powered Automation -->
+<div class="grid md:grid-cols-2 gap-12 items-center">
+<div class="order-2 md:order-1">
+<div class="flex items-center gap-2 text-primary mb-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-bold text-sm tracking-wider uppercase font-label">Intelligence</span>
+</div>
+<h2 class="text-3xl font-bold mb-6">AI-Powered Automation</h2>
+<p class="text-muted leading-relaxed mb-6">
+                        Say goodbye to manual sorting. Our AI automatically classifies incoming maintenance tickets and summarizes tenant requests, ensuring urgent issues never fall through the cracks.
+                    </p>
+<ul class="space-y-3">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+<span class="font-medium">Automatic ticket classification</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+<span class="font-medium">Instant request summarization</span>
+</li>
+</ul>
+</div>
+<div class="order-1 md:order-2 bg-white p-4 rounded-xl shadow-xl shadow-primary/5">
+<img alt="AI Automation Interface" class="rounded-lg w-full h-auto" data-alt="Modern UI dashboard interface showing AI ticket classification with clean gold accents, floating labels, and a minimalist digital aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLr2hYooGWiek5ZC3kPCBJErrzB3sbc7mpXT75v1_yE1WsldJlS7ZdbBQgnctN9duWoLuzalQ_Ey-beCYK4OvyzuuKKWmeeKIcOrjvqyN4q3wNob7Ccju6VXXI3KDux7YAuCML642CKcomet_5G7t22xPjxeW7yjJnIqkO0I5AP4xqe8OkefaYRwviwYA_JAdLKExZufeCMlTR3OulKBjQy_O6KBeye9NhpiZpSlU_SqYrbe0Ujn4zAlvG786oan5y607n2_Xa3BvK"/>
+</div>
+</div>
+<!-- WhatsApp Integration -->
+<div class="grid md:grid-cols-2 gap-12 items-center">
+<div class="bg-white p-4 rounded-xl shadow-xl shadow-primary/5">
+<img alt="WhatsApp Chat Mockup" class="rounded-lg w-full h-auto" data-alt="High-fidelity smartphone mockup showing a professional WhatsApp chat interface with automated rent reminders and property management messages" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMbaU3Y0_RAZnGyWtwsoQA85hGV_WodO9uR1fTOhtKeV7Q3aE-aaCXIXW54-nNdyHQvQBfXlbKk62Is6Qyu4cEdNIyW1qlOmgOD0fQo3PPYyc1s5bXgEYO8oeOBUFL_qd4vkXxwMdggP7wSKbUCTGbdTHRvI15tgyW05d_mq4o-BLLAv43-iOYPZ0MMbjR8kgO7StqDaHq7py-ZKXM4M5XMBv38iFXwGGXAIoC25ULsZti9OH0ELNcX-zu8tk9gG4nWTN6nWe9gZTR"/>
+</div>
+<div>
+<div class="flex items-center gap-2 text-[#25D366] mb-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat</span>
+<span class="font-bold text-sm tracking-wider uppercase font-label">Communication</span>
+</div>
+<h2 class="text-3xl font-bold mb-6">WhatsApp Integration</h2>
+<p class="text-muted leading-relaxed mb-6">
+                        Connect with your tenants where they are. Prophives integrates directly with WhatsApp to send automated rent reminders and facilitate seamless direct communication.
+                    </p>
+<div class="bg-ivory p-6 rounded-lg border-l-4 border-primary">
+<p class="italic text-dark font-medium">"Rent for Unit 402 is due in 3 days. Click here to pay via secure link."</p>
+</div>
+</div>
+</div>
+<!-- Telegram Bot Integration -->
+<div class="grid md:grid-cols-2 gap-12 items-center">
+<div>
+<div class="flex items-center gap-2 text-[#0088cc] mb-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span class="font-bold text-sm tracking-wider uppercase font-label">Automation</span>
+</div>
+<h2 class="text-3xl font-bold mb-6">Telegram Bot Integration</h2>
+<p class="text-muted leading-relaxed mb-6">
+                        Stay updated on the go. Our Telegram bot provides real-time notifications for support ticket updates, ensuring property managers are always in the loop without checking the dashboard.
+                    </p>
+<ul class="space-y-3">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-lg">notifications_active</span>
+<span class="font-medium">Real-time support updates</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-lg">bolt</span>
+<span class="font-medium">Lightning-fast bot interactions</span>
+</li>
+</ul>
+</div>
+<div class="bg-white p-4 rounded-xl shadow-xl shadow-primary/5">
+<img alt="Telegram Bot UI" class="rounded-lg w-full h-auto" data-alt="Sleek Telegram mobile app mockup featuring an automated property management bot with action buttons and real-time status updates" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgy10SfKkjioA7tFp-_ir32zWqTNurmf1n03vnXNqS_PGPBuWEOCUnCK30_zZsXgz8fP7-YJW7Cc6ew_zHjciuPlLs0GnEpXObkEzkAg_cr2_rhCM_AxpBlIktEdpQNeBAPlIZ9LoDUHOWHfmVzMuZhuv29izzvU5HsyAQLTq288bi896m_mLNlcHlKy8Ie9PTzUWzyl8OClsK4ktsgfhD6QkajR8Tas1RQhkKb-euAWJwJ0RK0nYNHWXIxjT9yh1uAlx4hEwOJZNY"/>
+</div>
+</div>
+<!-- Payment Tracking -->
+<div class="grid md:grid-cols-2 gap-12 items-center">
+<div class="bg-white p-4 rounded-xl shadow-xl shadow-primary/5">
+<img alt="Payment Tracking Dashboard" class="rounded-lg w-full h-auto" data-alt="Financial dashboard mockup showing rental payment status, overdue alerts, and revenue charts in a clean white and gold theme" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqjDIkJVXV_aWxJoQNxCgbMuGxQIpHylkkuB2hsdsRIiRiuUH77nXbdVf_wx8_2b_z6BnHpXfOO8bkSEQf9elGLSJ2Fj3fxTEgThhM4z1krDKdcU92JvgkUo2OWWpv25bTUxs-aWJoLVHC6wO-eTEHu1Ar9FKQ27UGEhGgT-5bVYH0Tgu1kL3t6YiwCCCC3_8xM0jDaa0PmS0qFdz9OarKsZyeMDbcLfSeqRuSz9VP2w6fqegMhsUWIux4zRpyvYIAfb47s8CwR889"/>
+</div>
+<div>
+<div class="flex items-center gap-2 text-primary mb-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="font-bold text-sm tracking-wider uppercase font-label">Finance</span>
+</div>
+<h2 class="text-3xl font-bold mb-6">Payment Tracking</h2>
+<p class="text-muted leading-relaxed mb-6">
+                        Eliminate financial blind spots. Monitor rent status across your entire portfolio with automated overdue alerts and comprehensive financial reporting.
+                    </p>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 bg-white border border-primary/20 rounded-lg">
+<p class="text-xs text-muted font-label">Collection Rate</p>
+<p class="text-xl font-bold text-primary">98.5%</p>
+</div>
+<div class="p-4 bg-white border border-primary/20 rounded-lg">
+<p class="text-xs text-muted font-label">Overdue Tickets</p>
+<p class="text-xl font-bold text-primary">04</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tenant Portal -->
+<div class="grid md:grid-cols-2 gap-12 items-center">
+<div>
+<div class="flex items-center gap-2 text-primary mb-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+<span class="font-bold text-sm tracking-wider uppercase font-label">Experience</span>
+</div>
+<h2 class="text-3xl font-bold mb-6">Tenant Portal</h2>
+<p class="text-muted leading-relaxed mb-6">
+                        Empower your tenants with a dedicated self-service hub. Tenants can view property details, pay rent, and submit maintenance tickets in just a few clicks.
+                    </p>
+<button class="flex items-center gap-2 font-bold text-primary hover:text-primary-hover transition-colors">
+                        Learn more about portal features
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="bg-white p-4 rounded-xl shadow-xl shadow-primary/5">
+<img alt="Tenant Portal Interface" class="rounded-lg w-full h-auto" data-alt="User-friendly mobile app interface for tenants showing property details, service request forms, and maintenance history with elegant gold accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB37GzCUfFkelQg1wKxaVoLm5A7FZ6pkwgvs9HOOUSfUwC4t2XLGhYbbkb3hOiRjtGCyf-eA6cGjq4t6VzndLIe8w0qmQdNE1CkOAHLOhmBrZEsQhO4aKFM_ljt83JnFdtLOyMTWZhpKL6ES_nDXqxQLJuiTwNjqzHacXdEvYpPmpdEO1_oXvhMmRJwYfjQxkGwhzmg-hAD8RPulz_cz9cKUQde0vMeW1g-EjgDL_KppC_QX_NS1wxh1AplbaBm0-w2IUAA8Eq6rXd4"/>
+</div>
+</div>
+<!-- Smart Notifications -->
+<div class="grid md:grid-cols-2 gap-12 items-center">
+<div class="bg-white p-4 rounded-xl shadow-xl shadow-primary/5">
+<img alt="Smart Notifications Mockup" class="rounded-lg w-full h-auto" data-alt="Abstract visualization of multi-channel notifications showing alerts flowing into mobile devices and smartwatches in a clean aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMnvnyf-iKJsH58M0O0NK4EBLATFYkAUt_mb2o9lYezo1NA2-_nH_NhAqVS0Nhjj1Q91ijdCbXmsvIcKAFowGYPvosPGwJIPXV0ymK4z-t9GaFJ5YevOUlApqeaBhvp47a6jmseDzAdji6THx-6zm6k2hdURpUcSGNG9WDJEvOcFV7GN_qy_0fuxoKTUz0PfGvd7Z8ixJEBpdZ0hTPUxwPkTJxvpz6FjDiB1_fl3YeMC5SgeoLTtHw-vpudtkXGcHdQG2XUyquEaN_"/>
+</div>
+<div>
+<div class="flex items-center gap-2 text-primary mb-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">notifications_active</span>
+<span class="font-bold text-sm tracking-wider uppercase font-label">Alerts</span>
+</div>
+<h2 class="text-3xl font-bold mb-6">Smart Notifications</h2>
+<p class="text-muted leading-relaxed mb-6">
+                        Never miss a beat. Real-time alerts delivered through multiple channels—email, SMS, and in-app—keep everyone informed and responsive.
+                    </p>
+<div class="flex gap-4">
+<span class="w-10 h-10 rounded-full bg-ivory flex items-center justify-center text-primary border border-primary/20">
+<span class="material-symbols-outlined text-sm">mail</span>
+</span>
+<span class="w-10 h-10 rounded-full bg-ivory flex items-center justify-center text-primary border border-primary/20">
+<span class="material-symbols-outlined text-sm">sms</span>
+</span>
+<span class="w-10 h-10 rounded-full bg-ivory flex items-center justify-center text-primary border border-primary/20">
+<span class="material-symbols-outlined text-sm">devices</span>
+</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Integration Banner -->
+<section class="bg-[#FED609] py-12">
+<div class="max-w-7xl mx-auto px-6 overflow-hidden">
+<div class="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-80 grayscale hover:grayscale-0 transition-all duration-500">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-3xl">chat</span>
+<span class="font-bold tracking-tight">WhatsApp</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-3xl">send</span>
+<span class="font-bold tracking-tight">Telegram</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-3xl">psychology</span>
+<span class="font-bold tracking-tight">AI Core</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-3xl">credit_score</span>
+<span class="font-bold tracking-tight">Stripe</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-3xl">account_balance</span>
+<span class="font-bold tracking-tight">Bank Direct</span>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-24 px-6 bg-ivory">
+<div class="max-w-4xl mx-auto text-center">
+<h2 class="text-3xl md:text-5xl font-extrabold mb-8">Start Managing Smarter Today</h2>
+<p class="text-muted text-lg mb-10 max-w-xl mx-auto">
+                    Join hundreds of Dubai property managers who are scaling their business with Prophives AI.
+                </p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+<button class="w-full sm:w-auto bg-[#FED609] text-dark px-10 py-4 rounded-full font-bold text-lg active:scale-95 duration-150 hover:bg-[#FFD70B] shadow-lg">Get Started Free</button>
+<button class="w-full sm:w-auto border-2 border-primary text-dark px-10 py-4 rounded-full font-bold text-lg active:scale-95 duration-150 hover:bg-white transition-colors">Book a Demo</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#1A1A1A] dark:bg-black text-gray-400">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-8 py-12 max-w-7xl mx-auto">
+<div class="mb-8 md:mb-0">
+<div class="text-xl font-bold text-[#FED609] mb-4">Prophives</div>
+<p class="max-w-xs text-sm">
+                    Premium AI-powered property management for the Dubai real estate market.
+                </p>
+</div>
+<div class="flex flex-wrap justify-center gap-6 md:gap-12 mb-8 md:mb-0">
+<a class="hover:text-white transition-colors nav-label text-sm" href="#">Privacy Policy</a>
+<a class="hover:text-white transition-colors nav-label text-sm" href="#">Terms of Service</a>
+<a class="hover:text-white transition-colors nav-label text-sm" href="#">Contact Us</a>
+<a class="flex items-center gap-2 hover:text-[#25D366] transition-colors nav-label text-sm" href="#">
+<span class="material-symbols-outlined text-base">chat</span> WhatsApp Support
+                </a>
+</div>
+<div class="text-xs opacity-60">
+                © 2024 Prophives AI. All rights reserved.
+            </div>
+</div>
+</footer>
+</body></html>

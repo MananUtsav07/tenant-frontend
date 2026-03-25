@@ -32,10 +32,10 @@ export function TestimonialSection() {
   const staggerVariants = useMotionVariants(staggerParent)
 
   return (
-    <SectionContainer size="wide" tone="navy">
+    <SectionContainer size="wide" tone="cream">
       <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
         <span className="ph-kicker">Operator Feedback</span>
-        <h2 className="ph-title mt-6 max-w-4xl text-3xl font-semibold text-[var(--ph-text)] md:text-5xl">
+        <h2 className="mt-5 text-3xl font-semibold text-[#1A1A1A] md:text-5xl">
           Trusted by teams that expect luxury-grade execution
         </h2>
       </motion.div>
@@ -51,12 +51,12 @@ export function TestimonialSection() {
           <motion.article
             key={testimonial.name}
             variants={revealVariants}
-            className="rounded-xl border border-[rgba(83,88,100,0.34)] bg-white/[0.025] p-6 sm:p-7"
+            className=”rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-6 shadow-sm”
           >
-            <p className="text-lg leading-relaxed text-[var(--ph-text-soft)]">"{testimonial.quote}"</p>
-            <div className="mt-6 border-t border-[rgba(83,88,100,0.28)] pt-4">
-              <p className="ph-title text-base font-semibold text-[var(--ph-text)]">{testimonial.name}</p>
-              <p className="text-sm text-[var(--ph-text-muted)]">
+            <p className=”text-lg leading-relaxed text-[#4B5563]”>”{testimonial.quote}”</p>
+            <div className=”mt-6 border-t border-[rgba(0,0,0,0.06)] pt-4”>
+              <p className=”text-base font-semibold text-[#1A1A1A]”>{testimonial.name}</p>
+              <p className=”text-sm text-[#6B7280]”>
                 {testimonial.role} · {testimonial.company}
               </p>
             </div>

@@ -9,10 +9,24 @@ type DashboardCardProps = {
 
 export function DashboardCard({ label, value, hint }: DashboardCardProps) {
   return (
-    <div className="p-4 sm:p-5">
-      <p className="text-sm font-medium text-[var(--ph-text-muted)]">{label}</p>
-      <p className="mt-2 text-4xl font-semibold tracking-[-0.03em] text-[var(--ph-text)]">{value}</p>
-      {hint ? <p className="mt-1.5 text-xs leading-relaxed text-[var(--ph-text-muted)]">{hint}</p> : null}
-    </div>
+    <motion.div
+      variants={revealVariants}
+      initial="hidden"
+      whileInView="show"
+      viewport={viewportOnce}
+      whileHover={motionEnabled ? { y: -3 } : undefined}
+      className="tf-panel p-5"
+    >
+      <p className="text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">{label}</p>
+      <div className="mt-2 flex items-center justify-between gap-3">
+        <p className="text-3xl font-semibold text-[var(--ph-text)]">{value}</p>
+        {icon ? (
+          <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-[rgba(254,214,9,0.25)] bg-[rgba(254,214,9,0.1)] text-[#D4A800]">
+            {icon}
+          </span>
+        ) : null}
+      </div>
+      {hint ? <p className="mt-2 text-xs text-[var(--ph-text-muted)]">{hint}</p> : null}
+    </motion.div>
   )
 }

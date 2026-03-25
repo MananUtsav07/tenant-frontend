@@ -163,37 +163,29 @@ export function OwnerDashboardPage() {
   ], [approvals.length])
 
   return (
-    <section className="ph-page-shell">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="ph-page-header">
-          <h2 className="ph-page-heading">Dashboard</h2>
-          {summary ? (
-            <div className="space-y-1 text-sm text-[var(--ph-text-muted)]">
-              <p>
-                {summary.overdue_rent > 0
-                  ? `${summary.overdue_rent} overdue rent item${summary.overdue_rent === 1 ? '' : 's'} need review.`
-                  : 'Collections stable with no overdue rent items.'}
-              </p>
-              <p>
-                {summary.awaiting_approvals > 0
-                  ? `${summary.awaiting_approvals} payment approval${summary.awaiting_approvals === 1 ? '' : 's'} waiting for review.`
-                  : 'Approval queue is currently clear.'}
-              </p>
+    <section className="space-y-6">
+      <div className="rounded-xl bg-white border border-[rgba(0,0,0,0.06)] shadow-sm p-6">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#92700A]">Owner Command Center</p>
+            <h2 className="mt-3 text-3xl font-semibold text-[#1A1A1A]">Portfolio overview</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#6B7280]">
+              Monitor residents, support requests, reminders, and approvals from a calmer control surface.
+            </p>
+            <div className="mt-4">
+              <OrganizationBadge name={organizationLabel} slug={owner?.organization?.slug} />
             </div>
-          ) : null}
-          <div className="pt-1">
-            <OrganizationBadge name={organizationLabel} slug={owner?.organization?.slug} />
           </div>
+          <Button
+            type="button"
+            onClick={() => void handleProcessReminders()}
+            disabled={processing}
+            variant="secondary"
+            iconLeft={<Clock3 className="h-4 w-4" />}
+          >
+            {processing ? 'Processing...' : 'Process reminder cycle'}
+          </Button>
         </div>
-        <Button
-          type="button"
-          onClick={() => void handleProcessReminders()}
-          disabled={processing}
-          variant="secondary"
-          iconLeft={<Clock3 className="h-4 w-4" />}
-        >
-          {processing ? 'Processing...' : 'Process reminders'}
-        </Button>
       </div>
 
       {error ? <ErrorState message={error} /> : null}
@@ -201,176 +193,55 @@ export function OwnerDashboardPage() {
 
       {!loading && summary ? (
         <>
-          <Tabs tabs={dashboardTabs} activeKey={activeTab} onChange={setActiveTab} />
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-6">
+            <SummaryCard label="Active Residents" value={summary.active_tenants} icon={<Users className="h-4 w-4" />} />
+            <SummaryCard label="Open Tickets" value={summary.open_tickets} icon={<LifeBuoy className="h-4 w-4" />} />
+            <SummaryCard label="Overdue Rent" value={summary.overdue_rent} icon={<TriangleAlert className="h-4 w-4" />} />
+            <SummaryCard label="Reminders Pending" value={summary.reminders_pending} icon={<Clock3 className="h-4 w-4" />} />
+            <SummaryCard
+              label="Unread Notices"
+              value={summary.unread_notifications}
+              icon={<Bell className="h-4 w-4" />}
+            />
+            <SummaryCard
+              label="Awaiting Approvals"
+              value={summary.awaiting_approvals}
+              icon={<CheckCheck className="h-4 w-4" />}
+            />
+          </div>
 
-          {activeTab === 'overview' ? (
-            <article className="ph-surface-card overflow-hidden p-0">
-              <div className="grid grid-cols-2 sm:grid-cols-3">
-                {summaryItems.map((item, index) => (
-                  <div
-                    key={item.label}
-                    className={`min-w-0 border-[rgba(83,88,100,0.15)] ${
-                      index % 2 === 0 ? 'border-r' : ''
-                    } ${index < 4 ? 'border-b' : ''} ${index % 3 !== 2 ? 'sm:border-r' : 'sm:border-r-0'} ${
-                      index < 3 ? 'sm:border-b' : 'sm:border-b-0'
-                    }`}
-                  >
-                    <SummaryCard label={item.label} value={item.value} hint={item.hint} />
-                  </div>
-                ))}
+          <div className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
+            <article className="rounded-xl bg-white border border-[rgba(0,0,0,0.06)] shadow-sm p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#92700A]">Operational Focus</p>
+              <div className="mt-4 space-y-4 text-sm text-[#4B5563]">
+                <div>
+                  <p className="text-[#1A1A1A]">{summary.overdue_rent > 0 ? 'Collections need attention' : 'Collections are currently stable'}</p>
+                  <p className="mt-1 text-[#6B7280]">
+                    {summary.overdue_rent > 0
+                      ? `${summary.overdue_rent} rent items are overdue and should be reviewed.`
+                      : 'No overdue rent items are currently flagged.'}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[#1A1A1A]">{summary.awaiting_approvals > 0 ? 'Approval queue is active' : 'Approval queue is clear'}</p>
+                  <p className="mt-1 text-[#6B7280]">
+                    {summary.awaiting_approvals > 0
+                      ? `${summary.awaiting_approvals} resident payment confirmations are waiting for review.`
+                      : 'No resident payment confirmations are waiting for review.'}
+                  </p>
+                </div>
               </div>
             </article>
-          ) : null}
 
-          {activeTab === 'approvals' ? (
-            approvals.length === 0 ? (
-              <p className="py-8 text-center text-sm text-[var(--ph-text-muted)]">No rent approvals are pending right now.</p>
-            ) : (
-              <DataTable headers={['Resident', 'Property', 'Due Date', 'Amount', 'Requested', 'Status', 'Actions']}>
-                {approvals.map((approval) => (
-                  <tr key={approval.id}>
-                    <td className="px-4 py-3">
-                      <p className="font-medium text-[var(--ph-text)]">{approval.tenants?.full_name ?? '-'}</p>
-                      <p className="text-xs text-[var(--ph-text-muted)]">{approval.tenants?.tenant_access_id ?? '-'}</p>
-                    </td>
-                    <td className="px-4 py-3 text-[var(--ph-text-soft)]">
-                      {approval.properties?.property_name ?? '-'}
-                      {approval.properties?.unit_number ? ` (${approval.properties.unit_number})` : ''}
-                    </td>
-                    <td className="px-4 py-3 text-[var(--ph-text-soft)]">{formatDate(approval.due_date)}</td>
-                    <td className="px-4 py-3 text-[var(--ph-text-soft)]">
-                      {formatCurrency(approval.amount_paid, owner?.organization?.currency_code)}
-                    </td>
-                    <td className="px-4 py-3 text-[var(--ph-text-muted)]">{formatDateTime(approval.created_at)}</td>
-                    <td className="px-4 py-3">
-                      <StatusBadge status={approval.status} />
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex min-w-[280px] flex-col gap-2">
-                        <FormInput
-                          label="Reject note"
-                          hideLabel
-                          wrapperClassName="gap-0"
-                          className="min-h-11 rounded-xl px-3 py-2 text-sm"
-                          placeholder="Optional reject note"
-                          value={rejectionNotes[approval.id] ?? ''}
-                          onChange={(event) =>
-                            setRejectionNotes((current) => ({
-                              ...current,
-                              [approval.id]: event.target.value,
-                            }))
-                          }
-                        />
-                        <div className="flex gap-2">
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="primary"
-                            disabled={reviewingApprovalId === approval.id}
-                            onClick={() => void handleReviewApproval(approval.id, 'approve')}
-                          >
-                            Approve
-                          </Button>
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="outline"
-                            className="border-red-500/28 bg-red-500/10 text-red-200 hover:bg-red-500/16"
-                            disabled={reviewingApprovalId === approval.id}
-                            onClick={() => void handleReviewApproval(approval.id, 'reject')}
-                          >
-                            Reject
-                          </Button>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </DataTable>
-            )
-          ) : null}
-
-          {activeTab === 'portfolio' ? (
-            portfolioSnapshot ? (
-              <div className="space-y-4">
-                <p className="text-xs text-[var(--ph-text-muted)]">Portfolio snapshot · Updated {formatDateTime(portfolioSnapshot.generated_at)}</p>
-
-                <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2 xl:grid-cols-3">
-                  <div>
-                    <p className="text-sm font-medium text-[var(--ph-text-muted)]">Overdue Rent</p>
-                    <p className="mt-1 font-heading text-2xl font-semibold text-[var(--ph-text)]">{portfolioSnapshot.overdue_rent_count}</p>
-                    <p className="mt-0.5 text-xs text-[var(--ph-text-muted)]">
-                      {portfolioSnapshot.payload.overdue_rent_items[0]
-                        ? `${portfolioSnapshot.payload.overdue_rent_items[0].tenant_name} needs review`
-                        : 'No overdue residents flagged'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-[var(--ph-text-muted)]">Urgent Tickets</p>
-                    <p className="mt-1 font-heading text-2xl font-semibold text-[var(--ph-text)]">{portfolioSnapshot.urgent_open_ticket_count}</p>
-                    <p className="mt-0.5 text-xs text-[var(--ph-text-muted)]">
-                      {portfolioSnapshot.payload.ticket_highlights.urgent_open[0]
-                        ? portfolioSnapshot.payload.ticket_highlights.urgent_open[0].subject
-                        : 'No urgent signals'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-[var(--ph-text-muted)]">Compliance</p>
-                    <p className="mt-1 font-heading text-2xl font-semibold text-[var(--ph-text)]">{portfolioSnapshot.upcoming_compliance_count}</p>
-                    <p className="mt-0.5 text-xs text-[var(--ph-text-muted)]">
-                      {portfolioSnapshot.payload.compliance_highlights[0]
-                        ? `${portfolioSnapshot.payload.compliance_highlights[0].trigger_label} in ${portfolioSnapshot.payload.compliance_highlights[0].days_remaining}d`
-                        : 'No upcoming milestones'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-[var(--ph-text-muted)]">Occupancy</p>
-                    <p className="mt-1 font-heading text-2xl font-semibold text-[var(--ph-text)]">
-                      {portfolioSnapshot.occupied_property_count}/{portfolioSnapshot.occupied_property_count + portfolioSnapshot.vacant_property_count}
-                    </p>
-                    <p className="mt-0.5 text-xs text-[var(--ph-text-muted)]">
-                      {portfolioSnapshot.vacant_property_count > 0 ? `${portfolioSnapshot.vacant_property_count} vacant` : 'Fully occupied'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-[var(--ph-text-muted)]">Net Income</p>
-                    <p className="mt-1 font-heading text-2xl font-semibold text-[var(--ph-text)]">
-                      {monthlyCashFlow ? formatCurrency(monthlyCashFlow.portfolio_net_income, monthlyCashFlow.currency_code) : 'N/A'}
-                    </p>
-                    <p className="mt-0.5 text-xs text-[var(--ph-text-muted)]">{monthlyCashFlow?.report_label ?? 'Not generated yet'}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-[var(--ph-text-muted)]">Yield</p>
-                    <p className="mt-1 font-heading text-2xl font-semibold text-[var(--ph-text)]">
-                      {typeof annualCashFlow?.portfolio_yield_percent === 'number' ? `${annualCashFlow.portfolio_yield_percent}%` : 'N/A'}
-                    </p>
-                    <p className="mt-0.5 text-xs text-[var(--ph-text-muted)]">{annualCashFlow?.report_label ?? 'Not generated yet'}</p>
-                  </div>
-                </div>
-
-                <div>
-                  <p className="mb-3 text-xs font-medium text-[var(--ph-text-muted)]">Recent alerts</p>
-                  {portfolioOverview?.recent_alerts.length ? (
-                    <div className="divide-y divide-[rgba(83,88,100,0.1)]">
-                      {portfolioOverview.recent_alerts.slice(0, 5).map((alert) => (
-                        <div key={alert.id} className="flex items-start justify-between gap-3 py-3 first:pt-0 last:pb-0">
-                          <div>
-                            <p className="text-sm font-medium text-[var(--ph-text)]">{alert.title}</p>
-                            <p className="mt-0.5 text-xs leading-relaxed text-[var(--ph-text-muted)]">{alert.message}</p>
-                          </div>
-                          <p className="shrink-0 text-[10px] text-[var(--ph-text-muted)]">{formatDateTime(alert.created_at)}</p>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-sm text-[var(--ph-text-muted)]">No recent alerts yet.</p>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <p className="py-8 text-center text-sm text-[var(--ph-text-muted)]">Portfolio visibility not available yet.</p>
-            )
-          ) : null}
+            <article className="rounded-xl bg-white border border-[rgba(0,0,0,0.06)] shadow-sm p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#92700A]">Automation Notes</p>
+              <ul className="mt-4 space-y-3 text-sm text-[#4B5563]">
+                <li>Reminder processing keeps scheduled follow-up disciplined across rent cycles.</li>
+                <li>Unread notices surface resident-facing activity that still needs attention.</li>
+                <li>Payment approvals stay human-led even when reminders and notifications are automated.</li>
+              </ul>
+            </article>
+          </div>
         </>
       ) : null}
 
@@ -382,6 +253,84 @@ export function OwnerDashboardPage() {
           actionLabel="Manage Properties"
           actionHref={ROUTES.ownerProperties}
         />
+      ) : null}
+
+      {!loading ? (
+        <div className="space-y-3">
+          <div>
+            <h3 className="text-2xl font-semibold text-[#1A1A1A]">Awaiting approvals</h3>
+            <p className="text-sm text-[#6B7280]">
+              Review resident rent payment confirmations pending your verification.
+            </p>
+          </div>
+
+          {approvals.length === 0 ? (
+            <EmptyState
+              title="No rent approvals pending"
+              description="Resident payment confirmations will appear here when submitted."
+              icon={<CheckCheck className="h-5 w-5" />}
+            />
+          ) : (
+            <DataTable headers={['Resident', 'Property', 'Due Date', 'Amount', 'Requested', 'Status', 'Actions']}>
+              {approvals.map((approval) => (
+                <tr key={approval.id}>
+                  <td className="px-4 py-3">
+                    <p className="font-medium text-[#1A1A1A]">{approval.tenants?.full_name ?? '-'}</p>
+                    <p className="text-xs text-[#6B7280]">{approval.tenants?.tenant_access_id ?? '-'}</p>
+                  </td>
+                  <td className="px-4 py-3 text-[#4B5563]">
+                    {approval.properties?.property_name ?? '-'}
+                    {approval.properties?.unit_number ? ` (${approval.properties.unit_number})` : ''}
+                  </td>
+                  <td className="px-4 py-3 text-[#4B5563]">{formatDate(approval.due_date)}</td>
+                  <td className="px-4 py-3 text-[#4B5563]">
+                    {formatCurrency(approval.amount_paid, owner?.organization?.currency_code)}
+                  </td>
+                  <td className="px-4 py-3 text-[#6B7280]">{formatDateTime(approval.created_at)}</td>
+                  <td className="px-4 py-3">
+                    <StatusBadge status={approval.status} />
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex min-w-[280px] flex-col gap-2">
+                      <input
+                        className="tf-field h-9 px-3 text-sm"
+                        placeholder="Optional reject note"
+                        value={rejectionNotes[approval.id] ?? ''}
+                        onChange={(event) =>
+                          setRejectionNotes((current) => ({
+                            ...current,
+                            [approval.id]: event.target.value,
+                          }))
+                        }
+                      />
+                      <div className="flex gap-2">
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="primary"
+                          disabled={reviewingApprovalId === approval.id}
+                          onClick={() => void handleReviewApproval(approval.id, 'approve')}
+                        >
+                          Approve
+                        </Button>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          className="border-red-300 bg-red-50 text-red-700 hover:bg-red-100"
+                          disabled={reviewingApprovalId === approval.id}
+                          onClick={() => void handleReviewApproval(approval.id, 'reject')}
+                        >
+                          Reject
+                        </Button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </DataTable>
+          )}
+        </div>
       ) : null}
     </section>
   )

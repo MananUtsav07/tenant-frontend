@@ -1,8 +1,8 @@
-import { Activity, BellRing, CircleDollarSign, MessageSquare, Sparkles, Users } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { BellRing, Building2, CreditCard, MessageCircle, Sparkles, Users, Wallet } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 
-import { CTASection } from '../../components/common/CTASection'
-import { HeroSection } from '../../components/common/HeroSection'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { usePageSeo } from '../../hooks/usePageSeo'
 import { ROUTES } from '../../routes/constants'
@@ -10,13 +10,12 @@ import { api } from '../../services/api'
 import { FaqSection } from '../../sections/landing/FaqSection'
 import { FeatureHighlightsSection } from '../../sections/landing/FeatureHighlightsSection'
 import { HowItWorksSection } from '../../sections/landing/HowItWorksSection'
-import { ProductBenefitsSection } from '../../sections/landing/ProductBenefitsSection'
-import { TestimonialSection } from '../../sections/landing/TestimonialSection'
+import { fadeIn, revealUp, staggerParent, useMotionVariants, viewportOnce } from '../../utils/motion'
 import type { OwnerSummary, PublicOperationsSnapshot } from '../../types/api'
 
 type SnapshotMode = 'public' | 'owner'
 
-function LiveMetricsStrip({
+function FloatingStatsCard({
   mode,
   snapshot,
   ownerSummary,
@@ -28,71 +27,62 @@ function LiveMetricsStrip({
   loading: boolean
 }) {
   const renderCount = (value: number | null) =>
-    value === null ? (loading ? '·' : '--') : value.toLocaleString('en-AE')
+    value === null ? (loading ? '...' : '--') : value.toLocaleString('en-AE')
 
-  const openTickets = renderCount(mode === 'owner' ? ownerSummary?.open_tickets ?? null : snapshot?.open_tickets ?? null)
-  const tenantCount = renderCount(mode === 'owner' ? ownerSummary?.active_tenants ?? null : snapshot?.active_tenants ?? null)
-  const actionCount = renderCount(mode === 'owner' ? ownerSummary?.reminders_pending ?? null : snapshot?.due_this_week ?? null)
+  const properties = renderCount(
+    mode === 'owner' ? ownerSummary?.open_tickets ?? null : snapshot?.open_tickets ?? null,
+  )
+  const tenants = renderCount(
+    mode === 'owner' ? ownerSummary?.active_tenants ?? null : snapshot?.active_tenants ?? null,
+  )
+  const actionCount = renderCount(
+    mode === 'owner' ? ownerSummary?.reminders_pending ?? null : snapshot?.due_this_week ?? null,
+  )
 
-  const metrics = [
-    { icon: <MessageSquare className="h-4 w-4" />, label: 'Open Tickets', value: openTickets },
-    { icon: <Users className="h-4 w-4" />, label: 'Active Residents', value: tenantCount },
-    { icon: <BellRing className="h-4 w-4" />, label: mode === 'owner' ? 'Pending Reminders' : 'Collections Due', value: actionCount },
-  ]
-
-  const features = [
-    { icon: <Sparkles className="h-3.5 w-3.5" />, label: 'Resident support triage and status orchestration' },
-    { icon: <CircleDollarSign className="h-3.5 w-3.5" />, label: 'Rent reminder timing with human approvals intact' },
-    { icon: <Activity className="h-3.5 w-3.5" />, label: 'Dashboard visibility for owners, operators, and residents' },
-  ]
+  const revealVariants = useMotionVariants(revealUp)
 
   return (
-    <div className="border-y border-[rgba(83,88,100,0.14)] bg-[rgba(9,13,21,0.72)] backdrop-blur-sm">
-      <div className="mx-auto max-w-7xl px-6 py-5 lg:px-10">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:gap-0 lg:divide-x lg:divide-[rgba(83,88,100,0.14)]">
-
-          {/* Live pulse label */}
-          <div className="flex items-center gap-3 lg:pr-8">
-            <span className="flex items-center gap-1.5">
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--ph-accent)]" style={{ animation: 'ph-dot-blink 2s ease-in-out infinite' }} />
-              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--ph-text-muted)]">Live Portfolio Pulse</span>
+    <motion.section
+      variants={revealVariants}
+      initial="hidden"
+      whileInView="show"
+      viewport={viewportOnce}
+      className="relative z-20 -mt-16 px-4 sm:px-6 lg:px-10"
+    >
+      <div className="mx-auto max-w-5xl rounded-2xl border border-[#FED609]/10 bg-white p-8 shadow-xl md:p-12">
+        <div className="flex flex-col items-center gap-10 md:flex-row md:justify-between">
+          <div className="flex flex-col items-center text-center md:items-start md:text-left">
+            <span className="text-sm font-bold uppercase tracking-widest text-[#FED609]">
+              Live Portfolio
             </span>
-            <span className="rounded-full border border-[rgba(240,163,35,0.18)] bg-[rgba(240,163,35,0.06)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#f1cb85]">
-              {mode === 'owner' ? 'Private' : 'Benchmark'}
-            </span>
+            <h3 className="ph-title mt-1 text-3xl font-bold">Real-time Metrics</h3>
           </div>
-
-          {/* Metrics */}
-          <div className="flex flex-wrap gap-6 lg:flex-1 lg:justify-center lg:px-8">
-            {metrics.map((m) => (
-              <div key={m.label} className="flex items-center gap-3">
-                <span className="text-[var(--ph-text-muted)]">{m.icon}</span>
-                <div>
-                  <p className="font-heading text-xl font-semibold leading-none text-[var(--ph-text)]">{m.value}</p>
-                  <p className="mt-0.5 text-[11px] text-[var(--ph-text-muted)]">{m.label}</p>
-                </div>
+          <div className="flex flex-wrap justify-center gap-12 md:gap-20">
+            <div className="text-center">
+              <div className="ph-title mb-1 text-4xl font-extrabold text-[#1A1A1A]">{properties}</div>
+              <div className="text-sm text-[#6B7280]">
+                <Building2 className="mr-1 inline-block h-3.5 w-3.5 text-[#FED609]" />
+                Properties
               </div>
-            ))}
-          </div>
-
-          {/* Automation features */}
-          <div className="flex flex-col gap-1.5 lg:pl-8">
-            {features.map((f) => (
-              <div key={f.label} className="flex items-center gap-2 text-[11px] text-[var(--ph-text-muted)]">
-                <span className="shrink-0 text-[var(--ph-accent)]">{f.icon}</span>
-                {f.label}
+            </div>
+            <div className="text-center">
+              <div className="ph-title mb-1 text-4xl font-extrabold text-[#FED609]">{tenants}</div>
+              <div className="text-sm text-[#6B7280]">
+                <Users className="mr-1 inline-block h-3.5 w-3.5 text-[#FED609]" />
+                Active Tenants
               </div>
-            ))}
+            </div>
+            <div className="text-center">
+              <div className="ph-title mb-1 text-4xl font-extrabold text-[#1A1A1A]">{actionCount}</div>
+              <div className="text-sm text-[#6B7280]">
+                <BellRing className="mr-1 inline-block h-3.5 w-3.5 text-[#FED609]" />
+                {mode === 'owner' ? 'Pending' : 'Due This Week'}
+              </div>
+            </div>
           </div>
-
         </div>
-        {mode === 'public' && snapshot?.generated_at ? (
-          <p className="mt-3 text-[10px] text-[var(--ph-text-muted)] opacity-60">
-            Updated {new Date(snapshot.generated_at).toLocaleString('en-AE')}
-          </p>
-        ) : null}
       </div>
-    </div>
+    </motion.section>
   )
 }
 
@@ -171,64 +161,133 @@ export function LandingPage() {
     },
   })
 
+  const revealVariants = useMotionVariants(revealUp)
+  const fadeVariants = useMotionVariants(fadeIn)
+  const staggerVariants = useMotionVariants(staggerParent)
+
   return (
     <>
-      <HeroSection
-        badge="Premium AI Property Operations"
-        fullViewport
-        heading={
-          <>
-            The <span className="ph-highlight">AI operations layer</span> for premium Dubai real estate
-          </>
-        }
-        subheading={
-          <>
-            Prophives brings resident service, rent workflows, and portfolio visibility into a single calm command
-            center for owners, operators, and real estate teams.
-          </>
-        }
-        actions={[
-          { label: 'Book Private Demo', href: ROUTES.contact, variant: 'primary' },
-          { label: 'Explore Platform', href: ROUTES.features, variant: 'secondary' },
-          { label: 'Owner Login', href: ROUTES.ownerLogin, variant: 'outline' },
-        ]}
-        highlights={[
-          'Premium operating environment for serious B2B real estate teams',
-          'Owner and resident workspaces with controlled visibility',
-          'AI-assisted reminders, service workflows, and approval handling',
-          'Conversion-focused rollout for luxury portfolios in Dubai',
-        ]}
-      />
+      {/* Hero Section - Stitch Design */}
+      <section className="relative min-h-[870px] overflow-hidden bg-gradient-to-br from-[#FFFAE2] to-[#FEFAEF]">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-4 pt-28 pb-20 sm:px-6 lg:grid-cols-2 lg:px-10">
+          {/* Left - Text Content */}
+          <motion.div
+            variants={staggerVariants}
+            initial="hidden"
+            animate="show"
+            className="z-10 text-center lg:text-left"
+          >
+            <motion.h1
+              variants={revealVariants}
+              className="ph-title text-5xl font-extrabold leading-[1.1] tracking-tight text-[#1A1A1A] md:text-7xl"
+            >
+              Manage Your Properties{' '}
+              <span className="text-[#FED609] underline decoration-[#FED609]/20">Smarter</span> with AI
+            </motion.h1>
+            <motion.p
+              variants={revealVariants}
+              className="mx-auto mt-6 max-w-xl text-lg text-[#6B7280] md:text-xl lg:mx-0"
+            >
+              The premium AI-powered property management platform designed for the modern Dubai real
+              estate market. Automate everything from tenant communication to rent collection.
+            </motion.p>
+            <motion.div
+              variants={fadeVariants}
+              className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start"
+            >
+              <Link
+                to={ROUTES.ownerLogin}
+                className="w-full rounded-xl bg-[#FED609] px-8 py-4 text-center text-lg font-bold text-[#1A1A1A] shadow-lg transition-all hover:bg-[#FFD70B] hover:shadow-xl active:scale-95 sm:w-auto"
+              >
+                Get Started for Free
+              </Link>
+              <Link
+                to={ROUTES.contact}
+                className="w-full rounded-xl border-2 border-[#FED609] px-8 py-4 text-center text-lg font-bold text-[#1A1A1A] transition-all hover:bg-[#FED609]/5 active:scale-95 sm:w-auto"
+              >
+                Book a Demo
+              </Link>
+            </motion.div>
+          </motion.div>
 
-      <LiveMetricsStrip
+          {/* Right - Hero Image with Decorative Elements */}
+          <motion.div
+            variants={revealVariants}
+            initial="hidden"
+            animate="show"
+            className="relative hidden h-[600px] lg:block"
+          >
+            {/* Abstract Geometric Shapes */}
+            <div className="absolute inset-0">
+              <div className="absolute right-10 top-10 h-64 w-64 rounded-full bg-[#FED609]/20 blur-3xl" />
+              <div className="absolute bottom-10 left-10 h-80 w-80 rounded-full bg-[#FFFAE2] blur-2xl" />
+              <div className="grid grid-cols-6 gap-4 opacity-10">
+                <div className="h-16 w-16 rounded-xl bg-[#1A1A1A]" />
+                <div className="mt-8 h-16 w-16 rounded-xl bg-[#FED609]" />
+                <div className="h-16 w-16 rounded-xl bg-[#1A1A1A]" />
+                <div className="mt-12 h-16 w-16 rounded-xl bg-[#FED609]" />
+                <div className="h-16 w-16 rounded-xl bg-[#1A1A1A]" />
+                <div className="mt-4 h-16 w-16 rounded-xl bg-[#FED609]" />
+              </div>
+            </div>
+            {/* Main Image */}
+            <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-3xl border-8 border-white bg-white shadow-2xl">
+              <img
+                className="h-full w-full object-cover"
+                alt="Modern luxury high-rise apartment building in Dubai with glass facade and sunset reflection in warm golden lighting"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwGYvpeM85pwKFXm97S1TAATDSM4__Trygy2ql_yytBQ3PtwsoBr96--gxmJ1tNMfkJalxYzSIoxOG5TitKAI8TkAmCuh-HgVJ38g6tv4XlGNyPXwcGHVh7RvK5Ks-VxmOaevdxY3ls6cvgFdCLs-OYhCJoy5zWvuNQy-FHxiWD6PdkJIyIzAwaSdi3fyEPPzolc5u8TXThfIcwgElPPs8urnbO34Aq7_k4t9aCRyv_klF-0EOqdCSCXpXavAV4-aCl0F__5tH7H6N"
+              />
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Floating Stats Card with Live Data */}
+      <FloatingStatsCard
         mode={snapshotMode}
         snapshot={snapshot}
         ownerSummary={ownerSummary}
         loading={snapshotLoading}
       />
 
+      {/* Features Section */}
       <FeatureHighlightsSection />
+
+      {/* How It Works Section */}
       <HowItWorksSection />
-      <ProductBenefitsSection />
-      <TestimonialSection />
+
+      {/* FAQ Section */}
       <FaqSection />
 
-      <CTASection
-        eyebrow="Private Rollout"
-        title={
-          <>
-            Ready to bring <span className="ph-highlight">luxury-grade operations</span> into one platform?
-          </>
-        }
-        description={
-          <>
-            Launch your owner workspace, map your portfolio flows, and roll out resident-facing operations with a
-            brand experience that feels premium from day one.
-          </>
-        }
-        primaryAction={{ label: 'Talk to Prophives', href: ROUTES.contact }}
-        secondaryAction={{ label: 'View Pricing', href: ROUTES.pricing }}
-      />
+      {/* CTA Banner - Stitch Design */}
+      <section className="px-4 py-20 sm:px-6 lg:px-10">
+        <motion.div
+          variants={revealVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-[#FED609] p-12 text-center md:p-20"
+        >
+          <div className="relative z-10">
+            <h2 className="ph-title text-3xl font-black text-[#1A1A1A] md:text-5xl">
+              Ready to simplify property management?
+            </h2>
+            <p className="mx-auto mb-10 mt-6 max-w-2xl text-lg text-[#1A1A1A]/80 md:text-xl">
+              Join hundreds of property owners who have saved over 40 hours a week using our AI
+              platform.
+            </p>
+            <Link
+              to={ROUTES.ownerLogin}
+              className="inline-block rounded-xl bg-white px-10 py-5 text-lg font-bold text-[#1A1A1A] shadow-xl transition-all hover:shadow-2xl active:scale-95"
+            >
+              Start Free Trial
+            </Link>
+          </div>
+          {/* Decorative blur elements */}
+          <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-white/20 blur-3xl" />
+          <div className="absolute -left-24 -top-24 h-64 w-64 rounded-full bg-white/10 blur-2xl" />
+        </motion.div>
+      </section>
     </>
   )
 }

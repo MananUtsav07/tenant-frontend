@@ -9,8 +9,6 @@ import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { Button } from '../../components/common/Button'
 import { ErrorState } from '../../components/common/ErrorState'
 import { FormInput } from '../../components/common/FormInput'
-import { SectionContainer } from '../../components/common/SectionContainer'
-import { getProphivesReactSelectStyles } from '../../components/common/formTheme'
 import { allCountryOptions } from '../../constants/countryCurrency'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { usePageSeo } from '../../hooks/usePageSeo'
@@ -23,6 +21,58 @@ type CountrySelectOption = {
   value: string
   label: string
   isSupported: boolean
+}
+
+const countrySelectStyles: StylesConfig<CountrySelectOption, false> = {
+  control: (baseStyles, state) => ({
+    ...baseStyles,
+    minHeight: '48px',
+    borderRadius: '0.75rem',
+    borderColor: state.isFocused ? '#FED609' : 'rgba(0, 0, 0, 0.12)',
+    boxShadow: state.isFocused ? '0 0 0 3px rgba(254, 214, 9, 0.2)' : 'none',
+    backgroundColor: '#fff',
+    '&:hover': {
+      borderColor: 'rgba(254, 214, 9, 0.5)',
+    },
+  }),
+  placeholder: (baseStyles) => ({
+    ...baseStyles,
+    color: '#9CA3AF',
+  }),
+  input: (baseStyles) => ({
+    ...baseStyles,
+    color: '#1A1A1A',
+  }),
+  singleValue: (baseStyles) => ({
+    ...baseStyles,
+    color: '#1A1A1A',
+  }),
+  menu: (baseStyles) => ({
+    ...baseStyles,
+    borderRadius: '0.75rem',
+    border: '1px solid rgba(0, 0, 0, 0.06)',
+    boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.12)',
+    backgroundColor: '#fff',
+    overflow: 'hidden',
+  }),
+  option: (baseStyles, state) => ({
+    ...baseStyles,
+    fontSize: '0.925rem',
+    backgroundColor: state.isFocused ? 'rgba(254, 214, 9, 0.1)' : '#fff',
+    color: state.isDisabled ? '#9CA3AF' : '#1A1A1A',
+    cursor: state.isDisabled ? 'not-allowed' : 'pointer',
+  }),
+  indicatorSeparator: (baseStyles) => ({
+    ...baseStyles,
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+  }),
+  dropdownIndicator: (baseStyles) => ({
+    ...baseStyles,
+    color: '#6B7280',
+    '&:hover': {
+      color: '#FED609',
+    },
+  }),
 }
 
 export function OwnerLoginPage() {
@@ -119,48 +169,62 @@ export function OwnerLoginPage() {
   }
 
   return (
-    <SectionContainer size="wide" className="py-12">
-      <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
-        <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce} className="ph-surface-navy ph-hex-bg rounded-xl p-6 sm:p-7">
-          <span className="ph-kicker">Owner Workspace</span>
-          <h1 className="ph-title mt-5 text-4xl font-semibold text-[var(--ph-text)]">Operate your portfolio with more control and less noise</h1>
-          <p className="mt-4 text-base leading-relaxed text-[var(--ph-text-muted)]">
+    <div className="flex min-h-screen">
+      {/* Left side — gold branding panel */}
+      <motion.div
+        variants={revealVariants}
+        initial="hidden"
+        whileInView="show"
+        viewport={viewportOnce}
+        className="hidden w-[45%] flex-col justify-between bg-[#FED609] p-10 lg:flex xl:p-14"
+      >
+        <div>
+          <span className="text-sm font-bold uppercase tracking-widest text-[#1A1A1A]/60">Owner Workspace</span>
+          <h1 className="mt-6 text-4xl font-semibold leading-tight text-[#1A1A1A] xl:text-5xl">
+            Operate your portfolio with more control and less noise
+          </h1>
+          <p className="mt-5 text-base leading-relaxed text-[#1A1A1A]/70">
             Prophives gives owners a premium command center for resident support, rent workflows, reminders, and approvals.
           </p>
-          <div className="mt-6 space-y-3 text-sm text-[var(--ph-text-soft)]">
-            <p className="inline-flex items-center gap-2">
-              <Building2 className="h-4 w-4 text-[var(--ph-accent)]" />
-              Structured property and resident operations
-            </p>
-            <p className="inline-flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-[var(--ph-accent)]" />
-              AI-assisted reminders with human oversight
-            </p>
-            <p className="inline-flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-[var(--ph-accent)]" />
-              Secure owner and resident workspace separation
-            </p>
-          </div>
-        </motion.div>
+        </div>
 
+        <div className="space-y-3 text-sm text-[#1A1A1A]/80">
+          <p className="inline-flex items-center gap-2">
+            <Building2 className="h-4 w-4 text-[#1A1A1A]" />
+            Structured property and resident operations
+          </p>
+          <p className="inline-flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-[#1A1A1A]" />
+            AI-assisted reminders with human oversight
+          </p>
+          <p className="inline-flex items-center gap-2">
+            <ShieldCheck className="h-4 w-4 text-[#1A1A1A]" />
+            Secure owner, resident, and admin workspace separation
+          </p>
+        </div>
+      </motion.div>
+
+      {/* Right side — form */}
+      <div className="flex flex-1 items-center justify-center bg-white px-6 py-12 sm:px-10">
         <motion.div
           variants={revealVariants}
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="ph-surface-card-strong rounded-xl p-7"
+          className="w-full max-w-md"
         >
-          <h2 className="ph-title text-3xl font-semibold text-[var(--ph-text)]">Owner Access</h2>
-          <p className="mt-2 text-sm text-[var(--ph-text-muted)]">Login or create your Prophives owner account.</p>
+          <h2 className="text-3xl font-semibold text-[#1A1A1A]">Owner Access</h2>
+          <p className="mt-2 text-sm text-[#6B7280]">Login or create your Prophives owner account.</p>
 
-          <div className="mt-5 inline-flex rounded-full border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-1">
+          {/* Tabs */}
+          <div className="mt-6 inline-flex rounded-full border border-[rgba(0,0,0,0.08)] bg-[#FEFAEF] p-1">
             <button
               type="button"
               onClick={() => setMode('login')}
-              className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm ${
+              className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition ${
                 mode === 'login'
-                  ? 'border border-[rgba(240,163,35,0.2)] bg-[rgba(240,163,35,0.08)] text-[#f4d298]'
-                  : 'text-[var(--ph-text-muted)]'
+                  ? 'bg-[#FED609] text-[#1A1A1A] shadow-sm'
+                  : 'text-[#6B7280] hover:text-[#1A1A1A]'
               }`}
             >
               <UserRound className="h-4 w-4" />
@@ -169,10 +233,10 @@ export function OwnerLoginPage() {
             <button
               type="button"
               onClick={() => setMode('register')}
-              className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm ${
+              className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition ${
                 mode === 'register'
-                  ? 'border border-[rgba(240,163,35,0.2)] bg-[rgba(240,163,35,0.08)] text-[#f4d298]'
-                  : 'text-[var(--ph-text-muted)]'
+                  ? 'bg-[#FED609] text-[#1A1A1A] shadow-sm'
+                  : 'text-[#6B7280] hover:text-[#1A1A1A]'
               }`}
             >
               <UserRoundPlus className="h-4 w-4" />
@@ -180,7 +244,7 @@ export function OwnerLoginPage() {
             </button>
           </div>
 
-          <form className="mt-5 space-y-4" onSubmit={handleSubmit}>
+          <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
             <FormInput
               label="Email"
               type="email"
@@ -247,7 +311,7 @@ export function OwnerLoginPage() {
                 />
 
                 <label className="block space-y-2">
-                  <span className="text-sm font-medium text-[var(--ph-text-muted)]">Country where your properties are located</span>
+                  <span className="text-sm font-medium text-[#6B7280]">Country where your properties are located</span>
                   <Select<CountrySelectOption, false>
                     inputId="owner_country_code"
                     name="owner_country_code"
@@ -271,7 +335,7 @@ export function OwnerLoginPage() {
                       </span>
                     )}
                   />
-                  <span className="text-xs text-[var(--ph-text-muted)]">
+                  <span className="text-xs text-[#6B7280]">
                     Used to set your rent currency now and regional pricing later. Countries marked "Coming soon" are
                     listed for visibility and cannot be selected yet.
                   </span>
@@ -292,14 +356,14 @@ export function OwnerLoginPage() {
             </Button>
           </form>
 
-          <p className="mt-4 text-sm text-[var(--ph-text-muted)]">
+          <p className="mt-5 text-sm text-[#6B7280]">
             Resident?{' '}
-            <Link className="ph-link font-semibold" to={ROUTES.tenantLogin}>
+            <Link className="font-semibold text-[#1A1A1A] underline decoration-[#FED609] decoration-2 underline-offset-2 hover:text-[#92700A]" to={ROUTES.tenantLogin}>
               Login here
             </Link>
           </p>
         </motion.div>
       </div>
-    </SectionContainer>
+    </div>
   )
 }

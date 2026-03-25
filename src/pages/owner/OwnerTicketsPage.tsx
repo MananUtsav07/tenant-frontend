@@ -171,12 +171,13 @@ export function OwnerTicketsPage() {
   }
 
   return (
-    <section className="ph-page-shell">
-      <div className="ph-page-header">
-        <h2 className="ph-title inline-flex items-center gap-2 text-xl font-semibold text-[var(--ph-text)]">
-          <LifeBuoy className="h-5 w-5 text-[var(--ph-accent)]" />
+    <section className="space-y-6">
+      <div>
+        <h2 className="inline-flex items-center gap-2 text-2xl font-semibold text-[#1A1A1A]">
+          <LifeBuoy className="h-6 w-6 text-[#FED609]" />
           Support Tickets
         </h2>
+        <p className="text-sm text-[#6B7280]">Track and update tenant requests.</p>
       </div>
 
       {error ? <ErrorState message={error} /> : null}

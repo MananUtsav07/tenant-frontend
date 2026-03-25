@@ -8,21 +8,21 @@ export function DataTable({
   children: ReactNode
 }) {
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full min-w-[640px]">
-        <thead>
-          <tr className="border-b border-[rgba(83,88,100,0.14)]">
+    <div className="overflow-x-auto rounded-xl border border-[rgba(0,0,0,0.06)] bg-white shadow-sm">
+      <table className="min-w-full divide-y divide-[rgba(0,0,0,0.06)]">
+        <thead className="bg-[#FEFAEF]">
+          <tr>
             {headers.map((header) => (
               <th
                 key={header}
-                className="px-4 py-3 text-left text-sm font-medium text-[var(--ph-text-muted)]"
+                className="px-4 py-3.5 text-left text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6B7280]"
               >
                 {header}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="text-sm text-[var(--ph-text-soft)] [&>tr]:border-b [&>tr]:border-[rgba(83,88,100,0.08)] [&>tr]:transition-colors [&>tr:hover]:bg-white/[0.025] [&>tr:last-child]:border-0">
+        <tbody className="divide-y divide-[rgba(0,0,0,0.06)] text-sm text-[#4B5563] [&>tr]:transition-colors [&>tr:hover]:bg-[#FEFAEF]/60 [&>tr:nth-child(even)]:bg-[#FEFAEF]/30">
           {children}
         </tbody>
       </table>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Support &amp; Help Center | Prophives</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Manrope:wght@400;500;600&amp;family=Dm+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#FED609",
+              cream: "#FEFAEF",
+              ivory: "#FFFAE2",
+              deepGold: "#FFD70B",
+              darkText: "#1A1A1A",
+              mutedText: "#6B7280",
+            },
+            fontFamily: {
+              "headline": ["Sora"],
+              "body": ["Manrope"],
+              "label": ["Dm Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .faq-item:hover .faq-icon {
+            color: #FED609;
+        }
+    </style>
+</head>
+<body class="bg-[#FEFAEF] font-body text-darkText">
+<!-- Sidebar Navigation (SideNavBar) -->
+<aside class="flex flex-col fixed left-0 top-0 h-full z-40 bg-[#FEFAEF] dark:bg-gray-900 h-screen w-64 border-r border-[#FED609]/20 dark:border-gray-800 font-['Manrope'] font-medium text-[#1A1A1A] dark:text-gray-200">
+<div class="p-6">
+<div class="text-xl font-bold text-[#FED609] mb-1">Prophives</div>
+<div class="text-xs text-[#6B7280] uppercase tracking-widest">Tenant Portal</div>
+</div>
+<nav class="flex-1 px-4 space-y-2">
+<a class="flex items-center px-4 py-3 text-[#6B7280] dark:text-gray-400 hover:text-[#FED609] hover:bg-[#FED609]/5 dark:hover:bg-gray-800 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
+                Overview
+            </a>
+<a class="flex items-center px-4 py-3 text-[#6B7280] dark:text-gray-400 hover:text-[#FED609] hover:bg-[#FED609]/5 dark:hover:bg-gray-800 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="confirmation_number">confirmation_number</span>
+                My Tickets
+            </a>
+<!-- Active State: Support -->
+<a class="flex items-center px-4 py-3 bg-[#FED609] text-[#1A1A1A] font-bold rounded-lg translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="support_agent">support_agent</span>
+                Support
+            </a>
+</nav>
+<div class="px-6 py-4">
+<button class="w-full py-3 bg-[#FED609] text-[#1A1A1A] font-bold rounded-lg shadow-sm hover:opacity-90 transition-opacity">
+                Pay Rent
+            </button>
+</div>
+<div class="mt-auto p-4 border-t border-[#FED609]/10">
+<a class="flex items-center px-4 py-3 text-[#6B7280] dark:text-gray-400 hover:text-[#FED609] transition-all" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="settings">settings</span>
+                Settings
+            </a>
+<a class="flex items-center px-4 py-3 text-[#6B7280] dark:text-gray-400 hover:text-[#FED609] transition-all" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="logout">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-64 min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-8 py-4 bg-[#FEFAEF] dark:bg-gray-900 border-b border-[#FED609]/20 shadow-sm sticky top-0 z-30">
+<h1 class="font-headline font-bold text-2xl text-[#1A1A1A] dark:text-white">Support &amp; Help Center</h1>
+<div class="flex items-center gap-6">
+<div class="relative hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-mutedText" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-white border border-[#FED609]/20 rounded-full text-sm focus:ring-2 focus:ring-[#FED609] focus:border-transparent outline-none w-64" placeholder="Search for help..." type="text"/>
+</div>
+<div class="flex gap-4">
+<button class="p-2 text-[#6B7280] hover:bg-[#FED609]/10 rounded-full transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-[#FED609] rounded-full"></span>
+</button>
+<button class="p-2 text-[#6B7280] hover:bg-[#FED609]/10 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+</button>
+</div>
+<div class="h-10 w-10 rounded-full bg-ivory border-2 border-[#FED609] overflow-hidden">
+<img alt="Tenant Profile Avatar" class="w-full h-full object-cover" data-alt="portrait of a professional male tenant in a modern business casual outfit with a friendly expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMafgo_1jSF2uNis4LN5ExMsVw4HpvHm7_JIfeiw2HHoSeCrhL4WyqDNPThQu2tKVlf-Z3zFVZJodmenOQ5wAuJOyfkuZlwVvYcS1eF4d6-5RovHlxCG4PHh6jpTj9k2YTEU-2PCSWnst0raEhnZkvGG7gY_uoNgdoThHZvj4_FIvF9MkZpgtpKKODN6INdeqkYph3KKN-0YbtZzHilnCCqqf4a71VcbaZaw6R85xBhewPG4pId_v6-EA4AFZL7elL8JBGEtxr2HoE"/>
+</div>
+</div>
+</header>
+<div class="p-8 max-w-6xl mx-auto">
+<!-- Top Bento Grid Section -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-12">
+<!-- Owner Contact Card -->
+<div class="lg:col-span-7 bg-white p-8 rounded-xl border border-[#FED609]/10 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex flex-col md:flex-row gap-8 items-start">
+<div class="w-32 h-32 rounded-2xl overflow-hidden flex-shrink-0 border-4 border-ivory">
+<img alt="Owner Profile" class="w-full h-full object-cover" data-alt="professional real estate owner profile picture wearing a suit in a bright luxury dubai office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqMYmKnDzt149UUp_tijoT57wEWwU9jP2Cka2pE5OrpD_4rZrAKiRD64KFiQVYm1F60EQeUAzARxuiwCISAuzJQii9y0Gz8HtXYkm3d9itA_jFYwOfmqXQxuCl9EXrWt0TsopgILOzfPJVhd_ymJAvx-inFx_JVLMx75bL8Z8VMO-H6xSVh42-zbpznhbUs8dSBxJDoSMjE0xun5v4oHDfR17RU-J93z1eNHxSp7qFZYo1IkDW2rwZR2TkP3S9jziE-807nvdqGs7L"/>
+</div>
+<div class="flex-1">
+<span class="inline-block px-3 py-1 bg-[#FED609]/10 text-[#FED609] text-xs font-bold rounded-full mb-3 uppercase tracking-wider">Property Owner</span>
+<h2 class="text-2xl font-headline font-bold mb-2">Ahmed Al-Maktoum</h2>
+<p class="text-mutedText mb-6 font-body">Available for urgent maintenance requests and lease inquiries. Standard response time: <span class="text-darkText font-semibold">Under 2 hours</span>.</p>
+<div class="flex flex-wrap gap-4">
+<a class="flex items-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-lg font-bold hover:opacity-90 transition-all shadow-sm" href="#">
+<img alt="WhatsApp" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHlLQL5VQgbUGiCSkCOlYK81UQ0DZ00ldXqRZxvnIrMrmeyg6dZxzcweQcTdwYfOOt9WRtMjVcRB2FKtrx3HEc0aDfmj8UsfRGbMGNpYY-HYUr305pzUQwfyAw4VwIgZEQbMqH2zD-HQzqK2_L-C4PcywaPTFEipvgKNyc-T_sOAs2Fr0SncBQEjnajQIWh2RK0r7nu6VFgsE-pZEbYRu_tMRMXne_YIC50qLF0sMa3novqaQ7dH97cxHnFgyJSSypAnFOfE8ny7OU"/>
+                                    Chat on WhatsApp
+                                </a>
+<a class="flex items-center gap-2 bg-[#0088CC] text-white px-6 py-3 rounded-lg font-bold hover:opacity-90 transition-all shadow-sm" href="#">
+<img alt="Telegram" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJqBR0AQXe2nf01CWVEDoL1Ab5aerXSTJPqWEKx9f569GjlykRRjBrBCuu_f46esilK-DpivlV0443gp-GmcJ1HYunslaIQF4tBb2cEV5WuMBI85trS8QDVVoJyxRNrA73d3oNttm1zlmtztWJvRiXm9deNnSvTIghR0VaLBp3ZYsGX6wCapU8kfY2uzr0Flj58GIVXblTfrZdTLB3kKAWr56lvfSFYIcLF7ECYqiLsoY6hVsbnFih_gPEqlfFhez7UJkAZluRsqOi"/>
+                                    Message Telegram
+                                </a>
+</div>
+</div>
+</div>
+</div>
+<!-- Telegram Setup Card -->
+<div class="lg:col-span-5 bg-gradient-to-br from-[#0088CC] to-[#00A8FF] p-8 rounded-xl text-white relative overflow-hidden group">
+<div class="relative z-10">
+<div class="bg-white/20 w-12 h-12 rounded-lg flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-3xl" data-icon="bolt" data-weight="fill" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<h3 class="text-2xl font-headline font-bold mb-3">Instant Alerts</h3>
+<p class="text-white/80 mb-8 font-body">Connect your Prophives account to Telegram to receive real-time rent reminders and maintenance updates.</p>
+<button class="w-full bg-white text-[#0088CC] py-3 rounded-lg font-bold hover:bg-ivory transition-colors flex items-center justify-center gap-2">
+                            Connect to Telegram
+                            <span class="material-symbols-outlined text-lg" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- Decorative element -->
+<span class="material-symbols-outlined absolute -bottom-8 -right-8 text-white/10 text-[180px] rotate-12 group-hover:scale-110 transition-transform" data-icon="send">send</span>
+</div>
+</div>
+<!-- FAQ Section -->
+<div class="bg-white rounded-xl border border-[#FED609]/10 shadow-sm p-8">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h2 class="text-2xl font-headline font-bold mb-1">Frequently Asked Questions</h2>
+<p class="text-mutedText">Quick solutions for your most common inquiries</p>
+</div>
+<button class="text-[#FED609] font-bold flex items-center gap-1 hover:underline">
+                        View All
+                        <span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span>
+</button>
+</div>
+<div class="space-y-4">
+<!-- FAQ 1 -->
+<div class="faq-item border border-cream rounded-lg overflow-hidden transition-all hover:border-[#FED609]/30">
+<button class="w-full flex items-center justify-between p-5 text-left bg-[#FEFAEF]/50">
+<span class="font-bold text-darkText font-headline">How do I pay rent?</span>
+<span class="material-symbols-outlined faq-icon transition-transform" data-icon="expand_more">expand_more</span>
+</button>
+<div class="px-5 py-4 text-mutedText border-t border-cream bg-white">
+                            You can pay your rent directly through the "Pay Rent" button in the sidebar. We support credit/debit cards, bank transfers, and automated recurring payments.
+                        </div>
+</div>
+<!-- FAQ 2 -->
+<div class="faq-item border border-cream rounded-lg overflow-hidden transition-all hover:border-[#FED609]/30">
+<button class="w-full flex items-center justify-between p-5 text-left bg-[#FEFAEF]/50">
+<span class="font-bold text-darkText font-headline">How to report an emergency?</span>
+<span class="material-symbols-outlined faq-icon transition-transform" data-icon="expand_more">expand_more</span>
+</button>
+<div class="px-5 py-4 text-mutedText border-t border-cream bg-white">
+                            For immediate emergencies (fire, flooding, gas leak), please contact local authorities first. Then, use the WhatsApp button to contact the property owner instantly or call our 24/7 hotline at +971-50-PROPHIVE.
+                        </div>
+</div>
+<!-- FAQ 3 -->
+<div class="faq-item border border-cream rounded-lg overflow-hidden transition-all hover:border-[#FED609]/30">
+<button class="w-full flex items-center justify-between p-5 text-left bg-[#FEFAEF]/50">
+<span class="font-bold text-darkText font-headline">Can I request a lease extension?</span>
+<span class="material-symbols-outlined faq-icon transition-transform" data-icon="expand_more">expand_more</span>
+</button>
+<div class="px-5 py-4 text-mutedText border-t border-cream bg-white">
+                            Yes, lease extension requests can be submitted via the "My Tickets" section. We recommend initiating this request at least 60 days before your current lease expires.
+                        </div>
+</div>
+<!-- FAQ 4 -->
+<div class="faq-item border border-cream rounded-lg overflow-hidden transition-all hover:border-[#FED609]/30">
+<button class="w-full flex items-center justify-between p-5 text-left bg-[#FEFAEF]/50">
+<span class="font-bold text-darkText font-headline">What is the policy on guest parking?</span>
+<span class="material-symbols-outlined faq-icon transition-transform" data-icon="expand_more">expand_more</span>
+</button>
+<div class="px-5 py-4 text-mutedText border-t border-cream bg-white">
+                            Guest parking is available on levels B1 and B2. Please ensure your visitors register their vehicle via the "Guest Access" portal to avoid towing.
+                        </div>
+</div>
+</div>
+</div>
+<!-- AI Support CTA (Extra Section for Premium Feel) -->
+<div class="mt-12 bg-ivory rounded-2xl p-8 border-2 border-dashed border-[#FED609]/30 flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 bg-[#FED609] rounded-full flex items-center justify-center shadow-lg shadow-[#FED609]/20">
+<span class="material-symbols-outlined text-white text-3xl" data-icon="smart_toy" data-weight="fill" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div>
+<h4 class="text-xl font-headline font-bold">Try our AI Assistant</h4>
+<p class="text-mutedText">Get instant answers to complex lease questions.</p>
+</div>
+</div>
+<button class="bg-darkText text-white px-8 py-3 rounded-full font-bold hover:bg-black transition-colors">
+                    Start AI Chat
+                </button>
+</div>
+</div>
+</main>
+</body></html>

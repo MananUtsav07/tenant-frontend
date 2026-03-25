@@ -16,8 +16,8 @@ export function TenantLayout() {
 
   return (
     <DashboardLayout
-      title="Resident Workspace"
-      subtitle="Stay ahead of rent, support, and property updates"
+      title="My Dashboard"
+      subtitle="Your property, payments, and support"
       identityPrimary={organizationName}
       identitySecondary={tenant?.tenant_access_id || undefined}
       navItems={tenantLinks}

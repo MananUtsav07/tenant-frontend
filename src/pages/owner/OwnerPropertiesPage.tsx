@@ -114,85 +114,61 @@ export function OwnerPropertiesPage() {
   }
 
   return (
-    <section className="ph-page-shell">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="ph-page-header">
-          <h2 className="ph-page-heading">Properties</h2>
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="inline-flex items-center gap-1.5 rounded-lg border border-[rgba(83,88,100,0.3)] bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-[var(--ph-text-muted)]">
-            <Building2 className="h-3.5 w-3.5 text-[var(--ph-accent)]" />
-            {properties.length} total
-          </span>
-          {properties.length > 0 ? (
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              iconLeft={<Download className="h-3.5 w-3.5" />}
-              onClick={() =>
-                exportToCsv(
-                  'properties.csv',
-                  ['Name', 'Address', 'Unit', 'Created'],
-                  properties.map((p) => [p.property_name, p.address, p.unit_number ?? '', formatDateTime(p.created_at)]),
-                )
-              }
-            >
-              Export CSV
-            </Button>
-          ) : null}
-          <Button type="button" onClick={() => setShowForm(true)} variant="secondary" size="sm" iconLeft={<Plus className="h-4 w-4" />}>
-            Add Property
-          </Button>
-        </div>
+    <section className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-semibold text-[#1A1A1A]">Properties</h2>
+        <p className="text-sm text-[#6B7280]">Create and manage your properties.</p>
       </div>
 
-      <Modal
-        isOpen={showForm || !!editingPropertyId}
-        onClose={() => { resetForm(); setShowForm(false) }}
-        title={editingPropertyId ? 'Edit Property' : 'Add Property'}
-        size="md"
+      <form
+        onSubmit={handleSubmit}
+        className="grid gap-3 rounded-xl border border-[rgba(0,0,0,0.06)] bg-white shadow-sm p-5 md:grid-cols-3"
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <p className="text-xs text-[var(--ph-text-muted)]">Keep the core property setup focused before tenants and workflows attach to it.</p>
-          <div className="grid gap-4 lg:grid-cols-2">
-            <FormInput
-              label="Property Name"
-              name="property_name"
-              autoComplete="off"
-              value={form.property_name}
-              onChange={(event) => setForm((current) => ({ ...current, property_name: event.target.value }))}
-              required
-            />
-            <FormInput
-              label="Address"
-              name="property_address"
-              autoComplete="off"
-              value={form.address}
-              onChange={(event) => setForm((current) => ({ ...current, address: event.target.value }))}
-              required
-            />
-            <FormInput
-              label="Unit Number"
-              name="property_unit_number"
-              autoComplete="off"
-              value={form.unit_number}
-              onChange={(event) => setForm((current) => ({ ...current, unit_number: event.target.value }))}
-            />
-          </div>
+        <FormInput
+          label="Property Name"
+          name="property_name"
+          autoComplete="off"
+          value={form.property_name}
+          onChange={(event) => setForm((current) => ({ ...current, property_name: event.target.value }))}
+          required
+        />
+        <FormInput
+          label="Address"
+          name="property_address"
+          autoComplete="off"
+          value={form.address}
+          onChange={(event) => setForm((current) => ({ ...current, address: event.target.value }))}
+          required
+        />
+        <FormInput
+          label="Unit Number"
+          name="property_unit_number"
+          autoComplete="off"
+          value={form.unit_number}
+          onChange={(event) => setForm((current) => ({ ...current, unit_number: event.target.value }))}
+        />
 
-          <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 md:col-span-3">
+          <Button
+            type="submit"
+            disabled={busy}
+            variant="secondary"
+            iconLeft={editingPropertyId ? <Pencil className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+          >
+            {editingPropertyId ? 'Save Property' : 'Create Property'}
+          </Button>
+          {editingPropertyId ? (
             <Button
-              type="submit"
-              disabled={busy}
-              variant="secondary"
-              iconLeft={editingPropertyId ? <Pencil className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+              type="button"
+              onClick={resetForm}
+              variant="outline"
+              className="border-[rgba(0,0,0,0.06)] bg-white text-[#4B5563]"
             >
-              {editingPropertyId ? 'Save Property' : 'Create Property'}
+              Cancel Edit
             </Button>
-          </div>
-        </form>
-      </Modal>
+          ) : null}
+        </div>
+      </form>
 
       {error ? <ErrorState message={error} /> : null}
       {loading ? <LoadingState message="Loading properties..." rows={4} /> : null}
@@ -212,11 +188,11 @@ export function OwnerPropertiesPage() {
           {properties.map((property) => (
             <tr key={property.id}>
               <td className="px-4 py-3">
-                <p className="font-medium text-[var(--ph-text)]">{property.property_name}</p>
-                <p className="text-xs text-[var(--ph-text-muted)]">{property.unit_number || 'No unit'}</p>
+                <p className="font-medium text-[#1A1A1A]">{property.property_name}</p>
+                <p className="text-xs text-[#6B7280]">{property.unit_number || 'No unit'}</p>
               </td>
-              <td className="px-4 py-3 text-[var(--ph-text-soft)]">{property.address}</td>
-              <td className="px-4 py-3 text-[var(--ph-text-muted)]">{formatDateTime(property.created_at)}</td>
+              <td className="px-4 py-3 text-[#4B5563]">{property.address}</td>
+              <td className="px-4 py-3 text-[#6B7280]">{formatDateTime(property.created_at)}</td>
               <td className="px-4 py-3">
                 <div className="flex gap-2">
                   <Button
@@ -224,6 +200,7 @@ export function OwnerPropertiesPage() {
                     onClick={() => beginEdit(property)}
                     variant="outline"
                     size="sm"
+                    className="border-[rgba(0,0,0,0.06)] bg-white text-[#4B5563]"
                     iconLeft={<Pencil className="h-3.5 w-3.5" />}
                   >
                     Edit
@@ -245,7 +222,17 @@ export function OwnerPropertiesPage() {
         </DataTable>
       ) : null}
 
-
+      {!loading && properties.length > 0 ? (
+        <div className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white shadow-sm p-4 text-sm text-[#4B5563]">
+          <p className="inline-flex items-center gap-2">
+            <MapPin className="h-4 w-4 text-[#FED609]" />
+            Properties are used across tenants, tickets, and reminders.
+          </p>
+          <Button to={ROUTES.ownerTenants} variant="ghost" size="sm" className="mt-2 px-0 text-[#92700A] hover:bg-transparent">
+            Go to Tenants
+          </Button>
+        </div>
+      ) : null}
     </section>
   )
 }

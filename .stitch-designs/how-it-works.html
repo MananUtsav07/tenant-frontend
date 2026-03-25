@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>How It Works - Prophives AI Property Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Manrope:wght@300;400;500;600&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FED609",
+                        cream: "#FEFAEF",
+                        ivory: "#FFFAE2",
+                        deepgold: "#FFD70B",
+                        darktext: "#1A1A1A",
+                        mutedtext: "#6B7280",
+                    },
+                    fontFamily: {
+                        "headline": ["Sora", "sans-serif"],
+                        "body": ["Manrope", "sans-serif"],
+                        "label": ["DM Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-line::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #FED609;
+            opacity: 0.3;
+            z-index: 0;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #FEFAEF;
+            color: #1A1A1A;
+        }
+        h1, h2, h3 {
+            font-family: 'Sora', sans-serif;
+        }
+        label, .nav-link {
+            font-family: 'DM Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="antialiased">
+<!-- TopNavBar -->
+<header class="bg-[#FEFAEF] dark:bg-gray-900 border-b border-[#FED609]/20 shadow-sm sticky top-0 z-50">
+<nav class="flex justify-between items-center w-full px-6 py-4 max-w-[1200px] mx-auto">
+<div class="text-2xl font-bold text-[#1A1A1A] dark:text-[#FEFAEF] font-headline">
+                Prophives
+            </div>
+<div class="hidden md:flex space-x-8 items-center">
+<a class="text-[#1A1A1A] dark:text-[#FEFAEF] hover:text-[#FFD70B] transition-colors duration-200 font-label" href="#">Features</a>
+<a class="text-[#FED609] font-bold border-b-2 border-[#FED609] pb-1 font-label" href="#">How It Works</a>
+<a class="text-[#1A1A1A] dark:text-[#FEFAEF] hover:text-[#FFD70B] transition-colors duration-200 font-label" href="#">Solutions</a>
+<a class="text-[#1A1A1A] dark:text-[#FEFAEF] hover:text-[#FFD70B] transition-colors duration-200 font-label" href="#">Pricing</a>
+</div>
+<div class="flex items-center space-x-4">
+<button class="text-[#1A1A1A] font-label hover:opacity-80 transition-opacity">Login</button>
+<button class="bg-[#FED609] text-[#1A1A1A] px-6 py-2.5 rounded-full font-bold hover:bg-[#FFD70B] transition-all scale-95 active:transition-transform font-label">Get Started</button>
+</div>
+</nav>
+</header>
+<!-- Hero / Header Section -->
+<section class="bg-cream pt-20 pb-16 px-6">
+<div class="max-w-[1200px] mx-auto text-center">
+<h1 class="text-5xl md:text-6xl font-extrabold text-darktext mb-6 tracking-tight">How Prophives Works</h1>
+<p class="text-xl text-mutedtext max-w-2xl mx-auto font-body">Get started in minutes, not days. Experience the future of property management in Dubai with AI-driven efficiency.</p>
+</div>
+</section>
+<!-- Steps Section -->
+<section class="bg-white py-24 px-6 overflow-hidden">
+<div class="max-w-[1000px] mx-auto relative">
+<!-- Step 1 -->
+<div class="relative flex items-start mb-24 last:mb-0 step-line">
+<div class="relative z-10 flex-shrink-0 w-10 h-10 rounded-full bg-primary flex items-center justify-center font-bold text-darktext text-lg shadow-md ring-8 ring-white">1</div>
+<div class="ml-12 grid md:grid-cols-2 gap-12 items-center w-full">
+<div>
+<h3 class="text-2xl font-bold mb-4">Sign Up &amp; Create Your Organization</h3>
+<p class="text-mutedtext leading-relaxed">Register your account, set up your organization with company details, country, and currency. Our onboarding wizard guides you through the essential legal frameworks for Dubai real estate.</p>
+</div>
+<div class="bg-ivory p-8 rounded-xl shadow-sm border border-primary/10">
+<img class="rounded-lg shadow-lg w-full h-auto" data-alt="Minimalist dashboard interface showing a business registration form with clean input fields and a welcoming golden success checkmark" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMVRxJ-e1TmKwqAaPB8XS0MKxyw6WYOVxQIyYMipb0Ji892zrqafZtACHTeH3UC7aUQxSMDgr9HV-KF9Y3AQDfG9G18VZUSDluIuToHhTAhGCLARU4y0_er47TatKuHOfvT9dQuVVuW4l0I3Fi2XcatWzXWLX1ISdpWiBmtNFCrD_d-hPv03rBDZW9_dWWhJnMiDKrbO8oR4P65QOCtrm0wcd_tkzZW41jkjPyMDYItHbOoFZKRS3ey5ZvlfUrs2vFt7rpbYBrdTvF"/>
+</div>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="relative flex items-start mb-24 last:mb-0 step-line">
+<div class="relative z-10 flex-shrink-0 w-10 h-10 rounded-full bg-primary flex items-center justify-center font-bold text-darktext text-lg shadow-md ring-8 ring-white">2</div>
+<div class="ml-12 grid md:grid-cols-2 gap-12 items-center w-full">
+<div class="order-2 md:order-1 bg-ivory p-8 rounded-xl shadow-sm border border-primary/10">
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+<div class="w-full h-24 bg-cream rounded mb-2"></div>
+<div class="h-3 bg-gray-200 rounded w-3/4 mb-2"></div>
+<div class="h-2 bg-gray-100 rounded w-1/2"></div>
+</div>
+<div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+<div class="w-full h-24 bg-cream rounded mb-2"></div>
+<div class="h-3 bg-gray-200 rounded w-3/4 mb-2"></div>
+<div class="h-2 bg-gray-100 rounded w-1/2"></div>
+</div>
+</div>
+</div>
+<div class="order-1 md:order-2">
+<h3 class="text-2xl font-bold mb-4">Add Your Properties</h3>
+<p class="text-mutedtext leading-relaxed">Add property details, addresses, and unit numbers. Use our powerful bulk import tool to migrate hundreds of units from spreadsheets in seconds.</p>
+</div>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="relative flex items-start mb-24 last:mb-0 step-line">
+<div class="relative z-10 flex-shrink-0 w-10 h-10 rounded-full bg-primary flex items-center justify-center font-bold text-darktext text-lg shadow-md ring-8 ring-white">3</div>
+<div class="ml-12 grid md:grid-cols-2 gap-12 items-center w-full">
+<div>
+<h3 class="text-2xl font-bold mb-4">Onboard Your Tenants</h3>
+<p class="text-mutedtext leading-relaxed">Add tenants, assign them to properties, and set lease dates with rent amounts. Tenants receive a secure invite to their own portal where they can manage payments and requests.</p>
+</div>
+<div class="bg-ivory p-8 rounded-xl shadow-sm border border-primary/10">
+<img class="rounded-lg shadow-lg w-full h-auto" data-alt="A clean list of tenant profile cards with circular avatars, name labels, and status badges in soft golden tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC94xnQo9eIqbocqe3x5S8fH5oFrdrKRf1Pv_XlWDhAsziMrCANhtxr4ESdKvwyeqMkt_xOxRR0SfrfBCciSi4nPF3AhlDlp8GkpnRUueuqgH7vi7zr2NnCcJMP-vwXdsu4DrrYbWhewy6TNzM9ObO8BiUObqhETuuGZRttJcirGALsGTqkL_ePhN8vzu7aqnqfNVDRhONTmZEbKFLDXegtn7Lif9tN1S0rT24uPvNt3-QyBY1Nt-A36DHNoEzwlNnjtMn9aBqM984w"/>
+</div>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="relative flex items-start mb-24 last:mb-0 step-line">
+<div class="relative z-10 flex-shrink-0 w-10 h-10 rounded-full bg-primary flex items-center justify-center font-bold text-darktext text-lg shadow-md ring-8 ring-white">4</div>
+<div class="ml-12 grid md:grid-cols-2 gap-12 items-center w-full">
+<div class="order-2 md:order-1 bg-ivory p-8 rounded-xl shadow-sm border border-primary/10 flex justify-center space-x-8 py-12">
+<div class="flex flex-col items-center">
+<div class="w-16 h-16 bg-[#25D366] rounded-2xl flex items-center justify-center text-white shadow-lg mb-3">
+<span class="material-symbols-outlined text-4xl" data-icon="chat" data-weight="fill">chat</span>
+</div>
+<span class="text-xs font-bold text-darktext">WhatsApp</span>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-16 h-16 bg-[#0088cc] rounded-2xl flex items-center justify-center text-white shadow-lg mb-3">
+<span class="material-symbols-outlined text-4xl" data-icon="send" data-weight="fill">send</span>
+</div>
+<span class="text-xs font-bold text-darktext">Telegram</span>
+</div>
+</div>
+<div class="order-1 md:order-2">
+<h3 class="text-2xl font-bold mb-4">Connect Messaging</h3>
+<p class="text-mutedtext leading-relaxed">Set up WhatsApp and Telegram integrations. Enable automated tenant communication so your team doesn't have to manually reply to routine queries.</p>
+</div>
+</div>
+</div>
+<!-- Step 5 -->
+<div class="relative flex items-start mb-24 last:mb-0 step-line">
+<div class="relative z-10 flex-shrink-0 w-10 h-10 rounded-full bg-primary flex items-center justify-center font-bold text-darktext text-lg shadow-md ring-8 ring-white">5</div>
+<div class="ml-12 grid md:grid-cols-2 gap-12 items-center w-full">
+<div>
+<h3 class="text-2xl font-bold mb-4">Enable AI Automation</h3>
+<p class="text-mutedtext leading-relaxed">Turn on AI-powered ticket classification and smart reminders. Let the AI handle categorization of maintenance issues and send smart rent reminders automatically.</p>
+</div>
+<div class="bg-ivory p-8 rounded-xl shadow-sm border border-primary/10">
+<div class="space-y-4">
+<div class="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm">
+<span class="font-medium text-darktext">AI Ticket Sorting</span>
+<div class="w-12 h-6 bg-primary rounded-full relative"><div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div></div>
+</div>
+<div class="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm">
+<span class="font-medium text-darktext">Auto Reminders</span>
+<div class="w-12 h-6 bg-primary rounded-full relative"><div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 6 -->
+<div class="relative flex items-start last:mb-0">
+<div class="relative z-10 flex-shrink-0 w-10 h-10 rounded-full bg-primary flex items-center justify-center font-bold text-darktext text-lg shadow-md ring-8 ring-white">6</div>
+<div class="ml-12 grid md:grid-cols-2 gap-12 items-center w-full">
+<div class="order-2 md:order-1 bg-ivory p-8 rounded-xl shadow-sm border border-primary/10">
+<img class="rounded-lg shadow-lg w-full h-auto" data-alt="High-fidelity dashboard mockup with analytics charts, payment tracking bars, and maintenance ticket summaries in a clean professional layout" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBy33v-gUUtfygZLYMw65VH0y9BlTNro8D-3HWqcG8W16i2o0gM22rId2I2ReliI-QuGSvur-4nWElYZ5f1XeTUECTufbZLlYyq5rT1RhkwOdsXxBHI-UbhqCBf05zljDmG6sFuY6uijwjI5XUu_KtP6xV-8bj-wYSm8JWH8s0AIFX60jKqWTnDq2CJFbMWpGw0fDpNmzyYhqFUAKgPo3Y8v6uOU5wMbZrjhgovuwAlrcqzx_8q110xPrhAWE6ZodNXvzzGOf89xONi"/>
+</div>
+<div class="order-1 md:order-2">
+<h3 class="text-2xl font-bold mb-4">Sit Back &amp; Manage</h3>
+<p class="text-mutedtext leading-relaxed">Monitor your dashboard, track payments, and handle tickets - all from one place. Prophives gives you a 360-degree view of your entire property portfolio at a glance.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Strip -->
+<section class="bg-ivory py-16 px-6">
+<div class="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-primary text-4xl mb-4" data-icon="timer">timer</span>
+<h4 class="text-3xl font-bold text-darktext mb-1">5 min setup</h4>
+<p class="text-mutedtext font-label">Launch your workspace instantly</p>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-primary text-4xl mb-4" data-icon="school">school</span>
+<h4 class="text-3xl font-bold text-darktext mb-1">Zero learning curve</h4>
+<p class="text-mutedtext font-label">Intuitive for you and your tenants</p>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-primary text-4xl mb-4" data-icon="psychology">psychology</span>
+<h4 class="text-3xl font-bold text-darktext mb-1">24/7 AI support</h4>
+<p class="text-mutedtext font-label">Smart automation that never sleeps</p>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="bg-[#FED609] py-20 px-6 text-center">
+<div class="max-w-[800px] mx-auto">
+<h2 class="text-4xl md:text-5xl font-extrabold text-[#1A1A1A] mb-8">Ready to Get Started?</h2>
+<button class="bg-white text-[#1A1A1A] px-10 py-4 rounded-full font-bold text-lg hover:shadow-xl transition-all hover:-translate-y-1 active:scale-95 font-label">
+                Create Free Account
+            </button>
+<p class="mt-6 text-[#1A1A1A]/70 font-body text-sm">No credit card required. Cancel anytime.</p>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-[#1A1A1A] dark:bg-black border-t border-gray-800">
+<div class="w-full px-6 py-12 max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center">
+<div class="mb-8 md:mb-0">
+<div class="text-xl font-bold text-[#FED609] font-headline mb-2">Prophives</div>
+<p class="text-gray-400 font-body text-sm max-w-xs">AI-powered property management tailored for the unique Dubai real estate market.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-6 mb-8 md:mb-0">
+<a class="text-gray-400 hover:text-[#FED609] transition-colors font-label text-sm" href="#">Support</a>
+<a class="text-gray-400 hover:text-[#FED609] transition-colors font-label text-sm" href="#">Privacy Policy</a>
+<a class="text-gray-400 hover:text-[#FED609] transition-colors font-label text-sm" href="#">Terms of Service</a>
+<a class="text-gray-400 hover:text-[#FED609] transition-colors font-label text-sm" href="#">Contact Us</a>
+</div>
+<div class="text-gray-500 font-body text-xs text-center md:text-right">
+                © 2024 Prophives AI Property Management. All rights reserved.
+            </div>
+</div>
+</footer>
+</body></html>

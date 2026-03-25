@@ -16,6 +16,43 @@ import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { api } from '../../services/api'
 import type { OwnerAiSettings } from '../../types/api'
 
+type ToggleFieldProps = {
+  label: string
+  description: string
+  checked: boolean
+  onToggle: () => void
+  disabled?: boolean
+}
+
+function ToggleField({ label, description, checked, onToggle, disabled = false }: ToggleFieldProps) {
+  return (
+    <div className="flex items-start justify-between gap-4 rounded-xl border border-[rgba(0,0,0,0.06)] bg-[#FEFAEF] p-4">
+      <div>
+        <p className="text-sm font-semibold text-[#1A1A1A]">{label}</p>
+        <p className="mt-1 text-xs text-[#4B5563]">{description}</p>
+      </div>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={checked}
+        onClick={onToggle}
+        disabled={disabled}
+        className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full border transition ${
+          checked
+            ? 'border-[#FFD70B] bg-[#FED609]'
+            : 'border-[rgba(0,0,0,0.06)] bg-gray-200'
+        } ${disabled ? 'cursor-not-allowed opacity-60' : ''}`}
+      >
+        <span
+          className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
+            checked ? 'translate-x-6' : 'translate-x-1'
+          }`}
+        />
+      </button>
+    </div>
+  )
+}
+
 export function OwnerAiSettingsPage() {
   const { token } = useOwnerAuth()
   const [settings, setSettings] = useState<OwnerAiSettings | null>(null)
@@ -102,13 +139,13 @@ export function OwnerAiSettingsPage() {
 
   return (
     <section className="space-y-6">
-      <div className={dashboardFormPanelClassName}>
-        <h2 className="ph-title inline-flex items-center gap-2 text-2xl font-semibold text-[var(--ph-text)]">
-          <Sparkles className="h-6 w-6 text-[var(--ph-accent)]" />
+      <div className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-5 shadow-sm">
+        <h2 className="inline-flex items-center gap-2 text-2xl font-semibold text-[#1A1A1A]">
+          <Sparkles className="h-6 w-6 text-[#FED609]" />
           AI Settings
         </h2>
-        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--ph-text-muted)]">
-          Configure the model and master toggle used by supported AI-assisted workflows and future releases.
+        <p className="mt-2 text-sm text-[#4B5563]">
+          Infrastructure is ready for future AI workflows. No AI automation is active in live operations yet.
         </p>
       </div>
 
@@ -125,8 +162,8 @@ export function OwnerAiSettingsPage() {
       {loading ? <LoadingState message="Loading AI settings..." rows={4} /> : null}
 
       {!loading && settings ? (
-        <article className={`${dashboardFormPanelClassName} space-y-4`}>
-          <FormToggle
+        <article className="space-y-4 rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-5 shadow-sm">
+          <ToggleField
             label="Enable AI Automation"
             description="Master switch for future AI-powered workflows."
             checked={settings.automation_enabled}
@@ -155,26 +192,27 @@ export function OwnerAiSettingsPage() {
             disabled={!aiConfigured}
           />
 
-          <FormInput
-            label="AI Model"
-            value={settings.ai_model}
-            onChange={(event) =>
-              setSettings((current) =>
-                current
-                  ? {
-                      ...current,
-                      ai_model: event.target.value,
-                    }
-                  : current,
-              )
-            }
-            disabled={!aiConfigured}
-            hint="Used as the preferred model for supported AI-assisted workflows in your organization."
-          />
+          <label className="block space-y-2">
+            <span className="text-sm font-medium text-[#4B5563]">AI Model</span>
+            <input
+              value={settings.ai_model}
+              onChange={(event) =>
+                setSettings((current) =>
+                  current
+                    ? {
+                        ...current,
+                        ai_model: event.target.value,
+                      }
+                    : current,
+                )
+              }
+              disabled={!aiConfigured}
+              className="tf-field disabled:cursor-not-allowed disabled:opacity-60"
+            />
+          </label>
 
-          <div className={dashboardInfoPanelClassName}>
-            AI remains assistive here: owners still review outputs, and workflows keep their existing human approval
-            steps.
+          <div className="rounded-xl border border-[#FED609]/30 bg-[#FFFAE2] px-4 py-3 text-xs text-[#92700A]">
+            Preparation mode: toggles and model selection are stored for rollout readiness, but live workflows remain unchanged.
           </div>
 
           {success ? <div className={dashboardSuccessPanelClassName}>{success}</div> : null}

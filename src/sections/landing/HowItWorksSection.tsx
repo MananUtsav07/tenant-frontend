@@ -1,32 +1,24 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Building2, ClipboardList, KeyRound, MessageCircleQuestion } from 'lucide-react'
-import { Link } from 'react-router-dom'
 
 import { revealUp, staggerParent, useMotionVariants, viewportOnce } from '../../utils/motion'
-import { Button } from '../../components/common/Button'
-import { SectionContainer } from '../../components/common/SectionContainer'
-import { ROUTES } from '../../routes/constants'
 
 const steps = [
   {
-    title: 'Launch a property stack',
-    description: 'Configure buildings, units, and resident support structure for each portfolio.',
-    icon: <Building2 className="h-5 w-5" />,
+    number: 1,
+    title: 'Onboard Properties',
+    description: 'Bulk upload your portfolio details or sync with existing ERP systems in seconds.',
   },
   {
-    title: 'Add residents and leases',
-    description: 'Bring tenant records, due dates, and payment expectations into one clean operational view.',
-    icon: <ClipboardList className="h-5 w-5" />,
+    number: 2,
+    title: 'Connect Tenants',
+    description:
+      'Invite tenants via WhatsApp. They get a branded dashboard with no app download required.',
   },
   {
-    title: 'Issue secure access',
-    description: 'Residents get their own workspace without owner-level exposure or operational friction.',
-    icon: <KeyRound className="h-5 w-5" />,
-  },
-  {
-    title: 'Automate requests and reminders',
-    description: 'Support issues, rent chasers, and approvals move through clear stages with AI assistance.',
-    icon: <MessageCircleQuestion className="h-5 w-5" />,
+    number: 3,
+    title: 'Automate Everything',
+    description:
+      'Relax as Prophives AI handles billing, contracts, and routine communications for you.',
   },
 ]
 
@@ -35,55 +27,46 @@ export function HowItWorksSection() {
   const staggerVariants = useMotionVariants(staggerParent)
 
   return (
-    <SectionContainer size="wide" tone="navy">
-      <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <span className="ph-kicker">Operating Flow</span>
-            <h2 className="ph-title mt-6 max-w-4xl text-3xl font-semibold text-[var(--ph-text)] md:text-4xl">
-              A disciplined workflow from onboarding to ongoing service
-            </h2>
-          </div>
-          <Button to={ROUTES.howItWorks} variant="outline" iconRight={<ArrowRight className="h-4 w-4" />}>
-            View Full Workflow
-          </Button>
-        </div>
-      </motion.div>
+    <section className="bg-[#FFFAE2] px-4 py-24 sm:px-6 lg:px-10">
+      <div className="mx-auto max-w-7xl">
+        <motion.div
+          variants={revealVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          className="mb-20 text-center"
+        >
+          <h2 className="ph-title text-4xl font-bold text-[#1A1A1A]">How It Works</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-[#6B7280]">
+            Get up and running in minutes, not months.
+          </p>
+        </motion.div>
 
-      <motion.ol
-        variants={staggerVariants}
-        initial="hidden"
-        whileInView="show"
-        viewport={viewportOnce}
-        className="mt-12 grid gap-4 lg:gap-5 md:grid-cols-2"
-      >
-        {steps.map((step, index) => (
-          <motion.li
-            key={step.title}
-            variants={revealVariants}
-            className="rounded-xl border border-[rgba(83,88,100,0.34)] bg-white/[0.025] p-5 sm:p-6"
-          >
-            <div className="flex items-center justify-between gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-[1rem] border border-[rgba(240,163,35,0.16)] bg-[rgba(240,163,35,0.06)] text-[var(--ph-accent)]">
-                {step.icon}
-              </span>
-              <span className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--ph-text-muted)]">
-                Step {index + 1}
-              </span>
-            </div>
-            <h3 className="ph-title mt-4 text-xl font-semibold text-[var(--ph-text)]">{step.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-[var(--ph-text-muted)]">{step.description}</p>
-          </motion.li>
-        ))}
-      </motion.ol>
+        <motion.div
+          variants={staggerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          className="relative grid grid-cols-1 gap-16 md:grid-cols-3"
+        >
+          {steps.map((step) => (
+            <motion.div
+              key={step.number}
+              variants={revealVariants}
+              className="relative flex flex-col items-center text-center"
+            >
+              <div className="z-10 mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#FED609] text-2xl font-black shadow-lg shadow-[#FED609]/20">
+                {step.number}
+              </div>
+              <h5 className="ph-title text-xl font-bold text-[#1A1A1A]">{step.title}</h5>
+              <p className="mt-3 text-[#6B7280]">{step.description}</p>
+            </motion.div>
+          ))}
 
-      <p className="mt-6 text-sm text-[var(--ph-text-muted)]">
-        Want to see the rollout mapped to your portfolio?{' '}
-        <Link to={ROUTES.contact} className="ph-link font-semibold">
-          Talk to our team
-        </Link>
-        .
-      </p>
-    </SectionContainer>
+          {/* Connector line (hidden on mobile) */}
+          <div className="absolute left-[20%] right-[20%] top-8 hidden h-0.5 border-t-2 border-dashed border-[#FED609]/40 md:block" />
+        </motion.div>
+      </div>
+    </section>
   )
 }

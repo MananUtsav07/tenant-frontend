@@ -26,7 +26,8 @@ function OwnerLayoutContent() {
 
   return (
     <DashboardLayout
-      title="Prophives"
+      title="Dashboard"
+      subtitle="Manage your properties, tenants, and automation"
       identityPrimary={organizationName}
       identitySecondary={owner?.email || undefined}
       navItems={ownerLinks}
