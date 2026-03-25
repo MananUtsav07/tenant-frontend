@@ -1,46 +1,27 @@
 import { motion } from 'framer-motion'
-import { CreditCard, MessageCircle, Send, ShieldCheck, Sparkles, Users } from 'lucide-react'
+import { MessageCircle, Sparkles, Wallet } from 'lucide-react'
+import type { ReactNode } from 'react'
 
 import { revealUp, staggerParent, useMotionVariants, viewportOnce } from '../../utils/motion'
-import { FeatureCard } from '../../components/common/FeatureCard'
-import { SectionContainer } from '../../components/common/SectionContainer'
 
-const features = [
+const features: { icon: ReactNode; title: string; description: string }[] = [
   {
+    icon: <Sparkles className="h-7 w-7 text-[#1A1A1A]" />,
     title: 'AI Automation',
-    description: 'Smart ticket classification, automated reminders, and AI-generated summaries to save you hours every week.',
-    detail: 'AI-powered',
-    icon: <Sparkles className="h-5 w-5" />,
+    description:
+      'Our neural engine handles complex scheduling, document processing, and tenant screening automatically.',
   },
   {
-    title: 'WhatsApp Integration',
-    description: 'Send rent reminders and communicate with tenants directly via WhatsApp. No app switching needed.',
-    detail: 'Messaging',
-    icon: <MessageCircle className="h-5 w-5" />,
+    icon: <MessageCircle className="h-7 w-7 text-[#1A1A1A]" />,
+    title: 'WhatsApp & Telegram',
+    description:
+      'Connect with your tenants where they already are. Send automated reminders and receive maintenance requests via bots.',
   },
   {
-    title: 'Telegram Bot',
-    description: 'Automated notifications, payment alerts, and ticket updates delivered instantly via Telegram.',
-    detail: 'Notifications',
-    icon: <Send className="h-5 w-5" />,
-  },
-  {
+    icon: <Wallet className="h-7 w-7 text-[#1A1A1A]" />,
     title: 'Payment Tracking',
-    description: 'Automated rent collection tracking with payment status, overdue alerts, and approval workflows.',
-    detail: 'Payments',
-    icon: <CreditCard className="h-5 w-5" />,
-  },
-  {
-    title: 'Tenant Portal',
-    description: 'Tenants can view property details, submit tickets, track payments, and contact support easily.',
-    detail: 'Self-service',
-    icon: <Users className="h-5 w-5" />,
-  },
-  {
-    title: 'Secure Access',
-    description: 'Separate owner and tenant workspaces with role-based visibility and controlled data access.',
-    detail: 'Security',
-    icon: <ShieldCheck className="h-5 w-5" />,
+    description:
+      'Automated bank reconciliation and instant rent alerts. Never chase a missed payment manually again.',
   },
 ]
 
@@ -49,34 +30,45 @@ export function FeatureHighlightsSection() {
   const staggerVariants = useMotionVariants(staggerParent)
 
   return (
-    <SectionContainer id="feature-highlights" size="wide" tone="panel">
-      <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
-        <span className="ph-kicker">Features</span>
-        <h2 className="ph-title mt-5 text-3xl font-bold text-[#1A1A1A] md:text-4xl">
-          Everything you need to manage properties
-        </h2>
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-[#6B7280]">
-          From AI automation to integrated messaging, Prophives gives you the tools to run smarter operations.
-        </p>
-      </motion.div>
+    <section className="bg-white px-4 py-24 sm:px-6 lg:px-10">
+      <div className="mx-auto max-w-7xl">
+        <motion.div
+          variants={revealVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          className="mb-20 text-center"
+        >
+          <h2 className="ph-title text-4xl font-bold text-[#1A1A1A]">
+            Powerful Features for Modern Landlords
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-[#6B7280]">
+            Everything you need to scale your property portfolio without the administrative headache.
+          </p>
+        </motion.div>
 
-      <motion.div
-        variants={staggerVariants}
-        initial="hidden"
-        whileInView="show"
-        viewport={viewportOnce}
-        className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3"
-      >
-        {features.map((feature) => (
-          <FeatureCard
-            key={feature.title}
-            icon={feature.icon}
-            title={feature.title}
-            description={feature.description}
-            detail={feature.detail}
-          />
-        ))}
-      </motion.div>
-    </SectionContainer>
+        <motion.div
+          variants={staggerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          className="grid grid-cols-1 gap-8 md:grid-cols-3"
+        >
+          {features.map((feature) => (
+            <motion.div
+              key={feature.title}
+              variants={revealVariants}
+              className="group rounded-2xl border border-transparent bg-[#FEFAEF] p-8 transition-all hover:border-[#FED609]"
+            >
+              <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-[#FED609] transition-transform group-hover:scale-110">
+                {feature.icon}
+              </div>
+              <h4 className="ph-title text-xl font-bold text-[#1A1A1A]">{feature.title}</h4>
+              <p className="mt-3 leading-relaxed text-[#6B7280]">{feature.description}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
   )
 }

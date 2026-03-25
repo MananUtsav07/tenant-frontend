@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Prophives | Owner Dashboard</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FED609",
+                        "primary-dark": "#FFD70B",
+                        cream: "#FEFAEF",
+                        ivory: "#FFFAE2",
+                        dark: "#1A1A1A",
+                        muted: "#6B7280",
+                        whatsapp: "#25D366",
+                        telegram: "#0088cc"
+                    },
+                    fontFamily: {
+                        headline: ["Sora", "sans-serif"],
+                        body: ["Manrope", "sans-serif"],
+                        label: ["DM Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .active-nav-shadow {
+            box-shadow: 0 4px 14px 0 rgba(254, 214, 9, 0.3);
+        }
+        body {
+            background-color: #FEFAEF;
+        }
+    </style>
+</head>
+<body class="font-body text-dark antialiased">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full hidden lg:flex flex-col z-40 h-screen w-64 border-r border-[#FED609]/20 bg-[#FEFAEF] dark:bg-gray-900 font-['Manrope'] antialiased shadow-sm">
+<!-- Logo Section -->
+<div class="p-6">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-dark text-xl" style="font-variation-settings: 'FILL' 1;">domain</span>
+</div>
+<h1 class="text-2xl font-bold text-[#1A1A1A] dark:text-[#FEFAEF] font-['Sora']">Prophives</h1>
+</div>
+<p class="text-xs text-muted mt-1 uppercase tracking-wider font-bold">Property Management</p>
+</div>
+<!-- Main Nav -->
+<nav class="flex-1 px-4 space-y-1 mt-4">
+<!-- Overview - ACTIVE -->
+<a class="flex items-center gap-3 px-4 py-3 bg-[#FED609] text-[#1A1A1A] font-bold rounded-lg transition-all active-nav-shadow" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span>Overview</span>
+</a>
+<!-- Properties -->
+<a class="flex items-center gap-3 px-4 py-3 text-[#6B7280] hover:text-[#1A1A1A] dark:hover:text-[#FEFAEF] transition-colors hover:bg-[#FFD70B]/10 rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">domain</span>
+<span>Properties</span>
+</a>
+<!-- Tenants -->
+<a class="flex items-center gap-3 px-4 py-3 text-[#6B7280] hover:text-[#1A1A1A] dark:hover:text-[#FEFAEF] transition-colors hover:bg-[#FFD70B]/10 rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">group</span>
+<span>Tenants</span>
+</a>
+<!-- Tickets -->
+<a class="flex items-center gap-3 px-4 py-3 text-[#6B7280] hover:text-[#1A1A1A] dark:hover:text-[#FEFAEF] transition-colors hover:bg-[#FFD70B]/10 rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">confirmation_number</span>
+<span>Tickets</span>
+</a>
+<!-- Notifications -->
+<a class="flex items-center justify-between gap-3 px-4 py-3 text-[#6B7280] hover:text-[#1A1A1A] dark:hover:text-[#FEFAEF] transition-colors hover:bg-[#FFD70B]/10 rounded-lg group" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">notifications</span>
+<span>Notifications</span>
+</div>
+<span class="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">12</span>
+</a>
+<!-- AI Settings -->
+<a class="flex items-center gap-3 px-4 py-3 text-[#6B7280] hover:text-[#1A1A1A] dark:hover:text-[#FEFAEF] transition-colors hover:bg-[#FFD70B]/10 rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">psychology</span>
+<span>AI Settings</span>
+</a>
+</nav>
+<!-- Divider -->
+<div class="px-6 my-4">
+<div class="h-px bg-primary/10 w-full"></div>
+</div>
+<!-- Footer Nav -->
+<div class="px-4 space-y-1 mb-6">
+<a class="flex items-center gap-3 px-4 py-2 text-[#6B7280] hover:text-[#1A1A1A] transition-colors text-sm" href="#">
+<span class="material-symbols-outlined text-lg">contact_support</span>
+<span>Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-[#6B7280] hover:text-[#1A1A1A] transition-colors text-sm" href="#">
+<span class="material-symbols-outlined text-lg">settings</span>
+<span>Settings</span>
+</a>
+</div>
+<!-- User Profile -->
+<div class="p-4 border-t border-primary/10 bg-ivory/30">
+<div class="flex items-center gap-3 mb-4">
+<img alt="Owner Profile" class="w-10 h-10 rounded-full border-2 border-primary object-cover" data-alt="Close up portrait of a professional businessman in a tailored suit smiling confidently in a modern bright office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2DhpVOoKUDyw6WvRMwT98XOqftTv9dJ1KYhnUUDBCz2Yn98ec5IjQ3L3mJAvoKN5xjEOzFCdjja6m_Po3BCbiq9zlxeDlXg5BVoCtN_5lSrhH83paXnat749079GkBWXiddOsXt_3PioILl8PKZx0ey2Ivwsd8WbnabHn55uAQBh14AlT-94sOzbMm59h-u_fn-TDkhuuJl6GDdG2EiwrULZgjd5el8Kir17bvhuoydQ6X8JOEHL_7fwGE8-NfjZIGlBwmSZ2WELc"/>
+<div class="overflow-hidden">
+<p class="text-sm font-bold truncate">Ahmed Al-Sayed</p>
+<p class="text-xs text-muted truncate">Prophives Portfolio</p>
+</div>
+</div>
+<button class="w-full flex items-center justify-center gap-2 py-2 text-xs font-bold text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-sm">logout</span>
+                Logout
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="lg:pl-64 min-h-screen">
+<!-- Top Nav Bar -->
+<header class="flex justify-between items-center w-full px-6 py-4 sticky top-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md z-30 border-b border-[#FED609]/10 shadow-sm">
+<div class="flex items-center gap-4">
+<h2 class="font-headline font-bold text-xl text-[#1A1A1A] dark:text-white">Welcome back, Ahmed</h2>
+<div class="hidden md:flex bg-cream px-3 py-1.5 rounded-full border border-primary/20 items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-dark/70">Premium Owner Plan</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<input class="bg-cream/50 border-primary/20 rounded-full py-2 pl-10 pr-4 text-sm focus:ring-primary focus:border-primary w-64" placeholder="Search properties..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-muted text-sm">search</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-muted hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">chat</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
+</button>
+<button class="p-2 text-muted hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications_active</span>
+</button>
+</div>
+<div class="h-8 w-px bg-primary/10 mx-2"></div>
+<button class="bg-primary text-dark font-bold px-4 py-2 rounded-lg text-sm hover:bg-primary-dark transition-all active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span>
+                    Create Ticket
+                </button>
+</div>
+</header>
+<!-- Content Body -->
+<div class="p-6 space-y-8">
+<!-- Summary Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Card 1 -->
+<div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-primary hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-muted text-xs font-bold uppercase tracking-wider mb-1">Total Properties</p>
+<h3 class="text-3xl font-headline font-bold">42</h3>
+</div>
+<div class="p-3 bg-ivory rounded-lg">
+<span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">domain</span>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-1 text-xs font-medium text-emerald-600">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>+2 this month</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-primary hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-muted text-xs font-bold uppercase tracking-wider mb-1">Active Tenants</p>
+<h3 class="text-3xl font-headline font-bold">38</h3>
+</div>
+<div class="p-3 bg-ivory rounded-lg">
+<span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">group</span>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-1 text-xs font-medium text-muted">
+<span>90% occupancy rate</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-orange-400 hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-muted text-xs font-bold uppercase tracking-wider mb-1">Open Tickets</p>
+<h3 class="text-3xl font-headline font-bold">12</h3>
+</div>
+<div class="p-3 bg-orange-50 rounded-lg">
+<span class="material-symbols-outlined text-orange-400 text-2xl" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-1 text-xs font-medium text-orange-600">
+<span class="material-symbols-outlined text-sm">priority_high</span>
+<span>4 urgent requests</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-emerald-500 hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-muted text-xs font-bold uppercase tracking-wider mb-1">Collection Rate</p>
+<h3 class="text-3xl font-headline font-bold">98%</h3>
+</div>
+<div class="p-3 bg-emerald-50 rounded-lg">
+<span class="material-symbols-outlined text-emerald-500 text-2xl" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-1 text-xs font-medium text-emerald-600">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span>Stable performance</span>
+</div>
+</div>
+</div>
+<!-- Main Dashboard Row -->
+<div class="grid grid-cols-1 lg:grid-cols-10 gap-8">
+<!-- Recent Rent Payments (60%) -->
+<div class="lg:col-span-6 bg-white rounded-xl shadow-sm overflow-hidden flex flex-col border-t-4 border-primary/10">
+<div class="p-6 flex justify-between items-center border-b border-cream">
+<h3 class="font-headline font-bold text-lg">Recent Rent Payments</h3>
+<a class="text-primary font-bold text-sm hover:underline" href="#">View All</a>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead>
+<tr class="bg-cream/50 text-muted font-label uppercase text-[10px] tracking-widest">
+<th class="px-6 py-4">Tenant Name</th>
+<th class="px-6 py-4">Property</th>
+<th class="px-6 py-4">Amount</th>
+<th class="px-6 py-4">Due Date</th>
+<th class="px-6 py-4">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-cream">
+<tr class="hover:bg-cream/20 transition-colors">
+<td class="px-6 py-4 font-bold">John Doe</td>
+<td class="px-6 py-4 text-muted">Marina View Apt 402</td>
+<td class="px-6 py-4 font-bold">AED 12,500</td>
+<td class="px-6 py-4 text-muted">Oct 12, 2023</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-primary text-dark text-[10px] font-bold">Paid</span>
+</td>
+</tr>
+<tr class="hover:bg-cream/20 transition-colors">
+<td class="px-6 py-4 font-bold">Sarah Jenkins</td>
+<td class="px-6 py-4 text-muted">Palm Jumeirah Villa 12</td>
+<td class="px-6 py-4 font-bold">AED 45,000</td>
+<td class="px-6 py-4 text-muted">Oct 15, 2023</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-orange-100 text-orange-600 text-[10px] font-bold">Pending</span>
+</td>
+</tr>
+<tr class="hover:bg-cream/20 transition-colors">
+<td class="px-6 py-4 font-bold">Mike Ross</td>
+<td class="px-6 py-4 text-muted">Downtown Studio 10A</td>
+<td class="px-6 py-4 font-bold">AED 8,000</td>
+<td class="px-6 py-4 text-muted">Oct 05, 2023</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-red-100 text-red-600 text-[10px] font-bold">Overdue</span>
+</td>
+</tr>
+<tr class="hover:bg-cream/20 transition-colors">
+<td class="px-6 py-4 font-bold">Elena Gilbert</td>
+<td class="px-6 py-4 text-muted">Business Bay Apt 902</td>
+<td class="px-6 py-4 font-bold">AED 15,000</td>
+<td class="px-6 py-4 text-muted">Oct 18, 2023</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-primary text-dark text-[10px] font-bold">Paid</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Quick Actions (40%) -->
+<div class="lg:col-span-4 space-y-6">
+<div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-primary/10">
+<h3 class="font-headline font-bold text-lg mb-6">Quick Actions</h3>
+<div class="flex flex-col gap-3">
+<button class="w-full bg-primary text-dark font-bold py-3 px-4 rounded-xl flex items-center justify-between hover:bg-primary-dark transition-all">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined">add_business</span>
+                                    Add Property
+                                </span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+<button class="w-full border-2 border-primary text-dark font-bold py-3 px-4 rounded-xl flex items-center justify-between hover:bg-primary/5 transition-all">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined">person_add</span>
+                                    Add Tenant
+                                </span>
+<span class="material-symbols-outlined text-sm text-primary">chevron_right</span>
+</button>
+<div class="h-px bg-cream my-2"></div>
+<button class="w-full bg-whatsapp text-white font-bold py-3 px-4 rounded-xl flex items-center gap-3 hover:brightness-105 transition-all">
+<span class="material-symbols-outlined">chat_bubble</span>
+                                Send Reminder via WhatsApp
+                            </button>
+<button class="w-full bg-telegram text-white font-bold py-3 px-4 rounded-xl flex items-center gap-3 hover:brightness-105 transition-all">
+<span class="material-symbols-outlined">send</span>
+                                Send Reminder via Telegram
+                            </button>
+</div>
+</div>
+<!-- AI Insights Mini Card -->
+<div class="bg-dark text-white p-6 rounded-xl shadow-lg relative overflow-hidden group">
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-2 text-primary">
+<span class="material-symbols-outlined text-sm">psychology</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">AI Insight</span>
+</div>
+<p class="text-sm font-medium leading-relaxed mb-4">You could increase your portfolio yield by <span class="text-primary font-bold">4.2%</span> by optimizing renewal rates in Marina.</p>
+<button class="text-xs font-bold text-primary underline">Run full analysis</button>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-700">
+<span class="material-symbols-outlined text-9xl">auto_awesome</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Row: Tickets & Notifications -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Recent Tickets -->
+<div class="bg-white rounded-xl shadow-sm border-t-4 border-primary/10">
+<div class="p-6 flex justify-between items-center border-b border-cream">
+<h3 class="font-headline font-bold text-lg">Recent Tickets</h3>
+<span class="bg-orange-50 text-orange-600 text-[10px] font-bold px-2 py-0.5 rounded">Action Required</span>
+</div>
+<div class="divide-y divide-cream">
+<!-- Ticket 1 -->
+<div class="p-6 flex items-start gap-4 hover:bg-cream/10 transition-colors">
+<div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-red-500">ac_unit</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-bold text-sm">A/C Repair - Marina View</h4>
+<span class="text-[9px] font-bold uppercase px-2 py-0.5 bg-red-100 text-red-600 rounded">Urgent</span>
+</div>
+<p class="text-xs text-muted mb-2">Unit 402 reporting total failure of cooling unit since morning.</p>
+<div class="flex items-center gap-3">
+<span class="text-[10px] font-medium px-2 py-0.5 bg-ivory text-dark/70 rounded border border-primary/10 italic">Assigned to: CoolFlow Ltd</span>
+</div>
+</div>
+</div>
+<!-- Ticket 2 -->
+<div class="p-6 flex items-start gap-4 hover:bg-cream/10 transition-colors">
+<div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-blue-500">description</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-bold text-sm">Lease Renewal - Palm Jumeirah</h4>
+<span class="text-[9px] font-bold uppercase px-2 py-0.5 bg-blue-100 text-blue-600 rounded">Medium</span>
+</div>
+<p class="text-xs text-muted mb-2">Tenant Sarah Jenkins requested a 2-year extension review.</p>
+<div class="flex items-center gap-3">
+<span class="text-[10px] font-medium px-2 py-0.5 bg-ivory text-dark/70 rounded border border-primary/10 italic">Waiting for: Owner Approval</span>
+</div>
+</div>
+</div>
+<!-- Ticket 3 -->
+<div class="p-6 flex items-start gap-4 hover:bg-cream/10 transition-colors">
+<div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-primary">plumbing</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-bold text-sm">Water Leakage - Downtown</h4>
+<span class="text-[9px] font-bold uppercase px-2 py-0.5 bg-emerald-100 text-emerald-600 rounded">Completed</span>
+</div>
+<p class="text-xs text-muted mb-2">Bathroom faucet replaced in Studio 10A.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Notifications -->
+<div class="bg-white rounded-xl shadow-sm border-t-4 border-primary/10 flex flex-col">
+<div class="p-6 flex justify-between items-center border-b border-cream">
+<h3 class="font-headline font-bold text-lg">Notifications</h3>
+<button class="text-muted text-[10px] font-bold hover:text-primary">Mark all as read</button>
+</div>
+<div class="flex-1">
+<div class="divide-y divide-cream">
+<!-- Notification 1 -->
+<div class="p-6 flex gap-4 bg-primary/5">
+<div class="w-2 h-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
+<div>
+<p class="text-sm font-bold text-dark mb-0.5">New Payment Received</p>
+<p class="text-xs text-muted leading-relaxed">Elena Gilbert paid AED 15,000 for Business Bay Apt 902.</p>
+<span class="text-[10px] text-muted font-medium mt-2 block">2 minutes ago</span>
+</div>
+</div>
+<!-- Notification 2 -->
+<div class="p-6 flex gap-4">
+<div class="w-2 h-2 rounded-full bg-transparent mt-1.5 flex-shrink-0"></div>
+<div>
+<p class="text-sm font-bold text-dark mb-0.5">Maintenance Ticket Created</p>
+<p class="text-xs text-muted leading-relaxed">A new 'Critical' ticket for A/C repair was logged by John Doe.</p>
+<span class="text-[10px] text-muted font-medium mt-2 block">1 hour ago</span>
+</div>
+</div>
+<!-- Notification 3 -->
+<div class="p-6 flex gap-4">
+<div class="w-2 h-2 rounded-full bg-transparent mt-1.5 flex-shrink-0"></div>
+<div>
+<p class="text-sm font-bold text-dark mb-0.5">Lease Expiry Warning</p>
+<p class="text-xs text-muted leading-relaxed">3 leases are expiring within the next 60 days. Start renewal process.</p>
+<span class="text-[10px] text-muted font-medium mt-2 block">4 hours ago</span>
+</div>
+</div>
+</div>
+</div>
+<div class="p-4 bg-cream/30 text-center">
+<button class="text-xs font-bold text-dark/60 hover:text-dark">View Notification History</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky Footer Analytics (Floating) -->
+<div class="fixed bottom-6 right-6 z-50">
+<button class="bg-dark text-white p-4 rounded-full shadow-2xl flex items-center gap-3 hover:scale-105 transition-transform">
+<div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-dark text-sm" style="font-variation-settings: 'FILL' 1;">insights</span>
+</div>
+<div class="text-left pr-4">
+<p class="text-[10px] font-bold text-primary uppercase tracking-tighter">Live Yield</p>
+<p class="text-sm font-bold">7.8% Net</p>
+</div>
+</button>
+</div>
+</main>
+</body></html>

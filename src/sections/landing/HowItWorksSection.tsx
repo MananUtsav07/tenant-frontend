@@ -1,32 +1,24 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Building2, ClipboardList, KeyRound, Sparkles } from 'lucide-react'
-import { Link } from 'react-router-dom'
 
 import { revealUp, staggerParent, useMotionVariants, viewportOnce } from '../../utils/motion'
-import { Button } from '../../components/common/Button'
-import { SectionContainer } from '../../components/common/SectionContainer'
-import { ROUTES } from '../../routes/constants'
 
 const steps = [
   {
+    number: 1,
     title: 'Onboard Properties',
-    description: 'Add your properties with addresses, units, and details in minutes.',
-    icon: <Building2 className="h-5 w-5" />,
+    description: 'Bulk upload your portfolio details or sync with existing ERP systems in seconds.',
   },
   {
+    number: 2,
     title: 'Connect Tenants',
-    description: 'Add tenants, set lease dates, rent amounts, and give them portal access.',
-    icon: <ClipboardList className="h-5 w-5" />,
+    description:
+      'Invite tenants via WhatsApp. They get a branded dashboard with no app download required.',
   },
   {
-    title: 'Set Up Messaging',
-    description: 'Connect WhatsApp and Telegram for instant tenant communication.',
-    icon: <KeyRound className="h-5 w-5" />,
-  },
-  {
+    number: 3,
     title: 'Automate Everything',
-    description: 'Enable AI automation for tickets, reminders, and payment tracking.',
-    icon: <Sparkles className="h-5 w-5" />,
+    description:
+      'Relax as Prophives AI handles billing, contracts, and routine communications for you.',
   },
 ]
 
@@ -35,55 +27,46 @@ export function HowItWorksSection() {
   const staggerVariants = useMotionVariants(staggerParent)
 
   return (
-    <SectionContainer className="py-10 md:py-12" size="wide" tone="ivory">
-      <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <span className="ph-kicker">How It Works</span>
-            <h2 className="ph-title mt-5 text-3xl font-bold text-[#1A1A1A] md:text-4xl">
-              Get started in minutes, not days
-            </h2>
-          </div>
-          <Button to={ROUTES.howItWorks} variant="outline" iconRight={<ArrowRight className="h-4 w-4" />}>
-            Learn More
-          </Button>
-        </div>
-      </motion.div>
+    <section className="bg-[#FFFAE2] px-4 py-24 sm:px-6 lg:px-10">
+      <div className="mx-auto max-w-7xl">
+        <motion.div
+          variants={revealVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          className="mb-20 text-center"
+        >
+          <h2 className="ph-title text-4xl font-bold text-[#1A1A1A]">How It Works</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-[#6B7280]">
+            Get up and running in minutes, not months.
+          </p>
+        </motion.div>
 
-      <motion.ol
-        variants={staggerVariants}
-        initial="hidden"
-        whileInView="show"
-        viewport={viewportOnce}
-        className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4"
-      >
-        {steps.map((step, index) => (
-          <motion.li
-            key={step.title}
-            variants={revealVariants}
-            className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-5 shadow-sm"
-          >
-            <div className="flex items-center justify-between gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(254,214,9,0.12)] text-[#92700A]">
-                {step.icon}
-              </span>
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#FED609] text-sm font-bold text-[#1A1A1A]">
-                {index + 1}
-              </span>
-            </div>
-            <h3 className="ph-title mt-4 text-lg font-bold text-[#1A1A1A]">{step.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-[#6B7280]">{step.description}</p>
-          </motion.li>
-        ))}
-      </motion.ol>
+        <motion.div
+          variants={staggerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          className="relative grid grid-cols-1 gap-16 md:grid-cols-3"
+        >
+          {steps.map((step) => (
+            <motion.div
+              key={step.number}
+              variants={revealVariants}
+              className="relative flex flex-col items-center text-center"
+            >
+              <div className="z-10 mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#FED609] text-2xl font-black shadow-lg shadow-[#FED609]/20">
+                {step.number}
+              </div>
+              <h5 className="ph-title text-xl font-bold text-[#1A1A1A]">{step.title}</h5>
+              <p className="mt-3 text-[#6B7280]">{step.description}</p>
+            </motion.div>
+          ))}
 
-      <p className="mt-6 text-sm text-[#6B7280]">
-        Want a walkthrough for your portfolio?{' '}
-        <Link to={ROUTES.contact} className="font-semibold text-[#D4A800] hover:text-[#92700A]">
-          Talk to our team
-        </Link>
-        .
-      </p>
-    </SectionContainer>
+          {/* Connector line (hidden on mobile) */}
+          <div className="absolute left-[20%] right-[20%] top-8 hidden h-0.5 border-t-2 border-dashed border-[#FED609]/40 md:block" />
+        </motion.div>
+      </div>
+    </section>
   )
 }

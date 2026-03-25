@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tenants Management | Prophives</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FED609",
+                        "primary-hover": "#FFD70B",
+                        "warm-cream": "#FEFAEF",
+                        "soft-ivory": "#FFFAE2",
+                        "dark-text": "#1A1A1A",
+                        "muted-text": "#6B7280"
+                    },
+                    fontFamily: {
+                        "headline": ["Sora"],
+                        "body": ["Manrope"],
+                        "label": ["DM Sans"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .active-nav-border {
+            border-right: 4px solid #FED609;
+        }
+    </style>
+</head>
+<body class="bg-warm-cream font-body text-dark-text antialiased">
+<!-- Sidebar Navigation -->
+<aside class="h-screen w-64 fixed left-0 top-0 border-r border-[#FED609]/10 bg-white shadow-xl z-50 flex flex-col py-6">
+<div class="px-6 mb-10">
+<h1 class="text-xl font-black text-dark-text font-headline">Prophives</h1>
+<p class="text-xs text-muted-text font-label uppercase tracking-wider">Premium Management</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-muted-text hover:bg-warm-cream/50 hover:translate-x-1 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-muted-text hover:bg-warm-cream/50 hover:translate-x-1 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+<span class="font-medium">Properties</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 bg-warm-cream text-dark-text active-nav-border font-bold scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined text-primary" data-icon="groups">groups</span>
+<span class="font-medium">Tenants</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-muted-text hover:bg-warm-cream/50 hover:translate-x-1 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-medium">Leases</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-muted-text hover:bg-warm-cream/50 hover:translate-x-1 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-medium">Payments</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-muted-text hover:bg-warm-cream/50 hover:translate-x-1 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full bg-primary hover:bg-primary-hover text-dark-text font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-all active:scale-95 shadow-md">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                Add Property
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-40 bg-warm-cream/80 backdrop-blur-md border-b border-primary/20 px-8 py-3 flex justify-between items-center shadow-sm">
+<div class="flex items-center bg-white border border-primary/20 rounded-full px-4 py-1.5 w-96">
+<span class="material-symbols-outlined text-muted-text mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full font-label" placeholder="Search tenants, units, or status..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-muted-text">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="chat">chat</span></button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="help">help</span></button>
+</div>
+<div class="h-8 w-px bg-primary/20"></div>
+<button class="text-dark-text font-semibold hover:text-primary transition-colors font-label">Support</button>
+<div class="w-10 h-10 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="professional portrait of a male real estate manager in a sharp blue suit with a clean office background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdKYFD5IbmbV1ZLhBB3_-Nj9W_r8hxzrrPtGLj0Dd2tfEkccvB1QQryXUpEQRGwOpFXfZ4nkPjNmx3JxHpxt7hwtl_TQ_Acr3Rgmsbh0ZOnd3BlWgz1ELYEO8jm5eAxZCMkJxZopJ8aBbmiCMHn-6ocTNszF7a76KzRLtm3pDcXTBydyTIPcsKn3NWJFjc9nY_ZeRfjph3Iie8Mr3uAwCfmIGLAM6pBQr6wrKCq_WA0OtPjYTSKuFLWpmdJF_pCWo8ArM9TBsv-0CY"/>
+</div>
+</div>
+</header>
+<div class="p-8 max-w-7xl mx-auto">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="text-3xl font-bold font-headline text-dark-text">Tenants</h2>
+<p class="text-muted-text mt-1">Manage your residents and lease agreements across Dubai properties.</p>
+</div>
+<div class="flex gap-3">
+<div class="relative">
+<select class="appearance-none bg-white border border-primary/20 rounded-lg px-4 py-2.5 pr-10 text-sm font-medium focus:ring-primary focus:border-primary outline-none cursor-pointer">
+<option>Filter by Property</option>
+<option>Marina View</option>
+<option>Palm Jumeirah Villa</option>
+<option>Business Bay Apt</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-2.5 pointer-events-none text-muted-text" data-icon="expand_more">expand_more</span>
+</div>
+<button class="bg-primary hover:bg-primary-hover text-dark-text font-bold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-all shadow-lg shadow-primary/10">
+<span class="material-symbols-outlined" data-icon="person_add">person_add</span>
+                        Add Tenant
+                    </button>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-8">
+<!-- Tenants Table Section -->
+<div class="col-span-12 xl:col-span-8">
+<div class="bg-white rounded-xl shadow-sm border border-primary/10 overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-primary text-dark-text">
+<th class="px-6 py-4 font-bold font-headline text-sm uppercase tracking-wider">Tenant Name</th>
+<th class="px-6 py-4 font-bold font-headline text-sm uppercase tracking-wider">Property</th>
+<th class="px-6 py-4 font-bold font-headline text-sm uppercase tracking-wider text-center">Unit</th>
+<th class="px-6 py-4 font-bold font-headline text-sm uppercase tracking-wider">Lease End</th>
+<th class="px-6 py-4 font-bold font-headline text-sm uppercase tracking-wider">Status</th>
+<th class="px-6 py-4 font-bold font-headline text-sm uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="text-sm">
+<tr class="bg-warm-cream/30 hover:bg-soft-ivory transition-colors border-b border-primary/5">
+<td class="px-6 py-4 font-semibold text-dark-text">Omar Khalid</td>
+<td class="px-6 py-4 text-muted-text">Marina View</td>
+<td class="px-6 py-4 text-center font-medium">1402</td>
+<td class="px-6 py-4 text-muted-text">Dec 12, 2024</td>
+<td class="px-6 py-4"><span class="px-3 py-1 rounded-full bg-green-100 text-green-700 font-bold text-xs uppercase border border-green-200">Paid</span></td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 hover:bg-primary/20 rounded-md transition-colors text-dark-text"><span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span></button>
+<button class="p-1.5 hover:bg-green-100 rounded-md transition-colors text-green-600"><span class="material-symbols-outlined text-[20px]" data-icon="chat">chat</span></button>
+<button class="p-1.5 hover:bg-blue-100 rounded-md transition-colors text-blue-500"><span class="material-symbols-outlined text-[20px]" data-icon="send">send</span></button>
+</div>
+</td>
+</tr>
+<tr class="bg-white hover:bg-soft-ivory transition-colors border-b border-primary/5">
+<td class="px-6 py-4 font-semibold text-dark-text">Sarah Jenkins</td>
+<td class="px-6 py-4 text-muted-text">Palm Jumeirah Villa</td>
+<td class="px-6 py-4 text-center font-medium">V-09</td>
+<td class="px-6 py-4 text-muted-text">Jan 05, 2025</td>
+<td class="px-6 py-4"><span class="px-3 py-1 rounded-full bg-orange-100 text-orange-700 font-bold text-xs uppercase border border-orange-200">Pending</span></td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 hover:bg-primary/20 rounded-md transition-colors text-dark-text"><span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span></button>
+<button class="p-1.5 hover:bg-green-100 rounded-md transition-colors text-green-600"><span class="material-symbols-outlined text-[20px]" data-icon="chat">chat</span></button>
+<button class="p-1.5 hover:bg-blue-100 rounded-md transition-colors text-blue-500"><span class="material-symbols-outlined text-[20px]" data-icon="send">send</span></button>
+</div>
+</td>
+</tr>
+<tr class="bg-warm-cream/30 hover:bg-soft-ivory transition-colors border-b border-primary/5">
+<td class="px-6 py-4 font-semibold text-dark-text">Ahmed Al-Sayed</td>
+<td class="px-6 py-4 text-muted-text">Business Bay Apt</td>
+<td class="px-6 py-4 text-center font-medium">804</td>
+<td class="px-6 py-4 text-muted-text">Nov 20, 2024</td>
+<td class="px-6 py-4"><span class="px-3 py-1 rounded-full bg-red-100 text-red-700 font-bold text-xs uppercase border border-red-200">Overdue</span></td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 hover:bg-primary/20 rounded-md transition-colors text-dark-text"><span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span></button>
+<button class="p-1.5 hover:bg-green-100 rounded-md transition-colors text-green-600"><span class="material-symbols-outlined text-[20px]" data-icon="chat">chat</span></button>
+<button class="p-1.5 hover:bg-blue-100 rounded-md transition-colors text-blue-500"><span class="material-symbols-outlined text-[20px]" data-icon="send">send</span></button>
+</div>
+</td>
+</tr>
+<tr class="bg-white hover:bg-soft-ivory transition-colors border-b border-primary/5">
+<td class="px-6 py-4 font-semibold text-dark-text">Fatima Rashid</td>
+<td class="px-6 py-4 text-muted-text">Marina View</td>
+<td class="px-6 py-4 text-center font-medium">1201</td>
+<td class="px-6 py-4 text-muted-text">Feb 14, 2025</td>
+<td class="px-6 py-4"><span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 font-bold text-xs uppercase border border-yellow-200">Partial</span></td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 hover:bg-primary/20 rounded-md transition-colors text-dark-text"><span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span></button>
+<button class="p-1.5 hover:bg-green-100 rounded-md transition-colors text-green-600"><span class="material-symbols-outlined text-[20px]" data-icon="chat">chat</span></button>
+<button class="p-1.5 hover:bg-blue-100 rounded-md transition-colors text-blue-500"><span class="material-symbols-outlined text-[20px]" data-icon="send">send</span></button>
+</div>
+</td>
+</tr>
+<tr class="bg-warm-cream/30 hover:bg-soft-ivory transition-colors border-b border-primary/5">
+<td class="px-6 py-4 font-semibold text-dark-text">Michael Ross</td>
+<td class="px-6 py-4 text-muted-text">Business Bay Apt</td>
+<td class="px-6 py-4 text-center font-medium">2102</td>
+<td class="px-6 py-4 text-muted-text">Mar 01, 2025</td>
+<td class="px-6 py-4"><span class="px-3 py-1 rounded-full bg-green-100 text-green-700 font-bold text-xs uppercase border border-green-200">Paid</span></td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 hover:bg-primary/20 rounded-md transition-colors text-dark-text"><span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span></button>
+<button class="p-1.5 hover:bg-green-100 rounded-md transition-colors text-green-600"><span class="material-symbols-outlined text-[20px]" data-icon="chat">chat</span></button>
+<button class="p-1.5 hover:bg-blue-100 rounded-md transition-colors text-blue-500"><span class="material-symbols-outlined text-[20px]" data-icon="send">send</span></button>
+</div>
+</td>
+</tr>
+<tr class="bg-white hover:bg-soft-ivory transition-colors border-b border-primary/5">
+<td class="px-6 py-4 font-semibold text-dark-text">Elena Rossi</td>
+<td class="px-6 py-4 text-muted-text">Marina View</td>
+<td class="px-6 py-4 text-center font-medium">905</td>
+<td class="px-6 py-4 text-muted-text">Jun 10, 2025</td>
+<td class="px-6 py-4"><span class="px-3 py-1 rounded-full bg-green-100 text-green-700 font-bold text-xs uppercase border border-green-200">Paid</span></td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 hover:bg-primary/20 rounded-md transition-colors text-dark-text"><span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span></button>
+<button class="p-1.5 hover:bg-green-100 rounded-md transition-colors text-green-600"><span class="material-symbols-outlined text-[20px]" data-icon="chat">chat</span></button>
+<button class="p-1.5 hover:bg-blue-100 rounded-md transition-colors text-blue-500"><span class="material-symbols-outlined text-[20px]" data-icon="send">send</span></button>
+</div>
+</td>
+</tr>
+<tr class="bg-warm-cream/30 hover:bg-soft-ivory transition-colors border-b border-primary/5">
+<td class="px-6 py-4 font-semibold text-dark-text">Julian Webb</td>
+<td class="px-6 py-4 text-muted-text">Palm Jumeirah Villa</td>
+<td class="px-6 py-4 text-center font-medium">V-12</td>
+<td class="px-6 py-4 text-muted-text">Aug 22, 2025</td>
+<td class="px-6 py-4"><span class="px-3 py-1 rounded-full bg-orange-100 text-orange-700 font-bold text-xs uppercase border border-orange-200">Pending</span></td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 hover:bg-primary/20 rounded-md transition-colors text-dark-text"><span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span></button>
+<button class="p-1.5 hover:bg-green-100 rounded-md transition-colors text-green-600"><span class="material-symbols-outlined text-[20px]" data-icon="chat">chat</span></button>
+<button class="p-1.5 hover:bg-blue-100 rounded-md transition-colors text-blue-500"><span class="material-symbols-outlined text-[20px]" data-icon="send">send</span></button>
+</div>
+</td>
+</tr>
+<tr class="bg-white hover:bg-soft-ivory transition-colors">
+<td class="px-6 py-4 font-semibold text-dark-text">Lila Chen</td>
+<td class="px-6 py-4 text-muted-text">Business Bay Apt</td>
+<td class="px-6 py-4 text-center font-medium">405</td>
+<td class="px-6 py-4 text-muted-text">Oct 30, 2024</td>
+<td class="px-6 py-4"><span class="px-3 py-1 rounded-full bg-green-100 text-green-700 font-bold text-xs uppercase border border-green-200">Paid</span></td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 hover:bg-primary/20 rounded-md transition-colors text-dark-text"><span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span></button>
+<button class="p-1.5 hover:bg-green-100 rounded-md transition-colors text-green-600"><span class="material-symbols-outlined text-[20px]" data-icon="chat">chat</span></button>
+<button class="p-1.5 hover:bg-blue-100 rounded-md transition-colors text-blue-500"><span class="material-symbols-outlined text-[20px]" data-icon="send">send</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 bg-white border-t border-primary/10 flex justify-between items-center">
+<span class="text-sm text-muted-text font-label">Showing 1-8 of 42 tenants</span>
+<div class="flex gap-1">
+<button class="w-8 h-8 rounded flex items-center justify-center border border-primary/20 text-muted-text hover:bg-primary hover:text-dark-text transition-colors"><span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span></button>
+<button class="w-8 h-8 rounded flex items-center justify-center bg-primary text-dark-text font-bold">1</button>
+<button class="w-8 h-8 rounded flex items-center justify-center border border-primary/20 text-muted-text hover:bg-primary hover:text-dark-text transition-colors">2</button>
+<button class="w-8 h-8 rounded flex items-center justify-center border border-primary/20 text-muted-text hover:bg-primary hover:text-dark-text transition-colors">3</button>
+<button class="w-8 h-8 rounded flex items-center justify-center border border-primary/20 text-muted-text hover:bg-primary hover:text-dark-text transition-colors"><span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Tenant Detail Side Panel -->
+<div class="col-span-12 xl:col-span-4 space-y-6">
+<div class="bg-white rounded-xl shadow-lg border border-primary/20 p-6 sticky top-24">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-xl bg-primary/10 border-2 border-primary flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="close-up portrait of a middle eastern man with a neat beard and friendly expression in professional attire" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVH8k9k052sJWLLdK7effhWkeM7-um_tzfFd5fxwGfYbia3lFe80UzZPq9E2QdMsxTPnBF2eT3iZH1lI-oCrx3EO017VrKeo0xzYNTyhv2MwCCQ3liYD_tAtk-2y0FdCY0bfPhQgFv86wrBHc1zIE1PdEPlwEpdMI27H1uHd_JwSmIFsU86G3SMdswYBM8YSjyECvrrTeE-vyb4PzG9xDMXJv9fuJh3pQLmcGgHdby_eY-EBUWlQLhwLamIDikjIcaxuGec_JE0cwk"/>
+</div>
+<div>
+<h3 class="text-xl font-bold font-headline">Ahmed Al-Sayed</h3>
+<span class="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded uppercase border border-red-100">Overdue Status</span>
+</div>
+</div>
+<button class="text-muted-text hover:text-dark-text"><span class="material-symbols-outlined" data-icon="edit">edit</span></button>
+</div>
+<div class="space-y-4 mb-8">
+<div class="flex justify-between items-center py-2 border-b border-primary/5">
+<span class="text-muted-text font-label text-sm">Property / Unit</span>
+<span class="font-semibold text-sm">Business Bay Apt / 804</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-primary/5">
+<span class="text-muted-text font-label text-sm">Monthly Rent</span>
+<span class="font-bold text-sm text-primary">AED 12,500</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-primary/5">
+<span class="text-muted-text font-label text-sm">Phone</span>
+<span class="font-semibold text-sm">+971 50 123 4567</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-primary/5">
+<span class="text-muted-text font-label text-sm">Email</span>
+<span class="font-semibold text-sm">ahmed.as@email.ae</span>
+</div>
+</div>
+<div class="mb-8">
+<h4 class="text-xs font-bold font-label uppercase tracking-widest text-muted-text mb-3">Recent Payments</h4>
+<div class="space-y-2">
+<div class="flex justify-between items-center p-3 bg-warm-cream rounded-lg border border-primary/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<p class="text-xs font-bold">September Rent</p>
+<p class="text-[10px] text-muted-text">Paid via Bank Transfer</p>
+</div>
+</div>
+<span class="text-xs font-bold">AED 12,500</span>
+</div>
+<div class="flex justify-between items-center p-3 bg-red-50 rounded-lg border border-red-100">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+<span class="material-symbols-outlined text-sm" data-icon="error">error</span>
+</div>
+<div>
+<p class="text-xs font-bold">October Rent</p>
+<p class="text-[10px] text-muted-text">Pending Since Oct 1st</p>
+</div>
+</div>
+<span class="text-xs font-bold text-red-600">AED 12,500</span>
+</div>
+</div>
+</div>
+<div class="space-y-3">
+<button class="w-full py-2.5 rounded-lg bg-[#25D366] text-white font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity text-sm">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+                                Send WhatsApp Reminder
+                            </button>
+<button class="w-full py-2.5 rounded-lg bg-[#0088CC] text-white font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity text-sm">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+                                Send Telegram Message
+                            </button>
+<div class="pt-4 mt-4 border-t border-primary/10">
+<p class="text-xs font-bold font-headline mb-3 text-center uppercase tracking-widest text-muted-text">Rent Approval Action</p>
+<div class="flex gap-2">
+<button class="flex-1 py-2 rounded-lg bg-green-500 text-white font-bold text-sm hover:bg-green-600 transition-colors">Accept</button>
+<button class="flex-1 py-2 rounded-lg bg-white border border-red-200 text-red-600 font-bold text-sm hover:bg-red-50 transition-colors">Reject</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary rounded-full shadow-2xl flex items-center justify-center text-dark-text hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-[28px]" data-icon="smart_toy">smart_toy</span>
+</button>
+</body></html>

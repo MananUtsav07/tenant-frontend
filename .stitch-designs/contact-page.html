@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Contact Prophives | Premium Property Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Manrope:wght@400;500;600&amp;family=DM+Sans:wght@400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#FED609",
+              cream: "#FEFAEF",
+              ivory: "#FFFAE2",
+              deepGold: "#FFD70B",
+              dark: "#1A1A1A",
+              muted: "#6B7280"
+            },
+            fontFamily: {
+              "headline": ["Sora"],
+              "body": ["Manrope"],
+              "label": ["DM Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-cream font-body text-dark antialiased">
+<!-- TopNavBar -->
+<nav class="bg-[#FEFAEF] dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm sticky top-0 z-50">
+<div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto font-['Manrope'] antialiased">
+<div class="text-2xl font-['Sora'] font-bold text-[#1A1A1A] dark:text-white">
+                Prophives
+            </div>
+<!-- Desktop Navigation -->
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-[#1A1A1A] dark:text-gray-300 hover:text-[#FED609] transition-colors" href="#">Features</a>
+<a class="text-[#1A1A1A] dark:text-gray-300 hover:text-[#FED609] transition-colors" href="#">How It Works</a>
+<a class="text-[#1A1A1A] dark:text-gray-300 hover:text-[#FED609] transition-colors" href="#">Solutions</a>
+<a class="text-[#1A1A1A] dark:text-gray-300 hover:text-[#FED609] transition-colors" href="#">Pricing</a>
+</div>
+<div class="flex items-center space-x-4">
+<button class="text-[#1A1A1A] dark:text-gray-300 hover:text-[#FED609] transition-colors font-medium">Login</button>
+<button class="bg-[#FED609] text-[#1A1A1A] px-6 py-2.5 rounded-lg font-bold hover:bg-[#FFD70B] active:scale-95 duration-200 transition-all">
+                    Get Started
+                </button>
+</div>
+</div>
+</nav>
+<main>
+<!-- Contact Hero Section -->
+<section class="py-16 md:py-24 px-6 max-w-7xl mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+<!-- Left Column: Contact Form -->
+<div class="order-2 lg:order-1">
+<div class="bg-white p-8 md:p-10 rounded-xl shadow-sm border border-gray-100">
+<form action="#" class="space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="font-label text-sm font-bold text-dark">Full Name</label>
+<input class="w-full px-4 py-3 bg-cream border-none rounded-lg focus:ring-2 focus:ring-primary text-dark placeholder-muted transition-all" placeholder="John Doe" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="font-label text-sm font-bold text-dark">Email Address</label>
+<input class="w-full px-4 py-3 bg-cream border-none rounded-lg focus:ring-2 focus:ring-primary text-dark placeholder-muted transition-all" placeholder="john@example.com" type="email"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label text-sm font-bold text-dark">Subject</label>
+<select class="w-full px-4 py-3 bg-cream border-none rounded-lg focus:ring-2 focus:ring-primary text-dark transition-all appearance-none">
+<option>General Inquiry</option>
+<option>Property Listing Support</option>
+<option>Technical Assistance</option>
+<option>Partnership Opportunities</option>
+</select>
+</div>
+<div class="space-y-2">
+<label class="font-label text-sm font-bold text-dark">Message</label>
+<textarea class="w-full px-4 py-3 bg-cream border-none rounded-lg focus:ring-2 focus:ring-primary text-dark placeholder-muted transition-all resize-none" placeholder="How can we help you today?" rows="5"></textarea>
+</div>
+<button class="w-full bg-primary text-dark font-bold py-4 rounded-lg hover:bg-deepGold active:scale-95 transition-all shadow-md shadow-primary/20" type="submit">
+                                Send Message
+                            </button>
+</form>
+</div>
+</div>
+<!-- Right Column: Contact Info -->
+<div class="order-1 lg:order-2 space-y-10 lg:pl-12">
+<div class="space-y-4">
+<span class="text-primary font-bold tracking-wider text-sm uppercase">Contact Us</span>
+<h1 class="text-4xl md:text-5xl font-headline font-bold text-dark leading-tight">Get in Touch</h1>
+<p class="text-muted text-lg max-w-md">Experience the future of property management in Dubai. Our team is ready to assist you 24/7.</p>
+</div>
+<div class="space-y-6">
+<!-- Contact Methods -->
+<div class="flex items-start space-x-4">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-primary">mail</span>
+</div>
+<div>
+<h3 class="font-bold text-dark">Email Us</h3>
+<p class="text-muted">support@prophives.com</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[#25D366]">chat</span>
+</div>
+<div>
+<h3 class="font-bold text-dark">WhatsApp</h3>
+<a class="text-muted hover:text-[#25D366] transition-colors" href="#">Chat with an Agent</a>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[#0088cc]">send</span>
+</div>
+<div>
+<h3 class="font-bold text-dark">Telegram</h3>
+<a class="text-muted hover:text-[#0088cc] transition-colors" href="#">Join our Support Bot</a>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-gray-200">
+<div>
+<h4 class="font-bold text-dark flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">location_on</span>
+                                Office Location
+                            </h4>
+<p class="text-muted mt-2">Business Bay, Prime Tower<br/>Dubai, UAE</p>
+</div>
+<div>
+<h4 class="font-bold text-dark flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">schedule</span>
+                                Operating Hours
+                            </h4>
+<p class="text-muted mt-2">Mon - Fri: 9am - 6pm<br/>Sat: 10am - 2pm</p>
+</div>
+</div>
+<!-- Map Placeholder -->
+<div class="relative w-full h-48 rounded-xl overflow-hidden shadow-inner bg-gray-200 group">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 opacity-60 group-hover:opacity-100" data-alt="Modern aerial view of Dubai Business Bay skyline with crystal clear canals and contemporary skyscrapers under bright daylight" data-location="Dubai" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcqsNdLHfbBMWpJMnYYPjVreaZF2Z7v6STar9oTNMKOQLoBaV78yfgKe9t-9aO4Y0wH-dgTBPDs0aDWx_hHHD8dSIUMqF16PQAqzUVMWAa8Ybj38pQc2V6hNrKahApQWDu2nNp5QtQohgm6iAahPWH6qKjSopKzkwubAJ3PIH5JB1jegU933Ow4-Yu2CX_kgMJQHYAox7enio3Qpk1PvQnEylFKdtNVhwdCPTXItgD-6q1yrthrWIu1N-up3JfiVPL-h6lh4f1rCbC"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg flex items-center gap-2">
+<span class="w-3 h-3 bg-primary rounded-full animate-pulse"></span>
+<span class="text-xs font-bold text-dark uppercase tracking-widest">Our Dubai HQ</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Section: Self-Service -->
+<section class="bg-ivory py-20 px-6">
+<div class="max-w-7xl mx-auto text-center space-y-8">
+<div class="space-y-2">
+<h2 class="text-3xl font-headline font-bold text-dark">Prefer self-service?</h2>
+<p class="text-muted">Find quick answers and detailed guides in our knowledge base.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+<a class="flex items-center justify-between p-6 bg-white rounded-xl hover:shadow-md transition-all group border border-transparent hover:border-primary/20" href="#">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-cream rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-dark transition-colors">
+<span class="material-symbols-outlined">menu_book</span>
+</div>
+<div class="text-left">
+<h4 class="font-bold text-dark">Documentation</h4>
+<p class="text-sm text-muted">Complete platform guides</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-muted group-hover:text-primary transition-colors">arrow_forward</span>
+</a>
+<a class="flex items-center justify-between p-6 bg-white rounded-xl hover:shadow-md transition-all group border border-transparent hover:border-primary/20" href="#">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-cream rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-dark transition-colors">
+<span class="material-symbols-outlined">quiz</span>
+</div>
+<div class="text-left">
+<h4 class="font-bold text-dark">F.A.Q.</h4>
+<p class="text-sm text-muted">Instant answers to common questions</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-muted group-hover:text-primary transition-colors">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#1A1A1A] dark:bg-black border-t border-gray-800">
+<div class="w-full py-12 px-6 flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto font-['Manrope'] text-sm">
+<div class="mb-8 md:mb-0">
+<div class="font-['Sora'] font-bold text-[#FED609] text-xl mb-4">Prophives</div>
+<p class="text-gray-400 max-w-xs text-center md:text-left">The intelligence layer for Dubai's most ambitious property portfolios.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-8 md:gap-12 mb-8 md:mb-0">
+<a class="text-gray-400 hover:text-white transition-colors opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+<a class="text-gray-400 hover:text-white transition-colors opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+<a class="text-gray-400 hover:text-white transition-colors opacity-80 hover:opacity-100" href="#">Contact Us</a>
+<a class="text-gray-400 hover:text-white transition-colors opacity-80 hover:opacity-100" href="#">Support</a>
+</div>
+<div class="text-gray-400 text-center md:text-right">
+                © 2024 Prophives Property Management. All rights reserved.
+            </div>
+</div>
+</footer>
+</body></html>
