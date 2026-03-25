@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -r \"formTheme\\\\|export.*theme\" /c/Users/asus/Desktop/tenant-frontend/src --include=*.ts --include=*.tsx)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:stitch.withgoogle.com)",
+      "Bash(npx -y @_davideast/stitch-mcp init)",
+      "Bash(xargs -I {} basename {})",
+      "mcp__stitch__create_project",
+      "mcp__stitch__create_design_system",
+      "mcp__stitch__update_design_system",
+      "mcp__stitch__generate_screen_from_text",
+      "Bash(xargs grep:*)",
+      "Bash(wc -l /c/Users/asus/Desktop/tenant-frontend/src/pages/**/*.tsx)",
+      "mcp__stitch__list_screens",
+      "mcp__stitch__get_project",
+      "mcp__stitch__list_design_systems",
+      "Bash(ls -la /c/Users/asus/Desktop/tenant-frontend/*.*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx vite:*)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "stitch"
+  ]
+}

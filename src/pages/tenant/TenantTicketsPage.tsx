@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useState, type FormEvent } from 'react'
+import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import { LifeBuoy, Plus, TicketX } from 'lucide-react'
 
 import { Button } from '../../components/common/Button'
@@ -63,14 +63,14 @@ export function TenantTicketsPage() {
   return (
     <section className="space-y-6">
       <div>
-        <h2 className="inline-flex items-center gap-2 text-2xl font-semibold text-slate-900">
-          <LifeBuoy className="h-6 w-6 text-blue-600" />
+        <h2 className="inline-flex items-center gap-2 text-2xl font-semibold text-[#1A1A1A]">
+          <LifeBuoy className="h-6 w-6 text-[#FED609]" />
           Support Tickets
         </h2>
-        <p className="text-sm text-slate-400">Raise and track support requests.</p>
+        <p className="text-sm text-[#6B7280]">Raise and track support requests.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-3 rounded-2xl border border-slate-200 bg-white shadow-sm p-5">
+      <form onSubmit={handleSubmit} className="space-y-3 rounded-xl border border-[rgba(0,0,0,0.06)] bg-white shadow-sm p-5">
         <FormInput
           label="Subject"
           name="tenant_ticket_subject"
@@ -88,14 +88,14 @@ export function TenantTicketsPage() {
           onChange={(event) => setMessage(event.target.value)}
           required
         />
-        <Button
+        <button
           type="submit"
           disabled={busy}
-          variant="secondary"
-          iconLeft={<Plus className="h-4 w-4" />}
+          className="inline-flex items-center gap-2 rounded-lg bg-[#FED609] px-4 py-2 text-sm font-semibold text-[#1A1A1A] hover:bg-[#FFD70B] disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
         >
+          <Plus className="h-4 w-4" />
           {busy ? 'Submitting...' : 'Raise Ticket'}
-        </Button>
+        </button>
       </form>
 
       {error ? <ErrorState message={error} /> : null}
@@ -118,7 +118,3 @@ export function TenantTicketsPage() {
     </section>
   )
 }
-
-
-
-

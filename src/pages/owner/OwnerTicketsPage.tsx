@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { LifeBuoy, TicketX } from 'lucide-react'
 
 import { EmptyState } from '../../components/common/EmptyState'
@@ -55,11 +55,11 @@ export function OwnerTicketsPage() {
   return (
     <section className="space-y-6">
       <div>
-        <h2 className="inline-flex items-center gap-2 text-2xl font-semibold text-slate-900">
-          <LifeBuoy className="h-6 w-6 text-blue-600" />
+        <h2 className="inline-flex items-center gap-2 text-2xl font-semibold text-[#1A1A1A]">
+          <LifeBuoy className="h-6 w-6 text-[#FED609]" />
           Support Tickets
         </h2>
-        <p className="text-sm text-slate-400">Track and update tenant requests.</p>
+        <p className="text-sm text-[#6B7280]">Track and update tenant requests.</p>
       </div>
 
       {error ? <ErrorState message={error} /> : null}
@@ -96,8 +96,3 @@ export function OwnerTicketsPage() {
     </section>
   )
 }
-
-
-
-
-

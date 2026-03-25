@@ -9,13 +9,22 @@ type SectionContainerProps = {
   id?: string
   size?: 'narrow' | 'default' | 'wide'
   padded?: boolean
-  tone?: 'default' | 'panel' | 'hero' | 'navy'
+  tone?: 'default' | 'panel' | 'hero' | 'navy' | 'cream' | 'ivory' | 'gold'
 }
 
 const containerWidths: Record<NonNullable<SectionContainerProps['size']>, string> = {
   narrow: 'max-w-[1120px]',
   default: 'max-w-[1280px]',
   wide: 'max-w-[1400px]',
+}
+
+const toneClassNames: Record<string, string> = {
+  panel: 'bg-white',
+  hero: 'bg-[#FEFAEF]',
+  navy: 'bg-[#1A1A1A] text-white',
+  cream: 'bg-[#FEFAEF]',
+  ivory: 'bg-[#FFFAE2]',
+  gold: 'bg-[#FED609]',
 }
 
 export function SectionContainer({
@@ -30,17 +39,8 @@ export function SectionContainer({
 }: SectionContainerProps) {
   const Tag = as
 
-  const toneClassName =
-    tone === 'panel'
-      ? 'ph-section-shell ph-surface-panel'
-      : tone === 'hero'
-        ? 'ph-section-shell ph-surface-hero ph-hex-bg'
-        : tone === 'navy'
-          ? 'ph-section-shell ph-surface-navy'
-          : undefined
-
   return (
-    <Tag id={id} className={clsx('w-full', toneClassName, className)}>
+    <Tag id={id} className={clsx('w-full', toneClassNames[tone], className)}>
       <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-12 2xl:px-16">
         <div
           className={clsx(

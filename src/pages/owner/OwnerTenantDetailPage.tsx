@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { ArrowLeft, Building2, Mail, Phone } from 'lucide-react'
 
@@ -105,14 +105,14 @@ export function OwnerTenantDetailPage() {
     <section className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-semibold text-slate-900">Tenant Detail</h2>
-          <p className="text-sm text-slate-400">Lease, ticket and reminder details for this tenant.</p>
+          <h2 className="text-2xl font-semibold text-[#1A1A1A]">Tenant Detail</h2>
+          <p className="text-sm text-[#6B7280]">Lease, ticket and reminder details for this tenant.</p>
         </div>
         <Button
           to="/owner/tenants"
           variant="outline"
           size="sm"
-          className="border-slate-300 bg-white text-slate-700"
+          className="border-[rgba(0,0,0,0.06)] bg-white text-[#4B5563]"
           iconLeft={<ArrowLeft className="h-4 w-4" />}
         >
           Back to tenants
@@ -124,55 +124,55 @@ export function OwnerTenantDetailPage() {
 
       {!loading && detail ? (
         <>
-          <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-5">
-            <p className="text-lg font-semibold text-slate-900">{detail.tenant.full_name}</p>
+          <div className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white shadow-sm p-5">
+            <p className="text-lg font-semibold text-[#1A1A1A]">{detail.tenant.full_name}</p>
             <div className="mt-3 grid gap-3 md:grid-cols-3">
               <div>
-                <p className="text-xs uppercase text-slate-400">Tenant Access ID</p>
-                <p className="text-sm text-slate-800">{detail.tenant.tenant_access_id}</p>
+                <p className="text-xs uppercase text-[#6B7280]">Tenant Access ID</p>
+                <p className="text-sm text-[#1A1A1A]">{detail.tenant.tenant_access_id}</p>
               </div>
               <div>
-                <p className="text-xs uppercase text-slate-400">Rent</p>
-                <p className="text-sm text-slate-800">
+                <p className="text-xs uppercase text-[#6B7280]">Rent</p>
+                <p className="text-sm text-[#1A1A1A]">
                   {formatCurrency(detail.tenant.monthly_rent, owner?.organization?.currency_code)}
                 </p>
               </div>
               <div>
-                <p className="text-xs uppercase text-slate-400">Payment Status</p>
+                <p className="text-xs uppercase text-[#6B7280]">Payment Status</p>
                 <StatusBadge status={detail.tenant.payment_status} />
               </div>
               <div>
-                <p className="text-xs uppercase text-slate-400">Due Date</p>
-                <p className="text-sm text-slate-800">{formatDate(getNextDueDate(detail.tenant.payment_due_day).toISOString())}</p>
+                <p className="text-xs uppercase text-[#6B7280]">Due Date</p>
+                <p className="text-sm text-[#1A1A1A]">{formatDate(getNextDueDate(detail.tenant.payment_due_day).toISOString())}</p>
               </div>
               <div>
-                <p className="text-xs uppercase text-slate-400">Lease</p>
-                <p className="text-sm text-slate-800">
+                <p className="text-xs uppercase text-[#6B7280]">Lease</p>
+                <p className="text-sm text-[#1A1A1A]">
                   {formatDate(detail.tenant.lease_start_date)} - {formatDate(detail.tenant.lease_end_date)}
                 </p>
               </div>
               <div>
-                <p className="text-xs uppercase text-slate-400">Property</p>
-                <p className="inline-flex items-center gap-2 text-sm text-slate-800">
-                  <Building2 className="h-4 w-4 text-blue-600" />
+                <p className="text-xs uppercase text-[#6B7280]">Property</p>
+                <p className="inline-flex items-center gap-2 text-sm text-[#1A1A1A]">
+                  <Building2 className="h-4 w-4 text-[#FED609]" />
                   {detail.tenant.properties?.property_name || '-'}
                 </p>
               </div>
               <div>
-                <p className="text-xs uppercase text-slate-400">Address</p>
-                <p className="text-sm text-slate-800">{detail.tenant.properties?.address || '-'}</p>
+                <p className="text-xs uppercase text-[#6B7280]">Address</p>
+                <p className="text-sm text-[#1A1A1A]">{detail.tenant.properties?.address || '-'}</p>
               </div>
               <div>
-                <p className="text-xs uppercase text-slate-400">Email</p>
-                <p className="inline-flex items-center gap-2 text-sm text-slate-800">
-                  <Mail className="h-4 w-4 text-blue-600" />
+                <p className="text-xs uppercase text-[#6B7280]">Email</p>
+                <p className="inline-flex items-center gap-2 text-sm text-[#1A1A1A]">
+                  <Mail className="h-4 w-4 text-[#FED609]" />
                   {tenantContact.email}
                 </p>
               </div>
               <div>
-                <p className="text-xs uppercase text-slate-400">Phone</p>
-                <p className="inline-flex items-center gap-2 text-sm text-slate-800">
-                  <Phone className="h-4 w-4 text-blue-600" />
+                <p className="text-xs uppercase text-[#6B7280]">Phone</p>
+                <p className="inline-flex items-center gap-2 text-sm text-[#1A1A1A]">
+                  <Phone className="h-4 w-4 text-[#FED609]" />
                   {tenantContact.phone}
                 </p>
               </div>
@@ -180,7 +180,7 @@ export function OwnerTenantDetailPage() {
           </div>
 
           <div>
-            <h3 className="mb-3 text-lg font-semibold text-slate-900">Support Tickets</h3>
+            <h3 className="mb-3 text-lg font-semibold text-[#1A1A1A]">Support Tickets</h3>
             {detail.tickets.length === 0 ? (
               <EmptyState
                 title="No tickets"
@@ -192,19 +192,19 @@ export function OwnerTenantDetailPage() {
           </div>
 
           <div>
-            <h3 className="mb-3 text-lg font-semibold text-slate-900">Rent Reminders</h3>
+            <h3 className="mb-3 text-lg font-semibold text-[#1A1A1A]">Rent Reminders</h3>
             {detail.reminders.length === 0 ? (
               <EmptyState title="No reminders" description="Run reminder processing from owner dashboard." />
             ) : (
               <DataTable headers={['Type', 'Scheduled For', 'Status', 'Sent At']}>
                 {detail.reminders.map((reminder) => (
                   <tr key={reminder.id}>
-                    <td className="px-4 py-3 text-slate-800">{reminder.reminder_type.replaceAll('_', ' ')}</td>
-                    <td className="px-4 py-3 text-slate-600">{formatDateTime(reminder.scheduled_for)}</td>
+                    <td className="px-4 py-3 text-[#1A1A1A]">{reminder.reminder_type.replaceAll('_', ' ')}</td>
+                    <td className="px-4 py-3 text-[#4B5563]">{formatDateTime(reminder.scheduled_for)}</td>
                     <td className="px-4 py-3">
                       <StatusBadge status={reminder.status} />
                     </td>
-                    <td className="px-4 py-3 text-slate-400">{formatDateTime(reminder.sent_at)}</td>
+                    <td className="px-4 py-3 text-[#6B7280]">{formatDateTime(reminder.sent_at)}</td>
                   </tr>
                 ))}
               </DataTable>
@@ -215,8 +215,3 @@ export function OwnerTenantDetailPage() {
     </section>
   )
 }
-
-
-
-
-

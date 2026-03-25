@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Building2, ClipboardList, KeyRound, MessageCircleQuestion } from 'lucide-react'
+import { ArrowRight, Building2, ClipboardList, KeyRound, Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { revealUp, staggerParent, useMotionVariants, viewportOnce } from '../../utils/motion'
@@ -9,24 +9,24 @@ import { ROUTES } from '../../routes/constants'
 
 const steps = [
   {
-    title: 'Launch a property stack',
-    description: 'Configure buildings, units, and resident support structure for each portfolio.',
+    title: 'Onboard Properties',
+    description: 'Add your properties with addresses, units, and details in minutes.',
     icon: <Building2 className="h-5 w-5" />,
   },
   {
-    title: 'Add residents and leases',
-    description: 'Bring tenant records, due dates, and payment expectations into one clean operational view.',
+    title: 'Connect Tenants',
+    description: 'Add tenants, set lease dates, rent amounts, and give them portal access.',
     icon: <ClipboardList className="h-5 w-5" />,
   },
   {
-    title: 'Issue secure access',
-    description: 'Residents get their own workspace without owner-level exposure or operational friction.',
+    title: 'Set Up Messaging',
+    description: 'Connect WhatsApp and Telegram for instant tenant communication.',
     icon: <KeyRound className="h-5 w-5" />,
   },
   {
-    title: 'Automate requests and reminders',
-    description: 'Support issues, rent chasers, and approvals move through clear stages with AI assistance.',
-    icon: <MessageCircleQuestion className="h-5 w-5" />,
+    title: 'Automate Everything',
+    description: 'Enable AI automation for tickets, reminders, and payment tracking.',
+    icon: <Sparkles className="h-5 w-5" />,
   },
 ]
 
@@ -35,17 +35,17 @@ export function HowItWorksSection() {
   const staggerVariants = useMotionVariants(staggerParent)
 
   return (
-    <SectionContainer className="py-10 md:py-12" size="wide" tone="navy">
+    <SectionContainer className="py-10 md:py-12" size="wide" tone="ivory">
       <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <span className="ph-kicker">Operating Flow</span>
-            <h2 className="ph-title mt-5 text-3xl font-semibold text-[var(--ph-text)] md:text-4xl">
-              A disciplined workflow from onboarding to ongoing service
+            <span className="ph-kicker">How It Works</span>
+            <h2 className="ph-title mt-5 text-3xl font-bold text-[#1A1A1A] md:text-4xl">
+              Get started in minutes, not days
             </h2>
           </div>
           <Button to={ROUTES.howItWorks} variant="outline" iconRight={<ArrowRight className="h-4 w-4" />}>
-            View Full Workflow
+            Learn More
           </Button>
         </div>
       </motion.div>
@@ -55,31 +55,31 @@ export function HowItWorksSection() {
         initial="hidden"
         whileInView="show"
         viewport={viewportOnce}
-        className="mt-10 grid gap-4 md:grid-cols-2"
+        className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4"
       >
         {steps.map((step, index) => (
           <motion.li
             key={step.title}
             variants={revealVariants}
-            className="rounded-[1.6rem] border border-[rgba(83,88,100,0.42)] bg-white/[0.03] p-5"
+            className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-5 shadow-sm"
           >
             <div className="flex items-center justify-between gap-3">
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-[rgba(240,163,35,0.18)] bg-[rgba(240,163,35,0.08)] text-[var(--ph-accent)]">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(254,214,9,0.12)] text-[#92700A]">
                 {step.icon}
               </span>
-              <span className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--ph-text-muted)]">
-                Step {index + 1}
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#FED609] text-sm font-bold text-[#1A1A1A]">
+                {index + 1}
               </span>
             </div>
-            <h3 className="ph-title mt-4 text-xl font-semibold text-[var(--ph-text)]">{step.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-[var(--ph-text-muted)]">{step.description}</p>
+            <h3 className="ph-title mt-4 text-lg font-bold text-[#1A1A1A]">{step.title}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-[#6B7280]">{step.description}</p>
           </motion.li>
         ))}
       </motion.ol>
 
-      <p className="mt-6 text-sm text-[var(--ph-text-muted)]">
-        Want to see the rollout mapped to your portfolio?{' '}
-        <Link to={ROUTES.contact} className="ph-link font-semibold">
+      <p className="mt-6 text-sm text-[#6B7280]">
+        Want a walkthrough for your portfolio?{' '}
+        <Link to={ROUTES.contact} className="font-semibold text-[#D4A800] hover:text-[#92700A]">
           Talk to our team
         </Link>
         .

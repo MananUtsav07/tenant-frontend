@@ -87,30 +87,30 @@ export function TenantSupportPage() {
   return (
     <section className="space-y-6">
       <div>
-        <h2 className="inline-flex items-center gap-2 text-2xl font-semibold text-slate-900">
-          <MessageSquare className="h-6 w-6 text-blue-600" />
+        <h2 className="inline-flex items-center gap-2 text-2xl font-semibold text-[#1A1A1A]">
+          <MessageSquare className="h-6 w-6 text-[#FED609]" />
           Support
         </h2>
-        <p className="text-sm text-slate-400">Owner support contact and recent support activity.</p>
+        <p className="text-sm text-[#6B7280]">Owner support contact and recent support activity.</p>
       </div>
 
       {!loading && telegramOnboarding ? (
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="inline-flex items-center gap-2 text-lg font-semibold text-slate-900">
-            <Send className="h-5 w-5 text-sky-600" />
+        <div className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-5 shadow-sm">
+          <h3 className="inline-flex items-center gap-2 text-lg font-semibold text-[#1A1A1A]">
+            <Send className="h-5 w-5 text-[#0088cc]" />
             Telegram Alerts
           </h3>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="mt-2 text-sm text-[#4B5563]">
             {telegramOnboarding.connected
               ? `Connected${telegramOnboarding.linked_chat?.username ? ` as @${telegramOnboarding.linked_chat.username}` : ''}.`
               : 'Connect Telegram to receive support and rent update alerts.'}
           </p>
-          <p className="mt-1 text-xs text-slate-500">Open bot, tap Start once, then click Refresh status.</p>
+          <p className="mt-1 text-xs text-[#6B7280]">Open bot, tap Start once, then click Refresh status.</p>
           <div className="mt-4 flex flex-wrap gap-2">
             {!telegramOnboarding.connected ? (
               <button
                 type="button"
-                className="rounded-xl border border-sky-600 bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-500 disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-lg border border-[#0088cc] bg-[#0088cc] px-4 py-2 text-sm font-semibold text-white hover:bg-[#006fa3] disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
                 onClick={connectTelegram}
                 disabled={!telegramOnboarding.connect_url}
               >
@@ -119,7 +119,7 @@ export function TenantSupportPage() {
             ) : (
               <button
                 type="button"
-                className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-lg border border-[rgba(0,0,0,0.06)] bg-white px-4 py-2 text-sm font-semibold text-[#4B5563] hover:bg-[#FEFAEF] disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
                 onClick={disconnectTelegram}
                 disabled={disconnectingTelegram}
               >
@@ -128,7 +128,7 @@ export function TenantSupportPage() {
             )}
             <button
               type="button"
-              className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+              className="rounded-lg border border-[rgba(0,0,0,0.06)] bg-white px-4 py-2 text-sm font-semibold text-[#4B5563] hover:bg-[#FEFAEF] transition-colors"
               onClick={() => {
                 void refreshTelegramStatus()
               }}
@@ -143,19 +143,19 @@ export function TenantSupportPage() {
       {loading ? <LoadingState message="Loading support details..." rows={4} /> : null}
 
       {!loading && ownerContact ? (
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="text-lg font-semibold text-slate-900">Owner Contact</h3>
-          <div className="mt-3 space-y-2 text-sm text-slate-700">
+        <div className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-5 shadow-sm">
+          <h3 className="text-lg font-semibold text-[#1A1A1A]">Owner Contact</h3>
+          <div className="mt-3 space-y-2 text-sm text-[#4B5563]">
             <p className="inline-flex items-center gap-2">
-              <Building2 className="h-4 w-4 text-blue-600" />
+              <Building2 className="h-4 w-4 text-[#FED609]" />
               Company: {ownerContact.company_name || '-'}
             </p>
             <p className="inline-flex items-center gap-2">
-              <Mail className="h-4 w-4 text-blue-600" />
+              <Mail className="h-4 w-4 text-[#FED609]" />
               Email: {ownerContact.support_email || '-'}
             </p>
             <p className="inline-flex items-center gap-2">
-              <Phone className="h-4 w-4 text-blue-600" />
+              <Phone className="h-4 w-4 text-[#25D366]" />
               WhatsApp: {ownerContact.support_whatsapp || '-'}
             </p>
           </div>
@@ -174,9 +174,9 @@ export function TenantSupportPage() {
 
       {!loading && tickets.length > 0 ? (
         <div>
-          <h3 className="mb-3 text-lg font-semibold text-slate-900">Ticket History</h3>
+          <h3 className="mb-3 text-lg font-semibold text-[#1A1A1A]">Ticket History</h3>
           <TicketTable tickets={tickets} />
-          <Button to={ROUTES.tenantTickets} variant="ghost" size="sm" className="mt-3 px-0 text-blue-700 hover:bg-transparent">
+          <Button to={ROUTES.tenantTickets} variant="ghost" size="sm" className="mt-3 px-0 text-[#92700A] hover:bg-transparent">
             Raise a new ticket
           </Button>
         </div>

@@ -1,4 +1,4 @@
-import { Activity, BellRing, CircleDollarSign, MessageSquare, Sparkles, Users } from 'lucide-react'
+import { BellRing, Building2, CreditCard, MessageCircle, MessageSquare, Send, Sparkles, Users } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import { CTASection } from '../../components/common/CTASection'
@@ -10,13 +10,11 @@ import { api } from '../../services/api'
 import { FaqSection } from '../../sections/landing/FaqSection'
 import { FeatureHighlightsSection } from '../../sections/landing/FeatureHighlightsSection'
 import { HowItWorksSection } from '../../sections/landing/HowItWorksSection'
-import { ProductBenefitsSection } from '../../sections/landing/ProductBenefitsSection'
-import { TestimonialSection } from '../../sections/landing/TestimonialSection'
 import type { OwnerSummary, PublicOperationsSnapshot } from '../../types/api'
 
 type SnapshotMode = 'public' | 'owner'
 
-function HeroPanel({
+function LivePortfolioCard({
   mode,
   snapshot,
   ownerSummary,
@@ -40,66 +38,58 @@ function HeroPanel({
   )
 
   return (
-    <div className="flex h-full min-h-[420px] flex-col gap-5 lg:min-h-[540px] lg:justify-between">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <div className="flex h-full flex-col gap-5">
+      <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f1cb85]">Live Portfolio Pulse</p>
-          <h2 className="ph-title mt-2 text-2xl font-semibold text-[var(--ph-text)]">Signals from the command center</h2>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#92700A]">Live Portfolio</p>
+          <h2 className="ph-title mt-1 text-xl font-bold text-[#1A1A1A]">Real-time metrics</h2>
         </div>
-        <span className="rounded-full border border-[rgba(240,163,35,0.22)] bg-[rgba(240,163,35,0.08)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">
-          {mode === 'owner' ? 'Private View' : 'Public Benchmark'}
+        <span className="ph-badge ph-badge-gold">
+          {mode === 'owner' ? 'Private' : 'Public'}
         </span>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div className="rounded-[1.35rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.04] p-4">
-          <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">
-            <MessageSquare className="h-3.5 w-3.5 text-[var(--ph-accent)]" />
-            Open Tickets
+      <div className="grid gap-3 sm:grid-cols-3">
+        <div className="rounded-xl bg-[#FEFAEF] p-4">
+          <p className="flex items-center gap-1.5 text-xs font-medium text-[#6B7280]">
+            <Building2 className="h-3.5 w-3.5 text-[#FED609]" />
+            Properties
           </p>
-          <p className="mt-3 text-3xl font-semibold text-[var(--ph-text)]">{openTickets}</p>
+          <p className="mt-2 text-2xl font-bold text-[#1A1A1A]">{openTickets}</p>
         </div>
-
-        <div className="rounded-[1.35rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.04] p-4">
-          <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">
-            <Users className="h-3.5 w-3.5 text-[var(--ph-accent)]" />
-            Active Residents
+        <div className="rounded-xl bg-[#FEFAEF] p-4">
+          <p className="flex items-center gap-1.5 text-xs font-medium text-[#6B7280]">
+            <Users className="h-3.5 w-3.5 text-[#FED609]" />
+            Tenants
           </p>
-          <p className="mt-3 text-3xl font-semibold text-[var(--ph-text)]">{tenantCount}</p>
+          <p className="mt-2 text-2xl font-bold text-[#1A1A1A]">{tenantCount}</p>
         </div>
-
-        <div className="rounded-[1.35rem] border border-[rgba(83,88,100,0.38)] bg-white/[0.04] p-4 sm:col-span-2">
-          <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-[var(--ph-text-muted)]">
-            <BellRing className="h-3.5 w-3.5 text-[var(--ph-accent)]" />
-            {mode === 'owner' ? 'Pending Reminder Actions' : 'Collections Due This Week'}
+        <div className="rounded-xl bg-[#FEFAEF] p-4">
+          <p className="flex items-center gap-1.5 text-xs font-medium text-[#6B7280]">
+            <BellRing className="h-3.5 w-3.5 text-[#FED609]" />
+            {mode === 'owner' ? 'Pending' : 'Due'}
           </p>
-          <p className="mt-3 text-3xl font-semibold text-[var(--ph-text)]">{actionCount}</p>
+          <p className="mt-2 text-2xl font-bold text-[#1A1A1A]">{actionCount}</p>
         </div>
       </div>
 
-      <div className="rounded-[1.35rem] border border-[rgba(240,163,35,0.18)] bg-[rgba(240,163,35,0.06)] p-4">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Automation Layer</p>
-        <ul className="mt-3 space-y-2 text-sm text-[var(--ph-text-soft)]">
-          <li className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-[var(--ph-accent)]" />
-            Resident support triage and status orchestration
-          </li>
-          <li className="flex items-center gap-2">
-            <CircleDollarSign className="h-4 w-4 text-[var(--ph-accent)]" />
-            Rent reminder timing with human approvals intact
-          </li>
-          <li className="flex items-center gap-2">
-            <Activity className="h-4 w-4 text-[var(--ph-accent)]" />
-            Dashboard visibility for owners, operators, and residents
-          </li>
-        </ul>
+      {/* Features */}
+      <div className="mt-auto grid gap-3">
+        <div className="flex items-center gap-3 rounded-xl bg-[#FFFAE2] p-3">
+          <Sparkles className="h-5 w-5 text-[#FED609]" />
+          <div>
+            <p className="text-sm font-semibold text-[#1A1A1A]">AI Automation</p>
+            <p className="text-xs text-[#6B7280]">Smart ticket classification & reminders</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 rounded-xl bg-[#FFFAE2] p-3">
+          <MessageCircle className="h-5 w-5 text-[#25D366]" />
+          <div>
+            <p className="text-sm font-semibold text-[#1A1A1A]">WhatsApp & Telegram</p>
+            <p className="text-xs text-[#6B7280]">Integrated tenant messaging</p>
+          </div>
+        </div>
       </div>
-
-      {mode === 'public' && snapshot?.generated_at ? (
-        <p className="text-xs text-[var(--ph-text-muted)]">
-          Updated {new Date(snapshot.generated_at).toLocaleString('en-AE')}
-        </p>
-      ) : null}
     </div>
   )
 }
@@ -182,32 +172,27 @@ export function LandingPage() {
   return (
     <>
       <HeroSection
-        badge="Premium AI Property Operations"
+        badge="AI-Powered Property Management"
         fullViewport
         heading={
           <>
-            The <span className="ph-highlight">AI operations layer</span> for premium Dubai real estate
+            Manage Your Properties{' '}
+            <span className="text-[#D4A800]">Smarter with AI</span>
           </>
         }
-        subheading={
-          <>
-            Prophives brings resident service, rent workflows, and portfolio visibility into a single calm command
-            center for owners, operators, and real estate teams.
-          </>
-        }
+        subheading="Automate rent collection, tenant communication, and property operations from one beautiful dashboard."
         actions={[
-          { label: 'Book Private Demo', href: ROUTES.contact, variant: 'primary' },
-          { label: 'Explore Platform', href: ROUTES.features, variant: 'secondary' },
-          { label: 'Owner Login', href: ROUTES.ownerLogin, variant: 'outline' },
+          { label: 'Get Started Free', href: ROUTES.ownerLogin, variant: 'primary' },
+          { label: 'Book a Demo', href: ROUTES.contact, variant: 'outline' },
         ]}
         highlights={[
-          'Premium operating environment for serious B2B real estate teams',
-          'Owner and resident workspaces with controlled visibility',
-          'AI-assisted reminders, service workflows, and approval handling',
-          'Conversion-focused rollout for luxury portfolios in Dubai',
+          'AI-powered ticket classification and smart reminders',
+          'WhatsApp & Telegram integrated messaging',
+          'Automated rent tracking with payment approvals',
+          'Owner and tenant dashboards with real-time data',
         ]}
         sidePanel={
-          <HeroPanel
+          <LivePortfolioCard
             mode={snapshotMode}
             snapshot={snapshot}
             ownerSummary={ownerSummary}
@@ -218,24 +203,18 @@ export function LandingPage() {
 
       <FeatureHighlightsSection />
       <HowItWorksSection />
-      <ProductBenefitsSection />
-      <TestimonialSection />
       <FaqSection />
 
       <CTASection
-        eyebrow="Private Rollout"
+        eyebrow="Ready to Start"
         title={
           <>
-            Ready to bring <span className="ph-highlight">luxury-grade operations</span> into one platform?
+            Ready to simplify your{' '}
+            <span className="text-[#1A1A1A]">property management?</span>
           </>
         }
-        description={
-          <>
-            Launch your owner workspace, map your portfolio flows, and roll out resident-facing operations with a
-            brand experience that feels premium from day one.
-          </>
-        }
-        primaryAction={{ label: 'Talk to Prophives', href: ROUTES.contact }}
+        description="Join property owners who've already switched to AI-powered management. Set up in minutes, not days."
+        primaryAction={{ label: 'Start Free Trial', href: ROUTES.ownerLogin }}
         secondaryAction={{ label: 'View Pricing', href: ROUTES.pricing }}
       />
     </>

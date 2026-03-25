@@ -1,66 +1,23 @@
+/* Light theme - subtle background patterns */
+.saas-grid-bg {
+  position: relative;
+}
+
 .saas-grid-bg::before {
   content: '';
   position: absolute;
   inset: 0;
   z-index: -2;
   background:
-    radial-gradient(circle at 5% 0%, rgba(240, 163, 35, 0.11), transparent 24%),
-    radial-gradient(circle at 100% 0%, rgba(11, 22, 51, 0.58), transparent 28%),
-    linear-gradient(180deg, rgba(18, 21, 32, 0.98), rgba(13, 18, 32, 1));
-}
-
-.saas-grid-bg::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    linear-gradient(
-      30deg,
-      transparent 24%,
-      rgba(240, 163, 35, 0.035) 25%,
-      rgba(240, 163, 35, 0.035) 26%,
-      transparent 27%,
-      transparent 74%,
-      rgba(240, 163, 35, 0.035) 75%,
-      rgba(240, 163, 35, 0.035) 76%,
-      transparent 77%,
-      transparent
-    ),
-    linear-gradient(
-      90deg,
-      transparent 24%,
-      rgba(151, 105, 34, 0.028) 25%,
-      rgba(151, 105, 34, 0.028) 26%,
-      transparent 27%,
-      transparent 74%,
-      rgba(151, 105, 34, 0.028) 75%,
-      rgba(151, 105, 34, 0.028) 76%,
-      transparent 77%,
-      transparent
-    ),
-    linear-gradient(
-      150deg,
-      transparent 24%,
-      rgba(240, 163, 35, 0.028) 25%,
-      rgba(240, 163, 35, 0.028) 26%,
-      transparent 27%,
-      transparent 74%,
-      rgba(240, 163, 35, 0.028) 75%,
-      rgba(240, 163, 35, 0.028) 76%,
-      transparent 77%,
-      transparent
-    );
-  background-size: 96px 160px;
-  mask-image: linear-gradient(to bottom, black 18%, transparent 96%);
-  opacity: 0.75;
+    radial-gradient(circle at 20% 0%, rgba(254, 214, 9, 0.05), transparent 30%),
+    radial-gradient(circle at 80% 20%, rgba(254, 214, 9, 0.03), transparent 30%);
 }
 
 .glass-card {
-  border: 1px solid rgba(83, 88, 100, 0.58);
-  background: linear-gradient(180deg, rgba(26, 34, 56, 0.94), rgba(16, 21, 34, 0.98));
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: white;
   box-shadow: var(--ph-shadow-card);
-  backdrop-filter: blur(18px);
+  border-radius: 0.75rem;
 }
 
 .premium-border {
@@ -73,7 +30,7 @@
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  background: linear-gradient(120deg, rgba(151, 105, 34, 0.45), rgba(240, 163, 35, 0.18), rgba(11, 22, 51, 0.24));
+  background: linear-gradient(120deg, rgba(254, 214, 9, 0.3), rgba(254, 214, 9, 0.1), transparent);
   z-index: -1;
-  opacity: 0.95;
+  opacity: 0.8;
 }

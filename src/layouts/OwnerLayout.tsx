@@ -19,8 +19,8 @@ export function OwnerLayout() {
 
   return (
     <DashboardLayout
-      title="Owner Command Center"
-      subtitle="Luxury operations control for properties, residents, and automation"
+      title="Dashboard"
+      subtitle="Manage your properties, tenants, and automation"
       identityPrimary={organizationName}
       identitySecondary={owner?.email || undefined}
       navItems={ownerLinks}

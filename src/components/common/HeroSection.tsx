@@ -49,52 +49,8 @@ export function HeroSection({
       }
       padded={false}
       size="wide"
-      tone="hero"
+      tone="cream"
     >
-      <motion.div
-        aria-hidden="true"
-        initial={{ opacity: 0.6 }}
-        animate={
-          motionEnabled
-            ? {
-                opacity: [0.4, 0.7, 0.4],
-              }
-            : undefined
-        }
-        transition={
-          motionEnabled
-            ? {
-                duration: 8,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: 'easeInOut',
-              }
-            : undefined
-        }
-        className="pointer-events-none absolute -left-16 top-0 h-60 w-60 rounded-full bg-[rgba(240,163,35,0.18)] blur-3xl"
-      />
-      <motion.div
-        aria-hidden="true"
-        initial={{ opacity: 0.45 }}
-        animate={
-          motionEnabled
-            ? {
-                opacity: [0.3, 0.55, 0.3],
-              }
-            : undefined
-        }
-        transition={
-          motionEnabled
-            ? {
-                duration: 7,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: 'easeInOut',
-                delay: 0.6,
-              }
-            : undefined
-        }
-        className="pointer-events-none absolute -right-16 top-24 h-72 w-72 rounded-full bg-[rgba(11,22,51,0.52)] blur-3xl"
-      />
-
       <motion.div
         variants={staggerVariants}
         initial="hidden"
@@ -106,10 +62,10 @@ export function HeroSection({
           <span className="ph-kicker">
             {badge}
           </span>
-          <h1 className="ph-title mt-6 max-w-4xl text-4xl font-semibold leading-[1.02] text-[var(--ph-text)] sm:text-5xl lg:text-7xl">
+          <h1 className="ph-title mt-6 max-w-4xl text-4xl font-bold leading-[1.05] text-[#1A1A1A] sm:text-5xl lg:text-6xl">
             {heading}
           </h1>
-          <div className="mt-5 max-w-2xl text-lg leading-relaxed text-[var(--ph-text-muted)] md:text-xl">{subheading}</div>
+          <div className="mt-5 max-w-2xl text-lg leading-relaxed text-[#6B7280] md:text-xl">{subheading}</div>
           <div className="mt-8 flex flex-wrap gap-3">
             {actions.map((action, index) => (
               <motion.div key={action.label} variants={fadeVariants} transition={{ delay: index * 0.05 }}>
@@ -126,14 +82,14 @@ export function HeroSection({
               </motion.div>
             ))}
           </div>
-          <ul className="mt-8 grid gap-3 text-sm text-[var(--ph-text-soft)] sm:grid-cols-2">
+          <ul className="mt-8 grid gap-3 text-sm text-[#4B5563] sm:grid-cols-2">
             {highlights.map((highlight) => (
               <motion.li
                 key={highlight}
                 variants={fadeVariants}
-                className="flex items-start gap-3 rounded-2xl border border-[rgba(83,88,100,0.38)] bg-white/[0.03] px-4 py-3 backdrop-blur"
+                className="flex items-start gap-3 rounded-xl border border-[rgba(0,0,0,0.06)] bg-white px-4 py-3 shadow-sm"
               >
-                <span className="mt-1.5 h-2 w-2 rounded-full bg-[var(--ph-accent)] shadow-[0_0_0_5px_rgba(240,163,35,0.12)]" />
+                <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#FED609] shadow-[0_0_0_4px_rgba(254,214,9,0.15)]" />
                 <span>{highlight}</span>
               </motion.li>
             ))}
@@ -145,25 +101,19 @@ export function HeroSection({
             variants={revealVariants}
             animate={
               motionEnabled
-                ? {
-                    y: [0, -7, 0],
-                  }
+                ? { y: [0, -6, 0] }
                 : undefined
             }
             transition={
               motionEnabled
-                ? {
-                    duration: 6,
-                    repeat: Number.POSITIVE_INFINITY,
-                    ease: 'easeInOut',
-                  }
+                ? { duration: 6, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }
                 : undefined
             }
             className={clsx('relative', fullViewport && 'h-full')}
           >
             <div
               className={clsx(
-                'ph-surface-card-strong ph-hex-bg h-full p-6 text-[var(--ph-text)] shadow-[0_35px_90px_-62px_rgba(0,0,0,0.72)] sm:p-7',
+                'h-full rounded-2xl border border-[rgba(0,0,0,0.06)] bg-white p-6 shadow-lg sm:p-7',
                 fullViewport && 'min-h-[420px] lg:min-h-0',
               )}
             >

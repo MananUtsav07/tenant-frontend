@@ -27,7 +27,7 @@ export function DashboardCard({ label, value, hint, icon }: DashboardCardProps) 
       <div className="mt-2 flex items-center justify-between gap-3">
         <p className="text-3xl font-semibold text-[var(--ph-text)]">{value}</p>
         {icon ? (
-          <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-[rgba(240,163,35,0.2)] bg-[rgba(240,163,35,0.08)] text-[var(--ph-accent)]">
+          <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-[rgba(254,214,9,0.25)] bg-[rgba(254,214,9,0.1)] text-[#D4A800]">
             {icon}
           </span>
         ) : null}

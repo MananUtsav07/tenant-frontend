@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useState, type FormEvent } from 'react'
+import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import { Building2, Pencil, Trash2, UserRoundPlus, Users } from 'lucide-react'
 
 import { Button } from '../../components/common/Button'
@@ -235,21 +235,21 @@ export function OwnerTenantsPage() {
     <section className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-semibold text-slate-900">Tenants</h2>
-          <p className="text-sm text-slate-400">Create tenant access IDs and manage occupancy.</p>
+          <h2 className="text-2xl font-semibold text-[#1A1A1A]">Tenants</h2>
+          <p className="text-sm text-[#6B7280]">Create tenant access IDs and manage occupancy.</p>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">
-          <Users className="h-3.5 w-3.5 text-blue-600" />
+        <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(0,0,0,0.06)] bg-[#FFFAE2] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[#92700A]">
+          <Users className="h-3.5 w-3.5 text-[#FED609]" />
           {tenants.length} total
         </span>
       </div>
 
       {!showTenantForm && properties.length > 0 ? (
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-5 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h3 className="text-lg font-semibold text-slate-900">Create Tenant</h3>
-              <p className="text-sm text-slate-500">Click below to open the full tenant form.</p>
+              <h3 className="text-lg font-semibold text-[#1A1A1A]">Create Tenant</h3>
+              <p className="text-sm text-[#6B7280]">Click below to open the full tenant form.</p>
             </div>
             <Button
               type="button"
@@ -271,7 +271,7 @@ export function OwnerTenantsPage() {
         <form
           onSubmit={handleCreateTenant}
           autoComplete="off"
-          className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+          className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-5 shadow-sm"
         >
         <input
           type="text"
@@ -292,7 +292,7 @@ export function OwnerTenantsPage() {
 
         <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           <label className="block space-y-2">
-            <span className="text-sm font-medium text-slate-600">Property</span>
+            <span className="text-sm font-medium text-[#4B5563]">Property</span>
             <select
               name="tenant_property_id"
               autoComplete="off"
@@ -345,7 +345,7 @@ export function OwnerTenantsPage() {
             required={!editingTenantId}
           />
           <label className="block space-y-2">
-            <span className="text-sm font-medium text-slate-600">Monthly Rent</span>
+            <span className="text-sm font-medium text-[#4B5563]">Monthly Rent</span>
             <input
               type="text"
               inputMode="decimal"
@@ -387,7 +387,7 @@ export function OwnerTenantsPage() {
           />
 
           <label className="block space-y-2">
-            <span className="text-sm font-medium text-slate-600">Payment Status</span>
+            <span className="text-sm font-medium text-[#4B5563]">Payment Status</span>
             <select
               name="tenant_payment_status"
               className="tf-field"
@@ -408,7 +408,7 @@ export function OwnerTenantsPage() {
           </label>
 
           <label className="block space-y-2">
-            <span className="text-sm font-medium text-slate-600">Tenant Status</span>
+            <span className="text-sm font-medium text-[#4B5563]">Tenant Status</span>
             <select
               name="tenant_status"
               className="tf-field"
@@ -441,7 +441,7 @@ export function OwnerTenantsPage() {
               type="button"
               onClick={resetForm}
               variant="outline"
-              className="border-slate-300 bg-white text-slate-700"
+              className="border-[rgba(0,0,0,0.06)] bg-white text-[#4B5563]"
             >
               {editingTenantId ? 'Cancel Edit' : 'Close Form'}
             </Button>
@@ -483,26 +483,26 @@ export function OwnerTenantsPage() {
           {tenants.map((tenant) => (
             <tr key={tenant.id}>
               <td className="px-4 py-3">
-                <p className="font-medium text-slate-900">{tenant.full_name}</p>
-                <p className="text-xs text-slate-400">{tenant.email || 'No email'}</p>
+                <p className="font-medium text-[#1A1A1A]">{tenant.full_name}</p>
+                <p className="text-xs text-[#6B7280]">{tenant.email || 'No email'}</p>
               </td>
-              <td className="px-4 py-3 text-slate-700">{tenant.tenant_access_id}</td>
-              <td className="px-4 py-3 text-slate-700">{formatCurrency(tenant.monthly_rent, ownerCurrencyCode)}</td>
-              <td className="px-4 py-3 text-slate-700">{formatDate(getNextDueDate(tenant.payment_due_day).toISOString())}</td>
-              <td className="px-4 py-3 text-slate-400">
+              <td className="px-4 py-3 text-[#1A1A1A]">{tenant.tenant_access_id}</td>
+              <td className="px-4 py-3 text-[#1A1A1A]">{formatCurrency(tenant.monthly_rent, ownerCurrencyCode)}</td>
+              <td className="px-4 py-3 text-[#1A1A1A]">{formatDate(getNextDueDate(tenant.payment_due_day).toISOString())}</td>
+              <td className="px-4 py-3 text-[#6B7280]">
                 {formatDate(tenant.lease_start_date)} - {formatDate(tenant.lease_end_date)}
               </td>
               <td className="px-4 py-3">
                 <StatusBadge status={tenant.payment_status} />
               </td>
-              <td className="px-4 py-3 text-slate-400">{formatDateTime(tenant.created_at)}</td>
+              <td className="px-4 py-3 text-[#6B7280]">{formatDateTime(tenant.created_at)}</td>
               <td className="px-4 py-3">
                 <div className="flex flex-wrap gap-2">
                   <Button
                     to={`/owner/tenants/${tenant.id}`}
                     variant="outline"
                     size="sm"
-                    className="border-slate-300 bg-white text-slate-700"
+                    className="border-[rgba(0,0,0,0.06)] bg-white text-[#4B5563]"
                   >
                     View
                   </Button>
@@ -511,7 +511,7 @@ export function OwnerTenantsPage() {
                     onClick={() => beginEdit(tenant)}
                     variant="outline"
                     size="sm"
-                    className="border-slate-300 bg-white text-slate-700"
+                    className="border-[rgba(0,0,0,0.06)] bg-white text-[#4B5563]"
                     iconLeft={<Pencil className="h-3.5 w-3.5" />}
                   >
                     Edit
@@ -534,15 +534,10 @@ export function OwnerTenantsPage() {
       ) : null}
 
       {!loading && properties.length > 0 && tenants.length > 0 ? (
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-[#6B7280]">
           Tip: leave password blank while editing to keep the tenant's current password.
         </p>
       ) : null}
     </section>
   )
 }
-
-
-
-
-

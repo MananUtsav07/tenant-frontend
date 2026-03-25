@@ -9,7 +9,7 @@ export function OrganizationBadge({ name, slug, className }: OrganizationBadgePr
 
   return (
     <span
-      className={`inline-flex items-center rounded-full border border-[rgba(240,163,35,0.22)] bg-[rgba(240,163,35,0.08)] px-2.5 py-1 text-xs font-medium text-[#f1cb85] shadow-[0_10px_24px_-22px_rgba(240,163,35,0.42)] ${className ?? ''}`}
+      className={`inline-flex items-center rounded-full border border-[rgba(254,214,9,0.3)] bg-[rgba(254,214,9,0.1)] px-2.5 py-1 text-xs font-medium text-[#92750A] shadow-sm ${className ?? ''}`}
     >
       {label}
     </span>

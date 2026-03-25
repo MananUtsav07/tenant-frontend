@@ -85,30 +85,30 @@ export function OwnerNotificationsPage() {
   return (
     <section className="space-y-6">
       <div>
-        <h2 className="inline-flex items-center gap-2 text-2xl font-semibold text-slate-900">
-          <Bell className="h-6 w-6 text-blue-600" />
+        <h2 className="inline-flex items-center gap-2 text-2xl font-semibold text-[#1A1A1A]">
+          <Bell className="h-6 w-6 text-[#FED609]" />
           Notifications
         </h2>
-        <p className="text-sm text-slate-400">Ticket and reminder events from tenants.</p>
+        <p className="text-sm text-[#6B7280]">Ticket and reminder events from tenants.</p>
       </div>
 
       {!loading && telegramOnboarding ? (
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="inline-flex items-center gap-2 text-lg font-semibold text-slate-900">
-            <Send className="h-5 w-5 text-sky-600" />
+        <div className="rounded-xl border border-[#0088cc]/20 bg-[#f0f9ff] p-5 shadow-sm">
+          <h3 className="inline-flex items-center gap-2 text-lg font-semibold text-[#1A1A1A]">
+            <Send className="h-5 w-5 text-[#0088cc]" />
             Telegram Alerts
           </h3>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="mt-2 text-sm text-[#4B5563]">
             {telegramOnboarding.connected
               ? `Connected${telegramOnboarding.linked_chat?.username ? ` as @${telegramOnboarding.linked_chat.username}` : ''}.`
               : 'Connect Telegram to receive instant owner alerts.'}
           </p>
-          <p className="mt-1 text-xs text-slate-500">Open bot, tap Start once, then click Refresh status.</p>
+          <p className="mt-1 text-xs text-[#6B7280]">Open bot, tap Start once, then click Refresh status.</p>
           <div className="mt-4 flex flex-wrap gap-2">
             {!telegramOnboarding.connected ? (
               <button
                 type="button"
-                className="rounded-xl border border-sky-600 bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-500 disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-xl border border-[#0088cc] bg-[#0088cc] px-4 py-2 text-sm font-semibold text-white hover:bg-[#006fa1] disabled:cursor-not-allowed disabled:opacity-60"
                 onClick={connectTelegram}
                 disabled={!telegramOnboarding.connect_url}
               >
@@ -117,7 +117,7 @@ export function OwnerNotificationsPage() {
             ) : (
               <button
                 type="button"
-                className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white px-4 py-2 text-sm font-semibold text-[#4B5563] hover:bg-[#FEFAEF] disabled:cursor-not-allowed disabled:opacity-60"
                 onClick={disconnectTelegram}
                 disabled={disconnectingTelegram}
               >
@@ -126,7 +126,7 @@ export function OwnerNotificationsPage() {
             )}
             <button
               type="button"
-              className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+              className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white px-4 py-2 text-sm font-semibold text-[#4B5563] hover:bg-[#FEFAEF]"
               onClick={() => {
                 void loadNotifications()
               }}

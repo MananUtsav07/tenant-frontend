@@ -1,4 +1,4 @@
-﻿import { AlertTriangle, Save, Sparkles } from 'lucide-react'
+import { AlertTriangle, Save, Sparkles } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 
 import { Button } from '../../components/common/Button'
@@ -18,10 +18,10 @@ type ToggleFieldProps = {
 
 function ToggleField({ label, description, checked, onToggle, disabled = false }: ToggleFieldProps) {
   return (
-    <div className="flex items-start justify-between gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+    <div className="flex items-start justify-between gap-4 rounded-xl border border-[rgba(0,0,0,0.06)] bg-[#FEFAEF] p-4">
       <div>
-        <p className="text-sm font-semibold text-slate-900">{label}</p>
-        <p className="mt-1 text-xs text-slate-600">{description}</p>
+        <p className="text-sm font-semibold text-[#1A1A1A]">{label}</p>
+        <p className="mt-1 text-xs text-[#4B5563]">{description}</p>
       </div>
       <button
         type="button"
@@ -31,8 +31,8 @@ function ToggleField({ label, description, checked, onToggle, disabled = false }
         disabled={disabled}
         className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full border transition ${
           checked
-            ? 'border-blue-500 bg-blue-600'
-            : 'border-slate-300 bg-slate-200'
+            ? 'border-[#FFD70B] bg-[#FED609]'
+            : 'border-[rgba(0,0,0,0.06)] bg-gray-200'
         } ${disabled ? 'cursor-not-allowed opacity-60' : ''}`}
       >
         <span
@@ -129,12 +129,12 @@ export function OwnerAiSettingsPage() {
 
   return (
     <section className="space-y-6">
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="inline-flex items-center gap-2 text-2xl font-semibold text-slate-900">
-          <Sparkles className="h-6 w-6 text-blue-500" />
+      <div className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-5 shadow-sm">
+        <h2 className="inline-flex items-center gap-2 text-2xl font-semibold text-[#1A1A1A]">
+          <Sparkles className="h-6 w-6 text-[#FED609]" />
           AI Settings
         </h2>
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-sm text-[#4B5563]">
           Infrastructure is ready for future AI workflows. No AI automation is active in live operations yet.
         </p>
       </div>
@@ -152,7 +152,7 @@ export function OwnerAiSettingsPage() {
       {loading ? <LoadingState message="Loading AI settings..." tone="light" rows={4} /> : null}
 
       {!loading && settings ? (
-        <article className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <article className="space-y-4 rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-5 shadow-sm">
           <ToggleField
             label="Enable AI Automation"
             description="Master switch for future AI-powered workflows."
@@ -183,7 +183,7 @@ export function OwnerAiSettingsPage() {
           />
 
           <label className="block space-y-2">
-            <span className="text-sm font-medium text-slate-700">AI Model</span>
+            <span className="text-sm font-medium text-[#4B5563]">AI Model</span>
             <input
               value={settings.ai_model}
               onChange={(event) =>
@@ -201,7 +201,7 @@ export function OwnerAiSettingsPage() {
             />
           </label>
 
-          <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-xs text-blue-700">
+          <div className="rounded-xl border border-[#FED609]/30 bg-[#FFFAE2] px-4 py-3 text-xs text-[#92700A]">
             Preparation mode: toggles and model selection are stored for rollout readiness, but live workflows remain unchanged.
           </div>
 
@@ -225,6 +225,3 @@ export function OwnerAiSettingsPage() {
     </section>
   )
 }
-
-
-

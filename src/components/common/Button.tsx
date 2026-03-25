@@ -1,4 +1,4 @@
-﻿import clsx from 'clsx'
+import clsx from 'clsx'
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, MouseEvent, ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { Link, type LinkProps } from 'react-router-dom'
@@ -6,7 +6,7 @@ import { Link, type LinkProps } from 'react-router-dom'
 import { trackEvent, type AnalyticsUserType } from '../../utils/analytics'
 import { useMotionEnabled } from '../../utils/motion'
 
-type Variant = 'primary' | 'secondary' | 'outline' | 'ghost'
+type Variant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'whatsapp' | 'telegram' | 'danger'
 type Size = 'sm' | 'md' | 'lg'
 
 type SharedProps = {
@@ -40,12 +40,19 @@ function isLinkButton(props: ButtonProps): props is ButtonAsLink {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    'border border-[rgba(240,163,35,0.32)] bg-[linear-gradient(180deg,#f3ae35_0%,#e39b1d_100%)] text-[#191108] shadow-[0_22px_48px_-26px_rgba(240,163,35,0.58)] hover:border-[#f6c26f] hover:shadow-[0_26px_58px_-28px_rgba(240,163,35,0.62)] active:translate-y-px',
+    'border border-[#FFD70B] bg-[#FED609] text-[#1A1A1A] shadow-[0_2px_8px_rgba(254,214,9,0.3)] hover:bg-[#FFD70B] hover:shadow-[0_4px_16px_rgba(254,214,9,0.35)] active:translate-y-px',
   secondary:
-    'border border-[rgba(83,88,100,0.56)] bg-[linear-gradient(180deg,rgba(26,34,56,0.95),rgba(16,21,34,0.98))] text-[var(--ph-text)] shadow-[0_16px_38px_-28px_rgba(0,0,0,0.62)] hover:border-[rgba(151,105,34,0.48)] hover:bg-[linear-gradient(180deg,rgba(31,40,66,0.95),rgba(16,21,34,1))]',
+    'border border-[rgba(0,0,0,0.1)] bg-white text-[#1A1A1A] shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:border-[rgba(254,214,9,0.4)] hover:shadow-[0_2px_8px_rgba(0,0,0,0.08)]',
   outline:
-    'border border-[rgba(240,163,35,0.34)] bg-[rgba(240,163,35,0.06)] text-[#f6d9a1] shadow-[0_16px_38px_-32px_rgba(240,163,35,0.42)] hover:bg-[rgba(240,163,35,0.1)] hover:text-[#fff1d5]',
-  ghost: 'bg-transparent text-[var(--ph-text-muted)] hover:bg-white/5 hover:text-[var(--ph-text)] active:bg-white/[0.07]',
+    'border border-[#FED609] bg-transparent text-[#92700A] hover:bg-[rgba(254,214,9,0.06)] hover:text-[#1A1A1A]',
+  ghost:
+    'bg-transparent text-[var(--ph-text-muted)] hover:bg-[rgba(0,0,0,0.04)] hover:text-[var(--ph-text)] active:bg-[rgba(0,0,0,0.06)]',
+  whatsapp:
+    'border border-[#25D366] bg-[#25D366] text-white shadow-[0_2px_8px_rgba(37,211,102,0.25)] hover:bg-[#20BD5A] active:translate-y-px',
+  telegram:
+    'border border-[#0088cc] bg-[#0088cc] text-white shadow-[0_2px_8px_rgba(0,136,204,0.25)] hover:bg-[#0077b5] active:translate-y-px',
+  danger:
+    'border border-[#EF4444] bg-transparent text-[#EF4444] hover:bg-[rgba(239,68,68,0.06)]',
 }
 
 const sizeClasses: Record<Size, string> = {
@@ -56,7 +63,7 @@ const sizeClasses: Record<Size, string> = {
 
 function buttonClassName(variant: Variant, size: Size, className?: string) {
   return clsx(
-    'group inline-flex items-center justify-center gap-2 rounded-full font-semibold tracking-[0.01em] ring-offset-[var(--ph-bg)] transition duration-200 ease-out focus-visible:ring-2 focus-visible:ring-[rgba(240,163,35,0.72)] disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none',
+    'group inline-flex items-center justify-center gap-2 rounded-full font-semibold tracking-[0.01em] ring-offset-[var(--ph-bg)] transition duration-200 ease-out focus-visible:ring-2 focus-visible:ring-[rgba(254,214,9,0.5)] disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none',
     variantClasses[variant],
     sizeClasses[size],
     className,
@@ -130,4 +137,3 @@ export function Button(props: ButtonProps) {
     </motion.span>
   )
 }
-

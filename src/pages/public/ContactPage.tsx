@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { useState, type FormEvent } from 'react'
-import { Clock3, Mail, MessageSquareMore, ShieldCheck } from 'lucide-react'
+import { Clock3, Mail, MessageCircle, MessageSquareMore, Send, ShieldCheck } from 'lucide-react'
 
 import { Button } from '../../components/common/Button'
 import { FormInput } from '../../components/common/FormInput'
@@ -52,14 +52,14 @@ export function ContactPage() {
   }
 
   return (
-    <SectionContainer size="wide">
+    <SectionContainer size="wide" tone="cream">
       <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
         <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
           <span className="ph-kicker">Contact</span>
-          <h1 className="ph-title mt-5 text-4xl font-semibold text-[var(--ph-text)] md:text-6xl">
+          <h1 className="ph-title mt-5 text-4xl font-semibold text-[#1A1A1A] md:text-6xl">
             Plan your Prophives rollout
           </h1>
-          <p className="mt-4 text-base leading-relaxed text-[var(--ph-text-muted)] md:text-lg">
+          <p className="mt-4 text-base leading-relaxed text-[#6B7280] md:text-lg">
             Questions about onboarding, pricing, or implementation? We will help map the right owner and resident
             experience for your portfolio.
           </p>
@@ -71,30 +71,62 @@ export function ContactPage() {
             viewport={viewportOnce}
             className="mt-8 space-y-3"
           >
-            <motion.div variants={revealVariants} className="ph-surface-card rounded-[1.5rem] p-5">
-              <p className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--ph-text)]">
-                <Mail className="h-4 w-4 text-[var(--ph-accent)]" />
+            <motion.div variants={revealVariants} className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-5 shadow-sm">
+              <p className="inline-flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
+                <Mail className="h-4 w-4 text-[#92700A]" />
                 Email
               </p>
-              <p className="mt-2 text-sm text-[var(--ph-text-muted)]">hello@prophives.com</p>
+              <p className="mt-2 text-sm text-[#6B7280]">hello@prophives.com</p>
             </motion.div>
 
-            <motion.div variants={revealVariants} className="ph-surface-card rounded-[1.5rem] p-5">
-              <p className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--ph-text)]">
-                <Clock3 className="h-4 w-4 text-[var(--ph-accent)]" />
+            <motion.div variants={revealVariants} className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-5 shadow-sm">
+              <p className="inline-flex items-center gap-2 text-sm font-semibold text-[#25D366]">
+                <MessageCircle className="h-4 w-4 text-[#25D366]" />
+                WhatsApp
+              </p>
+              <p className="mt-2 text-sm text-[#6B7280]">Message us directly on WhatsApp for quick responses and demo scheduling.</p>
+              <a
+                href="https://wa.me/971000000000"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-[#25D366] hover:underline"
+              >
+                Open WhatsApp Chat
+              </a>
+            </motion.div>
+
+            <motion.div variants={revealVariants} className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-5 shadow-sm">
+              <p className="inline-flex items-center gap-2 text-sm font-semibold text-[#0088cc]">
+                <Send className="h-4 w-4 text-[#0088cc]" />
+                Telegram
+              </p>
+              <p className="mt-2 text-sm text-[#6B7280]">Reach our team on Telegram for technical questions and integration support.</p>
+              <a
+                href="https://t.me/prophives"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-[#0088cc] hover:underline"
+              >
+                Open Telegram Chat
+              </a>
+            </motion.div>
+
+            <motion.div variants={revealVariants} className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-5 shadow-sm">
+              <p className="inline-flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
+                <Clock3 className="h-4 w-4 text-[#92700A]" />
                 Response Window
               </p>
-              <p className="mt-2 text-sm text-[var(--ph-text-muted)]">
+              <p className="mt-2 text-sm text-[#6B7280]">
                 Typically within one business day for sales and onboarding requests.
               </p>
             </motion.div>
 
-            <motion.div variants={revealVariants} className="ph-surface-card rounded-[1.5rem] p-5">
-              <p className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--ph-text)]">
-                <ShieldCheck className="h-4 w-4 text-[var(--ph-accent)]" />
+            <motion.div variants={revealVariants} className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-5 shadow-sm">
+              <p className="inline-flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
+                <ShieldCheck className="h-4 w-4 text-[#92700A]" />
                 Rollout Focus
               </p>
-              <p className="mt-2 text-sm text-[var(--ph-text-muted)]">
+              <p className="mt-2 text-sm text-[#6B7280]">
                 Dubai real estate teams seeking premium automation, service visibility, and secure multi-role workspaces.
               </p>
             </motion.div>
@@ -107,10 +139,10 @@ export function ContactPage() {
           whileInView="show"
           viewport={viewportOnce}
           onSubmit={handleSubmit}
-          className="ph-surface-card-strong rounded-[1.75rem] p-6 sm:p-7"
+          className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-6 shadow-sm sm:p-7"
         >
-          <p className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--ph-text)]">
-            <MessageSquareMore className="h-4 w-4 text-[var(--ph-accent)]" />
+          <p className="inline-flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
+            <MessageSquareMore className="h-4 w-4 text-[#92700A]" />
             Send a message
           </p>
           <div className="mt-5 space-y-4">
@@ -144,9 +176,9 @@ export function ContactPage() {
             />
           </div>
 
-          {error ? <p className="mt-4 rounded-xl border border-red-500/28 bg-red-950/28 px-3 py-2 text-sm text-red-200">{error}</p> : null}
+          {error ? <p className="mt-4 rounded-xl border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p> : null}
           {success ? (
-            <p className="mt-4 rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-3 py-2 text-sm text-emerald-200">
+            <p className="mt-4 rounded-xl border border-emerald-300 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
               {success}
             </p>
           ) : null}

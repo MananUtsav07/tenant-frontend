@@ -103,12 +103,12 @@ export function OwnerDashboardPage() {
 
   return (
     <section className="space-y-6">
-      <div className="ph-surface-card-strong rounded-[1.9rem] p-6">
+      <div className="rounded-xl bg-white border border-[rgba(0,0,0,0.06)] shadow-sm p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f1cb85]">Owner Command Center</p>
-            <h2 className="ph-title mt-3 text-3xl font-semibold text-[var(--ph-text)]">Portfolio overview</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--ph-text-muted)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#92700A]">Owner Command Center</p>
+            <h2 className="mt-3 text-3xl font-semibold text-[#1A1A1A]">Portfolio overview</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#6B7280]">
               Monitor residents, support requests, reminders, and approvals from a calmer control surface.
             </p>
             <div className="mt-4">
@@ -150,20 +150,20 @@ export function OwnerDashboardPage() {
           </div>
 
           <div className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
-            <article className="ph-surface-card rounded-[1.7rem] p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Operational Focus</p>
-              <div className="mt-4 space-y-4 text-sm text-[var(--ph-text-soft)]">
+            <article className="rounded-xl bg-white border border-[rgba(0,0,0,0.06)] shadow-sm p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#92700A]">Operational Focus</p>
+              <div className="mt-4 space-y-4 text-sm text-[#4B5563]">
                 <div>
-                  <p className="text-[var(--ph-text)]">{summary.overdue_rent > 0 ? 'Collections need attention' : 'Collections are currently stable'}</p>
-                  <p className="mt-1 text-[var(--ph-text-muted)]">
+                  <p className="text-[#1A1A1A]">{summary.overdue_rent > 0 ? 'Collections need attention' : 'Collections are currently stable'}</p>
+                  <p className="mt-1 text-[#6B7280]">
                     {summary.overdue_rent > 0
                       ? `${summary.overdue_rent} rent items are overdue and should be reviewed.`
                       : 'No overdue rent items are currently flagged.'}
                   </p>
                 </div>
                 <div>
-                  <p className="text-[var(--ph-text)]">{summary.awaiting_approvals > 0 ? 'Approval queue is active' : 'Approval queue is clear'}</p>
-                  <p className="mt-1 text-[var(--ph-text-muted)]">
+                  <p className="text-[#1A1A1A]">{summary.awaiting_approvals > 0 ? 'Approval queue is active' : 'Approval queue is clear'}</p>
+                  <p className="mt-1 text-[#6B7280]">
                     {summary.awaiting_approvals > 0
                       ? `${summary.awaiting_approvals} resident payment confirmations are waiting for review.`
                       : 'No resident payment confirmations are waiting for review.'}
@@ -172,9 +172,9 @@ export function OwnerDashboardPage() {
               </div>
             </article>
 
-            <article className="ph-surface-card rounded-[1.7rem] p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f1cb85]">Automation Notes</p>
-              <ul className="mt-4 space-y-3 text-sm text-[var(--ph-text-soft)]">
+            <article className="rounded-xl bg-white border border-[rgba(0,0,0,0.06)] shadow-sm p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#92700A]">Automation Notes</p>
+              <ul className="mt-4 space-y-3 text-sm text-[#4B5563]">
                 <li>Reminder processing keeps scheduled follow-up disciplined across rent cycles.</li>
                 <li>Unread notices surface resident-facing activity that still needs attention.</li>
                 <li>Payment approvals stay human-led even when reminders and notifications are automated.</li>
@@ -197,8 +197,8 @@ export function OwnerDashboardPage() {
       {!loading ? (
         <div className="space-y-3">
           <div>
-            <h3 className="ph-title text-2xl font-semibold text-[var(--ph-text)]">Awaiting approvals</h3>
-            <p className="text-sm text-[var(--ph-text-muted)]">
+            <h3 className="text-2xl font-semibold text-[#1A1A1A]">Awaiting approvals</h3>
+            <p className="text-sm text-[#6B7280]">
               Review resident rent payment confirmations pending your verification.
             </p>
           </div>
@@ -214,18 +214,18 @@ export function OwnerDashboardPage() {
               {approvals.map((approval) => (
                 <tr key={approval.id}>
                   <td className="px-4 py-3">
-                    <p className="font-medium text-[var(--ph-text)]">{approval.tenants?.full_name ?? '-'}</p>
-                    <p className="text-xs text-[var(--ph-text-muted)]">{approval.tenants?.tenant_access_id ?? '-'}</p>
+                    <p className="font-medium text-[#1A1A1A]">{approval.tenants?.full_name ?? '-'}</p>
+                    <p className="text-xs text-[#6B7280]">{approval.tenants?.tenant_access_id ?? '-'}</p>
                   </td>
-                  <td className="px-4 py-3 text-[var(--ph-text-soft)]">
+                  <td className="px-4 py-3 text-[#4B5563]">
                     {approval.properties?.property_name ?? '-'}
                     {approval.properties?.unit_number ? ` (${approval.properties.unit_number})` : ''}
                   </td>
-                  <td className="px-4 py-3 text-[var(--ph-text-soft)]">{formatDate(approval.due_date)}</td>
-                  <td className="px-4 py-3 text-[var(--ph-text-soft)]">
+                  <td className="px-4 py-3 text-[#4B5563]">{formatDate(approval.due_date)}</td>
+                  <td className="px-4 py-3 text-[#4B5563]">
                     {formatCurrency(approval.amount_paid, owner?.organization?.currency_code)}
                   </td>
-                  <td className="px-4 py-3 text-[var(--ph-text-muted)]">{formatDateTime(approval.created_at)}</td>
+                  <td className="px-4 py-3 text-[#6B7280]">{formatDateTime(approval.created_at)}</td>
                   <td className="px-4 py-3">
                     <StatusBadge status={approval.status} />
                   </td>
@@ -256,7 +256,7 @@ export function OwnerDashboardPage() {
                           type="button"
                           size="sm"
                           variant="outline"
-                          className="border-red-500/28 bg-red-500/10 text-red-200 hover:bg-red-500/16"
+                          className="border-red-300 bg-red-50 text-red-700 hover:bg-red-100"
                           disabled={reviewingApprovalId === approval.id}
                           onClick={() => void handleReviewApproval(approval.id, 'reject')}
                         >

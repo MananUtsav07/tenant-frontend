@@ -15,12 +15,12 @@ type EmptyStateProps = {
 
 export function EmptyState({ title, description, icon, actionLabel, actionHref, onAction }: EmptyStateProps) {
   return (
-    <div className="rounded-[1.75rem] border border-dashed border-[rgba(83,88,100,0.58)] bg-[rgba(255,255,255,0.02)] p-8 text-center shadow-[0_18px_46px_-38px_rgba(0,0,0,0.72)] backdrop-blur">
-      <div className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-[rgba(240,163,35,0.2)] bg-[rgba(240,163,35,0.08)] text-[var(--ph-accent)]">
+    <div className="rounded-xl border border-dashed border-[rgba(0,0,0,0.12)] bg-white p-8 text-center shadow-sm">
+      <div className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-[rgba(254,214,9,0.25)] bg-[rgba(254,214,9,0.1)] text-[#D4A800]">
         {icon ?? <Inbox className="h-5 w-5" />}
       </div>
-      <p className="ph-title mt-4 text-lg font-semibold text-[var(--ph-text)]">{title}</p>
-      <p className="mx-auto mt-2 max-w-xl text-sm text-[var(--ph-text-muted)]">{description}</p>
+      <p className="mt-4 text-lg font-semibold text-[#1A1A1A]">{title}</p>
+      <p className="mx-auto mt-2 max-w-xl text-sm text-[#6B7280]">{description}</p>
       {actionLabel && actionHref ? (
         <Button to={actionHref} variant="outline" size="sm" className="mt-5">
           {actionLabel}

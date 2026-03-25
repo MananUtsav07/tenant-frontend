@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Bot, Building2, CircleDollarSign, ShieldCheck, Sparkles, Workflow } from 'lucide-react'
+import { CreditCard, MessageCircle, Send, ShieldCheck, Sparkles, Users } from 'lucide-react'
 
 import { revealUp, staggerParent, useMotionVariants, viewportOnce } from '../../utils/motion'
 import { FeatureCard } from '../../components/common/FeatureCard'
@@ -7,40 +7,40 @@ import { SectionContainer } from '../../components/common/SectionContainer'
 
 const features = [
   {
-    title: 'Resident Experience Intelligence',
-    description: 'Keep resident requests, approvals, and follow-up communication inside one polished service layer.',
-    detail: 'Resident service orchestration',
-    icon: <Bot className="h-5 w-5" />,
-  },
-  {
-    title: 'Portfolio Command Visibility',
-    description: 'Track tenants, issues, rent readiness, and automation health across every building from a single command center.',
-    detail: 'Portfolio-wide signal clarity',
-    icon: <Building2 className="h-5 w-5" />,
-  },
-  {
-    title: 'AI Rent Chasing Workflows',
-    description: 'Automate reminder timing, monitor exceptions, and keep collections communication measured and consistent.',
-    detail: 'Collections without clutter',
-    icon: <CircleDollarSign className="h-5 w-5" />,
-  },
-  {
-    title: 'Approval and Exception Queues',
-    description: 'Route payment confirmations and operational approvals into clear review states for faster owner action.',
-    detail: 'Fewer blind spots',
-    icon: <Workflow className="h-5 w-5" />,
-  },
-  {
-    title: 'Secure Multi-Role Access',
-    description: 'Separate owner and resident workspaces while keeping data visibility elegant and controlled.',
-    detail: 'Luxury-grade access control',
-    icon: <ShieldCheck className="h-5 w-5" />,
-  },
-  {
-    title: 'Premium Automation Foundation',
-    description: 'Launch AI-assisted workflows gradually with dashboards, activity logs, and human oversight built in.',
-    detail: 'Automation with restraint',
+    title: 'AI Automation',
+    description: 'Smart ticket classification, automated reminders, and AI-generated summaries to save you hours every week.',
+    detail: 'AI-powered',
     icon: <Sparkles className="h-5 w-5" />,
+  },
+  {
+    title: 'WhatsApp Integration',
+    description: 'Send rent reminders and communicate with tenants directly via WhatsApp. No app switching needed.',
+    detail: 'Messaging',
+    icon: <MessageCircle className="h-5 w-5" />,
+  },
+  {
+    title: 'Telegram Bot',
+    description: 'Automated notifications, payment alerts, and ticket updates delivered instantly via Telegram.',
+    detail: 'Notifications',
+    icon: <Send className="h-5 w-5" />,
+  },
+  {
+    title: 'Payment Tracking',
+    description: 'Automated rent collection tracking with payment status, overdue alerts, and approval workflows.',
+    detail: 'Payments',
+    icon: <CreditCard className="h-5 w-5" />,
+  },
+  {
+    title: 'Tenant Portal',
+    description: 'Tenants can view property details, submit tickets, track payments, and contact support easily.',
+    detail: 'Self-service',
+    icon: <Users className="h-5 w-5" />,
+  },
+  {
+    title: 'Secure Access',
+    description: 'Separate owner and tenant workspaces with role-based visibility and controlled data access.',
+    detail: 'Security',
+    icon: <ShieldCheck className="h-5 w-5" />,
   },
 ]
 
@@ -49,15 +49,14 @@ export function FeatureHighlightsSection() {
   const staggerVariants = useMotionVariants(staggerParent)
 
   return (
-    <SectionContainer id="feature-highlights" size="wide">
+    <SectionContainer id="feature-highlights" size="wide" tone="panel">
       <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
-        <span className="ph-kicker">Platform Architecture</span>
-        <h2 className="ph-title mt-5 text-3xl font-semibold text-[var(--ph-text)] md:text-5xl">
-          Everything a premium property team needs to run calmer operations
+        <span className="ph-kicker">Features</span>
+        <h2 className="ph-title mt-5 text-3xl font-bold text-[#1A1A1A] md:text-4xl">
+          Everything you need to manage properties
         </h2>
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-[var(--ph-text-muted)] md:text-lg">
-          Prophives is built for luxury real estate teams that want structure, clarity, and AI assistance without
-          sacrificing control.
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-[#6B7280]">
+          From AI automation to integrated messaging, Prophives gives you the tools to run smarter operations.
         </p>
       </motion.div>
 
