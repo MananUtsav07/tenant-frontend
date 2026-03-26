@@ -159,65 +159,71 @@ export function FeaturesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-[#FEFAEF] py-20 md:py-32 px-6">
+      <section className="py-20 md:py-32 px-6 bg-[#FEFAEF]">
         <motion.div
           variants={revealVariants}
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="max-w-4xl mx-auto text-center"
+          className="w-full text-center"
         >
-          <h1 className="ph-title text-4xl md:text-6xl font-extrabold tracking-tight text-[#1A1A1A] mb-6">
+          <h1 className="font-['Sora'] text-4xl md:text-7xl font-extrabold tracking-tight text-[#1A1A1A] mb-6 leading-[1.08]">
             Everything You Need to{' '}
             <span className="text-[#FED609]">Manage Properties</span>
           </h1>
-          <p className="text-lg md:text-xl text-[#6B7280] font-medium max-w-2xl mx-auto font-['Manrope']">
+          <p className="text-lg md:text-2xl text-[#6B7280] font-medium max-w-4xl mx-auto font-['Manrope'] leading-relaxed">
             Experience the future of real estate management in Dubai with our AI-driven platform
             designed for efficiency, clarity, and total control.
           </p>
         </motion.div>
       </section>
 
-      {/* Feature Showcase */}
-      <section className="max-w-7xl mx-auto px-6 space-y-24 pb-24">
+      {/* Feature Showcase — full-bleed alternating layout */}
+      <section className="w-full space-y-0 pb-24">
         {featureShowcases.map((feature) => {
           const imageBlock = (
-            <motion.div
-              variants={revealVariants}
-              className="bg-white p-4 rounded-xl shadow-xl shadow-[#FED609]/5"
-            >
+            <div className="bg-white">
               <img
                 alt={feature.imageAlt}
                 src={feature.image}
-                className="rounded-lg w-full h-auto"
+                className="w-full h-full object-cover min-h-[500px]"
               />
-            </motion.div>
+            </div>
           )
 
           const textBlock = (
-            <motion.div variants={revealVariants} className={feature.imageFirst ? '' : 'order-2 md:order-1'}>
+            <motion.div
+              variants={revealVariants}
+              className="p-12 lg:p-24 xl:p-32"
+            >
               {/* Kicker */}
               <div className={`flex items-center gap-2 ${feature.kickerColor} mb-4`}>
                 {feature.kickerIcon}
-                <span className="font-bold text-sm tracking-wider uppercase font-['DM_Sans']">
+                <span className="font-bold text-sm tracking-widest uppercase font-['DM_Sans']">
                   {feature.kicker}
                 </span>
               </div>
 
-              <h2 className="ph-title text-3xl font-bold text-[#1A1A1A] mb-6">{feature.title}</h2>
-              <p className="text-[#6B7280] leading-relaxed mb-6 font-['Manrope']">{feature.description}</p>
+              <h2 className="font-['Sora'] text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-6 leading-tight">
+                {feature.title}
+              </h2>
+              <p className="text-[#6B7280] leading-relaxed mb-6 font-['Manrope'] text-lg">
+                {feature.description}
+              </p>
 
               {/* Bullet list */}
               {'bullets' in feature && feature.bullets && (
-                <ul className="space-y-3">
+                <ul className="space-y-3 mb-6">
                   {feature.bullets.map((bullet, i) => (
                     <li key={bullet} className="flex items-center gap-3">
                       {'bulletIcons' in feature && feature.bulletIcons ? (
                         feature.bulletIcons[i]
                       ) : (
-                        <CheckCircle className="h-[18px] w-[18px] text-[#FED609]" />
+                        <CheckCircle className="h-5 w-5 text-[#FED609] shrink-0" />
                       )}
-                      <span className="font-medium">{bullet}</span>
+                      <span className="font-medium text-lg text-[#1A1A1A] font-['Manrope']">
+                        {bullet}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -225,18 +231,25 @@ export function FeaturesPage() {
 
               {/* Quote callout */}
               {'quote' in feature && feature.quote && (
-                <div className="bg-[#FFFAE2] p-6 rounded-lg border-l-4 border-[#FED609]">
-                  <p className="italic text-[#1A1A1A] font-medium">{feature.quote}</p>
+                <div className="bg-[#FFFAE2] p-8 rounded-lg border-l-4 border-[#FED609] shadow-sm">
+                  <p className="italic text-[#1A1A1A] text-lg font-medium font-['Manrope']">
+                    {feature.quote}
+                  </p>
                 </div>
               )}
 
               {/* Stat cards */}
               {'stats' in feature && feature.stats && (
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-6">
                   {feature.stats.map((stat) => (
-                    <div key={stat.label} className="p-4 bg-white border border-[#FED609]/20 rounded-lg">
-                      <p className="text-xs text-[#6B7280] font-['DM_Sans']">{stat.label}</p>
-                      <p className="text-xl font-bold text-[#FED609]">{stat.value}</p>
+                    <div
+                      key={stat.label}
+                      className="p-6 bg-white border border-[#FED609]/20 rounded-xl shadow-sm hover:border-[#FED609] transition-colors"
+                    >
+                      <p className="text-sm text-[#6B7280] font-['DM_Sans'] uppercase tracking-wider mb-1">
+                        {stat.label}
+                      </p>
+                      <p className="text-3xl font-bold text-[#FED609] font-['Sora']">{stat.value}</p>
                     </div>
                   ))}
                 </div>
@@ -246,26 +259,29 @@ export function FeaturesPage() {
               {'linkText' in feature && feature.linkText && (
                 <Link
                   to={ROUTES.features}
-                  className="inline-flex items-center gap-2 font-bold text-[#FED609] hover:text-[#FFD70B] transition-colors"
+                  className="inline-flex items-center gap-2 font-bold text-xl text-[#FED609] hover:text-[#FFD70B] transition-colors font-['DM_Sans']"
                 >
                   {feature.linkText}
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-5 w-5" />
                 </Link>
               )}
 
               {/* Channel icons */}
               {'channelIcons' in feature && feature.channelIcons && (
-                <div className="flex gap-4">
+                <div className="flex gap-6">
                   {[
-                    <Mail className="h-4 w-4" key="mail" />,
-                    <Smartphone className="h-4 w-4" key="sms" />,
-                    <Monitor className="h-4 w-4" key="devices" />,
-                  ].map((icon, i) => (
+                    { icon: <Mail className="h-5 w-5" />, label: 'Email' },
+                    { icon: <Smartphone className="h-5 w-5" />, label: 'SMS' },
+                    { icon: <Monitor className="h-5 w-5" />, label: 'In-app' },
+                    { icon: <MessageCircle className="h-5 w-5" />, label: 'WhatsApp' },
+                    { icon: <Send className="h-5 w-5" />, label: 'Telegram' },
+                  ].map((item, i) => (
                     <span
                       key={i}
-                      className="w-10 h-10 rounded-full bg-[#FFFAE2] flex items-center justify-center text-[#FED609] border border-[#FED609]/20"
+                      className="w-14 h-14 rounded-full bg-[#FFFAE2] flex items-center justify-center text-[#FED609] border border-[#FED609]/20 shadow-sm hover:bg-[#FED609] hover:text-[#1A1A1A] transition-colors cursor-default"
+                      title={item.label}
                     >
-                      {icon}
+                      {item.icon}
                     </span>
                   ))}
                 </div>
@@ -280,7 +296,7 @@ export function FeaturesPage() {
               initial="hidden"
               whileInView="show"
               viewport={viewportOnce}
-              className="grid md:grid-cols-2 gap-12 items-center"
+              className="grid md:grid-cols-2 items-center"
             >
               {feature.imageFirst ? (
                 <>
@@ -289,17 +305,8 @@ export function FeaturesPage() {
                 </>
               ) : (
                 <>
-                  {textBlock}
-                  <motion.div
-                    variants={revealVariants}
-                    className="order-1 md:order-2 bg-white p-4 rounded-xl shadow-xl shadow-[#FED609]/5"
-                  >
-                    <img
-                      alt={feature.imageAlt}
-                      src={feature.image}
-                      className="rounded-lg w-full h-auto"
-                    />
-                  </motion.div>
+                  <div className="order-2 md:order-1">{textBlock}</div>
+                  <div className="order-1 md:order-2">{imageBlock}</div>
                 </>
               )}
             </motion.div>
@@ -308,19 +315,23 @@ export function FeaturesPage() {
       </section>
 
       {/* Integration Banner */}
-      <section className="bg-[#FED609] py-12">
-        <div className="max-w-7xl mx-auto px-6 overflow-hidden">
+      <section className="bg-[#FED609] py-16">
+        <div className="w-full px-6 overflow-hidden">
           <motion.div
             variants={staggerVariants}
             initial="hidden"
             whileInView="show"
             viewport={viewportOnce}
-            className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-80 grayscale hover:grayscale-0 transition-all duration-500"
+            className="flex flex-wrap justify-center items-center gap-12 md:gap-32 opacity-80 hover:opacity-100 transition-opacity duration-500"
           >
             {integrations.map((item) => (
-              <motion.div key={item.label} variants={revealVariants} className="flex items-center gap-3">
-                {item.icon}
-                <span className="font-bold tracking-tight">{item.label}</span>
+              <motion.div
+                key={item.label}
+                variants={revealVariants}
+                className="flex items-center gap-4 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
+              >
+                <span className="text-[1.75rem]">{item.icon}</span>
+                <span className="font-bold text-xl tracking-tight font-['DM_Sans']">{item.label}</span>
               </motion.div>
             ))}
           </motion.div>
@@ -328,31 +339,31 @@ export function FeaturesPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 px-6 bg-[#FFFAE2]">
+      <section className="py-32 px-6 bg-[#FFFAE2]">
         <motion.div
           variants={revealVariants}
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="max-w-4xl mx-auto text-center"
+          className="w-full text-center"
         >
-          <h2 className="ph-title text-3xl md:text-5xl font-extrabold text-[#1A1A1A] mb-8">
+          <h2 className="font-['Sora'] text-4xl md:text-6xl font-extrabold text-[#1A1A1A] mb-8 tracking-tight leading-tight">
             Start Managing Smarter Today
           </h2>
-          <p className="text-[#6B7280] text-lg mb-10 max-w-xl mx-auto font-['Manrope']">
+          <p className="text-[#6B7280] text-xl mb-12 max-w-2xl mx-auto font-['Manrope'] leading-relaxed">
             Join hundreds of Dubai property managers who are scaling their business with Prophives
             AI.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
             <Link
               to={ROUTES.contact}
-              className="w-full sm:w-auto bg-[#FED609] text-[#1A1A1A] px-10 py-4 rounded-full font-bold text-lg active:scale-95 duration-150 hover:bg-[#FFD70B] shadow-lg text-center transition-colors"
+              className="w-full sm:w-auto bg-[#FED609] text-[#1A1A1A] px-12 py-5 rounded-full font-bold text-xl active:scale-95 duration-150 hover:bg-[#FFD70B] shadow-lg text-center transition-all font-['DM_Sans']"
             >
               Get Started Free
             </Link>
             <Link
               to={ROUTES.pricing}
-              className="w-full sm:w-auto border-2 border-[#FED609] text-[#1A1A1A] px-10 py-4 rounded-full font-bold text-lg active:scale-95 duration-150 hover:bg-white transition-colors text-center"
+              className="w-full sm:w-auto border-2 border-[#FED609] text-[#1A1A1A] px-12 py-5 rounded-full font-bold text-xl active:scale-95 duration-150 hover:bg-white transition-all text-center font-['DM_Sans']"
             >
               Book a Demo
             </Link>

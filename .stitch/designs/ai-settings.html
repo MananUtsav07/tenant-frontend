@@ -3,10 +3,9 @@
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Prophives | AI Settings</title>
+<title>Prophives | AI Settings-updated</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Manrope:wght@400;500;600&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
@@ -103,10 +102,10 @@
 </div>
 </div>
 </aside>
-<!-- Main Content Area -->
-<main class="ml-64 p-8 min-h-screen">
-<!-- Top Navigation (Mobile/Utility) -->
-<header class="flex justify-between items-center mb-10">
+<!-- Main Content Area: Adjusted for Full Width -->
+<main class="ml-64 p-6 min-h-screen flex flex-col">
+<!-- Top Navigation -->
+<header class="flex justify-between items-center mb-8">
 <div class="flex flex-col">
 <div class="flex items-center gap-2 mb-1">
 <span class="material-symbols-outlined text-primary text-3xl" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
@@ -123,9 +122,9 @@
 </button>
 </div>
 </header>
-<!-- AI Overview Card -->
-<section class="mb-8">
-<div class="gold-gradient-border bg-white p-8 rounded-xl flex items-center justify-between shadow-sm">
+<!-- AI Overview Card: Full Width -->
+<section class="mb-6">
+<div class="gold-gradient-border bg-white p-6 rounded-xl flex items-center justify-between shadow-sm">
 <div class="flex items-center gap-6">
 <div class="p-4 bg-cream rounded-full">
 <span class="material-symbols-outlined text-primary text-4xl" data-icon="psychology" style="font-variation-settings: 'FILL' 1;">psychology</span>
@@ -135,21 +134,22 @@
 <h3 class="text-xl font-['Sora'] font-bold">AI Automation</h3>
 <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full uppercase tracking-wider">Active</span>
 </div>
-<p class="text-muted max-w-xl">Enable AI-powered features to automate your property management workflow, reducing manual tasks and increasing efficiency.</p>
+<p class="text-muted">Enable AI-powered features to automate your property management workflow, reducing manual tasks and increasing efficiency.</p>
 </div>
 </div>
 <!-- Gold Toggle Switch -->
-<label class="relative inline-flex items-center cursor-pointer">
+<label class="relative inline-flex items-center cursor-pointer ml-4">
 <input checked="" class="sr-only peer" type="checkbox" value=""/>
 <div class="w-14 h-8 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#FED609]"></div>
 </label>
 </div>
 </section>
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-<!-- Left Column: Feature Toggles -->
-<div class="lg:col-span-2 space-y-6">
-<h4 class="text-sm font-['DM Sans'] font-bold uppercase tracking-widest text-muted mb-4">Automation Features</h4>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-6 flex-1">
+<!-- Left Column: Feature Toggles (Occupying more space) -->
+<div class="lg:col-span-3 space-y-6">
+<h4 class="text-sm font-['DM Sans'] font-bold uppercase tracking-widest text-muted">Automation Features</h4>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
 <!-- Feature Card 1 -->
 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-50 hover:border-primary/30 transition-all group">
 <div class="flex justify-between items-start mb-4">
@@ -212,8 +212,8 @@
 <p class="text-sm text-muted">Automatically create and schedule periodic rent reminders for tenants based on lease agreements.</p>
 </div>
 </div>
-<!-- AI Model Selection Card -->
-<div class="bg-white p-8 rounded-xl shadow-sm border border-gray-50 mt-8">
+<!-- AI Model Selection Card: Full Width within column -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-50 mt-6">
 <div class="flex items-center gap-2 mb-6">
 <span class="material-symbols-outlined text-primary" data-icon="model_training">model_training</span>
 <h5 class="font-['Sora'] font-bold text-dark text-lg">AI Model Selection</h5>
@@ -238,13 +238,13 @@
 </div>
 </div>
 <!-- Right Column: Usage Stats -->
-<div class="space-y-6">
-<div class="bg-ivory p-8 rounded-xl shadow-sm sticky top-8">
-<div class="flex justify-between items-center mb-8">
+<div class="lg:col-span-1 space-y-6">
+<div class="bg-ivory p-6 rounded-xl shadow-sm h-full flex flex-col">
+<div class="flex justify-between items-center mb-6">
 <h4 class="font-['Sora'] font-bold text-dark text-lg">AI Analytics</h4>
 <span class="text-xs font-bold bg-white px-3 py-1 rounded-full text-muted border border-primary/20">This Month</span>
 </div>
-<div class="space-y-8">
+<div class="space-y-6 mb-8">
 <div>
 <div class="flex justify-between items-end mb-2">
 <span class="text-sm font-['DM Sans'] font-medium text-muted">Tickets Classified</span>
@@ -273,21 +273,21 @@
 </div>
 </div>
 </div>
-<div class="mt-12 p-6 bg-white/60 rounded-xl border border-white">
+<div class="mt-auto">
+<div class="p-6 bg-white/60 rounded-xl border border-white mb-6">
 <div class="flex items-center gap-3 mb-4">
 <span class="material-symbols-outlined text-primary" data-icon="info">info</span>
 <p class="text-sm font-bold text-dark">Efficiency Boost</p>
 </div>
 <p class="text-xs text-muted leading-relaxed">Your team saved approximately <span class="text-dark font-bold">42 hours</span> this month using automated ticket classification.</p>
 </div>
-<div class="mt-8">
-<img alt="Data Visualization" class="rounded-lg shadow-inner opacity-80" data-alt="a sleek minimalist line graph showing upward growth trends in golden yellow tones on a clean white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4NG2ErfHomXH1cHPzQXHm8DPwgzOCgbAuTH2ZyMWTrRbimudxnvyX0SovAIzUmFFZrdC5oYddtyNMRDIjoB0fbUeRe0GzMuHS-Kb8cLvrHrgIlGADwRKxH7aSZy19205MoHa2b8gE6YcoBUVT_ZKzlZq26o6RCnKfiUr8c5zDFc9YdoiOAhvvCA_QcT5QqfmIftGIFlRp7v0wzs_58_9O8tP8ENOuZssp0XDC209CoW1GJmsPQF160wPE3-7hu1lJH1Dgc9XPJhPr"/>
+<img alt="Data Visualization" class="w-full rounded-lg shadow-inner opacity-80" data-alt="a sleek minimalist line graph showing upward growth trends in golden yellow tones on a clean white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4NG2ErfHomXH1cHPzQXHm8DPwgzOCgbAuTH2ZyMWTrRbimudxnvyX0SovAIzUmFFZrdC5oYddtyNMRDIjoB0fbUeRe0GzMuHS-Kb8cLvrHrgIlGADwRKxH7aSZy19205MoHa2b8gE6YcoBUVT_ZKzlZq26o6RCnKfiUr8c5zDFc9YdoiOAhvvCA_QcT5QqfmIftGIFlRp7v0wzs_58_9O8tP8ENOuZssp0XDC209CoW1GJmsPQF160wPE3-7hu1lJH1Dgc9XPJhPr"/>
 </div>
 </div>
 </div>
 </div>
 <!-- Footer Action -->
-<footer class="mt-12 pt-8 border-t border-gray-200 flex justify-end">
+<footer class="mt-8 pt-6 border-t border-gray-200 flex justify-end">
 <div class="flex items-center gap-4">
 <button class="px-6 py-3 font-bold text-muted hover:text-dark transition-colors font-['DM Sans']">Discard Changes</button>
 <button class="bg-primary text-dark font-['Sora'] font-bold px-10 py-3 rounded-lg shadow-md hover:bg-primary-dark transition-all active:scale-95 flex items-center gap-2">

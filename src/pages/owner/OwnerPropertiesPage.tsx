@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion'
 import {
   ArrowRight,
-  BedDouble,
   Building2,
   ChevronLeft,
   ChevronRight,
@@ -38,13 +37,28 @@ function getPropertyImage(index: number): string {
 function getStatusConfig(status: Property['occupancy_status']) {
   switch (status) {
     case 'occupied':
-      return { label: 'Active', badgeClass: 'bg-[#FED609] text-[#1A1A1A]', borderClass: 'border-l-[#FED609]' }
+      return {
+        label: 'Active',
+        badgeClass: 'bg-[#FED609] text-[#1A1A1A]',
+        borderClass: 'border-l-4 border-[#FED609]',
+        unitBadgeClass: 'bg-[#FFFAE2] text-[#D4A800] border border-[#FED609]/20',
+      }
     case 'vacant':
     case 'pre_vacant':
     case 'relisting_in_progress':
-      return { label: 'Vacant', badgeClass: 'bg-neutral-200 text-neutral-600', borderClass: 'border-l-neutral-300' }
+      return {
+        label: 'Vacant',
+        badgeClass: 'bg-neutral-200 text-neutral-600',
+        borderClass: 'border-l-4 border-neutral-300',
+        unitBadgeClass: 'bg-neutral-100 text-neutral-500 border border-neutral-200',
+      }
     default:
-      return { label: 'Active', badgeClass: 'bg-[#FED609] text-[#1A1A1A]', borderClass: 'border-l-[#FED609]' }
+      return {
+        label: 'Active',
+        badgeClass: 'bg-[#FED609] text-[#1A1A1A]',
+        borderClass: 'border-l-4 border-[#FED609]',
+        unitBadgeClass: 'bg-[#FFFAE2] text-[#D4A800] border border-[#FED609]/20',
+      }
   }
 }
 
@@ -237,7 +251,7 @@ function DeleteConfirmModal({ propertyName, busy, onConfirm, onCancel }: DeleteC
   )
 }
 
-// Single property card matching Stitch design
+// Single property card matching updated Stitch design
 type PropertyCardProps = {
   property: Property
   index: number
@@ -246,30 +260,32 @@ type PropertyCardProps = {
 }
 
 function PropertyCard({ property, index, onEdit, onDelete }: PropertyCardProps) {
-  const { label, badgeClass, borderClass } = getStatusConfig(property.occupancy_status)
+  const { label, badgeClass, borderClass, unitBadgeClass } = getStatusConfig(property.occupancy_status)
   const isVacant = label === 'Vacant'
   const imageUrl = getPropertyImage(index)
 
   return (
     <motion.div
       variants={revealUp}
-      className={`bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border-l-4 ${borderClass} group overflow-hidden flex flex-col`}
+      className={`bg-white rounded-[12px] shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden flex flex-col ${borderClass}`}
     >
       {/* Card Image */}
-      <div className="relative h-48 bg-[#FEFAEF] flex items-center justify-center overflow-hidden">
+      <div className="relative h-48 bg-[#FEFAEF] overflow-hidden">
         <img
           src={imageUrl}
           alt={property.property_name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
+
         {/* Status badge */}
         <div className="absolute top-4 left-4">
           <span className={`${badgeClass} text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm`}>
             {label}
           </span>
         </div>
-        {/* Action buttons overlay */}
-        <div className="absolute top-4 right-4 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+
+        {/* Edit / Delete overlay buttons */}
+        <div className="absolute bottom-3 right-3 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <button
             type="button"
             onClick={() => onEdit(property)}
@@ -292,38 +308,32 @@ function PropertyCard({ property, index, onEdit, onDelete }: PropertyCardProps) 
       {/* Card Body */}
       <div className="p-6 flex-1 flex flex-col">
         <div className="flex justify-between items-start mb-2">
-          <h3 className="font-['Sora'] font-bold text-lg text-[#1A1A1A] group-hover:text-[#D4A800] transition-colors leading-tight">
+          <h3 className="font-['Sora'] font-bold text-lg text-[#1A1A1A] group-hover:text-[#D4A800] transition-colors truncate pr-2 leading-tight">
             {property.property_name}
           </h3>
           {property.unit_number ? (
-            <span
-              className={`text-[10px] font-bold px-2 py-0.5 rounded border whitespace-nowrap ml-2 ${
-                isVacant
-                  ? 'bg-neutral-100 text-neutral-500 border-neutral-200'
-                  : 'bg-[#FFFAE2] text-[#D4A800] border-[#FED609]/20'
-              }`}
-            >
+            <span className={`text-[10px] font-bold px-2 py-0.5 rounded whitespace-nowrap ml-2 shrink-0 ${unitBadgeClass}`}>
               {property.unit_number}
             </span>
           ) : null}
         </div>
 
-        <p className="text-[#6B7280] text-sm flex items-center gap-1 mb-4">
+        <p className="text-[#6B7280] text-sm flex items-center gap-1 mb-4 truncate font-['Manrope']">
           <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
           <span className="truncate">{property.address}</span>
         </p>
 
         {/* Stats row */}
-        <div className="flex items-center gap-6 mt-auto py-4 border-t border-neutral-50">
+        <div className="flex items-center gap-4 mt-auto py-4 border-t border-neutral-50">
           <div className="flex items-center gap-2">
             <Users className={`h-5 w-5 ${isVacant ? 'text-neutral-300' : 'text-[#FED609]'}`} />
-            <span className={`text-sm font-bold ${isVacant ? 'text-neutral-400' : 'text-[#1A1A1A]'}`}>
-              {isVacant ? '00 Tenants' : 'Active'}
+            <span className={`text-sm font-bold font-['DM_Sans'] ${isVacant ? 'text-neutral-400' : 'text-[#1A1A1A]'}`}>
+              {isVacant ? '00' : 'Active'}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <BedDouble className="h-5 w-5 text-[#FED609]" />
-            <span className="text-sm font-bold text-[#1A1A1A]">Property</span>
+            <Building2 className="h-5 w-5 text-[#FED609]" />
+            <span className="text-sm font-bold text-[#1A1A1A] font-['DM_Sans']">Property</span>
           </div>
         </div>
 
@@ -331,10 +341,10 @@ function PropertyCard({ property, index, onEdit, onDelete }: PropertyCardProps) 
         <button
           type="button"
           onClick={() => onEdit(property)}
-          className="mt-4 text-[#FED609] font-bold text-sm flex items-center justify-center gap-2 group/link hover:text-[#D4A800] transition-colors"
+          className="mt-4 text-[#FED609] font-bold text-sm flex items-center justify-center gap-2 group/link hover:text-[#D4A800] transition-colors font-['DM_Sans']"
         >
-          Edit Details
-          <ArrowRight className="h-4 w-4 group-hover/link:translate-x-1 transition-transform" />
+          View Details
+          <ArrowRight className="h-3.5 w-3.5 group-hover/link:translate-x-1 transition-transform" />
         </button>
       </div>
     </motion.div>
@@ -344,19 +354,20 @@ function PropertyCard({ property, index, onEdit, onDelete }: PropertyCardProps) 
 // Skeleton card for loading state
 function PropertyCardSkeleton() {
   return (
-    <div className="bg-white rounded-xl shadow-sm border-l-4 border-neutral-100 overflow-hidden flex flex-col animate-pulse">
+    <div className="bg-white rounded-[12px] shadow-sm border-l-4 border-neutral-100 overflow-hidden flex flex-col animate-pulse">
       <div className="h-48 bg-neutral-100" />
       <div className="p-6 flex-1 flex flex-col gap-3">
         <div className="flex justify-between">
-          <div className="h-5 bg-neutral-100 rounded w-2/3" />
-          <div className="h-5 bg-neutral-100 rounded w-16" />
+          <div className="h-4 bg-neutral-100 rounded w-2/3" />
+          <div className="h-4 bg-neutral-100 rounded w-12" />
         </div>
-        <div className="h-4 bg-neutral-100 rounded w-3/4" />
-        <div className="h-px bg-neutral-50 mt-2" />
-        <div className="flex gap-4 pt-2">
-          <div className="h-4 bg-neutral-100 rounded w-20" />
-          <div className="h-4 bg-neutral-100 rounded w-16" />
+        <div className="h-3 bg-neutral-100 rounded w-3/4" />
+        <div className="h-px bg-neutral-100 mt-2" />
+        <div className="flex gap-4 pt-1">
+          <div className="h-3 bg-neutral-100 rounded w-16" />
+          <div className="h-3 bg-neutral-100 rounded w-14" />
         </div>
+        <div className="h-4 bg-neutral-100 rounded w-24 mx-auto mt-1" />
       </div>
     </div>
   )
@@ -384,6 +395,7 @@ export function OwnerPropertiesPage() {
   // Filter / search state
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
+  const [locationFilter, setLocationFilter] = useState('all')
 
   const loadProperties = useCallback(async () => {
     if (!token) {
@@ -478,6 +490,11 @@ export function OwnerPropertiesPage() {
     }
   }
 
+  // Derive unique location fragments for filter
+  const locationOptions = Array.from(
+    new Set(properties.map((p) => p.address.split(',')[0]?.trim()).filter(Boolean))
+  )
+
   // Filtered properties
   const filteredProperties = properties.filter((p) => {
     const matchesSearch =
@@ -493,83 +510,105 @@ export function OwnerPropertiesPage() {
           p.occupancy_status === 'pre_vacant' ||
           p.occupancy_status === 'relisting_in_progress'))
 
-    return matchesSearch && matchesStatus
+    const matchesLocation =
+      locationFilter === 'all' ||
+      p.address.toLowerCase().includes(locationFilter.toLowerCase())
+
+    return matchesSearch && matchesStatus && matchesLocation
   })
 
   return (
     <div className="min-h-full bg-[#FEFAEF]">
-      {/* Page Content */}
-      <div className="pt-6 pb-12 px-6 max-w-7xl mx-auto">
+      <div className="pt-6 pb-12 px-6 w-full">
 
-        {/* Page Header */}
-        <motion.div
-          variants={revealUp}
-          initial="hidden"
-          animate="show"
-          className="flex items-center justify-between mb-8"
-        >
-          <div>
-            <h2 className="font-['Sora'] font-bold text-3xl text-[#1A1A1A] tracking-tight">Properties</h2>
-            <p className="text-[#6B7280] font-['Manrope'] text-sm mt-1">
-              Manage your Dubai real estate portfolio and track performance.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => {
-              resetForm()
-              setShowForm(true)
-            }}
-            className="bg-[#FED609] hover:bg-[#FFD70B] text-[#1A1A1A] font-bold py-3 px-6 rounded-xl flex items-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95"
+        {/* Page Header Section */}
+        <div className="flex flex-col gap-6 mb-8">
+          <motion.div
+            variants={revealUp}
+            initial="hidden"
+            animate="show"
+            className="flex items-center justify-between"
           >
-            <PlusCircle className="h-5 w-5" />
-            Add Property
-          </button>
-        </motion.div>
-
-        {/* Filters Bar */}
-        <motion.div
-          variants={revealUp}
-          initial="hidden"
-          animate="show"
-          transition={{ delay: 0.05 }}
-          className="bg-white p-4 rounded-xl shadow-sm flex flex-wrap items-center gap-4 border border-[#FFFAE2] mb-8"
-        >
-          {/* Search */}
-          <div className="relative flex-1 min-w-[220px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6B7280]" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search properties or addresses..."
-              className="w-full bg-[#FEFAEF] border border-neutral-100 rounded-lg py-2.5 pl-9 pr-4 text-sm focus:ring-2 focus:ring-[#FED609] focus:outline-none transition-all"
-            />
-          </div>
-
-          {/* Status filter */}
-          <div className="flex items-center gap-2 bg-[#FEFAEF] px-4 py-2.5 rounded-lg border border-neutral-100 min-w-[180px]">
-            <Filter className="h-4 w-4 text-[#6B7280]" />
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-transparent border-none text-sm font-medium focus:ring-0 cursor-pointer w-full text-[#1A1A1A] outline-none"
+            <div>
+              <h2 className="font-['Sora'] font-bold text-3xl text-[#1A1A1A] tracking-tight">Properties</h2>
+              <p className="text-[#6B7280] font-['Manrope'] text-sm mt-1">
+                Manage your Dubai real estate portfolio and track performance.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                resetForm()
+                setShowForm(true)
+              }}
+              className="bg-[#FED609] hover:bg-[#FFD70B] text-[#1A1A1A] font-bold py-3 px-6 rounded-lg flex items-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95 font-['DM_Sans']"
             >
-              <option value="all">Status: All</option>
-              <option value="active">Active</option>
-              <option value="vacant">Vacant</option>
-            </select>
-          </div>
+              <PlusCircle className="h-5 w-5" />
+              Add Property
+            </button>
+          </motion.div>
 
-          {/* Recent activity button */}
-          <button
-            type="button"
-            className="ml-auto text-[#6B7280] hover:text-[#1A1A1A] flex items-center gap-1.5 text-sm font-medium transition-colors"
+          {/* Filters Bar */}
+          <motion.div
+            variants={revealUp}
+            initial="hidden"
+            animate="show"
+            transition={{ delay: 0.05 }}
+            className="bg-white p-4 rounded-xl shadow-sm flex flex-wrap items-center gap-4 border border-[#FFFAE2]"
           >
-            <History className="h-4 w-4" />
-            Recent Activity
-          </button>
-        </motion.div>
+            {/* Search */}
+            <div className="relative flex-1 min-w-[200px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6B7280]" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search properties or addresses..."
+                className="w-full bg-[#FEFAEF] border border-neutral-100 rounded-xl py-2.5 pl-9 pr-4 text-sm focus:ring-2 focus:ring-[#FED609] focus:outline-none transition-all font-['Manrope']"
+              />
+            </div>
+
+            {/* Status filter */}
+            <div className="flex items-center gap-2 bg-[#FEFAEF] px-4 py-2 rounded-lg border border-neutral-100 min-w-[200px]">
+              <Filter className="h-4 w-4 text-[#6B7280] flex-shrink-0" />
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="bg-transparent border-none text-sm font-medium focus:ring-0 cursor-pointer w-full text-[#1A1A1A] outline-none font-['DM_Sans']"
+              >
+                <option value="all">Status: All</option>
+                <option value="active">Active</option>
+                <option value="vacant">Vacant</option>
+              </select>
+            </div>
+
+            {/* Location filter */}
+            {locationOptions.length > 0 ? (
+              <div className="flex items-center gap-2 bg-[#FEFAEF] px-4 py-2 rounded-lg border border-neutral-100 min-w-[200px]">
+                <MapPin className="h-4 w-4 text-[#6B7280] flex-shrink-0" />
+                <select
+                  value={locationFilter}
+                  onChange={(e) => setLocationFilter(e.target.value)}
+                  className="bg-transparent border-none text-sm font-medium focus:ring-0 cursor-pointer w-full text-[#1A1A1A] outline-none font-['DM_Sans']"
+                >
+                  <option value="all">Location: All Areas</option>
+                  {locationOptions.map((loc) => (
+                    <option key={loc} value={loc}>{loc}</option>
+                  ))}
+                </select>
+              </div>
+            ) : null}
+
+            {/* Recent activity button */}
+            <button
+              type="button"
+              className="ml-auto text-[#6B7280] hover:text-[#1A1A1A] flex items-center gap-1 text-sm font-medium transition-colors font-['DM_Sans']"
+            >
+              <History className="h-4 w-4" />
+              Recent Activity
+            </button>
+          </motion.div>
+        </div>
 
         {/* Error state */}
         {error && !showForm ? (
@@ -584,10 +623,10 @@ export function OwnerPropertiesPage() {
           </motion.div>
         ) : null}
 
-        {/* Loading state — skeleton grid */}
+        {/* Loading state */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-            {Array.from({ length: 6 }).map((_, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+            {Array.from({ length: 8 }).map((_, i) => (
               <PropertyCardSkeleton key={i} />
             ))}
           </div>
@@ -605,13 +644,13 @@ export function OwnerPropertiesPage() {
               <Building2 className="h-9 w-9 text-[#FED609]" />
             </div>
             <h3 className="font-['Sora'] font-bold text-xl text-[#1A1A1A] mb-2">No properties yet</h3>
-            <p className="text-[#6B7280] text-sm max-w-xs mb-8">
+            <p className="text-[#6B7280] text-sm max-w-xs mb-8 font-['Manrope']">
               Create your first property to onboard tenants and start tracking rent and support.
             </p>
             <button
               type="button"
               onClick={() => setShowForm(true)}
-              className="bg-[#FED609] hover:bg-[#FFD70B] text-[#1A1A1A] font-bold py-3 px-8 rounded-xl flex items-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95"
+              className="bg-[#FED609] hover:bg-[#FFD70B] text-[#1A1A1A] font-bold py-3 px-8 rounded-lg flex items-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95 font-['DM_Sans']"
             >
               <PlusCircle className="h-5 w-5" />
               Add Your First Property
@@ -629,25 +668,25 @@ export function OwnerPropertiesPage() {
           >
             <Search className="h-10 w-10 text-[#6B7280] mb-4" />
             <h3 className="font-['Sora'] font-bold text-lg text-[#1A1A1A] mb-1">No results found</h3>
-            <p className="text-[#6B7280] text-sm">Try adjusting your search or filter.</p>
+            <p className="text-[#6B7280] text-sm font-['Manrope']">Try adjusting your search or filters.</p>
             <button
               type="button"
-              onClick={() => { setSearchQuery(''); setStatusFilter('all') }}
-              className="mt-4 text-[#D4A800] font-semibold text-sm hover:underline"
+              onClick={() => { setSearchQuery(''); setStatusFilter('all'); setLocationFilter('all') }}
+              className="mt-4 text-[#D4A800] font-semibold text-sm hover:underline font-['DM_Sans']"
             >
               Clear filters
             </button>
           </motion.div>
         ) : null}
 
-        {/* Property Grid */}
+        {/* Property Grid - expanded to 4 cols on xl per new design */}
         {!loading && filteredProperties.length > 0 ? (
           <motion.div
             variants={staggerParent}
             initial="hidden"
             animate="show"
             viewport={viewportOnce}
-            className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6"
           >
             {filteredProperties.map((property, index) => (
               <PropertyCard
@@ -661,7 +700,7 @@ export function OwnerPropertiesPage() {
           </motion.div>
         ) : null}
 
-        {/* Pagination (shown only when there are enough properties) */}
+        {/* Pagination */}
         {!loading && filteredProperties.length >= 9 ? (
           <div className="mt-16 flex items-center justify-center gap-2">
             <button
@@ -672,7 +711,7 @@ export function OwnerPropertiesPage() {
             </button>
             <button
               type="button"
-              className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#FED609] text-[#1A1A1A] font-bold"
+              className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#FED609] text-[#1A1A1A] font-bold shadow-sm"
             >
               1
             </button>

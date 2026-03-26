@@ -3,9 +3,8 @@
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Tenants Management | Prophives</title>
+<title>Tenants Management-updated | Prophives</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
@@ -107,7 +106,8 @@
 </div>
 </div>
 </header>
-<div class="p-8 max-w-7xl mx-auto">
+<!-- Full Width Container -->
+<div class="px-8 py-8 w-full">
 <!-- Page Header -->
 <div class="flex justify-between items-end mb-8">
 <div>
@@ -130,9 +130,9 @@
                     </button>
 </div>
 </div>
-<div class="grid grid-cols-12 gap-8">
-<!-- Tenants Table Section -->
-<div class="col-span-12 xl:col-span-8">
+<div class="flex flex-col lg:flex-row gap-8 items-start">
+<!-- Tenants Table Section - Expanded -->
+<div class="flex-1 w-full lg:w-auto">
 <div class="bg-white rounded-xl shadow-sm border border-primary/10 overflow-hidden">
 <div class="overflow-x-auto">
 <table class="w-full text-left border-collapse">
@@ -275,8 +275,8 @@
 </div>
 </div>
 </div>
-<!-- Tenant Detail Side Panel -->
-<div class="col-span-12 xl:col-span-4 space-y-6">
+<!-- Tenant Detail Panel - Fixed Width, Full Viewport Height Alignment -->
+<div class="w-full lg:w-96 shrink-0">
 <div class="bg-white rounded-xl shadow-lg border border-primary/20 p-6 sticky top-24">
 <div class="flex justify-between items-start mb-6">
 <div class="flex items-center gap-4">

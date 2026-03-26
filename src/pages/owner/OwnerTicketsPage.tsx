@@ -44,10 +44,6 @@ const TICKETS_PER_PAGE = 8
 
 type FilterStatus = 'all' | TenantTicket['status']
 
-function getPriorityFromSubject(_subject: string): { label: string; classes: string } {
-  // Deterministic priority display based on status for real tickets — defaults to medium
-  return { label: 'Medium', classes: 'bg-orange-100 text-orange-600 border border-orange-200' }
-}
 
 function getStatusBadgeClasses(status: TenantTicket['status']): string {
   switch (status) {
@@ -762,7 +758,6 @@ export function OwnerTicketsPage() {
                               className="w-2.5 h-2.5 rounded-full ring-4"
                               style={{
                                 backgroundColor: '#FED609',
-                                ringColor: 'rgba(254,214,9,0.2)',
                               }}
                             />
                             <div className="w-0.5 flex-1 mt-1" style={{ backgroundColor: 'rgba(254,214,9,0.2)' }} />

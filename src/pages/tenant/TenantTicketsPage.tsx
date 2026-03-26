@@ -207,33 +207,32 @@ export function TenantTicketsPage() {
   ]
 
   return (
-    <div className="space-y-6">
-      {/* Page Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="space-y-6 p-6 w-full">
+      {/* Page Header Actions */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="font-headline text-3xl font-bold text-[#1A1A1A]">My Tickets</h1>
-          <p className="mt-1 text-sm text-[#6B7280]">Track and manage your property requests</p>
+          <p className="text-[#6B7280] font-['DM_Sans']">Track and manage your property requests</p>
         </div>
         <button
           type="button"
           onClick={() => setShowModal(true)}
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#FED609] px-6 py-3 font-bold text-[#1A1A1A] shadow-lg shadow-[#FED609]/20 transition-all hover:bg-[#FFD70B] active:scale-95"
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#FED609] px-6 py-3 font-['DM_Sans'] font-bold text-[#1A1A1A] shadow-lg shadow-[#FED609]/20 transition-all hover:bg-[#FFD70B] active:scale-95"
         >
           <Plus className="h-5 w-5" />
           Create New Ticket
         </button>
       </div>
 
-      {/* Search + Filters */}
-      <div className="flex flex-col gap-4 rounded-2xl bg-white p-3 shadow-sm md:flex-row md:items-center">
+      {/* Filters Section */}
+      <div className="flex flex-col gap-4 rounded-2xl bg-white p-2 shadow-sm md:flex-row md:items-center">
         {/* Status Tabs */}
-        <div className="flex overflow-x-auto rounded-xl bg-[#FEFAEF] p-1">
+        <div className="flex overflow-x-auto rounded-xl bg-[#FEFAEF] p-1 w-full md:w-auto">
           {filterTabs.map((tab) => (
             <button
               key={tab.value}
               type="button"
               onClick={() => setStatusFilter(tab.value)}
-              className={`rounded-lg px-5 py-2 text-sm font-medium transition-colors whitespace-nowrap ${
+              className={`rounded-lg px-6 py-2 text-sm font-medium transition-colors whitespace-nowrap ${
                 statusFilter === tab.value
                   ? 'bg-[#FED609] font-bold text-[#1A1A1A] shadow-sm'
                   : 'text-[#6B7280] hover:text-[#1A1A1A]'
@@ -245,19 +244,19 @@ export function TenantTicketsPage() {
         </div>
 
         {/* Search */}
-        <div className="relative flex-1 md:max-w-xs">
+        <div className="relative w-full md:max-w-xs md:ml-auto">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6B7280]" />
           <input
             type="text"
             placeholder="Search tickets..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-full border-none bg-[#FEFAEF] py-2 pl-10 pr-4 text-sm shadow-sm outline-none focus:ring-2 focus:ring-[#FED609]"
+            className="w-full rounded-xl border-none bg-[#FEFAEF] py-2 pl-10 pr-4 text-sm shadow-sm outline-none focus:ring-2 focus:ring-[#FED609]"
           />
         </div>
 
         {/* Sort */}
-        <div className="relative md:ml-auto md:w-52">
+        <div className="relative md:w-52">
           <Filter className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6B7280]" />
           <select
             value={sort}
@@ -276,18 +275,18 @@ export function TenantTicketsPage() {
 
       {/* Empty state */}
       {!loading && filteredTickets.length === 0 && !error ? (
-        <div className="flex flex-col items-center justify-center gap-4 rounded-2xl bg-white py-16 shadow-sm">
+        <div className="flex flex-col items-center justify-center gap-4 rounded-2xl bg-white py-16 shadow-sm border border-[rgba(0,0,0,0.06)]">
           <TicketX className="h-10 w-10 text-[#6B7280]" />
           <div className="text-center">
-            <p className="font-bold text-[#1A1A1A]">No tickets found</p>
-            <p className="mt-1 text-sm text-[#6B7280]">
+            <p className="font-bold text-[#1A1A1A] font-['Sora']">No tickets found</p>
+            <p className="mt-1 text-sm text-[#6B7280] font-['Manrope']">
               {statusFilter !== 'all' ? 'Try a different filter or create a new ticket.' : 'Submit your first support ticket.'}
             </p>
           </div>
           <button
             type="button"
             onClick={() => setShowModal(true)}
-            className="mt-2 inline-flex items-center gap-2 rounded-xl bg-[#FED609] px-5 py-2.5 text-sm font-bold text-[#1A1A1A] transition-all hover:bg-[#FFD70B] active:scale-95"
+            className="mt-2 inline-flex items-center gap-2 rounded-xl bg-[#FED609] px-5 py-2.5 text-sm font-bold text-[#1A1A1A] transition-all hover:bg-[#FFD70B] active:scale-95 font-['DM_Sans']"
           >
             <Plus className="h-4 w-4" />
             Create New Ticket
@@ -312,18 +311,18 @@ export function TenantTicketsPage() {
               <div className="flex-1">
                 <div className="mb-2 flex items-center gap-3">
                   {statusBadge(ticket.status)}
-                  <span className="text-xs font-medium text-[#6B7280]">#{ticket.id.slice(0, 8).toUpperCase()}</span>
+                  <span className="text-xs font-medium text-[#6B7280] font-['DM_Sans']">#{ticket.id.slice(0, 8).toUpperCase()}</span>
                 </div>
-                <h3 className="mb-1 font-headline text-lg font-bold transition-colors group-hover:text-[#FED609]">
+                <h3 className="mb-1 font-['Sora'] text-lg font-bold transition-colors group-hover:text-[#FED609]">
                   {ticket.subject}
                 </h3>
-                <p className="line-clamp-1 text-sm text-[#6B7280]">{ticket.message}</p>
+                <p className="line-clamp-1 text-sm text-[#6B7280] font-['Manrope']">{ticket.message}</p>
               </div>
 
               <div className="flex flex-wrap items-center gap-4 border-t border-[#FEFAEF] pt-4 text-sm md:flex-nowrap md:border-t-0 md:pt-0">
                 <div className="flex items-center gap-2 rounded-lg bg-[#FEFAEF] px-3 py-1.5">
                   <CalendarDays className="h-4 w-4 text-[#FED609]" />
-                  <span className="whitespace-nowrap font-medium">{formatDate(ticket.created_at)}</span>
+                  <span className="whitespace-nowrap font-medium font-['Manrope']">{formatDate(ticket.created_at)}</span>
                 </div>
                 <button
                   type="button"
@@ -349,9 +348,9 @@ export function TenantTicketsPage() {
           <div className="rounded-2xl bg-[#1A1A1A] p-6 sm:p-7">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-[#FED609]/70">Selected Ticket</p>
-                <h3 className="mt-3 font-headline text-2xl font-semibold text-white">{thread.ticket.subject}</h3>
-                <p className="mt-2 text-sm text-white/60">Opened: {ticketMeta?.openedAt}</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-[#FED609]/70 font-['DM_Sans']">Selected Ticket</p>
+                <h3 className="mt-3 font-['Sora'] text-2xl font-semibold text-white">{thread.ticket.subject}</h3>
+                <p className="mt-2 text-sm text-white/60 font-['Manrope']">Opened: {ticketMeta?.openedAt}</p>
               </div>
               <span className="mt-1">
                 {thread.ticket.status === 'open' ? (
@@ -368,9 +367,9 @@ export function TenantTicketsPage() {
           </div>
 
           {/* Conversation */}
-          <div className="rounded-2xl bg-white p-6 shadow-sm sm:p-7">
-            <h3 className="font-headline text-xl font-semibold text-[#1A1A1A]">Conversation</h3>
-            <p className="mt-1 text-sm text-[#6B7280]">
+          <div className="rounded-2xl bg-white p-6 shadow-sm sm:p-7 border border-[rgba(0,0,0,0.06)]">
+            <h3 className="font-['Sora'] text-xl font-semibold text-[#1A1A1A]">Conversation</h3>
+            <p className="mt-1 text-sm text-[#6B7280] font-['Manrope']">
               The original ticket, owner replies, and closing notes all appear here in order.
             </p>
             <div className="mt-4">
@@ -403,8 +402,8 @@ export function TenantTicketsPage() {
             />
           ) : (
             <div className="rounded-2xl border border-[rgba(0,0,0,0.06)] bg-white p-6 shadow-sm">
-              <h3 className="font-headline text-lg font-semibold text-[#1A1A1A]">Ticket closed</h3>
-              <p className="mt-2 text-sm text-[#6B7280]">
+              <h3 className="font-['Sora'] text-lg font-semibold text-[#1A1A1A]">Ticket closed</h3>
+              <p className="mt-2 text-sm text-[#6B7280] font-['Manrope']">
                 This ticket is closed. Review the thread above for the final owner response or closing note.
               </p>
             </div>
@@ -424,7 +423,7 @@ export function TenantTicketsPage() {
           <div className="w-full max-w-xl overflow-hidden rounded-2xl bg-white shadow-2xl">
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-[#FEFAEF] p-6">
-              <h2 className="font-headline text-xl font-bold text-[#1A1A1A]">Create Support Ticket</h2>
+              <h2 className="font-['Sora'] text-xl font-bold text-[#1A1A1A]">Create Support Ticket</h2>
               <button
                 type="button"
                 onClick={() => setShowModal(false)}
@@ -438,35 +437,35 @@ export function TenantTicketsPage() {
             {/* Modal Form */}
             <form onSubmit={handleSubmit} className="space-y-6 p-8">
               {createError ? (
-                <p className="rounded-lg bg-red-50 px-4 py-2 text-sm text-red-600">{createError}</p>
+                <p className="rounded-xl bg-red-50 px-4 py-2 text-sm text-red-600 font-['Manrope']">{createError}</p>
               ) : null}
 
               {/* Subject */}
               <div className="space-y-2">
-                <label className="block text-sm font-bold text-[#1A1A1A]">Subject Title</label>
+                <label className="block text-sm font-['DM_Sans'] font-bold text-[#1A1A1A]">Subject Title</label>
                 <input
                   type="text"
                   placeholder="Briefly describe the issue"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                   required
-                  className="w-full rounded-xl border-none bg-[#FEFAEF] px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#FED609]"
+                  className="w-full rounded-xl border-none bg-[#FEFAEF] px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#FED609] font-['Manrope']"
                 />
               </div>
 
               {/* Priority */}
               <div className="space-y-3">
-                <label className="block text-sm font-bold text-[#1A1A1A]">Priority Level</label>
+                <label className="block text-sm font-['DM_Sans'] font-bold text-[#1A1A1A]">Priority Level</label>
                 <div className="grid grid-cols-3 gap-3">
                   {(['low', 'medium', 'high'] as Priority[]).map((p) => (
                     <button
                       key={p}
                       type="button"
                       onClick={() => setPriority(p)}
-                      className={`flex items-center justify-center rounded-xl py-2 text-sm font-medium capitalize transition-all ${
+                      className={`flex items-center justify-center rounded-xl py-2.5 text-sm font-medium capitalize transition-all font-['DM_Sans'] ${
                         priority === p
-                          ? 'border-2 border-[#FED609] bg-[#FED609]/5'
-                          : 'border-2 border-transparent bg-[#FEFAEF]'
+                          ? 'border-2 border-[#FED609] bg-[#FED609]/10 text-[#1A1A1A] font-bold'
+                          : 'border-2 border-transparent bg-[#FEFAEF] text-[#6B7280]'
                       }`}
                     >
                       {p}
@@ -477,14 +476,14 @@ export function TenantTicketsPage() {
 
               {/* Description */}
               <div className="space-y-2">
-                <label className="block text-sm font-bold text-[#1A1A1A]">Description</label>
+                <label className="block text-sm font-['DM_Sans'] font-bold text-[#1A1A1A]">Description</label>
                 <textarea
                   placeholder="Provide detailed information about your request..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   required
                   rows={4}
-                  className="w-full resize-none rounded-xl border-none bg-[#FEFAEF] px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#FED609]"
+                  className="w-full resize-none rounded-xl border-none bg-[#FEFAEF] px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#FED609] font-['Manrope']"
                 />
               </div>
 
@@ -493,14 +492,14 @@ export function TenantTicketsPage() {
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="flex-1 rounded-xl border border-[#FEFAEF] px-6 py-3 font-bold text-[#6B7280] transition-colors hover:bg-[#FEFAEF]"
+                  className="flex-1 rounded-xl border border-[rgba(0,0,0,0.08)] px-6 py-3 font-['DM_Sans'] font-bold text-[#6B7280] transition-colors hover:bg-[#FEFAEF]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={busy}
-                  className="flex-1 rounded-xl bg-[#FED609] px-6 py-3 font-bold text-[#1A1A1A] shadow-lg shadow-[#FED609]/20 transition-all hover:bg-[#FFD70B] active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="flex-1 rounded-xl bg-[#FED609] px-6 py-3 font-['DM_Sans'] font-bold text-[#1A1A1A] shadow-lg shadow-[#FED609]/20 transition-all hover:bg-[#FFD70B] active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {busy ? 'Submitting...' : 'Submit Ticket'}
                 </button>

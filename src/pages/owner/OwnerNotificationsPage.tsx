@@ -285,13 +285,13 @@ export function OwnerNotificationsPage() {
   const isTelegramConnected = telegramOnboarding?.connected ?? false
 
   return (
-    <div className="min-h-screen bg-[#FEFAEF]">
-      <div className="p-8 max-w-5xl mx-auto space-y-8">
+    <div className="p-6 w-full bg-[#FEFAEF] min-h-screen">
+      <div className="max-w-5xl mx-auto space-y-6">
 
         {/* Page Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
-            <h2 className="font-[Sora] font-bold text-3xl text-[#1A1A1A] mb-4">Notifications</h2>
+            <h2 className="font-['Sora'] font-bold text-3xl text-[#1A1A1A] mb-4">Notifications</h2>
             <div className="flex p-1 bg-white/50 border border-[#FED609]/20 rounded-lg w-fit">
               {(['all', 'unread', 'read'] as NotificationFilter[]).map((filter) => (
                 <button
@@ -300,8 +300,8 @@ export function OwnerNotificationsPage() {
                   onClick={() => setActiveFilter(filter)}
                   className={
                     activeFilter === filter
-                      ? 'px-6 py-1.5 rounded-md text-sm font-[DM_Sans] font-bold bg-[#FED609] text-[#1A1A1A] shadow-sm capitalize'
-                      : 'px-6 py-1.5 rounded-md text-sm font-[DM_Sans] text-[#6B7280] hover:text-[#1A1A1A] transition-colors capitalize'
+                      ? "px-6 py-1.5 rounded-md text-sm font-['DM_Sans'] font-bold bg-[#FED609] text-[#1A1A1A] shadow-sm capitalize"
+                      : "px-6 py-1.5 rounded-md text-sm font-['DM_Sans'] text-[#6B7280] hover:text-[#1A1A1A] transition-colors capitalize"
                   }
                 >
                   {filter}
@@ -313,7 +313,7 @@ export function OwnerNotificationsPage() {
             <button
               type="button"
               onClick={() => void markAllRead()}
-              className="text-[#1A1A1A] font-[DM_Sans] font-bold text-sm flex items-center gap-1 hover:text-[#FFD70B] transition-colors pb-2"
+              className="text-[#1A1A1A] font-['DM_Sans'] font-bold text-sm flex items-center gap-1.5 hover:text-[#FFD70B] transition-colors whitespace-nowrap pb-2"
             >
               <CheckCircle2 className="w-4 h-4" />
               Mark All as Read
@@ -325,7 +325,7 @@ export function OwnerNotificationsPage() {
 
         {/* Telegram Integration Banner */}
         {!loading && telegramOnboarding && (
-          <div className="bg-[#FFFAE2] border border-[#FED609]/20 rounded-xl p-6 flex flex-col md:flex-row items-center gap-6 shadow-sm">
+          <div className="bg-[#FFFAE2] border border-[#FED609]/20 rounded-xl p-6 mb-8 flex flex-col md:flex-row items-center gap-6 shadow-sm">
             <div className="w-16 h-16 bg-[#0088CC]/10 rounded-2xl flex items-center justify-center flex-shrink-0">
               <svg className="w-10 h-10 text-[#0088CC]" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.98-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.11.02-1.93 1.23-5.46 3.62-.51.35-.98.52-1.4.51-.46-.01-1.35-.26-2.01-.48-.81-.27-1.45-.42-1.39-.89.03-.25.38-.51 1.07-.78 4.2-1.82 7-3.03 8.4-3.61 4-.17 4.83.1 4.83.1s.05.52.01 1.15z" />
@@ -334,34 +334,34 @@ export function OwnerNotificationsPage() {
             <div className="flex-1 text-center md:text-left">
               {isTelegramConnected ? (
                 <>
-                  <h3 className="font-[Sora] font-bold text-lg text-[#1A1A1A] mb-1">
+                  <h3 className="font-['Sora'] font-bold text-lg text-[#1A1A1A] mb-1">
                     Telegram connected
                     {telegramOnboarding.linked_chat?.username
                       ? ` as @${telegramOnboarding.linked_chat.username}`
                       : ''}
                   </h3>
-                  <p className="text-[#6B7280] text-sm max-w-md">
+                  <p className="text-[#6B7280] text-sm font-['Manrope'] max-w-md">
                     You are receiving all critical alerts directly in Telegram. Open the bot and tap Start once to confirm.
                   </p>
                 </>
               ) : (
                 <>
-                  <h3 className="font-[Sora] font-bold text-lg text-[#1A1A1A] mb-1">
+                  <h3 className="font-['Sora'] font-bold text-lg text-[#1A1A1A] mb-1">
                     Connect Telegram for instant notifications
                   </h3>
-                  <p className="text-[#6B7280] text-sm max-w-md">
-                    Get payment alerts, ticket updates, and reminders directly in Telegram with our AI bot.
+                  <p className="text-[#6B7280] text-sm font-['Manrope'] max-w-md">
+                    Get payment alerts, ticket updates, and reminders directly in Telegram with our AI bot. Stay informed on the go with real-time push notifications.
                   </p>
                 </>
               )}
             </div>
-            <div className="flex flex-wrap gap-3 items-center">
+            <div className="flex flex-wrap gap-2 items-center">
               {!isTelegramConnected ? (
                 <button
                   type="button"
                   onClick={() => void connectTelegram()}
                   disabled={!telegramOnboarding.connect_url}
-                  className="bg-[#0088CC] text-white px-6 py-2.5 rounded-lg font-[DM_Sans] font-bold text-sm shadow-md hover:bg-[#0077B5] transition-all flex items-center gap-2 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="bg-[#0088CC] text-white px-6 py-2.5 rounded-lg font-['DM_Sans'] font-bold text-sm shadow-md hover:bg-[#0077B5] transition-all flex items-center gap-2 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <Send className="w-4 h-4" />
                   Connect Telegram Bot
@@ -371,7 +371,7 @@ export function OwnerNotificationsPage() {
                   type="button"
                   onClick={() => void disconnectTelegram()}
                   disabled={disconnectingTelegram}
-                  className="border border-[rgba(0,0,0,0.08)] bg-white text-[#4B5563] px-5 py-2.5 rounded-lg font-[DM_Sans] font-bold text-sm hover:bg-[#FEFAEF] transition-all active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="border border-[#FED609]/30 bg-white text-[#4B5563] px-5 py-2.5 rounded-lg font-['DM_Sans'] font-bold text-sm hover:bg-[#FEFAEF] transition-all active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {disconnectingTelegram ? 'Disconnecting...' : 'Disconnect Telegram'}
                 </button>
@@ -379,10 +379,10 @@ export function OwnerNotificationsPage() {
               <button
                 type="button"
                 onClick={() => { void loadTelegramStatus(); void refresh({ silent: true }) }}
-                className="border border-[rgba(0,0,0,0.08)] bg-white text-[#4B5563] px-4 py-2.5 rounded-lg font-[DM_Sans] font-bold text-sm hover:bg-[#FEFAEF] transition-all flex items-center gap-2"
+                className="border border-[#FED609]/30 bg-white text-[#4B5563] px-4 py-2.5 rounded-lg font-['DM_Sans'] font-bold text-sm hover:bg-[#FEFAEF] transition-all flex items-center gap-2"
               >
                 <RefreshCw className="w-4 h-4" />
-                Refresh status
+                Refresh
               </button>
             </div>
           </div>
@@ -394,13 +394,15 @@ export function OwnerNotificationsPage() {
             <LoadingState message="Loading notifications..." rows={4} />
           </div>
         ) : filteredNotifications.length === 0 ? (
-          <EmptyState
-            title="No notifications"
-            description="Owner notifications appear here when resident tickets or rent events need your attention."
-            icon={<Inbox className="h-5 w-5" />}
-          />
+          <div className="bg-white rounded-xl shadow-sm border border-[#FED609]/10 p-10">
+            <EmptyState
+              title="No notifications"
+              description="Owner notifications appear here when resident tickets or rent events need your attention."
+              icon={<Inbox className="h-5 w-5" />}
+            />
+          </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-sm border border-[#FED609]/10 overflow-hidden">
+          <div className="bg-white rounded-xl shadow-sm border border-[#FED609]/10 overflow-hidden w-full">
             {filteredNotifications.map((notification, index) => (
               <div key={notification.id}>
                 <div
@@ -414,7 +416,7 @@ export function OwnerNotificationsPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start mb-1">
                       <h4
-                        className={`font-[Manrope] text-base truncate pr-8 ${
+                        className={`font-['Manrope'] text-base truncate pr-8 ${
                           !notification.is_read ? 'font-bold text-[#1A1A1A]' : 'font-medium text-[#1A1A1A]'
                         }`}
                       >
@@ -429,13 +431,13 @@ export function OwnerNotificationsPage() {
                         )}
                       </div>
                     </div>
-                    <p className="text-[#6B7280] text-sm">{notification.message}</p>
+                    <p className="text-[#6B7280] text-sm font-['Manrope'] leading-relaxed">{notification.message}</p>
                   </div>
                   {!notification.is_read && (
                     <button
                       type="button"
                       onClick={() => void markRead(notification.id)}
-                      className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs font-[DM_Sans] text-[#FED609] font-bold underline"
+                      className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs font-['DM_Sans'] text-[#FED609] font-bold underline"
                     >
                       Mark as read
                     </button>
@@ -450,12 +452,12 @@ export function OwnerNotificationsPage() {
         )}
 
         {/* WhatsApp Bot Link */}
-        <div className="bg-white rounded-xl shadow-sm border border-[#FED609]/10 p-6">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#92700A]">WhatsApp Bot Link</p>
-          <h3 className="font-[Sora] font-bold text-xl text-[#1A1A1A] mt-3">Owner WhatsApp number</h3>
-          <p className="text-sm text-[#6B7280] mt-2">
+        <div className="bg-[#FFFAE2] border border-[#FED609]/20 rounded-2xl shadow-sm p-6">
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#92700A] font-['DM_Sans']">WhatsApp Bot Link</p>
+          <h3 className="font-['Sora'] font-bold text-xl text-[#1A1A1A] mt-3">Owner WhatsApp number</h3>
+          <p className="text-sm text-[#6B7280] font-['Manrope'] mt-2">
             Set the number that will send commands to the bot. Use E.164 format, for example{' '}
-            <code className="bg-[#FEFAEF] px-1 py-0.5 rounded text-xs font-mono">+9198XXXXXXX</code>.
+            <code className="bg-white px-1.5 py-0.5 rounded text-xs font-mono border border-[#FED609]/20">+9198XXXXXXX</code>.
           </p>
           <div className="mt-4 space-y-3">
             <FormInput
@@ -470,7 +472,7 @@ export function OwnerNotificationsPage() {
                 type="button"
                 onClick={() => void saveWhatsappNumber()}
                 disabled={savingWhatsapp}
-                className="bg-[#25D366] text-white px-5 py-2.5 rounded-lg font-[DM_Sans] font-bold text-sm shadow-sm hover:bg-[#1EBE5C] transition-all active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="bg-[#FED609] text-[#1A1A1A] px-5 py-2.5 rounded-xl font-['DM_Sans'] font-bold text-sm shadow-sm hover:bg-[#FFD70B] transition-all active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {savingWhatsapp ? 'Saving...' : 'Save WhatsApp Number'}
               </button>
@@ -481,13 +483,13 @@ export function OwnerNotificationsPage() {
                   setWhatsappStatus(null)
                 }}
                 disabled={savingWhatsapp}
-                className="border border-[rgba(0,0,0,0.08)] bg-[#FEFAEF] text-[#4B5563] px-5 py-2.5 rounded-lg font-[DM_Sans] font-bold text-sm hover:bg-[#FFFAE2] transition-all active:scale-95 disabled:opacity-60"
+                className="border border-[#FED609]/30 bg-white text-[#4B5563] px-5 py-2.5 rounded-xl font-['DM_Sans'] font-bold text-sm hover:bg-[#FEFAEF] transition-all active:scale-95 disabled:opacity-60"
               >
                 Reset
               </button>
             </div>
-            <p className="text-xs text-[#6B7280]">
-              After saving, send <code className="bg-[#FEFAEF] px-1 rounded text-xs font-mono">help</code> from this same number to your Meta test number on WhatsApp to verify bot replies.
+            <p className="text-xs text-[#6B7280] font-['Manrope']">
+              After saving, send <code className="bg-white px-1 rounded text-xs font-mono border border-[#FED609]/20">help</code> from this same number to your Meta test number on WhatsApp to verify bot replies.
             </p>
             {whatsappStatus && (
               <p className="text-xs font-medium text-[#10B981]">{whatsappStatus}</p>
@@ -497,10 +499,10 @@ export function OwnerNotificationsPage() {
 
         {/* Notification Preferences */}
         {preferences && (
-          <div className="bg-white rounded-xl shadow-sm border border-[#FED609]/10 p-6">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#92700A]">Preferences</p>
-            <h3 className="font-[Sora] font-bold text-xl text-[#1A1A1A] mt-3">Delivery preferences</h3>
-            <p className="text-sm text-[#6B7280] mt-2">Choose which channels should receive owner automation alerts.</p>
+          <div className="bg-white rounded-2xl shadow-sm border border-[rgba(0,0,0,0.06)] p-6">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#92700A] font-['DM_Sans']">Preferences</p>
+            <h3 className="font-['Sora'] font-bold text-xl text-[#1A1A1A] mt-3">Delivery preferences</h3>
+            <p className="text-sm text-[#6B7280] font-['Manrope'] mt-2">Choose which channels should receive owner automation alerts.</p>
             <div className="mt-5 grid gap-3">
               {preferenceLabels.map((item) => (
                 <FormToggle
@@ -517,10 +519,10 @@ export function OwnerNotificationsPage() {
         )}
 
         {/* Delivery Logs */}
-        <div className="bg-white rounded-xl shadow-sm border border-[#FED609]/10 p-6">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#92700A]">Delivery Logs</p>
-          <h3 className="font-[Sora] font-bold text-xl text-[#1A1A1A] mt-3">Recent Telegram deliveries</h3>
-          <p className="text-sm text-[#6B7280] mt-2">Latest 10 Telegram delivery attempts for this owner account.</p>
+        <div className="bg-white rounded-2xl shadow-sm border border-[rgba(0,0,0,0.06)] p-6">
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#92700A] font-['DM_Sans']">Delivery Logs</p>
+          <h3 className="font-['Sora'] font-bold text-xl text-[#1A1A1A] mt-3">Recent Telegram deliveries</h3>
+          <p className="text-sm text-[#6B7280] font-['Manrope'] mt-2">Latest 10 Telegram delivery attempts for this owner account.</p>
           <div className="mt-5">
             {loadingDeliveryLogs ? (
               <LoadingState message="Loading delivery logs..." rows={3} />
@@ -533,7 +535,7 @@ export function OwnerNotificationsPage() {
               <DataTable headers={['Event', 'Status', 'Attempts', 'Created']}>
                 {deliveryLogs.map((log) => (
                   <tr key={log.id}>
-                    <td className="px-4 py-3 text-[#1A1A1A]">{log.event_type}</td>
+                    <td className="px-4 py-3 text-sm text-[#1A1A1A] font-['Manrope']">{log.event_type}</td>
                     <td className="px-4 py-3">
                       <span
                         className={
@@ -548,8 +550,8 @@ export function OwnerNotificationsPage() {
                         {log.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-[#4B5563]">{log.attempts}</td>
-                    <td className="px-4 py-3 text-[#6B7280]">{new Date(log.created_at).toLocaleString()}</td>
+                    <td className="px-4 py-3 text-sm text-[#4B5563]">{log.attempts}</td>
+                    <td className="px-4 py-3 text-sm text-[#6B7280]">{new Date(log.created_at).toLocaleString()}</td>
                   </tr>
                 ))}
               </DataTable>
@@ -559,10 +561,10 @@ export function OwnerNotificationsPage() {
 
         {/* Load More */}
         {filteredNotifications.length > 0 && (
-          <div className="flex justify-center pb-4">
+          <div className="mt-8 flex justify-center pb-4">
             <button
               type="button"
-              className="bg-[#FED609] hover:bg-[#FFD70B] text-[#1A1A1A] font-[DM_Sans] font-bold px-8 py-3 rounded-xl transition-all shadow-md active:scale-95 flex items-center gap-2"
+              className="bg-[#FED609] hover:bg-[#FFD70B] text-[#1A1A1A] font-['DM_Sans'] font-bold px-8 py-3 rounded-xl transition-all shadow-md active:scale-95 flex items-center gap-2 text-sm"
             >
               Load More
               <ChevronDown className="w-4 h-4" />

@@ -1,16 +1,18 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import {
   Building2,
-  Users,
-  UserRoundPlus,
-  Pencil,
-  Trash2,
-  Eye,
-  MessageCircle,
-  Send,
   ChevronLeft,
   ChevronRight,
+  Eye,
+  MessageCircle,
+  Pencil,
+  Send,
+  Trash2,
+  UserRoundPlus,
+  Users,
+  X,
 } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 import { Button } from '../../components/common/Button'
 import { EmptyState } from '../../components/common/EmptyState'
@@ -76,14 +78,14 @@ function sanitizeRentInput(value: string, currencyMarker: string): string {
 function getPaymentStatusStyle(status: Tenant['payment_status']) {
   switch (status) {
     case 'paid':
-      return 'bg-green-100 text-green-700 border-green-200'
+      return { badge: 'bg-green-100 text-green-700 border-green-200', dot: 'bg-green-500' }
     case 'overdue':
-      return 'bg-red-100 text-red-700 border-red-200'
+      return { badge: 'bg-red-100 text-red-700 border-red-200', dot: 'bg-red-500' }
     case 'partial':
-      return 'bg-yellow-100 text-yellow-700 border-yellow-200'
+      return { badge: 'bg-yellow-100 text-yellow-700 border-yellow-200', dot: 'bg-yellow-500' }
     case 'pending':
     default:
-      return 'bg-orange-100 text-orange-700 border-orange-200'
+      return { badge: 'bg-orange-100 text-orange-700 border-orange-200', dot: 'bg-orange-400' }
   }
 }
 
@@ -100,6 +102,178 @@ function getTenantStatusStyle(status: Tenant['status']) {
   }
 }
 
+// Tenant Detail Side Panel
+type TenantDetailPanelProps = {
+  tenant: Tenant
+  propertyName: string
+  currencyCode: string
+  onClose: () => void
+  onEdit: (tenant: Tenant) => void
+  onDelete: (tenantId: string) => void
+  busy: boolean
+}
+
+function TenantDetailPanel({ tenant, propertyName, currencyCode, onClose, onEdit, onDelete, busy }: TenantDetailPanelProps) {
+  const payStyle = getPaymentStatusStyle(tenant.payment_status)
+  const initials = tenant.full_name
+    .split(' ')
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase()
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, x: 32 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: 32 }}
+        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        className="bg-white rounded-2xl shadow-lg border border-[#FED609]/15 overflow-hidden sticky top-6"
+      >
+        {/* Gold accent top */}
+        <div className="h-1 bg-[#FED609] w-full" />
+
+        {/* Header */}
+        <div className="p-5 border-b border-[#FED609]/10 bg-[#FFFAE2]/50">
+          <div className="flex justify-between items-start mb-4">
+            <span className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest font-['DM_Sans']">
+              Tenant Details
+            </span>
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-7 h-7 rounded-full flex items-center justify-center text-[#6B7280] hover:bg-[#FED609]/20 hover:text-[#1A1A1A] transition-colors"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-[#FED609]/20 border-2 border-[#FED609]/30 flex items-center justify-center text-sm font-bold text-[#1A1A1A] font-['Sora'] flex-shrink-0">
+              {initials}
+            </div>
+            <div className="min-w-0">
+              <h3 className="font-['Sora'] font-bold text-base text-[#1A1A1A] truncate">{tenant.full_name}</h3>
+              <p className="text-xs text-[#6B7280] font-['Manrope'] truncate">{tenant.email ?? 'No email'}</p>
+            </div>
+          </div>
+          {/* Status badges */}
+          <div className="flex flex-wrap gap-2 mt-3">
+            <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase border ${payStyle.badge}`}>
+              {tenant.payment_status}
+            </span>
+            <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase border ${getTenantStatusStyle(tenant.status)}`}>
+              {tenant.status}
+            </span>
+          </div>
+        </div>
+
+        {/* Details */}
+        <div className="p-5 space-y-4">
+          {/* Property / Unit */}
+          <div>
+            <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mb-1 font-['DM_Sans']">Property / Unit</p>
+            <p className="text-sm font-semibold text-[#1A1A1A] font-['Manrope']">{propertyName}</p>
+          </div>
+
+          {/* Rent & Due */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-[#FEFAEF] rounded-xl p-3 border border-[#FED609]/10">
+              <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mb-1 font-['DM_Sans']">Monthly Rent</p>
+              <p className="text-base font-bold text-[#1A1A1A] font-['Sora']">
+                {formatCurrency(tenant.monthly_rent, currencyCode)}
+              </p>
+            </div>
+            <div className="bg-[#FEFAEF] rounded-xl p-3 border border-[#FED609]/10">
+              <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mb-1 font-['DM_Sans']">Next Due</p>
+              <p className="text-sm font-bold text-[#1A1A1A] font-['Sora']">
+                {formatDate(getNextDueDate(tenant.payment_due_day).toISOString())}
+              </p>
+            </div>
+          </div>
+
+          {/* Lease period */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mb-0.5 font-['DM_Sans']">Lease Start</p>
+              <p className="text-sm text-[#1A1A1A] font-['Manrope']">{formatDate(tenant.lease_start_date) || '—'}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mb-0.5 font-['DM_Sans']">Lease End</p>
+              <p className="text-sm text-[#1A1A1A] font-['Manrope']">{formatDate(tenant.lease_end_date) || '—'}</p>
+            </div>
+          </div>
+
+          {/* Contact */}
+          {tenant.phone ? (
+            <div>
+              <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mb-0.5 font-['DM_Sans']">Phone</p>
+              <p className="text-sm text-[#1A1A1A] font-['Manrope']">{tenant.phone}</p>
+            </div>
+          ) : null}
+
+          {/* Access ID */}
+          <div>
+            <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mb-0.5 font-['DM_Sans']">Access ID</p>
+            <p className="text-sm font-mono text-[#1A1A1A] bg-[#FEFAEF] rounded-lg px-3 py-1.5 border border-neutral-100 inline-block">
+              {tenant.tenant_access_id}
+            </p>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="p-5 border-t border-[#FED609]/10 space-y-2">
+          {/* Messaging */}
+          <div className="flex gap-2">
+            <button
+              type="button"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 font-bold text-xs transition-colors font-['DM_Sans'] border border-[#25D366]/20"
+            >
+              <MessageCircle className="h-4 w-4" />
+              WhatsApp
+            </button>
+            <button
+              type="button"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#0088cc]/10 text-[#0088cc] hover:bg-[#0088cc]/20 font-bold text-xs transition-colors font-['DM_Sans'] border border-[#0088cc]/20"
+            >
+              <Send className="h-4 w-4" />
+              Telegram
+            </button>
+          </div>
+          {/* Edit / View */}
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => onEdit(tenant)}
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#FED609] hover:bg-[#FFD70B] text-[#1A1A1A] font-bold text-xs transition-colors font-['DM_Sans'] shadow-sm"
+            >
+              <Pencil className="h-3.5 w-3.5" />
+              Edit
+            </button>
+            <Button
+              to={`/owner/tenants/${tenant.id}`}
+              variant="outline"
+              size="sm"
+              className="flex-1 justify-center rounded-xl border-neutral-200 text-[#1A1A1A] py-2.5 font-['DM_Sans']"
+              iconLeft={<Eye className="h-3.5 w-3.5" />}
+            >
+              View
+            </Button>
+            <button
+              type="button"
+              onClick={() => void onDelete(tenant.id)}
+              disabled={busy}
+              className="w-9 h-9 flex items-center justify-center rounded-xl bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-colors border border-red-100 disabled:opacity-40"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  )
+}
+
 export function OwnerTenantsPage() {
   const { token, owner } = useOwnerAuth()
   const [tenants, setTenants] = useState<Tenant[]>([])
@@ -112,6 +286,7 @@ export function OwnerTenantsPage() {
   const [showTenantForm, setShowTenantForm] = useState(false)
   const [form, setForm] = useState(buildEmptyTenantForm)
   const [filterPropertyId, setFilterPropertyId] = useState('')
+  const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null)
   const ownerCurrencyCode = owner?.organization?.currency_code ?? 'INR'
   const ownerCurrencyMarker = getCurrencyMarker(ownerCurrencyCode)
 
@@ -249,6 +424,7 @@ export function OwnerTenantsPage() {
     try {
       setBusy(true)
       await api.deleteOwnerTenant(token, tenantId)
+      if (selectedTenant?.id === tenantId) setSelectedTenant(null)
       await loadData()
     } catch (deleteError) {
       setError(deleteError instanceof Error ? deleteError.message : 'Failed to delete tenant')
@@ -289,20 +465,20 @@ export function OwnerTenantsPage() {
       {/* Page Header */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold font-[Sora] text-[#1A1A1A]">Tenants</h2>
-          <p className="text-[#6B7280] mt-1 font-[Manrope]">
-            Manage your residents and lease agreements across all properties.
+          <h2 className="text-3xl font-bold font-['Sora'] text-[#1A1A1A]">Tenants</h2>
+          <p className="text-[#6B7280] mt-1 font-['Manrope'] text-sm">
+            Manage your residents and lease agreements across Dubai properties.
           </p>
         </div>
         <div className="flex items-center gap-3">
           {/* Filter by Property */}
           <div className="relative">
             <select
-              className="appearance-none bg-white border border-[#FED609]/20 rounded-lg px-4 py-2.5 pr-10 text-sm font-medium focus:ring-[#FED609] focus:border-[#FED609] outline-none cursor-pointer text-[#1A1A1A] font-[DM_Sans]"
+              className="appearance-none bg-white border border-[#FED609]/15 rounded-xl px-4 py-2.5 pr-9 text-sm font-medium focus:ring-2 focus:ring-[#FED609] focus:border-[#FED609] outline-none cursor-pointer text-[#1A1A1A] font-['DM_Sans'] shadow-sm"
               value={filterPropertyId}
               onChange={(e) => setFilterPropertyId(e.target.value)}
             >
-              <option value="">All Properties</option>
+              <option value="">Filter by Property</option>
               {properties.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.property_name}
@@ -320,7 +496,7 @@ export function OwnerTenantsPage() {
               setEditingTenantId(null)
               setForm(buildEmptyTenantForm(properties[0]?.id ?? ''))
             }}
-            className="bg-[#FED609] hover:bg-[#FFD70B] text-[#1A1A1A] font-bold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-all shadow-lg shadow-[#FED609]/10 font-[DM_Sans] text-sm"
+            className="bg-[#FED609] hover:bg-[#FFD70B] text-[#1A1A1A] font-bold px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-md font-['DM_Sans'] text-sm"
           >
             <UserRoundPlus className="w-4 h-4" />
             Add Tenant
@@ -330,25 +506,25 @@ export function OwnerTenantsPage() {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-white rounded-xl border border-[#FED609]/10 shadow-sm p-4">
-          <p className="text-xs font-bold uppercase tracking-widest text-[#6B7280] font-[DM_Sans]">Total Tenants</p>
-          <p className="text-2xl font-bold font-[Sora] text-[#1A1A1A] mt-1">{tenants.length}</p>
+        <div className="bg-white rounded-2xl border border-[#FED609]/10 shadow-sm p-5 hover:border-[#FED609]/30 transition-colors">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B7280] font-['DM_Sans']">Total Tenants</p>
+          <p className="text-3xl font-bold font-['Sora'] text-[#1A1A1A] mt-1.5">{tenants.length}</p>
         </div>
-        <div className="bg-white rounded-xl border border-[#FED609]/10 shadow-sm p-4">
-          <p className="text-xs font-bold uppercase tracking-widest text-[#6B7280] font-[DM_Sans]">Paid</p>
-          <p className="text-2xl font-bold font-[Sora] text-green-600 mt-1">
+        <div className="bg-white rounded-2xl border border-[#FED609]/10 shadow-sm p-5 hover:border-[#FED609]/30 transition-colors">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B7280] font-['DM_Sans']">Paid</p>
+          <p className="text-3xl font-bold font-['Sora'] text-green-600 mt-1.5">
             {tenants.filter((t) => t.payment_status === 'paid').length}
           </p>
         </div>
-        <div className="bg-white rounded-xl border border-[#FED609]/10 shadow-sm p-4">
-          <p className="text-xs font-bold uppercase tracking-widest text-[#6B7280] font-[DM_Sans]">Pending</p>
-          <p className="text-2xl font-bold font-[Sora] text-orange-500 mt-1">
+        <div className="bg-white rounded-2xl border border-[#FED609]/10 shadow-sm p-5 hover:border-[#FED609]/30 transition-colors">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B7280] font-['DM_Sans']">Pending</p>
+          <p className="text-3xl font-bold font-['Sora'] text-orange-500 mt-1.5">
             {tenants.filter((t) => t.payment_status === 'pending').length}
           </p>
         </div>
-        <div className="bg-white rounded-xl border border-[#FED609]/10 shadow-sm p-4">
-          <p className="text-xs font-bold uppercase tracking-widest text-[#6B7280] font-[DM_Sans]">Overdue</p>
-          <p className="text-2xl font-bold font-[Sora] text-red-600 mt-1">
+        <div className="bg-white rounded-2xl border border-[#FED609]/10 shadow-sm p-5 hover:border-[#FED609]/30 transition-colors">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B7280] font-['DM_Sans']">Overdue</p>
+          <p className="text-3xl font-bold font-['Sora'] text-red-600 mt-1.5">
             {tenants.filter((t) => t.payment_status === 'overdue').length}
           </p>
         </div>
@@ -382,144 +558,147 @@ export function OwnerTenantsPage() {
         />
       ) : null}
 
-      {/* Tenants Table */}
+      {/* Table + Detail Panel layout */}
       {!loading && filteredTenants.length > 0 ? (
-        <div className="bg-white rounded-xl shadow-sm border border-[#FED609]/10 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-[#FED609] text-[#1A1A1A]">
-                  <th className="px-6 py-4 font-bold font-[Sora] text-sm uppercase tracking-wider">Tenant Name</th>
-                  <th className="px-6 py-4 font-bold font-[Sora] text-sm uppercase tracking-wider">Property</th>
-                  <th className="px-6 py-4 font-bold font-[Sora] text-sm uppercase tracking-wider text-center">Access ID</th>
-                  <th className="px-6 py-4 font-bold font-[Sora] text-sm uppercase tracking-wider">Monthly Rent</th>
-                  <th className="px-6 py-4 font-bold font-[Sora] text-sm uppercase tracking-wider">Lease End</th>
-                  <th className="px-6 py-4 font-bold font-[Sora] text-sm uppercase tracking-wider">Due Date</th>
-                  <th className="px-6 py-4 font-bold font-[Sora] text-sm uppercase tracking-wider">Payment</th>
-                  <th className="px-6 py-4 font-bold font-[Sora] text-sm uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-4 font-bold font-[Sora] text-sm uppercase tracking-wider text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="text-sm font-[Manrope]">
-                {filteredTenants.map((tenant, index) => (
-                  <tr
-                    key={tenant.id}
-                    className={`border-b border-[#FED609]/5 hover:bg-[#FFFAE2] transition-colors ${
-                      index % 2 === 0 ? 'bg-[#FEFAEF]/30' : 'bg-white'
-                    }`}
-                  >
-                    <td className="px-6 py-4">
-                      <p className="font-semibold text-[#1A1A1A]">{tenant.full_name}</p>
-                      <p className="text-xs text-[#6B7280]">{tenant.email ?? 'No email'}</p>
-                    </td>
-                    <td className="px-6 py-4 text-[#6B7280]">{getPropertyName(tenant.property_id)}</td>
-                    <td className="px-6 py-4 text-center font-medium text-[#1A1A1A]">
-                      {tenant.tenant_access_id}
-                    </td>
-                    <td className="px-6 py-4 font-bold text-[#1A1A1A]">
-                      {formatCurrency(tenant.monthly_rent, ownerCurrencyCode)}
-                    </td>
-                    <td className="px-6 py-4 text-[#6B7280]">{formatDate(tenant.lease_end_date)}</td>
-                    <td className="px-6 py-4 text-[#6B7280]">
-                      {formatDate(getNextDueDate(tenant.payment_due_day).toISOString())}
-                    </td>
-                    <td className="px-6 py-4">
-                      <span
-                        className={`px-3 py-1 rounded-full font-bold text-xs uppercase border ${getPaymentStatusStyle(tenant.payment_status)}`}
-                      >
-                        {tenant.payment_status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span
-                        className={`px-3 py-1 rounded-full font-bold text-xs uppercase border ${getTenantStatusStyle(tenant.status)}`}
-                      >
-                        {tenant.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex justify-end gap-1">
-                        <Button
-                          to={`/owner/tenants/${tenant.id}`}
-                          variant="ghost"
-                          size="sm"
-                          className="p-1.5 hover:bg-[#FED609]/20 rounded-md text-[#1A1A1A]"
-                          iconLeft={<Eye className="w-4 h-4" />}
-                        >
-                          {''}
-                        </Button>
-                        <button
-                          type="button"
-                          title="Send WhatsApp"
-                          className="p-1.5 hover:bg-green-100 rounded-md transition-colors text-green-600"
-                        >
-                          <MessageCircle className="w-4 h-4" />
-                        </button>
-                        <button
-                          type="button"
-                          title="Send Telegram"
-                          className="p-1.5 hover:bg-blue-100 rounded-md transition-colors text-blue-500"
-                        >
-                          <Send className="w-4 h-4" />
-                        </button>
-                        <button
-                          type="button"
-                          title="Edit tenant"
-                          onClick={() => beginEdit(tenant)}
-                          className="p-1.5 hover:bg-[#FED609]/20 rounded-md transition-colors text-[#1A1A1A]"
-                        >
-                          <Pencil className="w-4 h-4" />
-                        </button>
-                        <button
-                          type="button"
-                          title="Delete tenant"
-                          onClick={() => void handleDelete(tenant.id)}
-                          disabled={busy}
-                          className="p-1.5 hover:bg-red-100 rounded-md transition-colors text-red-500 disabled:opacity-40"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
+        <div className={`flex gap-6 ${selectedTenant ? 'items-start' : ''}`}>
+          {/* Tenants Table */}
+          <div className="flex-1 min-w-0 bg-white rounded-2xl shadow-sm border border-[#FED609]/10 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-[#FED609] text-[#1A1A1A]">
+                    <th className="px-5 py-4 font-bold font-['DM_Sans'] text-xs uppercase tracking-wider">Tenant Name</th>
+                    <th className="px-5 py-4 font-bold font-['DM_Sans'] text-xs uppercase tracking-wider">Property</th>
+                    <th className="px-5 py-4 font-bold font-['DM_Sans'] text-xs uppercase tracking-wider hidden md:table-cell">Unit</th>
+                    <th className="px-5 py-4 font-bold font-['DM_Sans'] text-xs uppercase tracking-wider hidden lg:table-cell">Lease End</th>
+                    <th className="px-5 py-4 font-bold font-['DM_Sans'] text-xs uppercase tracking-wider">Payment</th>
+                    <th className="px-5 py-4 font-bold font-['DM_Sans'] text-xs uppercase tracking-wider text-right">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="text-sm font-['Manrope']">
+                  {filteredTenants.map((tenant, index) => {
+                    const payStyle = getPaymentStatusStyle(tenant.payment_status)
+                    const isSelected = selectedTenant?.id === tenant.id
+                    return (
+                      <tr
+                        key={tenant.id}
+                        onClick={() => setSelectedTenant(isSelected ? null : tenant)}
+                        className={`border-b border-[#FED609]/5 cursor-pointer transition-colors ${
+                          isSelected
+                            ? 'bg-[#FFFAE2] border-l-2 border-l-[#FED609]'
+                            : index % 2 === 0
+                            ? 'bg-[#FEFAEF]/30 hover:bg-[#FFFAE2]/60'
+                            : 'bg-white hover:bg-[#FFFAE2]/60'
+                        }`}
+                      >
+                        <td className="px-5 py-4">
+                          <p className="font-semibold text-[#1A1A1A] truncate max-w-[140px]">{tenant.full_name}</p>
+                          <p className="text-xs text-[#6B7280] truncate">{tenant.email ?? 'No email'}</p>
+                        </td>
+                        <td className="px-5 py-4 text-[#6B7280] truncate max-w-[120px]">{getPropertyName(tenant.property_id)}</td>
+                        <td className="px-5 py-4 text-[#6B7280] hidden md:table-cell">
+                          {'—'}
+                        </td>
+                        <td className="px-5 py-4 text-[#6B7280] hidden lg:table-cell">{formatDate(tenant.lease_end_date)}</td>
+                        <td className="px-5 py-4">
+                          <span
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-bold text-[10px] uppercase border ${payStyle.badge}`}
+                          >
+                            <span className={`w-1.5 h-1.5 rounded-full ${payStyle.dot}`} />
+                            {tenant.payment_status}
+                          </span>
+                        </td>
+                        <td className="px-5 py-4">
+                          <div className="flex justify-end gap-1" onClick={(e) => e.stopPropagation()}>
+                            <button
+                              type="button"
+                              title="Send WhatsApp"
+                              className="p-1.5 hover:bg-green-100 rounded-lg transition-colors text-green-600"
+                            >
+                              <MessageCircle className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              type="button"
+                              title="Send Telegram"
+                              className="p-1.5 hover:bg-blue-100 rounded-lg transition-colors text-blue-500"
+                            >
+                              <Send className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              type="button"
+                              title="Edit tenant"
+                              onClick={() => beginEdit(tenant)}
+                              className="p-1.5 hover:bg-[#FED609]/20 rounded-lg transition-colors text-[#1A1A1A]"
+                            >
+                              <Pencil className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              type="button"
+                              title="Delete tenant"
+                              onClick={() => void handleDelete(tenant.id)}
+                              disabled={busy}
+                              className="p-1.5 hover:bg-red-100 rounded-lg transition-colors text-red-500 disabled:opacity-40"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
 
-          {/* Table Footer */}
-          <div className="px-6 py-4 bg-white border-t border-[#FED609]/10 flex justify-between items-center">
-            <span className="text-sm text-[#6B7280] font-[DM_Sans]">
-              Showing {filteredTenants.length} of {tenants.length} tenant{tenants.length !== 1 ? 's' : ''}
-            </span>
-            <div className="flex gap-1">
-              <button
-                type="button"
-                className="w-8 h-8 rounded flex items-center justify-center border border-[#FED609]/20 text-[#6B7280] hover:bg-[#FED609] hover:text-[#1A1A1A] transition-colors"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                className="w-8 h-8 rounded flex items-center justify-center bg-[#FED609] text-[#1A1A1A] font-bold"
-              >
-                1
-              </button>
-              <button
-                type="button"
-                className="w-8 h-8 rounded flex items-center justify-center border border-[#FED609]/20 text-[#6B7280] hover:bg-[#FED609] hover:text-[#1A1A1A] transition-colors"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
+            {/* Table Footer */}
+            <div className="px-5 py-4 bg-white border-t border-[#FED609]/10 flex justify-between items-center">
+              <span className="text-xs text-[#6B7280] font-['DM_Sans']">
+                Showing {filteredTenants.length} of {tenants.length} tenant{tenants.length !== 1 ? 's' : ''}
+              </span>
+              <div className="flex gap-1">
+                <button
+                  type="button"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center border border-[#FED609]/15 text-[#6B7280] hover:bg-[#FED609] hover:text-[#1A1A1A] transition-colors"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <button
+                  type="button"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#FED609] text-[#1A1A1A] font-bold text-sm"
+                >
+                  1
+                </button>
+                <button
+                  type="button"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center border border-[#FED609]/15 text-[#6B7280] hover:bg-[#FED609] hover:text-[#1A1A1A] transition-colors"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
+
+          {/* Tenant Detail Panel */}
+          {selectedTenant ? (
+            <div className="w-80 shrink-0">
+              <TenantDetailPanel
+                tenant={selectedTenant}
+                propertyName={getPropertyName(selectedTenant.property_id)}
+                currencyCode={ownerCurrencyCode}
+                onClose={() => setSelectedTenant(null)}
+                onEdit={beginEdit}
+                onDelete={handleDelete}
+                busy={busy}
+              />
+            </div>
+          ) : null}
         </div>
       ) : null}
 
       {/* Tip */}
       {!loading && properties.length > 0 && tenants.length > 0 ? (
-        <p className="text-xs text-[#6B7280] font-[DM_Sans]">
-          Tip: leave password blank while editing to keep the tenant's current password.
+        <p className="text-xs text-[#6B7280] font-['DM_Sans']">
+          Tip: click any row to view tenant details. Leave password blank while editing to keep the current password.
         </p>
       ) : null}
 

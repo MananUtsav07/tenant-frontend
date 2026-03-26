@@ -4,18 +4,19 @@ import { motion } from 'framer-motion'
 import {
   AlertTriangle,
   Bell,
-  BrainCircuit,
   Building2,
   CheckCheck,
   ChevronRight,
   Clock3,
+  CreditCard,
   MessageCircle,
-  PlusCircle,
   Send,
   Sparkles,
   TrendingUp,
+  UserPlus,
   Users,
   Wallet,
+  Wrench,
 } from 'lucide-react'
 
 import { Button } from '../../components/common/Button'
@@ -30,6 +31,45 @@ import { api } from '../../services/api'
 import type { OwnerPortfolioVisibilityOverview, OwnerRentPaymentApproval, OwnerSummary } from '../../types/api'
 import { formatCurrency, formatDate, formatDateTime } from '../../utils/date'
 import { revealUp, staggerParent, viewportOnce } from '../../utils/motion'
+
+// Bar chart data (static visual, representative of collection trends)
+const chartBars = [
+  { label: 'Jan', pct: 60, opacity: 'bg-[#FED609]/20', tooltip: 'AED 420k' },
+  { label: 'Feb', pct: 75, opacity: 'bg-[#FED609]/40', tooltip: 'AED 510k' },
+  { label: 'Mar', pct: 85, opacity: 'bg-[#FED609]/60', tooltip: 'AED 580k' },
+  { label: 'Apr', pct: 95, opacity: 'bg-[#FED609]', tooltip: 'AED 640k' },
+  { label: 'May', pct: 90, opacity: 'bg-[#FED609]/80', tooltip: 'AED 610k' },
+  { label: 'Jun', pct: 100, opacity: 'bg-[#FED609]', tooltip: 'AED 680k' },
+]
+
+// Static recent activity items
+const recentActivity = [
+  {
+    icon: <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 shrink-0"><CheckCheck className="w-5 h-5" /></div>,
+    title: 'Rent payment received',
+    time: '2 mins ago',
+    description: 'Unit 402, Marina Gate — processed and logged.',
+  },
+  {
+    icon: <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 shrink-0"><Wrench className="w-5 h-5" /></div>,
+    title: 'New ticket: AC Maintenance',
+    time: '1 hour ago',
+    description: 'Reported by a tenant in Business Bay Tower A.',
+  },
+  {
+    icon: <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shrink-0"><CreditCard className="w-5 h-5" /></div>,
+    title: 'Lease agreement signed',
+    time: '5 hours ago',
+    description: 'New tenant for JVC Villa #18 finalized documentation.',
+  },
+]
+
+// Upcoming reminders (static illustrative)
+const upcomingReminders = [
+  { month: 'Oct', day: '05', title: 'Bulk Rent Due', sub: '12 Units - Downtown', highlight: true },
+  { month: 'Oct', day: '12', title: 'Lease Expiry', sub: 'Marina Heights #1204', highlight: false },
+  { month: 'Oct', day: '20', title: 'Utility Inspection', sub: 'Palm Jumeirah Villa 4', highlight: false },
+]
 
 export function OwnerDashboardPage() {
   const { token, owner } = useOwnerAuth()
@@ -128,36 +168,36 @@ export function OwnerDashboardPage() {
   }
 
   const ownerName = owner?.full_name || owner?.company_name || 'Owner'
-  const organizationLabel = owner?.organization?.name || owner?.company_name || owner?.full_name || 'Portfolio'
 
   return (
-    <div className="space-y-8 p-6">
-      {/* Welcome Header */}
+    <div className="p-6 w-full bg-[#FEFAEF] min-h-screen">
+
+      {/* Greeting */}
       <motion.div
         variants={revealUp}
         initial="hidden"
         animate="show"
-        className="flex flex-wrap items-center justify-between gap-4"
+        className="mb-8 px-2"
       >
-        <div>
-          <h2 className="font-['Sora'] text-xl font-bold text-[#1A1A1A]">
-            Welcome back, {ownerName}
-          </h2>
-          <div className="mt-2 flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(254,214,9,0.3)] bg-[rgba(254,214,9,0.1)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-tight text-[#92700A]">
-              {organizationLabel}
-            </span>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h1 className="font-['Sora'] text-3xl font-extrabold tracking-tight text-[#1A1A1A]">
+              Welcome back, {ownerName}
+            </h1>
+            <p className="font-['Manrope'] text-[#6B7280] font-medium mt-1">
+              Here is what&apos;s happening with your portfolio today.
+            </p>
           </div>
+          <Button
+            type="button"
+            onClick={() => void handleProcessReminders()}
+            disabled={processing}
+            variant="secondary"
+            iconLeft={<Clock3 className="h-4 w-4" />}
+          >
+            {processing ? 'Processing...' : 'Process reminder cycle'}
+          </Button>
         </div>
-        <Button
-          type="button"
-          onClick={() => void handleProcessReminders()}
-          disabled={processing}
-          variant="secondary"
-          iconLeft={<Clock3 className="h-4 w-4" />}
-        >
-          {processing ? 'Processing...' : 'Process reminder cycle'}
-        </Button>
       </motion.div>
 
       {error ? <ErrorState message={error} /> : null}
@@ -170,261 +210,317 @@ export function OwnerDashboardPage() {
             variants={staggerParent}
             initial="hidden"
             animate="show"
-            className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
           >
-            {/* Card: Active Tenants */}
+            {/* Total Properties */}
             <motion.div
               variants={revealUp}
               whileInView="show"
               viewport={viewportOnce}
-              className="rounded-xl border-l-4 border-[#FED609] bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+              className="bg-white p-6 rounded-xl shadow-sm border border-transparent hover:border-[#FED609]/20 transition-all group"
             >
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-[#6B7280]">Active Tenants</p>
-                  <h3 className="mt-1 font-['Sora'] text-3xl font-bold text-[#1A1A1A]">{summary.active_tenants}</h3>
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 rounded-full bg-[#FED609]/10 flex items-center justify-center text-[#FED609] group-hover:scale-110 transition-transform">
+                  <Building2 className="w-6 h-6" />
                 </div>
-                <div className="rounded-lg bg-[#FFFAE2] p-3">
-                  <Users className="h-6 w-6 text-[#FED609]" />
-                </div>
+                <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">Portfolio</span>
               </div>
-              <div className="mt-4 flex items-center gap-1 text-xs font-medium text-[#6B7280]">
-                <span>Residents in portfolio</span>
+              <div className="text-[#6B7280] text-sm font-['DM_Sans'] font-medium mb-1 uppercase tracking-wider">Total Properties</div>
+              <div className="font-['Sora'] text-3xl font-extrabold text-[#1A1A1A]">
+                {summary.active_tenants > 0 ? '—' : '0'}
               </div>
             </motion.div>
 
-            {/* Card: Open Tickets */}
+            {/* Active Tenants */}
             <motion.div
               variants={revealUp}
               whileInView="show"
               viewport={viewportOnce}
-              className="rounded-xl border-l-4 border-orange-400 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+              className="bg-white p-6 rounded-xl shadow-sm border border-transparent hover:border-[#FED609]/20 transition-all group"
             >
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-[#6B7280]">Open Tickets</p>
-                  <h3 className="mt-1 font-['Sora'] text-3xl font-bold text-[#1A1A1A]">{summary.open_tickets}</h3>
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 rounded-full bg-[#FED609]/10 flex items-center justify-center text-[#FED609] group-hover:scale-110 transition-transform">
+                  <Users className="w-6 h-6" />
                 </div>
-                <div className="rounded-lg bg-orange-50 p-3">
-                  <AlertTriangle className="h-6 w-6 text-orange-400" />
-                </div>
-              </div>
-              <div className="mt-4 flex items-center gap-1 text-xs font-medium text-orange-600">
-                <AlertTriangle className="h-3.5 w-3.5" />
-                <span>Requires attention</span>
-              </div>
-            </motion.div>
-
-            {/* Card: Overdue Rent */}
-            <motion.div
-              variants={revealUp}
-              whileInView="show"
-              viewport={viewportOnce}
-              className="rounded-xl border-l-4 border-red-400 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-[#6B7280]">Overdue Rent</p>
-                  <h3 className="mt-1 font-['Sora'] text-3xl font-bold text-[#1A1A1A]">{summary.overdue_rent}</h3>
-                </div>
-                <div className="rounded-lg bg-red-50 p-3">
-                  <Clock3 className="h-6 w-6 text-red-400" />
-                </div>
-              </div>
-              <div className="mt-4 flex items-center gap-1 text-xs font-medium text-red-600">
-                {summary.overdue_rent > 0 ? (
-                  <>
-                    <AlertTriangle className="h-3.5 w-3.5" />
-                    <span>Collections need attention</span>
-                  </>
-                ) : (
-                  <span className="text-emerald-600">Collections are stable</span>
-                )}
-              </div>
-            </motion.div>
-
-            {/* Card: Awaiting Approvals */}
-            <motion.div
-              variants={revealUp}
-              whileInView="show"
-              viewport={viewportOnce}
-              className="rounded-xl border-l-4 border-emerald-500 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-[#6B7280]">Awaiting Approvals</p>
-                  <h3 className="mt-1 font-['Sora'] text-3xl font-bold text-[#1A1A1A]">{summary.awaiting_approvals}</h3>
-                </div>
-                <div className="rounded-lg bg-emerald-50 p-3">
-                  <Wallet className="h-6 w-6 text-emerald-500" />
-                </div>
-              </div>
-              <div className="mt-4 flex items-center gap-1 text-xs font-medium text-emerald-600">
-                <CheckCheck className="h-3.5 w-3.5" />
-                <span>
-                  {summary.awaiting_approvals > 0 ? 'Payment confirmations pending' : 'Approval queue is clear'}
+                <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">
+                  Active
                 </span>
               </div>
+              <div className="text-[#6B7280] text-sm font-['DM_Sans'] font-medium mb-1 uppercase tracking-wider">Active Tenants</div>
+              <div className="font-['Sora'] text-3xl font-extrabold text-[#1A1A1A]">{summary.active_tenants}</div>
+            </motion.div>
+
+            {/* Open Tickets */}
+            <motion.div
+              variants={revealUp}
+              whileInView="show"
+              viewport={viewportOnce}
+              className="bg-white p-6 rounded-xl shadow-sm border border-transparent hover:border-[#FED609]/20 transition-all group"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 rounded-full bg-[#FED609]/10 flex items-center justify-center text-[#FED609] group-hover:scale-110 transition-transform">
+                  <AlertTriangle className="w-6 h-6" />
+                </div>
+                {summary.open_tickets > 0 && (
+                  <span className="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded">
+                    {summary.open_tickets > 3 ? `${summary.open_tickets} open` : 'Urgent'}
+                  </span>
+                )}
+              </div>
+              <div className="text-[#6B7280] text-sm font-['DM_Sans'] font-medium mb-1 uppercase tracking-wider">Open Tickets</div>
+              <div className="font-['Sora'] text-3xl font-extrabold text-[#1A1A1A]">{summary.open_tickets}</div>
+            </motion.div>
+
+            {/* Pending Payments / Awaiting Approvals */}
+            <motion.div
+              variants={revealUp}
+              whileInView="show"
+              viewport={viewportOnce}
+              className="bg-white p-6 rounded-xl shadow-sm border border-transparent hover:border-[#FED609]/20 transition-all group"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 rounded-full bg-[#FED609]/10 flex items-center justify-center text-[#FED609] group-hover:scale-110 transition-transform">
+                  <Wallet className="w-6 h-6" />
+                </div>
+                {summary.awaiting_approvals > 0 && (
+                  <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-1 rounded">
+                    Pending
+                  </span>
+                )}
+              </div>
+              <div className="text-[#6B7280] text-sm font-['DM_Sans'] font-medium mb-1 uppercase tracking-wider">Pending Payments</div>
+              <div className="font-['Sora'] text-3xl font-extrabold text-[#1A1A1A]">{summary.awaiting_approvals}</div>
             </motion.div>
           </motion.div>
 
-          {/* Main Dashboard Row: Payments Table + Quick Actions */}
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-10">
-            {/* Left: Operational Focus / Payments Panel (60%) */}
-            <motion.div
-              variants={revealUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={viewportOnce}
-              className="flex flex-col overflow-hidden rounded-xl border-t-4 border-[#FED609]/10 bg-white shadow-sm lg:col-span-6"
-            >
-              <div className="flex items-center justify-between border-b border-[#FEFAEF] p-6">
-                <h3 className="font-['Sora'] text-lg font-bold text-[#1A1A1A]">Portfolio Status</h3>
-                <Link
-                  to={ROUTES.ownerTenants}
-                  className="text-sm font-bold text-[#FED609] hover:underline"
-                >
-                  View Tenants
-                </Link>
-              </div>
+          {/* Main Dashboard Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-              {/* Stats summary rows */}
-              <div className="divide-y divide-[#FEFAEF]">
-                {/* Reminders pending row */}
-                <div className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-[#FEFAEF]/40">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[#FFFAE2]">
-                    <Bell className="h-5 w-5 text-[#FED609]" />
+            {/* Left Column: Rent Collection chart + Recent Activity */}
+            <div className="lg:col-span-8 space-y-8">
+
+              {/* Rent Collection Chart */}
+              <motion.div
+                variants={revealUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={viewportOnce}
+                className="bg-white p-8 rounded-xl shadow-sm"
+              >
+                <div className="flex items-center justify-between mb-8">
+                  <div>
+                    <h2 className="font-['Sora'] text-xl font-bold text-[#1A1A1A]">Rent Collection</h2>
+                    <p className="text-sm text-[#6B7280] font-['Manrope']">Monthly collection trends for 2024</p>
                   </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-bold text-[#1A1A1A]">Reminders Pending</p>
-                    <p className="text-xs text-[#6B7280]">Scheduled follow-ups across rent cycles</p>
+                  <div className="flex gap-2">
+                    <button type="button" className="px-3 py-1 text-xs font-bold bg-[#FED609] text-[#1A1A1A] rounded-full">Monthly</button>
+                    <button type="button" className="px-3 py-1 text-xs font-bold bg-gray-100 hover:bg-gray-200 rounded-full transition-colors">Quarterly</button>
                   </div>
-                  <span className="font-['Sora'] text-2xl font-bold text-[#1A1A1A]">{summary.reminders_pending}</span>
+                </div>
+                {/* CSS Bar Chart */}
+                <div className="flex items-end justify-between h-64 gap-6 px-2">
+                  {chartBars.map((bar) => (
+                    <div key={bar.label} className="flex flex-col items-center gap-2 flex-1">
+                      <div
+                        className={`w-full ${bar.opacity} rounded-t-lg relative group`}
+                        style={{ height: `${bar.pct}%` }}
+                      >
+                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#1A1A1A] text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                          {bar.tooltip}
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-bold text-[#6B7280] uppercase">{bar.label}</span>
+                    </div>
+                  ))}
                 </div>
 
-                {/* Unread notifications row */}
-                <div className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-[#FEFAEF]/40">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[#FFFAE2]">
-                    <Bell className="h-5 w-5 text-[#FED609]" />
+                {/* Portfolio metrics row below chart */}
+                <div className="mt-6 grid grid-cols-2 gap-4 pt-4 border-t border-[#FEFAEF]">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#FFFAE2]">
+                      <Bell className="h-4 w-4 text-[#FED609]" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-[#1A1A1A]">Reminders Pending</p>
+                      <p className="text-lg font-['Sora'] font-bold text-[#1A1A1A]">{summary.reminders_pending}</p>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-bold text-[#1A1A1A]">Unread Notifications</p>
-                    <p className="text-xs text-[#6B7280]">Resident-facing activity awaiting review</p>
+                  <div className="flex items-center gap-3">
+                    <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${summary.overdue_rent > 0 ? 'bg-red-50' : 'bg-emerald-50'}`}>
+                      <TrendingUp className={`h-4 w-4 ${summary.overdue_rent > 0 ? 'text-red-500' : 'text-emerald-500'}`} />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-[#1A1A1A]">
+                        {summary.overdue_rent > 0 ? 'Overdue Rent' : 'Collections Stable'}
+                      </p>
+                      <p className="text-lg font-['Sora'] font-bold text-[#1A1A1A]">
+                        {summary.overdue_rent > 0 ? summary.overdue_rent : '✓'}
+                      </p>
+                    </div>
                   </div>
-                  <span className="font-['Sora'] text-2xl font-bold text-[#1A1A1A]">{summary.unread_notifications}</span>
+                </div>
+              </motion.div>
+
+              {/* Recent Activity */}
+              <motion.div
+                variants={revealUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={viewportOnce}
+                className="bg-white rounded-xl shadow-sm overflow-hidden"
+              >
+                <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+                  <h2 className="font-['Sora'] text-xl font-bold text-[#1A1A1A]">Recent Activity</h2>
+                  <Link to={ROUTES.ownerTenants} className="text-[#FED609] font-bold text-sm hover:underline">
+                    View All
+                  </Link>
+                </div>
+                <div className="divide-y divide-gray-50">
+                  {recentActivity.map((item, idx) => (
+                    <div key={idx} className="p-6 flex items-start gap-4 hover:bg-[#FFFAE2] transition-colors">
+                      {item.icon}
+                      <div className="flex-1">
+                        <div className="flex justify-between items-start">
+                          <p className="font-bold text-[#1A1A1A] font-['Manrope']">{item.title}</p>
+                          <span className="text-xs text-[#6B7280]">{item.time}</span>
+                        </div>
+                        <p className="text-sm text-[#6B7280] font-['Manrope'] mt-1">{item.description}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
-                {/* Collections status row */}
-                <div className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-[#FEFAEF]/40">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-emerald-50">
-                    <TrendingUp className="h-5 w-5 text-emerald-500" />
+                {/* Unread notifications banner inside activity section */}
+                {summary.unread_notifications > 0 && (
+                  <div className="flex items-center justify-between p-5 border-t border-[#FEFAEF] bg-[rgba(254,214,9,0.04)]">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#FED609]">
+                        <Bell className="h-4 w-4 text-[#1A1A1A]" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-[#1A1A1A]">
+                          {summary.unread_notifications} unread notification{summary.unread_notifications !== 1 ? 's' : ''}
+                        </p>
+                        <p className="text-xs text-[#6B7280]">Awaiting your review</p>
+                      </div>
+                    </div>
+                    <Link
+                      to={ROUTES.ownerNotifications}
+                      className="flex items-center gap-2 rounded-lg bg-[#FED609] px-4 py-2 text-sm font-bold text-[#1A1A1A] hover:bg-[#FFD70B] active:scale-95 transition-all"
+                    >
+                      View all
+                      <ChevronRight className="h-4 w-4" />
+                    </Link>
                   </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-bold text-[#1A1A1A]">
-                      {summary.overdue_rent > 0 ? 'Collections need attention' : 'Collections are currently stable'}
-                    </p>
-                    <p className="text-xs text-[#6B7280]">
-                      {summary.overdue_rent > 0
-                        ? `${summary.overdue_rent} rent items are overdue and should be reviewed.`
-                        : 'No overdue rent items are currently flagged.'}
-                    </p>
-                  </div>
-                  <span
-                    className={`inline-flex rounded-full px-3 py-1 text-[10px] font-bold ${
-                      summary.overdue_rent > 0
-                        ? 'bg-red-100 text-red-600'
-                        : 'bg-emerald-100 text-emerald-700'
-                    }`}
-                  >
-                    {summary.overdue_rent > 0 ? 'Action Needed' : 'Stable'}
-                  </span>
-                </div>
+                )}
+              </motion.div>
+            </div>
 
-                {/* Approval queue row */}
-                <div className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-[#FEFAEF]/40">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[#FFFAE2]">
-                    <CheckCheck className="h-5 w-5 text-[#FED609]" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-bold text-[#1A1A1A]">
-                      {summary.awaiting_approvals > 0 ? 'Approval queue is active' : 'Approval queue is clear'}
-                    </p>
-                    <p className="text-xs text-[#6B7280]">
-                      {summary.awaiting_approvals > 0
-                        ? `${summary.awaiting_approvals} resident payment confirmations are waiting for review.`
-                        : 'No resident payment confirmations are waiting for review.'}
-                    </p>
-                  </div>
-                  <span
-                    className={`inline-flex rounded-full px-3 py-1 text-[10px] font-bold ${
-                      summary.awaiting_approvals > 0
-                        ? 'bg-orange-100 text-orange-600'
-                        : 'bg-[#FED609] text-[#1A1A1A]'
-                    }`}
-                  >
-                    {summary.awaiting_approvals > 0 ? 'Pending' : 'Clear'}
-                  </span>
-                </div>
-              </div>
-            </motion.div>
+            {/* Right Column: Quick Actions + Upcoming Reminders + AI Insights */}
+            <div className="lg:col-span-4 space-y-8">
 
-            {/* Right: Quick Actions + AI Insight (40%) */}
-            <div className="flex flex-col gap-6 lg:col-span-4">
               {/* Quick Actions */}
               <motion.div
                 variants={revealUp}
                 initial="hidden"
                 whileInView="show"
                 viewport={viewportOnce}
-                className="rounded-xl border-t-4 border-[#FED609]/10 bg-white p-6 shadow-sm"
+                className="bg-white p-6 rounded-xl shadow-sm"
               >
-                <h3 className="mb-5 font-['Sora'] text-lg font-bold text-[#1A1A1A]">Quick Actions</h3>
-                <div className="flex flex-col gap-3">
+                <h2 className="font-['Sora'] text-lg font-bold text-[#1A1A1A] mb-6">Quick Actions</h2>
+                <div className="grid grid-cols-2 gap-4">
                   <Link
                     to={ROUTES.ownerProperties}
-                    className="flex w-full items-center justify-between rounded-xl bg-[#FED609] px-4 py-3 font-bold text-[#1A1A1A] transition-all hover:bg-[#FFD70B] active:scale-95"
+                    className="flex flex-col items-center gap-3 p-4 rounded-xl border border-yellow-100 hover:bg-[#FED609]/10 hover:border-[#FED609] transition-all group"
                   >
-                    <span className="flex items-center gap-3">
-                      <Building2 className="h-5 w-5" />
-                      Manage Properties
-                    </span>
-                    <ChevronRight className="h-4 w-4" />
+                    <div className="w-10 h-10 rounded-lg bg-[#FED609]/10 flex items-center justify-center text-[#FED609] group-hover:scale-110 transition-transform">
+                      <Building2 className="w-5 h-5" />
+                    </div>
+                    <span className="text-xs font-bold text-[#1A1A1A]">Add Property</span>
                   </Link>
-
                   <Link
                     to={ROUTES.ownerTenants}
-                    className="flex w-full items-center justify-between rounded-xl border-2 border-[#FED609] px-4 py-3 font-bold text-[#1A1A1A] transition-all hover:bg-[#FED609]/5 active:scale-95"
+                    className="flex flex-col items-center gap-3 p-4 rounded-xl border border-yellow-100 hover:bg-[#FED609]/10 hover:border-[#FED609] transition-all group"
                   >
-                    <span className="flex items-center gap-3">
-                      <Users className="h-5 w-5" />
-                      View Tenants
-                    </span>
-                    <ChevronRight className="h-4 w-4 text-[#FED609]" />
+                    <div className="w-10 h-10 rounded-lg bg-[#FED609]/10 flex items-center justify-center text-[#FED609] group-hover:scale-110 transition-transform">
+                      <UserPlus className="w-5 h-5" />
+                    </div>
+                    <span className="text-xs font-bold text-[#1A1A1A]">Add Tenant</span>
                   </Link>
-
-                  <div className="my-1 h-px bg-[#FEFAEF]" />
-
+                  <Link
+                    to={ROUTES.ownerTickets}
+                    className="flex flex-col items-center gap-3 p-4 rounded-xl border border-yellow-100 hover:bg-[#FED609]/10 hover:border-[#FED609] transition-all group"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-[#FED609]/10 flex items-center justify-center text-[#FED609] group-hover:scale-110 transition-transform">
+                      <AlertTriangle className="w-5 h-5" />
+                    </div>
+                    <span className="text-xs font-bold text-[#1A1A1A]">View Tickets</span>
+                  </Link>
                   <button
                     type="button"
                     onClick={() => void handleProcessReminders()}
                     disabled={processing}
-                    className="flex w-full items-center gap-3 rounded-xl bg-[#25D366] px-4 py-3 font-bold text-white transition-all hover:brightness-105 active:scale-95 disabled:opacity-60"
+                    className="flex flex-col items-center gap-3 p-4 rounded-xl border border-yellow-100 hover:bg-[#FED609]/10 hover:border-[#FED609] transition-all group disabled:opacity-60"
                   >
-                    <MessageCircle className="h-5 w-5" />
-                    {processing ? 'Processing...' : 'Send WhatsApp Reminders'}
-                  </button>
-
-                  <button
-                    type="button"
-                    className="flex w-full items-center gap-3 rounded-xl bg-[#0088cc] px-4 py-3 font-bold text-white transition-all hover:brightness-105 active:scale-95"
-                  >
-                    <Send className="h-5 w-5" />
-                    Send Telegram Reminders
+                    <div className="w-10 h-10 rounded-lg bg-[#25D366]/10 flex items-center justify-center text-[#25D366] group-hover:scale-110 transition-transform">
+                      <MessageCircle className="w-5 h-5" />
+                    </div>
+                    <span className="text-xs font-bold text-[#1A1A1A]">
+                      {processing ? 'Sending...' : 'Send Reminder'}
+                    </span>
                   </button>
                 </div>
+
+                {/* Telegram quick action */}
+                <button
+                  type="button"
+                  className="mt-4 w-full flex items-center gap-3 rounded-xl bg-[#0088cc] px-4 py-3 font-bold text-white text-sm transition-all hover:brightness-105 active:scale-95"
+                >
+                  <Send className="h-5 w-5" />
+                  Send Reminder via Telegram
+                </button>
               </motion.div>
 
-              {/* AI Insight Card */}
+              {/* Upcoming Reminders */}
+              <motion.div
+                variants={revealUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={viewportOnce}
+                className="bg-white p-6 rounded-xl shadow-sm"
+              >
+                <h2 className="font-['Sora'] text-lg font-bold text-[#1A1A1A] mb-6">Upcoming Reminders</h2>
+                <div className="space-y-4">
+                  {upcomingReminders.map((reminder, idx) => (
+                    <div
+                      key={idx}
+                      className={`flex items-center gap-4 p-3 rounded-lg transition-colors ${
+                        reminder.highlight
+                          ? 'bg-[#FFFAE2] border-l-4 border-[#FED609]'
+                          : 'hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className="text-center shrink-0 w-12">
+                        <div className="text-[10px] uppercase font-bold text-[#6B7280]">{reminder.month}</div>
+                        <div className="font-['Sora'] text-lg font-black text-[#1A1A1A]">{reminder.day}</div>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-bold text-[#1A1A1A]">{reminder.title}</p>
+                        <p className="text-[11px] text-[#6B7280]">{reminder.sub}</p>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-gray-300" />
+                    </div>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  className="w-full mt-6 py-3 border-2 border-dashed border-gray-200 text-gray-400 font-bold text-sm rounded-xl hover:border-[#FED609] hover:text-[#FED609] transition-all"
+                >
+                  + New Reminder
+                </button>
+              </motion.div>
+
+              {/* AI Insights */}
               <motion.div
                 variants={revealUp}
                 initial="hidden"
@@ -433,58 +529,26 @@ export function OwnerDashboardPage() {
                 className="group relative overflow-hidden rounded-xl bg-[#1A1A1A] p-6 shadow-lg"
               >
                 <div className="relative z-10">
-                  <div className="mb-2 flex items-center gap-2 text-[#FED609]">
-                    <BrainCircuit className="h-4 w-4" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest">AI Insight</span>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Sparkles className="h-5 w-5 text-[#FED609]" />
+                    <span className="text-xs font-black uppercase tracking-widest text-[#FED609]">AI Insight</span>
                   </div>
-                  <p className="mb-4 text-sm font-medium leading-relaxed text-white">
-                    Reminder processing keeps scheduled follow-up disciplined across rent cycles.{' '}
-                    <span className="font-bold text-[#FED609]">Payment approvals stay human-led</span> even when
-                    notifications are automated.
+                  <p className="text-sm leading-relaxed text-white mb-4">
+                    You could increase revenue by{' '}
+                    <span className="text-[#FED609] font-bold">4.2%</span>{' '}
+                    by optimizing service charge distribution in your portfolio.
                   </p>
                   <Link
                     to={ROUTES.ownerAiSettings}
-                    className="text-xs font-bold text-[#FED609] underline"
+                    className="text-xs font-bold bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-colors text-white inline-block"
                   >
-                    Configure AI settings
+                    View Analysis
                   </Link>
                 </div>
-                <div className="absolute -bottom-4 -right-4 opacity-10 transition-transform duration-700 group-hover:scale-110">
-                  <Sparkles className="h-24 w-24 text-white" />
-                </div>
+                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-[#FED609]/20 blur-3xl rounded-full" />
               </motion.div>
             </div>
           </div>
-
-          {/* Bottom Row: Notifications Banner */}
-          {summary.unread_notifications > 0 && (
-            <motion.div
-              variants={revealUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={viewportOnce}
-              className="flex items-center justify-between rounded-xl border border-[rgba(254,214,9,0.2)] bg-[rgba(254,214,9,0.06)] p-5"
-            >
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#FED609]">
-                  <Bell className="h-5 w-5 text-[#1A1A1A]" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-[#1A1A1A]">
-                    {summary.unread_notifications} unread notification{summary.unread_notifications !== 1 ? 's' : ''}
-                  </p>
-                  <p className="text-xs text-[#6B7280]">Resident-facing activity awaiting your review</p>
-                </div>
-              </div>
-              <Link
-                to={ROUTES.ownerNotifications}
-                className="flex items-center gap-2 rounded-lg bg-[#FED609] px-4 py-2 text-sm font-bold text-[#1A1A1A] transition-all hover:bg-[#FFD70B] active:scale-95"
-              >
-                View all
-                <ChevronRight className="h-4 w-4" />
-              </Link>
-            </motion.div>
-          )}
         </>
       ) : null}
 
@@ -500,7 +564,7 @@ export function OwnerDashboardPage() {
 
       {/* Awaiting Approvals Section */}
       {!loading ? (
-        <div className="space-y-4">
+        <div className="space-y-4 mt-8">
           <motion.div
             variants={revealUp}
             initial="hidden"
@@ -596,22 +660,6 @@ export function OwnerDashboardPage() {
           )}
         </div>
       ) : null}
-
-      {/* Floating Live Yield FAB */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <Link
-          to={ROUTES.ownerAutomation}
-          className="flex items-center gap-3 rounded-full bg-[#1A1A1A] px-4 py-3 shadow-2xl transition-transform hover:scale-105"
-        >
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FED609]">
-            <PlusCircle className="h-4 w-4 text-[#1A1A1A]" />
-          </div>
-          <div className="pr-2 text-left">
-            <p className="text-[10px] font-bold uppercase tracking-tighter text-[#FED609]">Automation</p>
-            <p className="text-sm font-bold text-white">AI Settings</p>
-          </div>
-        </Link>
-      </div>
     </div>
   )
 }
