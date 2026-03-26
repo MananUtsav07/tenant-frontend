@@ -40,7 +40,11 @@
       "Bash(curl -sL \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzI3Y2VlMjcwNjQ4ZjRhM2ViMDA4OWU5YTU0N2M3OWRkEgsSBxDvruiT4AsYAZIBJAoKcHJvamVjdF9pZBIWQhQxNzE0MTQxOTczMTQ3NDI1OTk2Ng&filename=&opi=96797242\" -o ai-settings.html)",
       "Bash(curl -sL \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzQ2NzM2MGQ5YzdiMjQ5ODg4NTVjYzM4ZDFmNjk2YjUyEgsSBxDvruiT4AsYAZIBJAoKcHJvamVjdF9pZBIWQhQxNzE0MTQxOTczMTQ3NDI1OTk2Ng&filename=&opi=96797242\" -o tenant-dashboard.html)",
       "Bash(curl -sL \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sX2MxOThhYjE1MzRjNDQxMWRiY2JkMzM4MTZiNjY0ODY3EgsSBxDvruiT4AsYAZIBJAoKcHJvamVjdF9pZBIWQhQxNzE0MTQxOTczMTQ3NDI1OTk2Ng&filename=&opi=96797242\" -o tenant-tickets.html)",
-      "Bash(curl -sL \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzM2NDk1NGQ4ZGM5YjQ2Yjg4ZThkOGY2NzU1MTEzZDVjEgsSBxDvruiT4AsYAZIBJAoKcHJvamVjdF9pZBIWQhQxNzE0MTQxOTczMTQ3NDI1OTk2Ng&filename=&opi=96797242\" -o tenant-support.html)"
+      "Bash(curl -sL \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzM2NDk1NGQ4ZGM5YjQ2Yjg4ZThkOGY2NzU1MTEzZDVjEgsSBxDvruiT4AsYAZIBJAoKcHJvamVjdF9pZBIWQhQxNzE0MTQxOTczMTQ3NDI1OTk2Ng&filename=&opi=96797242\" -o tenant-support.html)",
+      "Bash(npm run:*)",
+      "Bash(xxd c:/Users/asus/Desktop/tenant-frontend/src/sections/landing/TestimonialSection.tsx)",
+      "Skill(react-components)",
+      "Skill(react-components:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

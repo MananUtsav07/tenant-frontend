@@ -1,64 +1,11 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Check, CheckCircle, XCircle, Minus, Zap, MessageCircle, Send, Wallet, Infinity, Settings, ShieldCheck, ChevronDown, Calendar } from 'lucide-react'
+import { CheckCircle, Minus, Zap, MessageCircle, Send, Wallet, Infinity, Settings, ShieldCheck, ChevronDown, Calendar } from 'lucide-react'
 
-import { Button } from '../../components/common/Button'
-import { SectionContainer } from '../../components/common/SectionContainer'
 import { usePageSeo } from '../../hooks/usePageSeo'
 import { ROUTES } from '../../routes/constants'
 import { revealUp, staggerParent, useMotionVariants, viewportOnce } from '../../utils/motion'
-
-const pricingTiers = [
-  {
-    name: 'Starter',
-    price: '$29',
-    period: '/mo',
-    description: 'Perfect for individual landlords just starting their journey.',
-    features: [
-      { text: 'Up to 5 properties', included: true },
-      { text: 'Up to 10 tenants', included: true },
-      { text: 'Basic ticket system', included: false },
-      { text: 'Email notifications', included: true },
-    ],
-    ctaLabel: 'Get Started',
-    ctaHref: ROUTES.contact,
-    variant: 'outline' as const,
-  },
-  {
-    name: 'Professional',
-    price: '$99',
-    period: '/mo',
-    description: 'The full suite for serious property managers in Dubai.',
-    features: [
-      { text: 'Up to 25 properties', included: true, bold: true, icon: 'check' },
-      { text: 'Up to 50 tenants', included: true, icon: 'check' },
-      { text: 'AI automation suite', included: true, icon: 'zap', bold: true },
-      { text: 'WhatsApp integration', included: true, icon: 'whatsapp' },
-      { text: 'Telegram bot access', included: true, icon: 'telegram' },
-      { text: 'Payment tracking', included: true, icon: 'wallet' },
-    ],
-    ctaLabel: 'Start Free Trial',
-    ctaHref: ROUTES.contact,
-    highlighted: true,
-    badge: 'Most Popular',
-    variant: 'dark' as const,
-  },
-  {
-    name: 'Enterprise',
-    price: 'Custom',
-    period: '',
-    description: 'Bespoke solutions for large-scale portfolios and agencies.',
-    features: [
-      { text: 'Unlimited properties', included: true, bold: true, icon: 'infinity' },
-      { text: 'Dedicated support manager', included: true, icon: 'check' },
-      { text: 'Custom API integrations', included: true, icon: 'settings' },
-      { text: 'SLA guarantee', included: true, icon: 'shield' },
-    ],
-    ctaLabel: 'Contact Sales',
-    ctaHref: ROUTES.contact,
-    variant: 'primary' as const,
-  },
-]
 
 const comparisonFeatures = [
   { name: 'Properties', starter: '5', professional: '25', enterprise: 'Unlimited' },
@@ -75,44 +22,25 @@ const comparisonFeatures = [
 const faqs = [
   {
     question: 'Can I change plans later?',
-    answer: 'Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle, with pro-rated adjustments applied automatically to your account.',
+    answer:
+      'Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle, with pro-rated adjustments applied automatically to your account.',
   },
   {
     question: 'Is there a free trial?',
-    answer: 'Absolutely! We offer a 14-day free trial on our Professional plan so you can experience the power of AI automation and WhatsApp integration first-hand.',
+    answer:
+      'Absolutely! We offer a 14-day free trial on our Professional plan so you can experience the power of AI automation and WhatsApp integration first-hand.',
   },
   {
     question: "What's included in AI automation?",
-    answer: 'Our AI handles automated tenant screening, maintenance request categorization, rent payment predictions, and intelligent response drafts for common tenant inquiries.',
+    answer:
+      'Our AI handles automated tenant screening, maintenance request categorization, rent payment predictions, and intelligent response drafts for common tenant inquiries.',
   },
   {
     question: 'How does the WhatsApp integration work?',
-    answer: 'Prophives connects to your official WhatsApp Business API, allowing you to send automated rent reminders, maintenance updates, and collect documents directly through chat.',
+    answer:
+      'Prophives connects to your official WhatsApp Business API, allowing you to send automated rent reminders, maintenance updates, and collect documents directly through chat.',
   },
 ]
-
-function FeatureIcon({ icon, included }: { icon?: string; included: boolean }) {
-  if (!included) return <XCircle className="h-[18px] w-[18px] shrink-0 text-[#6B7280]/30" />
-
-  switch (icon) {
-    case 'zap':
-      return <Zap className="h-[18px] w-[18px] shrink-0 text-[#FED609]" />
-    case 'whatsapp':
-      return <MessageCircle className="h-[18px] w-[18px] shrink-0 text-[#25D366]" />
-    case 'telegram':
-      return <Send className="h-[18px] w-[18px] shrink-0 text-[#0088cc]" />
-    case 'wallet':
-      return <Wallet className="h-[18px] w-[18px] shrink-0 text-[#FED609]" />
-    case 'infinity':
-      return <Infinity className="h-[18px] w-[18px] shrink-0 text-[#FED609]" />
-    case 'settings':
-      return <Settings className="h-[18px] w-[18px] shrink-0 text-[#FED609]" />
-    case 'shield':
-      return <ShieldCheck className="h-[18px] w-[18px] shrink-0 text-[#FED609]" />
-    default:
-      return <CheckCircle className="h-[18px] w-[18px] shrink-0 text-[#FED609]" />
-  }
-}
 
 function ComparisonCell({ value }: { value: boolean | string }) {
   if (typeof value === 'string') {
@@ -145,186 +73,239 @@ export function PricingPage() {
   return (
     <>
       {/* Hero Section */}
-      <SectionContainer size="wide" tone="cream" padded={false}>
+      <section className="py-20 px-6 text-center max-w-[1200px] mx-auto">
         <motion.div
           variants={revealVariants}
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="py-20 text-center"
         >
-          <div className="inline-block rounded-full bg-[#FED609]/10 px-4 py-1.5 text-sm font-bold uppercase tracking-wider text-[#FED609] font-['DM_Sans']">
+          <div className="inline-block bg-[#FED609]/10 text-[#FED609] px-4 py-1.5 rounded-full text-sm font-bold mb-6 tracking-wider uppercase font-['DM_Sans']">
             Transparent Plans
           </div>
-          <h1 className="ph-title mt-6 text-4xl font-extrabold tracking-tight text-[#1A1A1A] md:text-6xl">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-[#1A1A1A] mb-6 tracking-tight font-['Sora']">
             Simple, Transparent Pricing
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-[#6B7280] font-['Manrope']">
+          <p className="text-[#6B7280] text-lg max-w-2xl mx-auto font-['Manrope']">
             Choose the plan that fits your portfolio size. No hidden fees, just pure AI-driven property management efficiency.
           </p>
         </motion.div>
-      </SectionContainer>
+      </section>
 
       {/* Pricing Grid */}
-      <SectionContainer size="wide" padded={false}>
+      <section className="pb-24 px-6 max-w-[1200px] mx-auto">
         <motion.div
           variants={staggerVariants}
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="grid gap-8 pb-24 md:grid-cols-3"
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
         >
-          {pricingTiers.map((tier) => (
-            <motion.div
-              key={tier.name}
-              variants={revealVariants}
-              className={`relative flex flex-col rounded-xl bg-white p-8 transition-all ${
-                tier.highlighted
-                  ? 'border-2 border-[#FED609] shadow-xl md:-translate-y-4'
-                  : 'border border-[#FFFAE2] shadow-sm hover:border-[#FED609]/30'
-              }`}
+          {/* Starter Plan */}
+          <motion.div
+            variants={revealVariants}
+            className="bg-white p-8 rounded-xl shadow-sm border border-[#FFFAE2] hover:border-[#FED609]/30 transition-all flex flex-col"
+          >
+            <div className="mb-8">
+              <h3 className="text-xl font-bold mb-2 font-['Sora']">Starter</h3>
+              <p className="text-[#6B7280] text-sm">Perfect for individual landlords just starting their journey.</p>
+            </div>
+            <div className="mb-8">
+              <span className="text-4xl font-extrabold">$29</span>
+              <span className="text-[#6B7280]">/mo</span>
+            </div>
+            <ul className="space-y-4 mb-10 flex-grow">
+              <li className="flex items-center gap-3 text-sm">
+                <CheckCircle className="h-[18px] w-[18px] shrink-0 text-[#FED609]" />
+                <span>Up to 5 properties</span>
+              </li>
+              <li className="flex items-center gap-3 text-sm">
+                <CheckCircle className="h-[18px] w-[18px] shrink-0 text-[#FED609]" />
+                <span>Up to 10 tenants</span>
+              </li>
+              <li className="flex items-center gap-3 text-sm text-[#6B7280]/70">
+                <Minus className="h-[18px] w-[18px] shrink-0 text-[#6B7280]/30" />
+                <span>Basic ticket system</span>
+              </li>
+              <li className="flex items-center gap-3 text-sm">
+                <CheckCircle className="h-[18px] w-[18px] shrink-0 text-[#FED609]" />
+                <span>Email notifications</span>
+              </li>
+            </ul>
+            <Link
+              to={ROUTES.contact}
+              className="w-full py-4 border-2 border-[#FED609] text-[#1A1A1A] font-bold rounded-lg hover:bg-[#FED609] transition-all text-center block"
             >
-              {tier.badge && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-[#FED609] px-4 py-1 text-xs font-bold uppercase tracking-widest text-[#1A1A1A] shadow-md font-['DM_Sans']">
-                  {tier.badge}
-                </div>
-              )}
+              Get Started
+            </Link>
+          </motion.div>
 
-              <div className="mb-8">
-                <h3 className="ph-title text-xl font-bold text-[#1A1A1A]">{tier.name}</h3>
-                <p className="mt-2 text-sm text-[#6B7280]">{tier.description}</p>
-              </div>
+          {/* Professional Plan */}
+          <motion.div
+            variants={revealVariants}
+            className="bg-white p-8 rounded-xl shadow-xl border-2 border-[#FED609] relative flex flex-col transform md:-translate-y-4"
+          >
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#FED609] text-[#1A1A1A] px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest shadow-md font-['DM_Sans']">
+              Most Popular
+            </div>
+            <div className="mb-8">
+              <h3 className="text-xl font-bold mb-2 font-['Sora']">Professional</h3>
+              <p className="text-[#6B7280] text-sm">The full suite for serious property managers in Dubai.</p>
+            </div>
+            <div className="mb-8 text-[#FED609]">
+              <span className="text-4xl font-extrabold">$99</span>
+              <span className="text-[#6B7280]">/mo</span>
+            </div>
+            <ul className="space-y-4 mb-10 flex-grow">
+              <li className="flex items-center gap-3 text-sm">
+                <CheckCircle className="h-[18px] w-[18px] shrink-0 text-[#FED609]" />
+                <span className="font-semibold">Up to 25 properties</span>
+              </li>
+              <li className="flex items-center gap-3 text-sm">
+                <CheckCircle className="h-[18px] w-[18px] shrink-0 text-[#FED609]" />
+                <span>Up to 50 tenants</span>
+              </li>
+              <li className="flex items-center gap-3 text-sm">
+                <Zap className="h-[18px] w-[18px] shrink-0 text-[#FED609]" />
+                <span className="font-medium text-[#1A1A1A]">AI automation suite</span>
+              </li>
+              <li className="flex items-center gap-3 text-sm">
+                <MessageCircle className="h-[18px] w-[18px] shrink-0 text-[#25D366]" />
+                <span>WhatsApp integration</span>
+              </li>
+              <li className="flex items-center gap-3 text-sm">
+                <Send className="h-[18px] w-[18px] shrink-0 text-[#0088cc]" />
+                <span>Telegram bot access</span>
+              </li>
+              <li className="flex items-center gap-3 text-sm">
+                <Wallet className="h-[18px] w-[18px] shrink-0 text-[#FED609]" />
+                <span>Payment tracking</span>
+              </li>
+            </ul>
+            <Link
+              to={ROUTES.contact}
+              className="w-full py-4 bg-[#1A1A1A] text-white font-bold rounded-lg hover:bg-black transition-all shadow-lg text-center block"
+            >
+              Start Free Trial
+            </Link>
+          </motion.div>
 
-              <div className={`mb-8 ${tier.highlighted ? 'text-[#FED609]' : ''}`}>
-                <span className="text-4xl font-extrabold">{tier.price}</span>
-                {tier.period && <span className="text-[#6B7280]">{tier.period}</span>}
-              </div>
-
-              <ul className="mb-10 flex-grow space-y-4">
-                {tier.features.map((feature) => (
-                  <li
-                    key={feature.text}
-                    className={`flex items-center gap-3 text-sm ${
-                      !feature.included ? 'text-[#6B7280]/70' : ''
-                    }`}
-                  >
-                    <FeatureIcon icon={feature.icon} included={feature.included} />
-                    <span className={feature.bold ? 'font-semibold text-[#1A1A1A]' : ''}>
-                      {feature.text}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-
-              {tier.variant === 'dark' ? (
-                <Button
-                  to={tier.ctaHref}
-                  variant="primary"
-                  className="!w-full !justify-center !rounded-lg !bg-[#1A1A1A] !text-white !border-[#1A1A1A] !py-4 !shadow-lg hover:!bg-black"
-                >
-                  {tier.ctaLabel}
-                </Button>
-              ) : tier.variant === 'outline' ? (
-                <Button
-                  to={tier.ctaHref}
-                  variant="outline"
-                  className="!w-full !justify-center !rounded-lg !border-2 !border-[#FED609] !text-[#1A1A1A] !font-bold !py-4 hover:!bg-[#FED609]"
-                >
-                  {tier.ctaLabel}
-                </Button>
-              ) : (
-                <Button
-                  to={tier.ctaHref}
-                  variant="primary"
-                  className="!w-full !justify-center !rounded-lg !py-4"
-                >
-                  {tier.ctaLabel}
-                </Button>
-              )}
-            </motion.div>
-          ))}
+          {/* Enterprise Plan */}
+          <motion.div
+            variants={revealVariants}
+            className="bg-white p-8 rounded-xl shadow-sm border border-[#FFFAE2] hover:border-[#FED609]/30 transition-all flex flex-col"
+          >
+            <div className="mb-8">
+              <h3 className="text-xl font-bold mb-2 font-['Sora']">Enterprise</h3>
+              <p className="text-[#6B7280] text-sm">Bespoke solutions for large-scale portfolios and agencies.</p>
+            </div>
+            <div className="mb-8">
+              <span className="text-4xl font-extrabold">Custom</span>
+            </div>
+            <ul className="space-y-4 mb-10 flex-grow">
+              <li className="flex items-center gap-3 text-sm">
+                <Infinity className="h-[18px] w-[18px] shrink-0 text-[#FED609]" />
+                <span className="font-semibold">Unlimited properties</span>
+              </li>
+              <li className="flex items-center gap-3 text-sm">
+                <CheckCircle className="h-[18px] w-[18px] shrink-0 text-[#FED609]" />
+                <span>Dedicated support manager</span>
+              </li>
+              <li className="flex items-center gap-3 text-sm">
+                <Settings className="h-[18px] w-[18px] shrink-0 text-[#FED609]" />
+                <span>Custom API integrations</span>
+              </li>
+              <li className="flex items-center gap-3 text-sm">
+                <ShieldCheck className="h-[18px] w-[18px] shrink-0 text-[#FED609]" />
+                <span>SLA guarantee</span>
+              </li>
+            </ul>
+            <Link
+              to={ROUTES.contact}
+              className="w-full py-4 bg-[#FED609] text-[#1A1A1A] font-bold rounded-lg hover:bg-[#FFD70B] transition-all text-center block"
+            >
+              Contact Sales
+            </Link>
+          </motion.div>
         </motion.div>
-      </SectionContainer>
+      </section>
 
       {/* Feature Comparison Table */}
-      <SectionContainer size="narrow" tone="ivory" className="bg-[#FFFAE2]/30">
-        <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
-          <h2 className="ph-title text-center text-3xl font-bold text-[#1A1A1A]">
+      <section className="py-20 bg-[#FFFAE2]/30">
+        <div className="max-w-[1000px] mx-auto px-6">
+          <motion.h2
+            variants={revealVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={viewportOnce}
+            className="text-3xl font-bold text-center mb-12 font-['Sora'] text-[#1A1A1A]"
+          >
             Detailed Comparison
-          </h2>
-        </motion.div>
+          </motion.h2>
+          <motion.div
+            variants={revealVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={viewportOnce}
+            className="overflow-hidden rounded-xl border border-[#FFFAE2] shadow-sm bg-white"
+          >
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-white border-b border-[#FFFAE2]">
+                  <th className="p-6 font-bold text-sm uppercase tracking-wider text-[#6B7280] font-['DM_Sans']">Feature</th>
+                  <th className="p-6 font-bold text-sm uppercase tracking-wider text-center font-['DM_Sans']">Starter</th>
+                  <th className="p-6 font-bold text-sm uppercase tracking-wider text-center text-[#FED609] font-['DM_Sans']">Professional</th>
+                  <th className="p-6 font-bold text-sm uppercase tracking-wider text-center font-['DM_Sans']">Enterprise</th>
+                </tr>
+              </thead>
+              <tbody className="text-sm">
+                {comparisonFeatures.map((feature, index) => (
+                  <tr key={feature.name} className={index % 2 === 0 ? 'bg-[#FEFAEF]' : 'bg-white'}>
+                    <td className="p-6 font-medium">{feature.name}</td>
+                    <td className="p-6 text-center">
+                      <ComparisonCell value={feature.starter} />
+                    </td>
+                    <td className="p-6 text-center">
+                      <ComparisonCell value={feature.professional} />
+                    </td>
+                    <td className="p-6 text-center">
+                      <ComparisonCell value={feature.enterprise} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </motion.div>
+        </div>
+      </section>
 
-        <motion.div
+      {/* FAQ Section */}
+      <section className="py-24 px-6 max-w-[800px] mx-auto">
+        <motion.h2
           variants={revealVariants}
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="mt-12 overflow-hidden rounded-xl border border-[#FFFAE2] bg-white shadow-sm"
+          className="text-3xl font-bold text-center mb-12 font-['Sora'] text-[#1A1A1A]"
         >
-          <table className="w-full border-collapse text-left">
-            <thead>
-              <tr className="border-b border-[#FFFAE2] bg-white">
-                <th className="p-6 text-sm font-bold uppercase tracking-wider text-[#6B7280] font-['DM_Sans']">
-                  Feature
-                </th>
-                <th className="p-6 text-center text-sm font-bold uppercase tracking-wider font-['DM_Sans']">
-                  Starter
-                </th>
-                <th className="p-6 text-center text-sm font-bold uppercase tracking-wider text-[#FED609] font-['DM_Sans']">
-                  Professional
-                </th>
-                <th className="p-6 text-center text-sm font-bold uppercase tracking-wider font-['DM_Sans']">
-                  Enterprise
-                </th>
-              </tr>
-            </thead>
-            <tbody className="text-sm">
-              {comparisonFeatures.map((feature, index) => (
-                <tr
-                  key={feature.name}
-                  className={index % 2 === 0 ? 'bg-[#FEFAEF]' : 'bg-white'}
-                >
-                  <td className="p-6 font-medium">{feature.name}</td>
-                  <td className="p-6 text-center">
-                    <ComparisonCell value={feature.starter} />
-                  </td>
-                  <td className="p-6 text-center">
-                    <ComparisonCell value={feature.professional} />
-                  </td>
-                  <td className="p-6 text-center">
-                    <ComparisonCell value={feature.enterprise} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </motion.div>
-      </SectionContainer>
-
-      {/* FAQ Section */}
-      <SectionContainer size="narrow" contentClassName="!max-w-[800px]">
-        <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
-          <h2 className="ph-title text-center text-3xl font-bold text-[#1A1A1A]">
-            Frequently Asked Questions
-          </h2>
-        </motion.div>
-
+          Frequently Asked Questions
+        </motion.h2>
         <motion.div
           variants={staggerVariants}
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="mt-12 space-y-4"
+          className="space-y-4"
         >
           {faqs.map((faq, index) => (
             <motion.div
               key={faq.question}
               variants={revealVariants}
-              className="rounded-xl border border-[#FFFAE2] bg-white p-6"
+              className="group bg-white rounded-xl border border-[#FFFAE2] p-6"
             >
               <button
                 onClick={() => setOpenFaq(openFaq === index ? -1 : index)}
-                className="flex w-full items-center justify-between text-left font-bold font-['Sora']"
+                className="flex w-full items-center justify-between text-left font-bold font-['Sora'] cursor-pointer list-none"
               >
                 <span>{faq.question}</span>
                 <ChevronDown
@@ -337,7 +318,7 @@ export function PricingPage() {
                 <motion.p
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
-                  className="mt-4 text-sm leading-relaxed text-[#6B7280]"
+                  className="mt-4 text-[#6B7280] text-sm leading-relaxed"
                 >
                   {faq.answer}
                 </motion.p>
@@ -345,34 +326,32 @@ export function PricingPage() {
             </motion.div>
           ))}
         </motion.div>
-      </SectionContainer>
+      </section>
 
       {/* CTA Banner */}
-      <SectionContainer size="wide" padded={false} className="px-6 pb-24">
+      <section className="px-6 pb-24">
         <motion.div
           variants={revealVariants}
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="flex flex-col items-center rounded-3xl bg-[#FED609] p-12 text-center shadow-xl"
+          className="max-w-[1200px] mx-auto bg-[#FED609] rounded-3xl p-12 text-center shadow-xl flex flex-col items-center"
         >
-          <h2 className="ph-title text-3xl font-extrabold text-[#1A1A1A] md:text-4xl">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-[#1A1A1A] mb-4 font-['Sora']">
             Not sure which plan? Talk to our team
           </h2>
-          <p className="mt-4 max-w-xl text-lg text-[#1A1A1A]/70">
+          <p className="text-[#1A1A1A]/70 text-lg mb-8 max-w-xl">
             Our specialists are ready to help you find the perfect configuration for your unique property portfolio.
           </p>
-          <Button
+          <Link
             to={ROUTES.contact}
-            variant="secondary"
-            size="lg"
-            className="!mt-8 !rounded-xl !bg-white !px-10 !py-4 !font-bold !text-[#1A1A1A] !shadow-md hover:!bg-[#FFFAE2]"
-            iconLeft={<Calendar className="h-5 w-5" />}
+            className="bg-white text-[#1A1A1A] font-bold py-4 px-10 rounded-xl hover:bg-[#FFFAE2] transition-all shadow-md flex items-center gap-2"
           >
+            <Calendar className="h-5 w-5" />
             Schedule a Call
-          </Button>
+          </Link>
         </motion.div>
-      </SectionContainer>
+      </section>
     </>
   )
 }

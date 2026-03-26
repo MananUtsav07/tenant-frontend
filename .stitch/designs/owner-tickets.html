@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Prophives - Support Tickets</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Manrope:wght@400;500;600&amp;family=Dm+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FED609",
+                        cream: "#FEFAEF",
+                        ivory: "#FFFAE2",
+                        deepgold: "#FFD70B",
+                        dark: "#1A1A1A",
+                        muted: "#6B7280"
+                    },
+                    fontFamily: {
+                        "headline": ["Sora"],
+                        "body": ["Manrope"],
+                        "label": ["Dm Sans"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #FEFAEF;
+            color: #1A1A1A;
+            font-family: 'Manrope', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-cream text-dark">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-4 bg-[#FEFAEF] dark:bg-gray-950 h-screen w-64 border-r border-[#FED609]/10 divide-y divide-[#FED609]/5 z-50">
+<div class="pb-6">
+<div class="flex items-center gap-3 px-2">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-dark" data-icon="domain">domain</span>
+</div>
+<div>
+<h1 class="font-['Sora'] font-bold text-[#FED609] text-xl leading-tight">Prophives</h1>
+<p class="text-[10px] uppercase tracking-widest text-muted font-bold">Property Management</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 py-6 space-y-1">
+<!-- Dashboard -->
+<a class="flex items-center gap-3 text-[#6B7280] dark:text-gray-400 px-4 py-3 hover:bg-[#FFFAE2] dark:hover:bg-gray-800 hover:text-[#FED609] transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-['Manrope'] text-sm font-medium">Dashboard</span>
+</a>
+<!-- Properties -->
+<a class="flex items-center gap-3 text-[#6B7280] dark:text-gray-400 px-4 py-3 hover:bg-[#FFFAE2] dark:hover:bg-gray-800 hover:text-[#FED609] transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+<span class="font-['Manrope'] text-sm font-medium">Properties</span>
+</a>
+<!-- Tickets (ACTIVE) -->
+<a class="flex items-center gap-3 bg-[#FED609] text-[#1A1A1A] rounded-lg px-4 py-3 shadow-sm transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="confirmation_number" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+<span class="font-['Manrope'] text-sm font-medium">Tickets</span>
+</a>
+<!-- Tenants -->
+<a class="flex items-center gap-3 text-[#6B7280] dark:text-gray-400 px-4 py-3 hover:bg-[#FFFAE2] dark:hover:bg-gray-800 hover:text-[#FED609] transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-['Manrope'] text-sm font-medium">Tenants</span>
+</a>
+<!-- Reports -->
+<a class="flex items-center gap-3 text-[#6B7280] dark:text-gray-400 px-4 py-3 hover:bg-[#FFFAE2] dark:hover:bg-gray-800 hover:text-[#FED609] transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span class="font-['Manrope'] text-sm font-medium">Reports</span>
+</a>
+</nav>
+<div class="pt-6 space-y-1">
+<button class="w-full bg-primary text-dark font-bold py-3 rounded-xl mb-4 flex items-center justify-center gap-2 hover:bg-deepgold transition-colors shadow-md">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                New Ticket
+            </button>
+<a class="flex items-center gap-3 text-[#6B7280] dark:text-gray-400 px-4 py-3 hover:bg-[#FFFAE2] dark:hover:bg-gray-800 hover:text-[#FED609]" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-['Manrope'] text-sm font-medium">Help Center</span>
+</a>
+<a class="flex items-center gap-3 text-[#6B7280] dark:text-gray-400 px-4 py-3 hover:bg-[#FFFAE2] dark:hover:bg-gray-800 hover:text-[#FED609]" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-['Manrope'] text-sm font-medium">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 min-h-screen p-8">
+<!-- Header Section -->
+<header class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+<div>
+<h1 class="font-headline font-bold text-3xl text-dark tracking-tight">Support Tickets</h1>
+<p class="text-muted mt-1">Manage and track property maintenance and tenant inquiries.</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted text-sm" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2.5 bg-white border border-primary/20 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none w-64 text-sm font-body" placeholder="Search tickets..." type="text"/>
+</div>
+<button class="flex items-center gap-2 bg-white px-4 py-2.5 rounded-xl border border-primary/20 hover:bg-ivory transition-colors text-sm font-medium">
+<span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
+                    More Filters
+                </button>
+</div>
+</header>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+<div class="bg-white p-6 rounded-xl shadow-sm border border-primary/5 hover:border-primary/30 transition-all group">
+<p class="text-muted text-xs font-bold uppercase tracking-wider mb-2">Total Tickets</p>
+<div class="flex items-end justify-between">
+<h3 class="text-3xl font-headline font-bold text-dark">142</h3>
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform" data-icon="confirmation_number">confirmation_number</span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-l-primary hover:border-primary/30 transition-all group">
+<p class="text-muted text-xs font-bold uppercase tracking-wider mb-2">Open</p>
+<div class="flex items-end justify-between">
+<h3 class="text-3xl font-headline font-bold text-primary">12</h3>
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform" data-icon="pending">pending</span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl shadow-sm border border-primary/5 hover:border-primary/30 transition-all group">
+<p class="text-muted text-xs font-bold uppercase tracking-wider mb-2">In Progress</p>
+<div class="flex items-end justify-between">
+<h3 class="text-3xl font-headline font-bold text-blue-500">28</h3>
+<span class="material-symbols-outlined text-blue-500 group-hover:scale-110 transition-transform" data-icon="autorenew">autorenew</span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl shadow-sm border border-primary/5 hover:border-primary/30 transition-all group">
+<p class="text-muted text-xs font-bold uppercase tracking-wider mb-2">Resolved</p>
+<div class="flex items-end justify-between">
+<h3 class="text-3xl font-headline font-bold text-green-500">102</h3>
+<span class="material-symbols-outlined text-green-500 group-hover:scale-110 transition-transform" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+</div>
+<!-- Layout Wrapper for Table and Detail -->
+<div class="flex flex-col lg:flex-row gap-8">
+<!-- Tickets List Section -->
+<div class="flex-grow space-y-6">
+<!-- Filter Pills -->
+<div class="flex flex-wrap gap-2">
+<button class="px-5 py-2 rounded-full bg-dark text-white text-sm font-medium transition-colors">All</button>
+<button class="px-5 py-2 rounded-full bg-primary text-dark text-sm font-medium transition-colors">Open</button>
+<button class="px-5 py-2 rounded-full bg-white border border-primary/20 text-muted hover:bg-ivory text-sm font-medium transition-colors">In Progress</button>
+<button class="px-5 py-2 rounded-full bg-white border border-primary/20 text-muted hover:bg-ivory text-sm font-medium transition-colors">Resolved</button>
+<button class="px-5 py-2 rounded-full bg-white border border-primary/20 text-muted hover:bg-ivory text-sm font-medium transition-colors">Closed</button>
+</div>
+<!-- Tickets Table Card -->
+<div class="bg-white rounded-xl shadow-sm border border-primary/10 overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-ivory border-b border-primary/20">
+<th class="px-6 py-4 text-xs font-bold text-dark uppercase tracking-wider">Ticket ID</th>
+<th class="px-6 py-4 text-xs font-bold text-dark uppercase tracking-wider">Subject</th>
+<th class="px-6 py-4 text-xs font-bold text-dark uppercase tracking-wider">Tenant / Property</th>
+<th class="px-6 py-4 text-xs font-bold text-dark uppercase tracking-wider text-center">Priority</th>
+<th class="px-6 py-4 text-xs font-bold text-dark uppercase tracking-wider text-center">Status</th>
+<th class="px-6 py-4 text-xs font-bold text-dark uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-primary/5">
+<!-- Row 1 -->
+<tr class="bg-white hover:bg-ivory/30 transition-colors cursor-pointer border-l-4 border-l-primary">
+<td class="px-6 py-4 font-label text-sm text-muted">#PH-2984</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="font-medium text-dark text-sm">Leaking AC in Bedroom</span>
+<span class="bg-primary/20 text-[10px] font-bold px-1.5 py-0.5 rounded text-dark border border-primary/30">AI</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="text-sm font-medium text-dark">Sarah Jenkins</div>
+<div class="text-xs text-muted">Palm Jumeirah Villa 12</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter bg-red-100 text-red-600 border border-red-200">High</span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-3 py-1 rounded-full text-xs font-bold bg-primary text-dark shadow-sm">Open</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-primary/10 rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="bg-cream hover:bg-ivory/30 transition-colors cursor-pointer">
+<td class="px-6 py-4 font-label text-sm text-muted">#PH-2983</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="font-medium text-dark text-sm">Broken Kitchen Cabinet</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="text-sm font-medium text-dark">Michael Chen</div>
+<div class="text-xs text-muted">Marina Gate Apt 402</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter bg-orange-100 text-orange-600 border border-orange-200">Medium</span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-600 border border-blue-200">In Progress</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-primary/10 rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="bg-white hover:bg-ivory/30 transition-colors cursor-pointer">
+<td class="px-6 py-4 font-label text-sm text-muted">#PH-2980</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="font-medium text-dark text-sm">Elevator Access Issue</span>
+<span class="bg-primary/20 text-[10px] font-bold px-1.5 py-0.5 rounded text-dark border border-primary/30">AI</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="text-sm font-medium text-dark">David Miller</div>
+<div class="text-xs text-muted">Downtown Studio 15A</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter bg-green-100 text-green-600 border border-green-200">Low</span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-600 border border-green-200">Resolved</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-primary/10 rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="bg-cream hover:bg-ivory/30 transition-colors cursor-pointer">
+<td class="px-6 py-4 font-label text-sm text-muted">#PH-2975</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="font-medium text-dark text-sm">Pool Key Replacement</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="text-sm font-medium text-dark">Emma Watson</div>
+<div class="text-xs text-muted">Palm Jumeirah Villa 05</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter bg-green-100 text-green-600 border border-green-200">Low</span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600 border border-gray-200">Closed</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-primary/10 rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="bg-white hover:bg-ivory/30 transition-colors cursor-pointer">
+<td class="px-6 py-4 font-label text-sm text-muted">#PH-2974</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="font-medium text-dark text-sm">Water Heater Not Working</span>
+<span class="bg-primary/20 text-[10px] font-bold px-1.5 py-0.5 rounded text-dark border border-primary/30">AI</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="text-sm font-medium text-dark">James Bond</div>
+<div class="text-xs text-muted">Marina Gate Apt 901</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter bg-red-100 text-red-600 border border-red-200">High</span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-3 py-1 rounded-full text-xs font-bold bg-primary text-dark shadow-sm">Open</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-primary/10 rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 6 -->
+<tr class="bg-cream hover:bg-ivory/30 transition-colors cursor-pointer">
+<td class="px-6 py-4 font-label text-sm text-muted">#PH-2970</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="font-medium text-dark text-sm">Balcony Door Seal</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="text-sm font-medium text-dark">Aria Stark</div>
+<div class="text-xs text-muted">Downtown Studio 22B</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter bg-orange-100 text-orange-600 border border-orange-200">Medium</span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-600 border border-blue-200">In Progress</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-primary/10 rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 7 -->
+<tr class="bg-white hover:bg-ivory/30 transition-colors cursor-pointer">
+<td class="px-6 py-4 font-label text-sm text-muted">#PH-2968</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="font-medium text-dark text-sm">Smart Home Sync Issue</span>
+<span class="bg-primary/20 text-[10px] font-bold px-1.5 py-0.5 rounded text-dark border border-primary/30">AI</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="text-sm font-medium text-dark">Robert Downey</div>
+<div class="text-xs text-muted">Palm Jumeirah Villa 12</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter bg-green-100 text-green-600 border border-green-200">Low</span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-600 border border-green-200">Resolved</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-primary/10 rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 8 -->
+<tr class="bg-cream hover:bg-ivory/30 transition-colors cursor-pointer">
+<td class="px-6 py-4 font-label text-sm text-muted">#PH-2965</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="font-medium text-dark text-sm">Light Bulb Replacement</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="text-sm font-medium text-dark">Tom Hiddleston</div>
+<div class="text-xs text-muted">Marina Gate Apt 402</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter bg-green-100 text-green-600 border border-green-200">Low</span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600 border border-gray-200">Closed</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-primary/10 rounded-lg text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Pagination Footer -->
+<div class="px-6 py-4 bg-white border-t border-primary/10 flex items-center justify-between">
+<p class="text-xs text-muted">Showing 8 of 142 tickets</p>
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-primary/20 text-muted hover:bg-ivory transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-dark font-bold text-xs">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-primary/20 text-muted hover:bg-ivory transition-colors text-xs">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-primary/20 text-muted hover:bg-ivory transition-colors text-xs">3</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-primary/20 text-muted hover:bg-ivory transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Ticket Detail Sidebar Panel -->
+<aside class="w-full lg:w-96 shrink-0">
+<div class="bg-white rounded-xl shadow-lg border border-primary/20 overflow-hidden sticky top-8">
+<!-- Detail Header -->
+<div class="bg-ivory p-6 border-b border-primary/20">
+<div class="flex justify-between items-start mb-4">
+<span class="px-2 py-1 rounded-md bg-white/60 border border-primary/30 text-[10px] font-bold text-dark">TICKET #PH-2984</span>
+<button class="p-1 hover:bg-primary/20 rounded-full transition-colors">
+<span class="material-symbols-outlined text-muted" data-icon="close">close</span>
+</button>
+</div>
+<h2 class="font-headline font-bold text-xl text-dark leading-tight">Leaking AC in Bedroom</h2>
+<div class="flex items-center gap-2 mt-4">
+<span class="px-3 py-1 rounded-full text-xs font-bold bg-primary text-dark">Open</span>
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-red-100 text-red-600 border border-red-200">High Priority</span>
+</div>
+</div>
+<!-- AI Summary Section -->
+<div class="p-6 bg-primary/5 border-b border-primary/10">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<h3 class="text-xs font-bold uppercase tracking-wider text-dark">AI Automation Summary</h3>
+</div>
+<p class="text-sm text-muted leading-relaxed italic">
+                            "Tenant reports a steady drip from the wall-mounted unit. Likely a clogged drainage pipe. System auto-assigned to AC Expert Team for inspection tomorrow morning."
+                        </p>
+</div>
+<!-- Scrollable Content -->
+<div class="p-6 space-y-8 max-h-[500px] overflow-y-auto custom-scrollbar">
+<!-- Tenant Info -->
+<div class="flex items-center gap-4">
+<img alt="Sarah Jenkins" class="w-12 h-12 rounded-full object-cover border-2 border-primary/30" data-alt="portrait of a professional woman with blonde hair smiling in a sunlit office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtandFiM4miDuMmNXEH8RVjvZUgN5DRDiJQiR88XC000yjE70wxbvM9pgWfh_i8dALkAl81zVFoEDCwStF7R4GnYlq2FGbT26jPSGOXwqcwZMZyLtxgyLt3pimQC4fHrSDJcQWD5jpnjhhkGwRSpO-05lXZaQ1CzwnJ6JAckm3w3yeOqVo9kayaSP3llk74E3S2aBBvP4-p4XI9xsNG4r0oPbqPUwsbL-IFAmhP5Jpfu1kEmGQLRqdvDkXZGU-soA_xYKoIh1e7y8l"/>
+<div>
+<h4 class="text-sm font-bold text-dark">Sarah Jenkins</h4>
+<p class="text-xs text-muted">Palm Jumeirah Villa 12</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="px-2 py-0.5 rounded bg-green-100 text-green-600 text-[10px] font-bold">Verified Tenant</span>
+</div>
+</div>
+</div>
+<!-- Timeline -->
+<div>
+<h4 class="text-xs font-bold uppercase tracking-wider text-muted mb-4">Status Timeline</h4>
+<div class="space-y-4">
+<div class="flex gap-3">
+<div class="flex flex-col items-center">
+<div class="w-2.5 h-2.5 rounded-full bg-primary ring-4 ring-primary/20"></div>
+<div class="w-0.5 h-full bg-primary/20"></div>
+</div>
+<div>
+<p class="text-xs font-bold text-dark">Ticket Created</p>
+<p class="text-[10px] text-muted">Today, 09:12 AM</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="flex flex-col items-center">
+<div class="w-2.5 h-2.5 rounded-full bg-primary"></div>
+<div class="w-0.5 h-full bg-primary/20"></div>
+</div>
+<div>
+<p class="text-xs font-bold text-dark">AI Classified &amp; Assigned</p>
+<p class="text-[10px] text-muted">Today, 09:14 AM</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="flex flex-col items-center">
+<div class="w-2.5 h-2.5 rounded-full bg-gray-300"></div>
+</div>
+<div>
+<p class="text-xs font-medium text-muted italic">Awaiting Inspection...</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Conversation Thread -->
+<div>
+<h4 class="text-xs font-bold uppercase tracking-wider text-muted mb-4">Conversation</h4>
+<div class="space-y-4">
+<div class="bg-cream p-3 rounded-lg border border-primary/10">
+<p class="text-xs text-dark">"Hello, the AC in my master bedroom has started leaking water onto the carpet. It's quite a bit of water. Can someone please look at this ASAP?"</p>
+<p class="text-[10px] text-muted mt-2 text-right">Sarah Jenkins • 09:12 AM</p>
+</div>
+</div>
+</div>
+<!-- Quick Update Form -->
+<div class="pt-4 border-t border-primary/10">
+<h4 class="text-xs font-bold uppercase tracking-wider text-muted mb-3">Update Ticket</h4>
+<div class="space-y-3">
+<select class="w-full bg-cream border border-primary/20 rounded-lg py-2 px-3 text-xs focus:ring-primary focus:border-primary outline-none font-medium">
+<option>Update Status: Open</option>
+<option>In Progress</option>
+<option>Resolved</option>
+<option>Closed</option>
+</select>
+<textarea class="w-full bg-cream border border-primary/20 rounded-lg py-2 px-3 text-xs focus:ring-primary focus:border-primary outline-none h-20 resize-none" placeholder="Add internal note or reply..."></textarea>
+<div class="flex items-center gap-2 pt-1">
+<button class="flex-1 bg-primary text-dark font-bold py-2 rounded-lg text-xs hover:bg-deepgold transition-colors shadow-sm">
+                                        Update Ticket
+                                    </button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-[#25D366] text-[#25D366] hover:bg-[#25D366]/5 transition-colors">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Floating Action Button (FAB) -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-dark rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform z-[100] border-4 border-white">
+<span class="material-symbols-outlined text-2xl" data-icon="smart_toy" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</button>
+</body></html>

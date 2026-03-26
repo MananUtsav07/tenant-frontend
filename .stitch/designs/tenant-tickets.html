@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Prophives - Property Management Modals</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Manrope:wght@400;500;600&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FED609",
+                        cream: "#FEFAEF",
+                        ivory: "#FFFAE2",
+                        deepgold: "#FFD70B",
+                        dark: "#1A1A1A",
+                        muted: "#6B7280"
+                    },
+                    fontFamily: {
+                        "headline": ["Sora"],
+                        "body": ["Manrope"],
+                        "label": ["Dm Sans"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #FEFAEF;
+        }
+    </style>
+</head>
+<body class="font-body text-dark antialiased">
+<!-- Sidebar Navigation Shell -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-4 z-40 bg-[#FEFAEF] dark:bg-zinc-950 h-screen w-64 border-r border-zinc-200 dark:border-zinc-800 font-['Manrope'] text-sm font-medium">
+<div class="mb-8 px-4">
+<h1 class="text-lg font-bold text-zinc-900 dark:text-zinc-50 font-headline">Prophives Manager</h1>
+<p class="text-xs text-muted">Premium Property AI</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-zinc-600 dark:text-zinc-400 hover:bg-white dark:hover:bg-zinc-900 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+                Properties
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-zinc-600 dark:text-zinc-400 hover:bg-white dark:hover:bg-zinc-900 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="person_add">person_add</span>
+                Tenants
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-zinc-600 dark:text-zinc-400 hover:bg-white dark:hover:bg-zinc-900 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+                Payments
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-zinc-600 dark:text-zinc-400 hover:bg-white dark:hover:bg-zinc-900 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+                Automation
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 bg-yellow-400 text-zinc-900 rounded-xl font-bold shadow-sm scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto p-4 bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-zinc-100 dark:border-zinc-800">
+<div class="flex items-center gap-3 mb-4">
+<img alt="User profile" class="w-10 h-10 rounded-full bg-ivory" data-alt="professional headshot of a luxury real estate manager in Dubai with a clean minimalist aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEzmzjUNBF8Zco8y02XYreSmzLyq4QV8Ji_cf9i5L4lRHmqvOFCkYNfMNMyn_9YrYIhqw0OT8DPH4mit9CANCh7-jwbajLo248CcReCOwGGaeUggP3iTtG0PZMUgfTNnWmhQwK0lqr8oluHSGQDuyhK9NF2qkVdOwWQJQ9kNj46lw1iF6FzcXxGVrmZ_4Wz7hFCAI9yYLzUdae9IHcTvrs3I3EL9mGdiaLF0tKn9DWagBWz3SPT66JzDJKWOT0yzyrVd8Bqmomm0Bv"/>
+<div>
+<p class="font-bold text-xs">Khalid Al-Maktoum</p>
+<p class="text-[10px] text-muted uppercase tracking-wider font-label">Manager</p>
+</div>
+</div>
+<button class="w-full py-2 bg-primary hover:bg-deepgold text-dark font-bold rounded-lg transition-colors text-xs">
+                Add New
+            </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 p-8 min-h-screen">
+<header class="flex justify-between items-center mb-12">
+<div>
+<h2 class="text-3xl font-headline font-extrabold tracking-tight">System Components</h2>
+<p class="text-muted font-medium">Overview of active modal dialogs for the Prophives ecosystem.</p>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 px-4 py-2 bg-white border border-zinc-200 rounded-lg text-sm font-semibold hover:bg-ivory transition-colors shadow-sm">
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+                    Export Specs
+                </button>
+</div>
+</header>
+<!-- Bento Grid for Modals -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-12 items-start max-w-[1100px] mx-auto">
+<!-- Modal 1: Add New Property -->
+<div class="flex flex-col gap-4">
+<span class="text-[10px] font-bold text-muted uppercase tracking-widest px-1">Component: Modal_01</span>
+<div class="w-[480px] bg-white rounded-[12px] shadow-xl border border-zinc-100 overflow-hidden">
+<div class="p-8">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-headline font-bold">Add New Property</h3>
+<span class="material-symbols-outlined text-muted cursor-pointer hover:text-dark" data-icon="close">close</span>
+</div>
+<form class="space-y-4">
+<div>
+<label class="block text-xs font-label font-bold text-dark mb-1 uppercase tracking-wide">Property Name</label>
+<input class="w-full px-4 py-3 bg-cream border-transparent rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all font-body text-sm" placeholder="e.g. Burj Khalifa Residences" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-label font-bold text-dark mb-1 uppercase tracking-wide">Address</label>
+<input class="w-full px-4 py-3 bg-cream border-transparent rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all font-body text-sm" placeholder="Street, District" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-xs font-label font-bold text-dark mb-1 uppercase tracking-wide">City</label>
+<select class="w-full px-4 py-3 bg-cream border-transparent rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all font-body text-sm appearance-none">
+<option>Dubai</option>
+<option>Abu Dhabi</option>
+<option>Sharjah</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-label font-bold text-dark mb-1 uppercase tracking-wide">Unit Number</label>
+<input class="w-full px-4 py-3 bg-cream border-transparent rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all font-body text-sm" placeholder="A-102" type="text"/>
+</div>
+</div>
+<div class="pt-4 flex items-center justify-between">
+<a class="text-sm font-semibold text-muted hover:text-dark transition-colors" href="#">Cancel</a>
+<button class="px-8 py-3 bg-primary hover:bg-deepgold text-dark font-bold rounded-lg transition-all shadow-md active:scale-95" type="button">Add Property</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+<!-- Modal 2: Add New Tenant -->
+<div class="flex flex-col gap-4">
+<span class="text-[10px] font-bold text-muted uppercase tracking-widest px-1">Component: Modal_02</span>
+<div class="w-[480px] bg-white rounded-[12px] shadow-xl border border-zinc-100 overflow-hidden">
+<div class="p-8">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-headline font-bold">Add New Tenant</h3>
+<span class="material-symbols-outlined text-muted cursor-pointer hover:text-dark" data-icon="close">close</span>
+</div>
+<form class="space-y-4">
+<div class="grid grid-cols-2 gap-4">
+<div class="col-span-2">
+<label class="block text-xs font-label font-bold text-dark mb-1 uppercase tracking-wide">Full Name</label>
+<input class="w-full px-4 py-3 bg-cream border-transparent rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all font-body text-sm" placeholder="John Doe" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-label font-bold text-dark mb-1 uppercase tracking-wide">Email</label>
+<input class="w-full px-4 py-3 bg-cream border-transparent rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all font-body text-sm" placeholder="john@example.com" type="email"/>
+</div>
+<div>
+<label class="block text-xs font-label font-bold text-dark mb-1 uppercase tracking-wide">Phone</label>
+<input class="w-full px-4 py-3 bg-cream border-transparent rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all font-body text-sm" placeholder="+971..." type="tel"/>
+</div>
+<div class="col-span-2">
+<label class="block text-xs font-label font-bold text-dark mb-1 uppercase tracking-wide">Property</label>
+<select class="w-full px-4 py-3 bg-cream border-transparent rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all font-body text-sm">
+<option>Palm Jumeirah Villa 4</option>
+<option>Marina Gate 1 - Unit 12</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-label font-bold text-dark mb-1 uppercase tracking-wide">Monthly Rent (AED)</label>
+<input class="w-full px-4 py-3 bg-cream border-transparent rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all font-body text-sm" placeholder="15,000" type="number"/>
+</div>
+<div>
+<label class="block text-xs font-label font-bold text-dark mb-1 uppercase tracking-wide">WhatsApp Number</label>
+<div class="relative">
+<input class="w-full px-4 py-3 bg-cream border-transparent rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all font-body text-sm pr-10" placeholder="+971..." type="tel"/>
+<div class="absolute right-3 top-1/2 -translate-y-1/2 text-green-500">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"></path></svg>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-4 flex items-center justify-between">
+<a class="text-sm font-semibold text-muted hover:text-dark transition-colors" href="#">Cancel</a>
+<button class="px-8 py-3 bg-primary hover:bg-deepgold text-dark font-bold rounded-lg transition-all shadow-md active:scale-95" type="button">Add Tenant</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+<!-- Modal 3: Review Payment -->
+<div class="flex flex-col gap-4">
+<span class="text-[10px] font-bold text-muted uppercase tracking-widest px-1">Component: Modal_03</span>
+<div class="w-[480px] bg-white rounded-[12px] shadow-xl border border-zinc-100 overflow-hidden">
+<div class="p-8">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-headline font-bold">Review Payment</h3>
+<span class="material-symbols-outlined text-muted cursor-pointer hover:text-dark" data-icon="more_horiz">more_horiz</span>
+</div>
+<div class="bg-ivory/50 rounded-xl p-6 mb-6 space-y-4">
+<div class="flex justify-between">
+<span class="text-xs font-bold text-muted uppercase tracking-wider">Tenant</span>
+<span class="text-sm font-semibold">Sarah Jenkins</span>
+</div>
+<div class="flex justify-between">
+<span class="text-xs font-bold text-muted uppercase tracking-wider">Property</span>
+<span class="text-sm font-semibold text-right">Burj Vista Tower 1, 2204</span>
+</div>
+<div class="flex justify-between items-center pt-2 border-t border-zinc-100">
+<span class="text-xs font-bold text-muted uppercase tracking-wider">Amount</span>
+<span class="text-lg font-extrabold text-dark">AED 12,500.00</span>
+</div>
+<div class="flex justify-between">
+<span class="text-xs font-bold text-muted uppercase tracking-wider">Date</span>
+<span class="text-sm font-semibold">Oct 12, 2023</span>
+</div>
+</div>
+<div class="mb-8">
+<label class="block text-xs font-label font-bold text-dark mb-2 uppercase tracking-wide">Internal Notes</label>
+<textarea class="w-full px-4 py-3 bg-cream border-transparent rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all font-body text-sm" placeholder="Add details about the transaction or verification..." rows="3"></textarea>
+</div>
+<div class="flex gap-4">
+<button class="flex-1 py-3 border-2 border-red-500 text-red-500 hover:bg-red-50 font-bold rounded-lg transition-all text-sm" type="button">Reject</button>
+<button class="flex-1 py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition-all shadow-md active:scale-95 text-sm" type="button">Approve</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Modal 4: Connect Telegram Bot -->
+<div class="flex flex-col gap-4">
+<span class="text-[10px] font-bold text-muted uppercase tracking-widest px-1">Component: Modal_04</span>
+<div class="w-[480px] bg-white rounded-[12px] shadow-xl border border-zinc-100 overflow-hidden">
+<div class="p-8">
+<div class="flex flex-col items-center text-center mb-8">
+<div class="w-16 h-16 bg-[#0088cc]/10 text-[#0088cc] rounded-full flex items-center justify-center mb-4">
+<svg class="w-10 h-10 fill-current" viewbox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .33z"></path></svg>
+</div>
+<h3 class="text-xl font-headline font-bold">Connect Telegram Bot</h3>
+<p class="text-sm text-muted mt-2">Get instant property alerts and notifications directly to your phone.</p>
+</div>
+<div class="space-y-6">
+<div class="flex items-start gap-4">
+<span class="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-dark text-xs font-bold flex items-center justify-center mt-1">1</span>
+<p class="text-sm font-medium">Search for <span class="font-bold text-dark">@ProphivesBot</span> in Telegram</p>
+</div>
+<div class="flex items-start gap-4">
+<span class="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-dark text-xs font-bold flex items-center justify-center mt-1">2</span>
+<p class="text-sm font-medium">Click <span class="font-bold text-dark">Start</span> or send /start to the bot</p>
+</div>
+<div class="flex items-start gap-4">
+<span class="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-dark text-xs font-bold flex items-center justify-center mt-1">3</span>
+<div>
+<p class="text-sm font-medium mb-3">Enter the following verification code:</p>
+<div class="bg-primary px-6 py-3 rounded-xl inline-block shadow-sm">
+<span class="text-2xl font-black tracking-widest text-dark">PH-8829</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-10">
+<button class="w-full py-4 bg-primary hover:bg-deepgold text-dark font-bold rounded-lg transition-all shadow-md active:scale-95" type="button">Done</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Background Pattern/Decoration -->
+<div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+<div class="absolute top-0 right-0 w-[800px] h-[800px] bg-ivory rounded-full blur-[120px] -mr-96 -mt-96 opacity-60"></div>
+<div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[100px] -ml-48 -mb-48 opacity-40"></div>
+</div>
+</body></html>

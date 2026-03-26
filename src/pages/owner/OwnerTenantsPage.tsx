@@ -1,22 +1,28 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react'
-import { Building2, Download, Pencil, Trash2, UserRoundPlus, Users } from 'lucide-react'
+import {
+  Building2,
+  Users,
+  UserRoundPlus,
+  Pencil,
+  Trash2,
+  Eye,
+  MessageCircle,
+  Send,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react'
 
 import { Button } from '../../components/common/Button'
-import { DataTable } from '../../components/common/DataTable'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { FormInput } from '../../components/common/FormInput'
-import { FormSelect } from '../../components/common/FormSelect'
 import { LoadingState } from '../../components/common/LoadingState'
-import { StatusBadge } from '../../components/common/StatusBadge'
 import { Modal } from '../../components/common/Modal'
-import { dashboardInfoPanelClassName } from '../../components/common/formTheme'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
 import type { Broker, Property, Tenant } from '../../types/api'
-import { formatCurrency, formatDate, formatDateTime, getCurrencyMarker } from '../../utils/date'
-import { exportToCsv } from '../../utils/export'
+import { formatCurrency, formatDate, getCurrencyMarker } from '../../utils/date'
 
 function getNextDueDate(dayOfMonth: number, now = new Date()): Date {
   const currentYear = now.getUTCFullYear()
@@ -67,17 +73,45 @@ function sanitizeRentInput(value: string, currencyMarker: string): string {
   return decimalPart.length > 0 ? `${wholePart || '0'}.${decimalPart}` : wholePart
 }
 
+function getPaymentStatusStyle(status: Tenant['payment_status']) {
+  switch (status) {
+    case 'paid':
+      return 'bg-green-100 text-green-700 border-green-200'
+    case 'overdue':
+      return 'bg-red-100 text-red-700 border-red-200'
+    case 'partial':
+      return 'bg-yellow-100 text-yellow-700 border-yellow-200'
+    case 'pending':
+    default:
+      return 'bg-orange-100 text-orange-700 border-orange-200'
+  }
+}
+
+function getTenantStatusStyle(status: Tenant['status']) {
+  switch (status) {
+    case 'active':
+      return 'bg-green-100 text-green-700 border-green-200'
+    case 'inactive':
+      return 'bg-gray-100 text-gray-600 border-gray-200'
+    case 'terminated':
+      return 'bg-red-100 text-red-700 border-red-200'
+    default:
+      return 'bg-gray-100 text-gray-600 border-gray-200'
+  }
+}
+
 export function OwnerTenantsPage() {
   const { token, owner } = useOwnerAuth()
   const [tenants, setTenants] = useState<Tenant[]>([])
   const [properties, setProperties] = useState<Property[]>([])
-  const [brokers, setBrokers] = useState<Broker[]>([])
+  const [_brokers, setBrokers] = useState<Broker[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [editingTenantId, setEditingTenantId] = useState<string | null>(null)
   const [showTenantForm, setShowTenantForm] = useState(false)
   const [form, setForm] = useState(buildEmptyTenantForm)
+  const [filterPropertyId, setFilterPropertyId] = useState('')
   const ownerCurrencyCode = owner?.organization?.currency_code ?? 'INR'
   const ownerCurrencyMarker = getCurrencyMarker(ownerCurrencyCode)
 
@@ -242,228 +276,91 @@ export function OwnerTenantsPage() {
     })
   }
 
+  const filteredTenants = filterPropertyId
+    ? tenants.filter((t) => t.property_id === filterPropertyId)
+    : tenants
+
+  const getPropertyName = (propertyId: string) => {
+    return properties.find((p) => p.id === propertyId)?.property_name ?? '-'
+  }
+
   return (
-    <section className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-3">
+    <div className="p-6 max-w-7xl mx-auto space-y-6">
+      {/* Page Header */}
+      <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-semibold text-[#1A1A1A]">Tenants</h2>
-          <p className="text-sm text-[#6B7280]">Create tenant access IDs and manage occupancy.</p>
+          <h2 className="text-3xl font-bold font-[Sora] text-[#1A1A1A]">Tenants</h2>
+          <p className="text-[#6B7280] mt-1 font-[Manrope]">
+            Manage your residents and lease agreements across all properties.
+          </p>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(0,0,0,0.06)] bg-[#FFFAE2] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[#92700A]">
-          <Users className="h-3.5 w-3.5 text-[#FED609]" />
-          {tenants.length} total
-        </span>
-      </div>
-
-      {!showTenantForm && properties.length > 0 ? (
-        <div className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-5 shadow-sm">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <h3 className="text-lg font-semibold text-[#1A1A1A]">Create Tenant</h3>
-              <p className="text-sm text-[#6B7280]">Click below to open the full tenant form.</p>
-            </div>
-            <Button
-              type="button"
-              onClick={() => {
-                setShowTenantForm(true)
-                setEditingTenantId(null)
-                setForm(buildEmptyTenantForm(properties[0]?.id ?? ''))
-              }}
-              variant="secondary"
-              size="sm"
-              iconLeft={<UserRoundPlus className="h-4 w-4" />}
-            >
-              Add Tenant
-            </Button>
-          ) : null}
-        </div>
-      ) : null}
-
-      {showTenantForm ? (
-        <form
-          onSubmit={handleCreateTenant}
-          autoComplete="off"
-          className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-5 shadow-sm"
-        >
-        <input
-          type="text"
-          name="prevent_username"
-          autoComplete="username"
-          tabIndex={-1}
-          aria-hidden="true"
-          style={{ position: 'absolute', left: '-9999px', opacity: 0, width: 1, height: 1 }}
-        />
-        <input
-          type="password"
-          name="prevent_current_password"
-          autoComplete="current-password"
-          tabIndex={-1}
-          aria-hidden="true"
-          style={{ position: 'absolute', left: '-9999px', opacity: 0, width: 1, height: 1 }}
-        />
-
-        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-          <label className="block space-y-2">
-            <span className="text-sm font-medium text-[#4B5563]">Property</span>
+        <div className="flex items-center gap-3">
+          {/* Filter by Property */}
+          <div className="relative">
             <select
-              name="tenant_property_id"
-              autoComplete="off"
-              className="tf-field"
-              value={form.property_id}
-              onChange={(event) => setForm((current) => ({ ...current, property_id: event.target.value }))}
-              required
+              className="appearance-none bg-white border border-[#FED609]/20 rounded-lg px-4 py-2.5 pr-10 text-sm font-medium focus:ring-[#FED609] focus:border-[#FED609] outline-none cursor-pointer text-[#1A1A1A] font-[DM_Sans]"
+              value={filterPropertyId}
+              onChange={(e) => setFilterPropertyId(e.target.value)}
             >
-              <option value="" disabled>
-                Select property
-              </option>
-              {properties.map((property) => (
-                <option key={property.id} value={property.id}>
-                  {property.property_name}
+              <option value="">All Properties</option>
+              {properties.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.property_name}
                 </option>
               ))}
             </select>
-          </label>
-
-          <FormInput
-            label="Full Name"
-            name="tenant_full_name"
-            autoComplete="off"
-            value={form.full_name}
-            onChange={(event) => setForm((current) => ({ ...current, full_name: event.target.value }))}
-            required
-          />
-          <FormInput
-            label="Email"
-            type="email"
-            name="tenant_contact_email"
-            autoComplete="new-password"
-            value={form.email}
-            onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
-          />
-          <FormInput
-            label="Phone"
-            name="tenant_phone"
-            autoComplete="off"
-            value={form.phone}
-            onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
-          />
-          <FormInput
-            label={editingTenantId ? 'Password (leave blank to keep current)' : 'Password'}
-            type="password"
-            name="tenant_access_password"
-            autoComplete="new-password"
-            value={form.password}
-            onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
-            required={!editingTenantId}
-          />
-          <label className="block space-y-2">
-            <span className="text-sm font-medium text-[#4B5563]">Monthly Rent</span>
-            <input
-              type="text"
-              inputMode="decimal"
-              name="tenant_monthly_rent"
-              className="tf-field"
-              value={`${ownerCurrencyMarker}${form.monthly_rent}`}
-              onChange={(event) =>
-                setForm((current) => ({
-                  ...current,
-                  monthly_rent: sanitizeRentInput(event.target.value, ownerCurrencyMarker),
-                }))
-              }
-              required
-            />
-          </label>
-          <FormInput
-            label="Due Date"
-            type="number"
-            name="tenant_due_day"
-            min={1}
-            max={31}
-            value={form.payment_due_day}
-            onChange={(event) => setForm((current) => ({ ...current, payment_due_day: event.target.value }))}
-            required
-          />
-          <FormInput
-            label="Lease Start"
-            type="date"
-            name="tenant_lease_start"
-            value={form.lease_start_date}
-            onChange={(event) => setForm((current) => ({ ...current, lease_start_date: event.target.value }))}
-          />
-          <FormInput
-            label="Lease End"
-            type="date"
-            name="tenant_lease_end"
-            value={form.lease_end_date}
-            onChange={(event) => setForm((current) => ({ ...current, lease_end_date: event.target.value }))}
-          />
-
-          <label className="block space-y-2">
-            <span className="text-sm font-medium text-[#4B5563]">Payment Status</span>
-            <select
-              name="tenant_payment_status"
-              className="tf-field"
-              value={form.payment_status}
-              onChange={(event) =>
-                setForm((current) => ({
-                  ...current,
-                  payment_status: event.target.value as Tenant['payment_status'],
-                }))
-              }
-              required
-            >
-              <option value="pending">pending</option>
-              <option value="paid">paid</option>
-              <option value="overdue">overdue</option>
-              <option value="partial">partial</option>
-            </select>
-          </label>
-
-          <label className="block space-y-2">
-            <span className="text-sm font-medium text-[#4B5563]">Tenant Status</span>
-            <select
-              name="tenant_status"
-              className="tf-field"
-              value={form.status}
-              onChange={(event) =>
-                setForm((current) => ({
-                  ...current,
-                  status: event.target.value as Tenant['status'],
-                }))
-              }
-              required
-            >
-              <option value="active">active</option>
-              <option value="inactive">inactive</option>
-              <option value="terminated">terminated</option>
-            </select>
-          </label>
-        </div>
-
-          <div className="mt-4 flex flex-wrap gap-2">
-          <Button
-            type="submit"
-            disabled={busy || properties.length === 0}
-            variant="secondary"
-            iconLeft={editingTenantId ? <Pencil className="h-4 w-4" /> : <UserRoundPlus className="h-4 w-4" />}
-          >
-            {editingTenantId ? 'Save Tenant' : 'Create Tenant'}
-          </Button>
-            <Button
-              type="button"
-              onClick={resetForm}
-              variant="outline"
-              className="border-[rgba(0,0,0,0.06)] bg-white text-[#4B5563]"
-            >
-              {editingTenantId ? 'Cancel Edit' : 'Close Form'}
-            </Button>
+            <ChevronRight className="absolute right-3 top-3 w-4 h-4 pointer-events-none text-[#6B7280] rotate-90" />
           </div>
-        </form>
-      </Modal>
 
+          {/* Add Tenant Button */}
+          <button
+            type="button"
+            onClick={() => {
+              setShowTenantForm(true)
+              setEditingTenantId(null)
+              setForm(buildEmptyTenantForm(properties[0]?.id ?? ''))
+            }}
+            className="bg-[#FED609] hover:bg-[#FFD70B] text-[#1A1A1A] font-bold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-all shadow-lg shadow-[#FED609]/10 font-[DM_Sans] text-sm"
+          >
+            <UserRoundPlus className="w-4 h-4" />
+            Add Tenant
+          </button>
+        </div>
+      </div>
+
+      {/* Summary Stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="bg-white rounded-xl border border-[#FED609]/10 shadow-sm p-4">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#6B7280] font-[DM_Sans]">Total Tenants</p>
+          <p className="text-2xl font-bold font-[Sora] text-[#1A1A1A] mt-1">{tenants.length}</p>
+        </div>
+        <div className="bg-white rounded-xl border border-[#FED609]/10 shadow-sm p-4">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#6B7280] font-[DM_Sans]">Paid</p>
+          <p className="text-2xl font-bold font-[Sora] text-green-600 mt-1">
+            {tenants.filter((t) => t.payment_status === 'paid').length}
+          </p>
+        </div>
+        <div className="bg-white rounded-xl border border-[#FED609]/10 shadow-sm p-4">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#6B7280] font-[DM_Sans]">Pending</p>
+          <p className="text-2xl font-bold font-[Sora] text-orange-500 mt-1">
+            {tenants.filter((t) => t.payment_status === 'pending').length}
+          </p>
+        </div>
+        <div className="bg-white rounded-xl border border-[#FED609]/10 shadow-sm p-4">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#6B7280] font-[DM_Sans]">Overdue</p>
+          <p className="text-2xl font-bold font-[Sora] text-red-600 mt-1">
+            {tenants.filter((t) => t.payment_status === 'overdue').length}
+          </p>
+        </div>
+      </div>
+
+      {/* Error */}
       {error ? <ErrorState message={error} /> : null}
+
+      {/* Loading */}
       {loading ? <LoadingState message="Loading tenant records..." rows={4} /> : null}
 
+      {/* No Properties */}
       {!loading && properties.length === 0 ? (
         <EmptyState
           title="No properties found"
@@ -474,76 +371,344 @@ export function OwnerTenantsPage() {
         />
       ) : null}
 
+      {/* No Tenants */}
       {!loading && properties.length > 0 && tenants.length === 0 ? (
         <EmptyState
           title="No tenants yet"
-          description="Use the form above to create the first tenant account."
+          description="Click 'Add Tenant' to create the first tenant account."
           icon={<Users className="h-5 w-5" />}
           actionLabel="Add Tenant"
           onAction={() => setShowTenantForm(true)}
         />
       ) : null}
 
-      {!loading && tenants.length > 0 ? (
-        <DataTable headers={['Name', 'Broker', 'Access ID', 'Rent', 'Due Date', 'Lease', 'Status', 'Created', 'Actions']}>
-          {tenants.map((tenant) => (
-            <tr key={tenant.id}>
-              <td className="px-4 py-3">
-                <p className="font-medium text-[#1A1A1A]">{tenant.full_name}</p>
-                <p className="text-xs text-[#6B7280]">{tenant.email || 'No email'}</p>
-              </td>
-              <td className="px-4 py-3 text-[#1A1A1A]">{tenant.tenant_access_id}</td>
-              <td className="px-4 py-3 text-[#1A1A1A]">{formatCurrency(tenant.monthly_rent, ownerCurrencyCode)}</td>
-              <td className="px-4 py-3 text-[#1A1A1A]">{formatDate(getNextDueDate(tenant.payment_due_day).toISOString())}</td>
-              <td className="px-4 py-3 text-[#6B7280]">
-                {formatDate(tenant.lease_start_date)} - {formatDate(tenant.lease_end_date)}
-              </td>
-              <td className="px-4 py-3">
-                <StatusBadge status={tenant.payment_status} />
-              </td>
-              <td className="px-4 py-3 text-[#6B7280]">{formatDateTime(tenant.created_at)}</td>
-              <td className="px-4 py-3">
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    to={`/owner/tenants/${tenant.id}`}
-                    variant="outline"
-                    size="sm"
-                    className="border-[rgba(0,0,0,0.06)] bg-white text-[#4B5563]"
+      {/* Tenants Table */}
+      {!loading && filteredTenants.length > 0 ? (
+        <div className="bg-white rounded-xl shadow-sm border border-[#FED609]/10 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-[#FED609] text-[#1A1A1A]">
+                  <th className="px-6 py-4 font-bold font-[Sora] text-sm uppercase tracking-wider">Tenant Name</th>
+                  <th className="px-6 py-4 font-bold font-[Sora] text-sm uppercase tracking-wider">Property</th>
+                  <th className="px-6 py-4 font-bold font-[Sora] text-sm uppercase tracking-wider text-center">Access ID</th>
+                  <th className="px-6 py-4 font-bold font-[Sora] text-sm uppercase tracking-wider">Monthly Rent</th>
+                  <th className="px-6 py-4 font-bold font-[Sora] text-sm uppercase tracking-wider">Lease End</th>
+                  <th className="px-6 py-4 font-bold font-[Sora] text-sm uppercase tracking-wider">Due Date</th>
+                  <th className="px-6 py-4 font-bold font-[Sora] text-sm uppercase tracking-wider">Payment</th>
+                  <th className="px-6 py-4 font-bold font-[Sora] text-sm uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-4 font-bold font-[Sora] text-sm uppercase tracking-wider text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="text-sm font-[Manrope]">
+                {filteredTenants.map((tenant, index) => (
+                  <tr
+                    key={tenant.id}
+                    className={`border-b border-[#FED609]/5 hover:bg-[#FFFAE2] transition-colors ${
+                      index % 2 === 0 ? 'bg-[#FEFAEF]/30' : 'bg-white'
+                    }`}
                   >
-                    View
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={() => beginEdit(tenant)}
-                    variant="outline"
-                    size="sm"
-                    className="border-[rgba(0,0,0,0.06)] bg-white text-[#4B5563]"
-                    iconLeft={<Pencil className="h-3.5 w-3.5" />}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={() => void handleDelete(tenant.id)}
-                    variant="outline"
-                    size="sm"
-                    className="border-[rgba(244,163,163,0.28)] bg-[rgba(120,28,28,0.14)] text-red-200 hover:bg-[rgba(120,28,28,0.2)]"
-                    iconLeft={<Trash2 className="h-3.5 w-3.5" />}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </DataTable>
+                    <td className="px-6 py-4">
+                      <p className="font-semibold text-[#1A1A1A]">{tenant.full_name}</p>
+                      <p className="text-xs text-[#6B7280]">{tenant.email ?? 'No email'}</p>
+                    </td>
+                    <td className="px-6 py-4 text-[#6B7280]">{getPropertyName(tenant.property_id)}</td>
+                    <td className="px-6 py-4 text-center font-medium text-[#1A1A1A]">
+                      {tenant.tenant_access_id}
+                    </td>
+                    <td className="px-6 py-4 font-bold text-[#1A1A1A]">
+                      {formatCurrency(tenant.monthly_rent, ownerCurrencyCode)}
+                    </td>
+                    <td className="px-6 py-4 text-[#6B7280]">{formatDate(tenant.lease_end_date)}</td>
+                    <td className="px-6 py-4 text-[#6B7280]">
+                      {formatDate(getNextDueDate(tenant.payment_due_day).toISOString())}
+                    </td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`px-3 py-1 rounded-full font-bold text-xs uppercase border ${getPaymentStatusStyle(tenant.payment_status)}`}
+                      >
+                        {tenant.payment_status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`px-3 py-1 rounded-full font-bold text-xs uppercase border ${getTenantStatusStyle(tenant.status)}`}
+                      >
+                        {tenant.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex justify-end gap-1">
+                        <Button
+                          to={`/owner/tenants/${tenant.id}`}
+                          variant="ghost"
+                          size="sm"
+                          className="p-1.5 hover:bg-[#FED609]/20 rounded-md text-[#1A1A1A]"
+                          iconLeft={<Eye className="w-4 h-4" />}
+                        >
+                          {''}
+                        </Button>
+                        <button
+                          type="button"
+                          title="Send WhatsApp"
+                          className="p-1.5 hover:bg-green-100 rounded-md transition-colors text-green-600"
+                        >
+                          <MessageCircle className="w-4 h-4" />
+                        </button>
+                        <button
+                          type="button"
+                          title="Send Telegram"
+                          className="p-1.5 hover:bg-blue-100 rounded-md transition-colors text-blue-500"
+                        >
+                          <Send className="w-4 h-4" />
+                        </button>
+                        <button
+                          type="button"
+                          title="Edit tenant"
+                          onClick={() => beginEdit(tenant)}
+                          className="p-1.5 hover:bg-[#FED609]/20 rounded-md transition-colors text-[#1A1A1A]"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                        <button
+                          type="button"
+                          title="Delete tenant"
+                          onClick={() => void handleDelete(tenant.id)}
+                          disabled={busy}
+                          className="p-1.5 hover:bg-red-100 rounded-md transition-colors text-red-500 disabled:opacity-40"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Table Footer */}
+          <div className="px-6 py-4 bg-white border-t border-[#FED609]/10 flex justify-between items-center">
+            <span className="text-sm text-[#6B7280] font-[DM_Sans]">
+              Showing {filteredTenants.length} of {tenants.length} tenant{tenants.length !== 1 ? 's' : ''}
+            </span>
+            <div className="flex gap-1">
+              <button
+                type="button"
+                className="w-8 h-8 rounded flex items-center justify-center border border-[#FED609]/20 text-[#6B7280] hover:bg-[#FED609] hover:text-[#1A1A1A] transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                className="w-8 h-8 rounded flex items-center justify-center bg-[#FED609] text-[#1A1A1A] font-bold"
+              >
+                1
+              </button>
+              <button
+                type="button"
+                className="w-8 h-8 rounded flex items-center justify-center border border-[#FED609]/20 text-[#6B7280] hover:bg-[#FED609] hover:text-[#1A1A1A] transition-colors"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
       ) : null}
 
+      {/* Tip */}
       {!loading && properties.length > 0 && tenants.length > 0 ? (
-        <p className="text-xs text-[#6B7280]">
+        <p className="text-xs text-[#6B7280] font-[DM_Sans]">
           Tip: leave password blank while editing to keep the tenant's current password.
         </p>
       ) : null}
-    </section>
+
+      {/* Tenant Form Modal */}
+      {showTenantForm ? (
+        <Modal
+          isOpen={showTenantForm}
+          onClose={resetForm}
+          title={editingTenantId ? 'Edit Tenant' : 'Create Tenant'}
+          size="lg"
+        >
+          <form onSubmit={handleCreateTenant} autoComplete="off" className="space-y-4">
+            {/* Hidden autocomplete traps */}
+            <input
+              type="text"
+              name="prevent_username"
+              autoComplete="username"
+              tabIndex={-1}
+              aria-hidden="true"
+              style={{ position: 'absolute', left: '-9999px', opacity: 0, width: 1, height: 1 }}
+            />
+            <input
+              type="password"
+              name="prevent_current_password"
+              autoComplete="current-password"
+              tabIndex={-1}
+              aria-hidden="true"
+              style={{ position: 'absolute', left: '-9999px', opacity: 0, width: 1, height: 1 }}
+            />
+
+            <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+              <label className="block space-y-2">
+                <span className="text-sm font-medium text-[#4B5563]">Property</span>
+                <select
+                  name="tenant_property_id"
+                  autoComplete="off"
+                  className="tf-field"
+                  value={form.property_id}
+                  onChange={(event) => setForm((current) => ({ ...current, property_id: event.target.value }))}
+                  required
+                >
+                  <option value="" disabled>
+                    Select property
+                  </option>
+                  {properties.map((property) => (
+                    <option key={property.id} value={property.id}>
+                      {property.property_name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <FormInput
+                label="Full Name"
+                name="tenant_full_name"
+                autoComplete="off"
+                value={form.full_name}
+                onChange={(event) => setForm((current) => ({ ...current, full_name: event.target.value }))}
+                required
+              />
+              <FormInput
+                label="Email"
+                type="email"
+                name="tenant_contact_email"
+                autoComplete="new-password"
+                value={form.email}
+                onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
+              />
+              <FormInput
+                label="Phone"
+                name="tenant_phone"
+                autoComplete="off"
+                value={form.phone}
+                onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
+              />
+              <FormInput
+                label={editingTenantId ? 'Password (leave blank to keep current)' : 'Password'}
+                type="password"
+                name="tenant_access_password"
+                autoComplete="new-password"
+                value={form.password}
+                onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
+                required={!editingTenantId}
+              />
+              <label className="block space-y-2">
+                <span className="text-sm font-medium text-[#4B5563]">Monthly Rent</span>
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  name="tenant_monthly_rent"
+                  className="tf-field"
+                  value={`${ownerCurrencyMarker}${form.monthly_rent}`}
+                  onChange={(event) =>
+                    setForm((current) => ({
+                      ...current,
+                      monthly_rent: sanitizeRentInput(event.target.value, ownerCurrencyMarker),
+                    }))
+                  }
+                  required
+                />
+              </label>
+              <FormInput
+                label="Due Date"
+                type="number"
+                name="tenant_due_day"
+                min={1}
+                max={31}
+                value={form.payment_due_day}
+                onChange={(event) => setForm((current) => ({ ...current, payment_due_day: event.target.value }))}
+                required
+              />
+              <FormInput
+                label="Lease Start"
+                type="date"
+                name="tenant_lease_start"
+                value={form.lease_start_date}
+                onChange={(event) => setForm((current) => ({ ...current, lease_start_date: event.target.value }))}
+              />
+              <FormInput
+                label="Lease End"
+                type="date"
+                name="tenant_lease_end"
+                value={form.lease_end_date}
+                onChange={(event) => setForm((current) => ({ ...current, lease_end_date: event.target.value }))}
+              />
+
+              <label className="block space-y-2">
+                <span className="text-sm font-medium text-[#4B5563]">Payment Status</span>
+                <select
+                  name="tenant_payment_status"
+                  className="tf-field"
+                  value={form.payment_status}
+                  onChange={(event) =>
+                    setForm((current) => ({
+                      ...current,
+                      payment_status: event.target.value as Tenant['payment_status'],
+                    }))
+                  }
+                  required
+                >
+                  <option value="pending">pending</option>
+                  <option value="paid">paid</option>
+                  <option value="overdue">overdue</option>
+                  <option value="partial">partial</option>
+                </select>
+              </label>
+
+              <label className="block space-y-2">
+                <span className="text-sm font-medium text-[#4B5563]">Tenant Status</span>
+                <select
+                  name="tenant_status"
+                  className="tf-field"
+                  value={form.status}
+                  onChange={(event) =>
+                    setForm((current) => ({
+                      ...current,
+                      status: event.target.value as Tenant['status'],
+                    }))
+                  }
+                  required
+                >
+                  <option value="active">active</option>
+                  <option value="inactive">inactive</option>
+                  <option value="terminated">terminated</option>
+                </select>
+              </label>
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Button
+                type="submit"
+                disabled={busy || properties.length === 0}
+                variant="secondary"
+                iconLeft={editingTenantId ? <Pencil className="h-4 w-4" /> : <UserRoundPlus className="h-4 w-4" />}
+              >
+                {editingTenantId ? 'Save Tenant' : 'Create Tenant'}
+              </Button>
+              <Button
+                type="button"
+                onClick={resetForm}
+                variant="outline"
+                className="border-[rgba(0,0,0,0.06)] bg-white text-[#4B5563]"
+              >
+                {editingTenantId ? 'Cancel Edit' : 'Close Form'}
+              </Button>
+            </div>
+          </form>
+        </Modal>
+      ) : null}
+    </div>
   )
 }

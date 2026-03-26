@@ -1,16 +1,12 @@
 import { useState, type FormEvent } from 'react'
-import { motion } from 'framer-motion'
-import { KeyRound, LogIn, MessageCircle, Send, ShieldCheck } from 'lucide-react'
+import { Eye, EyeOff, KeyRound, Lock, MessageCircle, Send, User } from 'lucide-react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 
-import { Button } from '../../components/common/Button'
 import { ErrorState } from '../../components/common/ErrorState'
-import { FormInput } from '../../components/common/FormInput'
 import { useTenantAuth } from '../../hooks/useTenantAuth'
 import { usePageSeo } from '../../hooks/usePageSeo'
 import { ROUTES } from '../../routes/constants'
 import { trackEvent } from '../../utils/analytics'
-import { revealUp, useMotionVariants, viewportOnce } from '../../utils/motion'
 
 export function TenantLoginPage() {
   const navigate = useNavigate()
@@ -20,7 +16,7 @@ export function TenantLoginPage() {
   const [tenantAccessId, setTenantAccessId] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const revealVariants = useMotionVariants(revealUp)
+  const [showPassword, setShowPassword] = useState(false)
 
   usePageSeo({
     title: 'Resident Login',
@@ -38,9 +34,7 @@ export function TenantLoginPage() {
 
     try {
       await login(tenantAccessId, password, email || undefined)
-      trackEvent('tenant_login_form_submit', {
-        user_type: 'tenant',
-      })
+      trackEvent('tenant_login_form_submit', { user_type: 'tenant' })
       navigate(ROUTES.tenantDashboard, { replace: true })
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Login failed')
@@ -50,137 +44,216 @@ export function TenantLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen">
-      {/* Left side — cream/gold branding panel */}
-      <motion.div
-        variants={revealVariants}
-        initial="hidden"
-        whileInView="show"
-        viewport={viewportOnce}
-        className="hidden w-[45%] flex-col justify-between bg-[#FEFAEF] p-10 lg:flex xl:p-14"
-      >
-        <div>
-          <span className="text-sm font-bold uppercase tracking-widest text-[#6B7280]">Resident Workspace</span>
-          <h1 className="mt-6 text-4xl font-semibold leading-tight text-[#1A1A1A] xl:text-5xl">
-            A cleaner support and rent experience for residents
+    <main className="flex min-h-screen flex-col md:flex-row">
+      {/* Left Side: Visual & Branding */}
+      <section className="relative hidden flex-col justify-between overflow-hidden bg-[#FEFAEF] p-12 md:flex md:w-1/2 lg:p-20">
+        {/* Decorative blur */}
+        <div className="absolute -bottom-20 -left-20 h-80 w-80 rounded-full bg-[#FED609]/10 blur-3xl" />
+
+        {/* Logo */}
+        <div className="relative z-10">
+          <span className="font-['Sora'] text-2xl font-black tracking-tight text-[#FED609]">Prophives</span>
+        </div>
+
+        {/* Hero Content */}
+        <div className="relative z-10 max-w-md">
+          <h1 className="mb-6 font-['Sora'] text-4xl font-extrabold leading-tight text-[#1A1A1A] lg:text-5xl">
+            Welcome Back, Tenant
           </h1>
-          <p className="mt-5 text-base leading-relaxed text-[#6B7280]">
-            Use your access ID to enter the Prophives resident workspace, view rent status, and follow support activity without operational noise.
+          <p className="font-['Manrope'] text-lg font-medium leading-relaxed text-[#6B7280]">
+            Access your property details, payments, and support in one seamless AI-powered experience.
           </p>
         </div>
 
-        <div className="space-y-3 text-sm text-[#1A1A1A]/70">
-          <p className="inline-flex items-center gap-2">
-            <KeyRound className="h-4 w-4 text-[#92700A]" />
-            Secure resident access through owner-issued credentials
-          </p>
-          <p className="inline-flex items-center gap-2">
-            <LogIn className="h-4 w-4 text-[#92700A]" />
-            Support requests, rent actions, and property detail visibility
-          </p>
-          <p className="inline-flex items-center gap-2">
-            <ShieldCheck className="h-4 w-4 text-[#92700A]" />
-            Separate resident workspace with no owner-level exposure
-          </p>
+        {/* Illustration */}
+        <div className="relative z-10 mx-auto w-full max-w-sm" style={{ aspectRatio: '1' }}>
+          <img
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwmokeBToTZN3roK3mkhXYj_uxCe1Ye7cpLUxXKjMDznbRs6yEaLkVW4pP9KFk6nZKRHttuyCfby9uFJo4aQTJahHjRjsFiTxZ8EFD8GRlQ4HLRw2bmFJfO08cmLZVImIXrqUM5aEbFCvBmbRXEM-Jm5KelDjLLqpEE1QzqFgoaDlaFP4WgD4QU-pddubSzQ5m29XrtmguORCDU-2hGor6BIUY3yBCzhIYaaLBIulGNYzip0aNB-tK1IlUSSv3ohYf7qrb-6aXVghZ"
+            alt="Modern apartment illustration"
+            className="h-full w-full object-contain"
+          />
         </div>
-      </motion.div>
+      </section>
 
-      {/* Right side — form */}
-      <div className="flex flex-1 items-center justify-center bg-white px-6 py-12 sm:px-10">
-        <motion.div
-          variants={revealVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={viewportOnce}
-          className="w-full max-w-md"
-        >
-          <h2 className="text-3xl font-semibold text-[#1A1A1A]">Resident Login</h2>
-          <p className="mt-2 text-sm text-[#6B7280]">Access your property support workspace.</p>
+      {/* Right Side: Login Form */}
+      <section className="flex w-full flex-col items-center justify-center bg-white p-8 md:w-1/2 lg:p-24">
+        {/* Mobile logo */}
+        <div className="mb-12 md:hidden">
+          <span className="font-['Sora'] text-2xl font-black tracking-tight text-[#FED609]">Prophives</span>
+        </div>
 
-          <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-            <FormInput
-              label="Tenant Access ID"
-              variant="light"
-              name="tenant_access_id"
-              autoComplete="username"
-              value={tenantAccessId}
-              onChange={(event) => setTenantAccessId(event.target.value)}
-              required
-            />
-            <FormInput
-              label="Email (optional)"
-              type="email"
-              variant="light"
-              name="tenant_email"
-              autoComplete="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-            />
-            <FormInput
-              label="Password"
-              type="password"
-              variant="light"
-              name="tenant_password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-            />
+        <div className="w-full max-w-md">
+          {/* Header */}
+          <div className="mb-10">
+            <h2 className="font-['Sora'] text-3xl font-bold text-[#1A1A1A]">Tenant Login</h2>
+            <p className="mt-2 font-['DM_Sans'] text-[#6B7280]">Enter your credentials to manage your home.</p>
+          </div>
 
-            <div className="-mt-1 flex justify-end">
-              <Link className="ph-link text-sm font-semibold" to={ROUTES.tenantForgotPassword}>
-                Forgot password?
-              </Link>
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            {/* Tenant Code / ID */}
+            <div className="space-y-2">
+              <label
+                htmlFor="tenant-id"
+                className="block font-['DM_Sans'] text-sm font-bold text-[#1A1A1A]"
+              >
+                Tenant Code / ID
+              </label>
+              <div className="group relative">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-[#6B7280] transition-colors group-focus-within:text-[#FED609]">
+                  <User className="h-5 w-5" />
+                </div>
+                <input
+                  id="tenant-id"
+                  type="text"
+                  name="tenant_access_id"
+                  autoComplete="username"
+                  placeholder="e.g. PH-88291"
+                  value={tenantAccessId}
+                  onChange={(e) => setTenantAccessId(e.target.value)}
+                  required
+                  className="block w-full rounded-xl border-transparent bg-[#FEFAEF] py-4 pl-12 pr-4 font-['Manrope'] text-[#1A1A1A] outline-none transition-all focus:border-[#FED609] focus:ring-2 focus:ring-[#FED609]/20"
+                />
+              </div>
             </div>
 
-            {error ? <ErrorState message={error} variant="light" /> : null}
+            {/* Email (optional) */}
+            <div className="space-y-2">
+              <label
+                htmlFor="tenant-email"
+                className="block font-['DM_Sans'] text-sm font-bold text-[#1A1A1A]"
+              >
+                Email{' '}
+                <span className="font-normal text-[#6B7280]">(optional)</span>
+              </label>
+              <div className="group relative">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-[#6B7280] transition-colors group-focus-within:text-[#FED609]">
+                  <KeyRound className="h-5 w-5" />
+                </div>
+                <input
+                  id="tenant-email"
+                  type="email"
+                  name="tenant_email"
+                  autoComplete="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="block w-full rounded-xl border-transparent bg-[#FEFAEF] py-4 pl-12 pr-4 font-['Manrope'] text-[#1A1A1A] outline-none transition-all focus:border-[#FED609] focus:ring-2 focus:ring-[#FED609]/20"
+                />
+              </div>
+            </div>
 
-            <Button
+            {/* Password */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="password"
+                  className="block font-['DM_Sans'] text-sm font-bold text-[#1A1A1A]"
+                >
+                  Password
+                </label>
+                <Link
+                  to={ROUTES.tenantForgotPassword}
+                  className="font-['DM_Sans'] text-sm font-semibold text-[#FED609] transition-colors hover:text-[#FFD70B]"
+                >
+                  Forgot?
+                </Link>
+              </div>
+              <div className="group relative">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-[#6B7280] transition-colors group-focus-within:text-[#FED609]">
+                  <Lock className="h-5 w-5" />
+                </div>
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  name="tenant_password"
+                  autoComplete="current-password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="block w-full rounded-xl border-transparent bg-[#FEFAEF] py-4 pl-12 pr-12 font-['Manrope'] text-[#1A1A1A] outline-none transition-all focus:border-[#FED609] focus:ring-2 focus:ring-[#FED609]/20"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute inset-y-0 right-0 flex items-center pr-4 text-[#6B7280] hover:text-[#1A1A1A]"
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Remember me */}
+            <div className="flex items-center">
+              <input
+                id="remember"
+                type="checkbox"
+                className="h-5 w-5 rounded border-[#FEFAEF] text-[#FED609] focus:ring-[#FED609]"
+              />
+              <label
+                htmlFor="remember"
+                className="ml-3 cursor-pointer select-none font-['DM_Sans'] text-sm font-medium text-[#6B7280]"
+              >
+                Remember me on this device
+              </label>
+            </div>
+
+            {error && <ErrorState message={error} variant="light" />}
+
+            {/* Submit */}
+            <button
               type="submit"
               disabled={busy}
-              variant="primary"
-              className="w-full justify-center"
-              iconLeft={<LogIn className="h-4 w-4" />}
+              className="w-full rounded-xl bg-[#FED609] px-6 py-4 font-['Sora'] font-bold text-[#1A1A1A] shadow-lg shadow-[#FED609]/20 transition-all duration-200 hover:bg-[#FFD70B] active:scale-[0.98] disabled:opacity-60"
             >
               {busy ? 'Please wait...' : 'Sign In'}
-            </Button>
+            </button>
           </form>
 
-          <p className="mt-5 text-sm text-[#6B7280]">
-            Owner?{' '}
-            <Link className="font-semibold text-[#1A1A1A] underline decoration-[#FED609] decoration-2 underline-offset-2 hover:text-[#92700A]" to={ROUTES.ownerLogin}>
-              Login here
-            </Link>
-          </p>
+          {/* Support & Footer */}
+          <div className="mt-12 border-t border-[#FEFAEF] pt-8 text-center">
+            <p className="mb-6 font-['DM_Sans'] text-sm font-medium text-[#6B7280]">
+              Need help?{' '}
+              <Link
+                to={ROUTES.ownerLogin}
+                className="font-bold text-[#1A1A1A] underline decoration-[#FED609]/30 underline-offset-4 transition-colors hover:text-[#FED609]"
+              >
+                Contact your property owner
+              </Link>
+            </p>
+            <div className="flex justify-center gap-4">
+              <a
+                href="https://wa.me/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-full border border-gray-100 px-5 py-2.5 font-['DM_Sans'] text-xs font-bold text-[#6B7280] transition-all hover:border-[#25D366]/30 hover:bg-[#25D366]/5 hover:text-[#25D366]"
+              >
+                <MessageCircle className="h-4 w-4" />
+                WhatsApp
+              </a>
+              <a
+                href="https://t.me/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-full border border-gray-100 px-5 py-2.5 font-['DM_Sans'] text-xs font-bold text-[#6B7280] transition-all hover:border-[#0088cc]/30 hover:bg-[#0088cc]/5 hover:text-[#0088cc]"
+              >
+                <Send className="h-4 w-4" />
+                Telegram
+              </a>
+            </div>
 
-          <div className="mt-5 inline-flex items-center gap-2 rounded-xl border border-[rgba(0,0,0,0.06)] bg-[#FEFAEF] px-4 py-2.5 text-xs text-[#6B7280]">
-            <KeyRound className="h-3.5 w-3.5 text-[#92700A]" />
-            Use the access ID shared by your property owner.
+            <p className="mt-8 font-['DM_Sans'] text-sm text-[#6B7280]">
+              Owner?{' '}
+              <Link
+                to={ROUTES.ownerLogin}
+                className="font-bold text-[#1A1A1A] underline decoration-[#FED609] decoration-2 underline-offset-2 hover:text-[#92700A]"
+              >
+                Login here
+              </Link>
+            </p>
           </div>
-
-          {/* Support links */}
-          <div className="mt-6 flex items-center gap-3">
-            <a
-              href="https://wa.me/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full border border-[#25D366]/30 bg-[#25D366]/5 px-3.5 py-2 text-xs font-medium text-[#25D366] transition hover:bg-[#25D366]/10"
-            >
-              <MessageCircle className="h-3.5 w-3.5" />
-              WhatsApp Support
-            </a>
-            <a
-              href="https://t.me/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full border border-[#0088cc]/30 bg-[#0088cc]/5 px-3.5 py-2 text-xs font-medium text-[#0088cc] transition hover:bg-[#0088cc]/10"
-            >
-              <Send className="h-3.5 w-3.5" />
-              Telegram Support
-            </a>
-          </div>
-        </motion.div>
-      </div>
-    </div>
+        </div>
+      </section>
+    </main>
   )
 }

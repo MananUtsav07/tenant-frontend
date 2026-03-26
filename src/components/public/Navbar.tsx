@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { Building2, ChevronDown, LogOut, Menu, UserRound, X } from 'lucide-react'
+import { Building2, ChevronDown, LogOut, Menu, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 

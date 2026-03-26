@@ -20,14 +20,10 @@ type DashboardLayoutProps = {
 }
 
 export function DashboardLayout({
-  title,
-  subtitle,
   identityPrimary,
   identitySecondary,
   navItems,
   onLogout,
-  showTopNavbar = true,
-  headerActions,
 }: DashboardLayoutProps) {
   return (
     <div className="min-h-screen bg-[#FEFAEF] text-[#1A1A1A]">

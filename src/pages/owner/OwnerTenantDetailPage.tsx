@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom'
 import { ArrowLeft, Building2, Mail, Phone } from 'lucide-react'
 
 import { Button } from '../../components/common/Button'
-import { ConditionReportOwnerPanel } from '../../components/condition-reports/ConditionReportOwnerPanel'
 import { DataTable } from '../../components/common/DataTable'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
@@ -119,7 +118,6 @@ export function OwnerTenantDetailPage() {
         >
           Back to tenants
         </Button>
-        </div>
       </div>
 
       {error ? <ErrorState message={error} /> : null}

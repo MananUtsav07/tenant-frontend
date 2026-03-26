@@ -5,12 +5,6 @@ type StatusBadgeProps = {
   status: string
 }
 
-const mutedGold = 'border-[rgba(240,163,35,0.24)] bg-[rgba(240,163,35,0.1)] text-[#f3d49a]'
-const mutedSlate = 'border-[rgba(140,154,182,0.24)] bg-[rgba(140,154,182,0.1)] text-[#d8deea]'
-const mutedGreen = 'border-[rgba(139,208,181,0.22)] bg-[rgba(139,208,181,0.1)] text-[#cfeede]'
-const mutedGray = 'border-[rgba(83,88,100,0.42)] bg-white/5 text-[var(--ph-text-soft)]'
-const mutedRed = 'border-[rgba(244,163,163,0.24)] bg-[rgba(244,163,163,0.1)] text-[#f8d2d2]'
-
 const statusClass: Record<string, string> = {
   open: 'border-[rgba(254,214,9,0.3)] bg-[rgba(254,214,9,0.08)] text-[#92750A]',
   in_progress: 'border-sky-500/20 bg-sky-50 text-sky-700',

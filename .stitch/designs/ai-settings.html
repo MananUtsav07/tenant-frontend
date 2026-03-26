@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Prophives | AI Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Manrope:wght@400;500;600&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FED609",
+                        "primary-dark": "#FFD70B",
+                        cream: "#FEFAEF",
+                        ivory: "#FFFAE2",
+                        dark: "#1A1A1A",
+                        muted: "#6B7280"
+                    },
+                    fontFamily: {
+                        "headline": ["Sora", "sans-serif"],
+                        "body": ["Manrope", "sans-serif"],
+                        "label": ["DM Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #FEFAEF;
+            color: #1A1A1A;
+            font-family: 'Manrope', sans-serif;
+        }
+        .gold-gradient-border {
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(to right, #FED609, #FFD70B) border-box;
+            border: 2px solid transparent;
+        }
+    </style>
+</head>
+<body class="bg-cream text-dark">
+<!-- SideNavBar Component -->
+<aside class="fixed left-0 top-0 h-screen flex flex-col p-4 bg-white border-r border-gray-100 shadow-xl w-64 z-50">
+<div class="mb-8 px-2">
+<h1 class="text-[#FED609] font-['Sora'] font-bold text-xl">Prophives</h1>
+<p class="text-xs text-muted font-medium">Premium Management</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-[#6B7280] hover:bg-[#FEFAEF] hover:text-[#FED609] transition-all duration-200 ease-in-out font-['Manrope'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#6B7280] hover:bg-[#FEFAEF] hover:text-[#FED609] transition-all duration-200 ease-in-out font-['Manrope'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+<span>Properties</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#6B7280] hover:bg-[#FEFAEF] hover:text-[#FED609] transition-all duration-200 ease-in-out font-['Manrope'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span>Tenants</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#6B7280] hover:bg-[#FEFAEF] hover:text-[#FED609] transition-all duration-200 ease-in-out font-['Manrope'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="build">build</span>
+<span>Maintenance</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#6B7280] hover:bg-[#FEFAEF] hover:text-[#FED609] transition-all duration-200 ease-in-out font-['Manrope'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span>Reports</span>
+</a>
+<!-- Active Tab: AI Settings -->
+<a class="flex items-center gap-3 px-4 py-3 bg-[#FEFAEF] text-[#1A1A1A] border-l-4 border-[#FED609] rounded-r-lg transition-all duration-200 ease-in-out font-['Manrope'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span>AI Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-4 border-t border-gray-100">
+<button class="w-full bg-[#FED609] text-dark font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 hover:bg-[#FFD70B] transition-colors shadow-sm">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+                Add Property
+            </button>
+<div class="flex items-center gap-3 mt-6 px-2">
+<div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+<img alt="User Profile" data-alt="professional male executive in a sharp suit with a confident smile in a bright modern office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBprOIgn9nWTpCCQLrz6O5s0K1b-LBsfMZwURib5PmfCPwf1Eeq3MBoR3d81PgwdrSWoJDz2AsBarABRc2h6c4Y59GJxD-y0DaHL7P6Zub9scQUSwRVaszlK3awch0HPIs4n2hCRxlQel5NITOych7a3dUG62eUR9jgTZNMHMgA8G6q7CCPJpWV-tpwvVAalktULHsZ3R2areKDdfWACy24jZ9E9ys0Qg2__EmqZXuhLGN2khH7I0z5rFKJkvDm9P6F7mf54u-YZnH8"/>
+</div>
+<div>
+<p class="text-sm font-bold text-dark">Alex Rivera</p>
+<p class="text-xs text-muted">Portfolio Manager</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 p-8 min-h-screen">
+<!-- Top Navigation (Mobile/Utility) -->
+<header class="flex justify-between items-center mb-10">
+<div class="flex flex-col">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<h2 class="text-3xl font-['Sora'] font-extrabold tracking-tight text-dark">AI Settings</h2>
+</div>
+<p class="text-muted font-['Manrope'] font-medium">Configure your AI automation preferences.</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-muted hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-muted hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+</button>
+</div>
+</header>
+<!-- AI Overview Card -->
+<section class="mb-8">
+<div class="gold-gradient-border bg-white p-8 rounded-xl flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-6">
+<div class="p-4 bg-cream rounded-full">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="psychology" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</div>
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h3 class="text-xl font-['Sora'] font-bold">AI Automation</h3>
+<span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full uppercase tracking-wider">Active</span>
+</div>
+<p class="text-muted max-w-xl">Enable AI-powered features to automate your property management workflow, reducing manual tasks and increasing efficiency.</p>
+</div>
+</div>
+<!-- Gold Toggle Switch -->
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-14 h-8 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#FED609]"></div>
+</label>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left Column: Feature Toggles -->
+<div class="lg:col-span-2 space-y-6">
+<h4 class="text-sm font-['DM Sans'] font-bold uppercase tracking-widest text-muted mb-4">Automation Features</h4>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Feature Card 1 -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-50 hover:border-primary/30 transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-cream rounded-lg group-hover:bg-ivory transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#FED609]"></div>
+</label>
+</div>
+<h5 class="font-['Sora'] font-bold text-dark mb-2">Ticket Classification</h5>
+<p class="text-sm text-muted">Automatically classify incoming support tickets by priority and category using natural language processing.</p>
+</div>
+<!-- Feature Card 2 -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-50 hover:border-primary/30 transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex gap-2">
+<div class="p-3 bg-cream rounded-lg group-hover:bg-ivory transition-colors">
+<img alt="WhatsApp" class="w-6 h-6" data-alt="official green whatsapp logo icon representing messaging platform integration" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSfqVrH6l4Ww3Y8Q9eI2OQkKDVxlmMmlbF6Z6WI5vV7pYcbdD86hMfQDuOffu0q-RFmKvi7DALwdIqkPDD0pvqbVia7WFoVTVJ0CPBfmscnyLinwHE_hLiGLqbSdMERkrgMPOYnx-4EZa88PK05091FUk7UUkVX_cHtcrHyW5oFh8BFdxAduZRJ7OwXS7YH-L-Oqbwx9xTFSmTJFH4jsVbJowHiw1_-3Nujuiw6-5UluzhRl73-lgLyXHlJTzUHtLdYrIxmaCk62V3"/>
+</div>
+<div class="p-3 bg-cream rounded-lg group-hover:bg-ivory transition-colors">
+<img alt="Telegram" class="w-6 h-6" data-alt="official blue telegram logo icon representing cloud based messaging platform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6sgbuABhKx-XrOzdgH7-4My24BEaVyrlotpl3_JqYoMQNl4v3ifvaCX107G4O_3b_yOM8yM-_LLHII8z3CBSGCPstCX-lEcqFsWjyLtEBEIAdP_SQhP6dHUom1TlV0k21RCs9uruTcUGOdFgpAQnjgmRuCynWPv6J2hp_ELNx3NXlvk6oc42Dmy9daMzcc9la6Yv73Wv6f2Xfr8FBx3FVKqkwq6eErSbJ8Js5t-xifQBhfjXnsgQmpVbyvnHy-CyMhi8jSg6uGwSb"/>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#FED609]"></div>
+</label>
+</div>
+<h5 class="font-['Sora'] font-bold text-dark mb-2">Smart Reminders</h5>
+<p class="text-sm text-muted">AI generates friendly payment reminders and sends them automatically via WhatsApp or Telegram bots.</p>
+</div>
+<!-- Feature Card 3 -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-50 hover:border-primary/30 transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-cream rounded-lg group-hover:bg-ivory transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="summarize" style="font-variation-settings: 'FILL' 1;">summarize</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#FED609]"></div>
+</label>
+</div>
+<h5 class="font-['Sora'] font-bold text-dark mb-2">Ticket Summarization</h5>
+<p class="text-sm text-muted">Get AI-generated summaries of lengthy ticket threads for a quick overview of tenant issues and history.</p>
+</div>
+<!-- Feature Card 4 -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-50 hover:border-primary/30 transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-cream rounded-lg group-hover:bg-ivory transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="calendar_month">calendar_month</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#FED609]"></div>
+</label>
+</div>
+<h5 class="font-['Sora'] font-bold text-dark mb-2">Reminder Generation</h5>
+<p class="text-sm text-muted">Automatically create and schedule periodic rent reminders for tenants based on lease agreements.</p>
+</div>
+</div>
+<!-- AI Model Selection Card -->
+<div class="bg-white p-8 rounded-xl shadow-sm border border-gray-50 mt-8">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary" data-icon="model_training">model_training</span>
+<h5 class="font-['Sora'] font-bold text-dark text-lg">AI Model Selection</h5>
+</div>
+<div class="flex flex-col md:flex-row md:items-center gap-6">
+<div class="flex-1">
+<label class="block text-sm font-['DM Sans'] font-bold text-muted mb-2 uppercase tracking-wide">Select Primary Engine</label>
+<select class="w-full bg-cream border-gray-200 rounded-lg py-3 px-4 text-dark font-medium focus:ring-primary focus:border-primary transition-all">
+<option>Prophives-Lumina v4.2 (Default)</option>
+<option>Prophives-FastTrack v2.0</option>
+<option>GPT-4o Optimized Integration</option>
+</select>
+</div>
+<div class="flex items-center gap-3 bg-ivory px-6 py-4 rounded-xl md:w-1/3">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="bolt">bolt</span>
+<div>
+<p class="text-xs font-bold text-primary-dark uppercase">Performance</p>
+<p class="text-sm font-medium text-dark leading-tight">Current model processes tickets 3x faster</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Usage Stats -->
+<div class="space-y-6">
+<div class="bg-ivory p-8 rounded-xl shadow-sm sticky top-8">
+<div class="flex justify-between items-center mb-8">
+<h4 class="font-['Sora'] font-bold text-dark text-lg">AI Analytics</h4>
+<span class="text-xs font-bold bg-white px-3 py-1 rounded-full text-muted border border-primary/20">This Month</span>
+</div>
+<div class="space-y-8">
+<div>
+<div class="flex justify-between items-end mb-2">
+<span class="text-sm font-['DM Sans'] font-medium text-muted">Tickets Classified</span>
+<span class="text-sm font-bold text-dark">1,248</span>
+</div>
+<div class="w-full bg-white rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 85%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-end mb-2">
+<span class="text-sm font-['DM Sans'] font-medium text-muted">Reminders Generated</span>
+<span class="text-sm font-bold text-dark">432</span>
+</div>
+<div class="w-full bg-white rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 62%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-end mb-2">
+<span class="text-sm font-['DM Sans'] font-medium text-muted">Summaries Created</span>
+<span class="text-sm font-bold text-dark">89</span>
+</div>
+<div class="w-full bg-white rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 45%"></div>
+</div>
+</div>
+</div>
+<div class="mt-12 p-6 bg-white/60 rounded-xl border border-white">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary" data-icon="info">info</span>
+<p class="text-sm font-bold text-dark">Efficiency Boost</p>
+</div>
+<p class="text-xs text-muted leading-relaxed">Your team saved approximately <span class="text-dark font-bold">42 hours</span> this month using automated ticket classification.</p>
+</div>
+<div class="mt-8">
+<img alt="Data Visualization" class="rounded-lg shadow-inner opacity-80" data-alt="a sleek minimalist line graph showing upward growth trends in golden yellow tones on a clean white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4NG2ErfHomXH1cHPzQXHm8DPwgzOCgbAuTH2ZyMWTrRbimudxnvyX0SovAIzUmFFZrdC5oYddtyNMRDIjoB0fbUeRe0GzMuHS-Kb8cLvrHrgIlGADwRKxH7aSZy19205MoHa2b8gE6YcoBUVT_ZKzlZq26o6RCnKfiUr8c5zDFc9YdoiOAhvvCA_QcT5QqfmIftGIFlRp7v0wzs_58_9O8tP8ENOuZssp0XDC209CoW1GJmsPQF160wPE3-7hu1lJH1Dgc9XPJhPr"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Action -->
+<footer class="mt-12 pt-8 border-t border-gray-200 flex justify-end">
+<div class="flex items-center gap-4">
+<button class="px-6 py-3 font-bold text-muted hover:text-dark transition-colors font-['DM Sans']">Discard Changes</button>
+<button class="bg-primary text-dark font-['Sora'] font-bold px-10 py-3 rounded-lg shadow-md hover:bg-primary-dark transition-all active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="save">save</span>
+                    Save Settings
+                </button>
+</div>
+</footer>
+</main>
+</body></html>

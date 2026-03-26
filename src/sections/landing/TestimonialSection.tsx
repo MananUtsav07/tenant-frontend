@@ -51,13 +51,13 @@ export function TestimonialSection() {
           <motion.article
             key={testimonial.name}
             variants={revealVariants}
-            className=”rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-6 shadow-sm”
+            className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-6 shadow-sm"
           >
-            <p className=”text-lg leading-relaxed text-[#4B5563]”>”{testimonial.quote}”</p>
-            <div className=”mt-6 border-t border-[rgba(0,0,0,0.06)] pt-4”>
-              <p className=”text-base font-semibold text-[#1A1A1A]”>{testimonial.name}</p>
-              <p className=”text-sm text-[#6B7280]”>
-                {testimonial.role} · {testimonial.company}
+            <p className="text-lg leading-relaxed text-[#4B5563]">&ldquo;{testimonial.quote}&rdquo;</p>
+            <div className="mt-6 border-t border-[rgba(0,0,0,0.06)] pt-4">
+              <p className="text-base font-semibold text-[#1A1A1A]">{testimonial.name}</p>
+              <p className="text-sm text-[#6B7280]">
+                {testimonial.role} &middot; {testimonial.company}
               </p>
             </div>
           </motion.article>

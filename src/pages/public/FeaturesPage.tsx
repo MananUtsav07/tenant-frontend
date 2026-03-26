@@ -4,21 +4,19 @@ import {
   ArrowRight,
   Bell,
   Bot,
+  BrainCircuit,
   CheckCircle,
-  CreditCard,
   Landmark,
   Mail,
   MessageCircle,
   Monitor,
   Send,
   Smartphone,
-  Sparkles,
   UserCircle,
+  Wallet,
   Zap,
 } from 'lucide-react'
 
-import { CTASection } from '../../components/common/CTASection'
-import { SectionContainer } from '../../components/common/SectionContainer'
 import { usePageSeo } from '../../hooks/usePageSeo'
 import { ROUTES } from '../../routes/constants'
 import { revealUp, staggerParent, useMotionVariants, viewportOnce } from '../../utils/motion'
@@ -31,7 +29,7 @@ const featureShowcases = [
   {
     kicker: 'Intelligence',
     kickerColor: 'text-[#FED609]',
-    kickerIcon: <Sparkles className="h-5 w-5" />,
+    kickerIcon: <BrainCircuit className="h-5 w-5" />,
     title: 'AI-Powered Automation',
     description:
       'Say goodbye to manual sorting. Our AI automatically classifies incoming maintenance tickets and summarizes tenant requests, ensuring urgent issues never fall through the cracks.',
@@ -71,7 +69,7 @@ const featureShowcases = [
   {
     kicker: 'Finance',
     kickerColor: 'text-[#FED609]',
-    kickerIcon: <CreditCard className="h-5 w-5" />,
+    kickerIcon: <Wallet className="h-5 w-5" />,
     title: 'Payment Tracking',
     description:
       'Eliminate financial blind spots. Monitor rent status across your entire portfolio with automated overdue alerts and comprehensive financial reporting.',
@@ -115,8 +113,8 @@ const featureShowcases = [
 const integrations = [
   { icon: <MessageCircle className="h-7 w-7" />, label: 'WhatsApp' },
   { icon: <Send className="h-7 w-7" />, label: 'Telegram' },
-  { icon: <Sparkles className="h-7 w-7" />, label: 'AI Core' },
-  { icon: <CreditCard className="h-7 w-7" />, label: 'Stripe' },
+  { icon: <BrainCircuit className="h-7 w-7" />, label: 'AI Core' },
+  { icon: <Wallet className="h-7 w-7" />, label: 'Payments' },
   { icon: <Landmark className="h-7 w-7" />, label: 'Bank Direct' },
 ]
 
@@ -160,7 +158,7 @@ export function FeaturesPage() {
 
   return (
     <>
-      {/* ─── Hero ─── */}
+      {/* Hero */}
       <section className="bg-[#FEFAEF] py-20 md:py-32 px-6">
         <motion.div
           variants={revealVariants}
@@ -173,16 +171,16 @@ export function FeaturesPage() {
             Everything You Need to{' '}
             <span className="text-[#FED609]">Manage Properties</span>
           </h1>
-          <p className="text-lg md:text-xl text-[#6B7280] font-medium max-w-2xl mx-auto font-body">
-            Experience the future of real estate management in Dubai with our AI-driven platform designed for efficiency,
-            clarity, and total control.
+          <p className="text-lg md:text-xl text-[#6B7280] font-medium max-w-2xl mx-auto font-['Manrope']">
+            Experience the future of real estate management in Dubai with our AI-driven platform
+            designed for efficiency, clarity, and total control.
           </p>
         </motion.div>
       </section>
 
-      {/* ─── Feature Showcase ─── */}
+      {/* Feature Showcase */}
       <section className="max-w-7xl mx-auto px-6 space-y-24 pb-24">
-        {featureShowcases.map((feature, idx) => {
+        {featureShowcases.map((feature) => {
           const imageBlock = (
             <motion.div
               variants={revealVariants}
@@ -201,13 +199,13 @@ export function FeaturesPage() {
               {/* Kicker */}
               <div className={`flex items-center gap-2 ${feature.kickerColor} mb-4`}>
                 {feature.kickerIcon}
-                <span className="font-bold text-sm tracking-wider uppercase font-label">
+                <span className="font-bold text-sm tracking-wider uppercase font-['DM_Sans']">
                   {feature.kicker}
                 </span>
               </div>
 
               <h2 className="ph-title text-3xl font-bold text-[#1A1A1A] mb-6">{feature.title}</h2>
-              <p className="text-[#6B7280] leading-relaxed mb-6 font-body">{feature.description}</p>
+              <p className="text-[#6B7280] leading-relaxed mb-6 font-['Manrope']">{feature.description}</p>
 
               {/* Bullet list */}
               {'bullets' in feature && feature.bullets && (
@@ -237,7 +235,7 @@ export function FeaturesPage() {
                 <div className="grid grid-cols-2 gap-4">
                   {feature.stats.map((stat) => (
                     <div key={stat.label} className="p-4 bg-white border border-[#FED609]/20 rounded-lg">
-                      <p className="text-xs text-[#6B7280] font-label">{stat.label}</p>
+                      <p className="text-xs text-[#6B7280] font-['DM_Sans']">{stat.label}</p>
                       <p className="text-xl font-bold text-[#FED609]">{stat.value}</p>
                     </div>
                   ))}
@@ -309,7 +307,7 @@ export function FeaturesPage() {
         })}
       </section>
 
-      {/* ─── Integration Banner ─── */}
+      {/* Integration Banner */}
       <section className="bg-[#FED609] py-12">
         <div className="max-w-7xl mx-auto px-6 overflow-hidden">
           <motion.div
@@ -329,7 +327,7 @@ export function FeaturesPage() {
         </div>
       </section>
 
-      {/* ─── CTA ─── */}
+      {/* CTA */}
       <section className="py-24 px-6 bg-[#FFFAE2]">
         <motion.div
           variants={revealVariants}
@@ -341,8 +339,9 @@ export function FeaturesPage() {
           <h2 className="ph-title text-3xl md:text-5xl font-extrabold text-[#1A1A1A] mb-8">
             Start Managing Smarter Today
           </h2>
-          <p className="text-[#6B7280] text-lg mb-10 max-w-xl mx-auto font-body">
-            Join hundreds of Dubai property managers who are scaling their business with Prophives AI.
+          <p className="text-[#6B7280] text-lg mb-10 max-w-xl mx-auto font-['Manrope']">
+            Join hundreds of Dubai property managers who are scaling their business with Prophives
+            AI.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link

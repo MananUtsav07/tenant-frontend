@@ -1,4 +1,7 @@
+import { motion } from 'framer-motion'
 import type { ReactNode } from 'react'
+
+import { revealUp, useMotionEnabled, useMotionVariants, viewportOnce } from '../../utils/motion'
 
 type DashboardCardProps = {
   label: string
@@ -7,7 +10,10 @@ type DashboardCardProps = {
   icon?: ReactNode
 }
 
-export function DashboardCard({ label, value, hint }: DashboardCardProps) {
+export function DashboardCard({ label, value, hint, icon }: DashboardCardProps) {
+  const revealVariants = useMotionVariants(revealUp)
+  const motionEnabled = useMotionEnabled()
+
   return (
     <motion.div
       variants={revealVariants}

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Prophives | Tenant Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#FED609",
+              cream: "#FEFAEF",
+              ivory: "#FFFAE2",
+              deepGold: "#FFD70B",
+              dark: "#1A1A1A",
+              muted: "#6B7280"
+            },
+            fontFamily: {
+              "headline": ["Sora", "sans-serif"],
+              "body": ["Manrope", "sans-serif"],
+              "label": ["DM Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav-indicator {
+            box-shadow: 4px 0 0 0 #FED609 inset;
+        }
+    </style>
+</head>
+<body class="bg-[#FEFAEF] font-body text-dark antialiased">
+<!-- Sidebar Navigation -->
+<aside class="h-screen w-64 fixed left-0 top-0 border-r border-[#FFFAE2] bg-[#FEFAEF] dark:bg-gray-900 shadow-sm flex flex-col py-6 z-50">
+<!-- Brand Header -->
+<div class="px-6 mb-10">
+<div class="text-2xl font-black text-[#1A1A1A] dark:text-white font-headline flex items-center gap-2">
+<span class="bg-primary p-1.5 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-dark text-xl" style="font-variation-settings: 'FILL' 1;">apartment</span>
+</span>
+                Prophives
+            </div>
+<div class="text-[10px] uppercase tracking-widest text-muted mt-1 font-label font-bold">Tenant Portal</div>
+</div>
+<!-- Main Navigation -->
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-[#1A1A1A] dark:text-white font-bold border-r-4 border-primary bg-[#FFFAE2] dark:bg-gray-800 transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-[#6B7280] dark:text-gray-400 hover:text-primary hover:bg-[#FFFAE2] transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">confirmation_number</span>
+<span class="font-label">My Tickets</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-[#6B7280] dark:text-gray-400 hover:text-primary hover:bg-[#FFFAE2] transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="font-label">Support</span>
+</a>
+</nav>
+<!-- Footer Navigation -->
+<div class="mt-auto pt-6 border-t border-[#FFFAE2] dark:border-gray-800 flex flex-col gap-1">
+<div class="px-6 mb-4 flex items-center gap-3">
+<img alt="Ahmed Al-Maktoum" class="w-10 h-10 rounded-full border-2 border-primary object-cover" data-alt="professional portrait of a middle eastern businessman with a friendly expression in a modern office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGnG5p49UNzzxTmwOi7l5WeKbS7MYwlMsiztvn2ucyadjyD_dvIS996m8XkxRrv3Hu4kx3xgrCVRsfIr4h0Cep9GEB1Q4DrQexxnQYuTPkYbPrDMGEhfbVUTW6asv1Bwrjw41RdiEP6qj8w5m7i-QCCpqwCGuN_HiPpgx5cQx7SV17YNB0ZwGaunZRA3zcFXUwq64R6vcsjGSa6yD7L_2FXG28EvYjZGnpzcKH7pRrUBjAKKN564i6fTmZ9gwGri6C7k49S8z94uXJ"/>
+<div class="overflow-hidden">
+<p class="text-sm font-bold truncate">Ahmed Al-Maktoum</p>
+<p class="text-xs text-muted truncate">Unit 4402</p>
+</div>
+</div>
+<a class="flex items-center gap-3 px-6 py-3 text-[#6B7280] dark:text-gray-400 hover:text-primary hover:bg-[#FFFAE2] transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label text-sm">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-red-500 hover:bg-red-50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label text-sm">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- Top App Bar -->
+<header class="sticky top-0 w-full z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-[#FEFAEF] dark:border-gray-800 h-16 px-8 flex justify-between items-center shadow-sm">
+<h1 class="text-lg font-headline font-bold text-dark dark:text-white">Dashboard</h1>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted text-lg">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-ivory border-none rounded-full text-sm focus:ring-2 focus:ring-primary w-64 transition-all" placeholder="Search resources..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-muted hover:text-primary cursor-pointer transition-colors relative">
+                        notifications
+                        <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+</button>
+<button class="material-symbols-outlined text-muted hover:text-primary cursor-pointer transition-colors">chat_bubble</button>
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-dark text-xl">account_circle</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-8 max-w-7xl mx-auto space-y-8">
+<!-- Welcome Header -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="text-3xl font-headline font-extrabold text-dark">Welcome, Ahmed Al-Maktoum</h2>
+<p class="text-muted mt-1 font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">location_on</span>
+                        Skyview Penthouse - Unit 4402
+                    </p>
+</div>
+<div class="flex gap-3">
+<button class="px-5 py-2.5 bg-white border border-[#FFFAE2] rounded-lg shadow-sm font-label font-bold text-sm flex items-center gap-2 hover:bg-ivory transition-colors">
+<span class="material-symbols-outlined text-primary">calendar_month</span>
+                        October 2023
+                    </button>
+</div>
+</section>
+<!-- Top Grid: Property & Payment -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Property Info Card -->
+<div class="lg:col-span-7 bg-white rounded-xl shadow-sm border-t-4 border-primary p-6 relative overflow-hidden group">
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-ivory rounded-full opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-xl font-headline font-bold text-dark mb-1">Skyview Penthouse</h3>
+<p class="text-muted text-sm">Dubai Marina, Marina Gate 1</p>
+</div>
+<span class="px-3 py-1 bg-primary/10 text-dark text-[10px] font-black uppercase tracking-widest rounded-full border border-primary/20">Active Lease</span>
+</div>
+<div class="grid grid-cols-2 gap-y-4 gap-x-8 mb-8">
+<div>
+<p class="text-[10px] text-muted font-label font-bold uppercase tracking-wider mb-1">Unit Number</p>
+<p class="font-bold text-dark">Unit 4402</p>
+</div>
+<div>
+<p class="text-[10px] text-muted font-label font-bold uppercase tracking-wider mb-1">Management</p>
+<p class="font-bold text-dark">Prophives Management</p>
+</div>
+<div class="col-span-2">
+<p class="text-[10px] text-muted font-label font-bold uppercase tracking-wider mb-1">Lease Period</p>
+<div class="flex items-center gap-2 text-dark font-bold">
+<span>Jan 2024</span>
+<span class="material-symbols-outlined text-primary text-sm">trending_flat</span>
+<span>Dec 2024</span>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-3">
+<button class="flex items-center gap-2 px-4 py-2 bg-[#25D366] text-white rounded-lg font-label font-bold text-sm hover:opacity-90 transition-opacity active:scale-95">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">chat</span>
+                                WhatsApp Owner
+                            </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-[#0088cc] text-white rounded-lg font-label font-bold text-sm hover:opacity-90 transition-opacity active:scale-95">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">send</span>
+                                Telegram
+                            </button>
+<button class="flex items-center gap-2 px-4 py-2 border border-primary text-dark rounded-lg font-label font-bold text-sm hover:bg-ivory transition-colors active:scale-95">
+<span class="material-symbols-outlined text-lg text-primary">mail</span>
+                                Email
+                            </button>
+</div>
+</div>
+</div>
+<!-- Rent Payment Card -->
+<div class="lg:col-span-5 bg-white rounded-xl shadow-sm p-6 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-lg font-headline font-bold text-dark">Rent Payment</h3>
+<span class="px-2 py-1 bg-green-100 text-green-700 text-[10px] font-black rounded-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            PAID
+                        </span>
+</div>
+<div class="bg-ivory rounded-xl p-5 mb-6 text-center">
+<p class="text-muted text-xs font-label font-bold mb-1">NEXT DUE AMOUNT</p>
+<p class="text-4xl font-headline font-extrabold text-dark tracking-tight">AED 12,500</p>
+<p class="text-muted text-sm mt-2">Due: <span class="text-dark font-bold">Oct 1, 2023</span></p>
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="text-[10px] text-muted font-label font-bold uppercase tracking-wider mb-3">Recent History</p>
+<div class="space-y-3">
+<div class="flex justify-between items-center py-2 border-b border-ivory">
+<span class="text-sm font-medium">September 2023</span>
+<span class="text-xs font-bold text-green-600">Paid</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-ivory">
+<span class="text-sm font-medium">August 2023</span>
+<span class="text-xs font-bold text-green-600">Paid</span>
+</div>
+<div class="flex justify-between items-center py-2">
+<span class="text-sm font-medium">July 2023</span>
+<span class="text-xs font-bold text-green-600">Paid</span>
+</div>
+</div>
+</div>
+<div class="mt-4 p-3 bg-primary/10 rounded-lg flex items-start gap-3">
+<span class="material-symbols-outlined text-primary">info</span>
+<p class="text-[11px] leading-tight text-dark font-medium">Next payment will be automatically debited from your linked bank account on Oct 1.</p>
+</div>
+</div>
+</div>
+<!-- Bottom Section: Tickets & Support -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<!-- Recent Tickets -->
+<div class="bg-white rounded-xl shadow-sm p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-lg font-headline font-bold text-dark">Recent Tickets</h3>
+<a class="text-xs font-label font-bold text-primary hover:underline" href="#">View All Tickets</a>
+</div>
+<div class="space-y-4 mb-8">
+<!-- Ticket 1 -->
+<div class="flex items-center justify-between p-3 rounded-lg border border-[#FEFAEF] hover:border-primary/30 transition-colors group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-blue-500">ac_unit</span>
+</div>
+<div>
+<p class="text-sm font-bold text-dark group-hover:text-primary transition-colors">AC Repair</p>
+<p class="text-xs text-muted">Ticket #PR-9231</p>
+</div>
+</div>
+<span class="px-2 py-1 bg-green-50 text-green-600 text-[10px] font-bold rounded">Resolved</span>
+</div>
+<!-- Ticket 2 -->
+<div class="flex items-center justify-between p-3 rounded-lg border border-[#FEFAEF] hover:border-primary/30 transition-colors group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-yellow-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-yellow-500">lightbulb</span>
+</div>
+<div>
+<p class="text-sm font-bold text-dark group-hover:text-primary transition-colors">Light Bulb Replacement</p>
+<p class="text-xs text-muted">Ticket #PR-9345</p>
+</div>
+</div>
+<span class="px-2 py-1 bg-primary/10 text-primary text-[10px] font-bold rounded">Open</span>
+</div>
+<!-- Ticket 3 -->
+<div class="flex items-center justify-between p-3 rounded-lg border border-[#FEFAEF] hover:border-primary/30 transition-colors group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-red-500">water_drop</span>
+</div>
+<div>
+<p class="text-sm font-bold text-dark group-hover:text-primary transition-colors">Water Leak Bathroom</p>
+<p class="text-xs text-muted">Ticket #PR-9122</p>
+</div>
+</div>
+<span class="px-2 py-1 bg-gray-100 text-gray-500 text-[10px] font-bold rounded">Closed</span>
+</div>
+</div>
+<button class="w-full py-3 bg-primary text-dark font-label font-bold rounded-lg shadow-md hover:bg-deepGold transition-all transform active:scale-[0.98] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add_circle</span>
+                        Create New Ticket
+                    </button>
+</div>
+<!-- Quick Support -->
+<div class="bg-white rounded-xl shadow-sm p-6 flex flex-col">
+<h3 class="text-lg font-headline font-bold text-dark mb-6">Quick Support</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+<button class="flex items-center justify-center gap-3 p-4 bg-[#25D366]/10 text-[#25D366] rounded-xl font-label font-bold hover:bg-[#25D366]/20 transition-colors">
+<span class="material-symbols-outlined">chat</span>
+                            Chat on WhatsApp
+                        </button>
+<button class="flex items-center justify-center gap-3 p-4 bg-[#0088cc]/10 text-[#0088cc] rounded-xl font-label font-bold hover:bg-[#0088cc]/20 transition-colors">
+<span class="material-symbols-outlined">send</span>
+                            Message on Telegram
+                        </button>
+</div>
+<button class="w-full py-4 border-2 border-primary border-dashed rounded-xl text-dark font-label font-bold hover:bg-ivory transition-all mb-8 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-primary">support_agent</span>
+                        Create Support Ticket
+                    </button>
+<div class="mt-auto p-4 bg-ivory rounded-xl border border-primary/20">
+<p class="text-[10px] text-muted font-label font-bold uppercase tracking-wider mb-3">Emergency Contact</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-dark text-lg">call</span>
+</div>
+<div>
+<p class="text-sm font-bold">Maintenance Line</p>
+<p class="text-xs text-muted">Available 24/7</p>
+</div>
+</div>
+<p class="text-sm font-black text-dark">+971 4 000 0000</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Telegram Connect Banner -->
+<div class="bg-gradient-to-r from-[#0088cc] to-[#00a2ed] rounded-2xl p-6 text-white shadow-lg overflow-hidden relative group">
+<div class="absolute -right-10 -bottom-10 opacity-10 group-hover:scale-110 transition-transform duration-700">
+<span class="material-symbols-outlined text-[200px]" style="font-variation-settings: 'FILL' 1;">send</span>
+</div>
+<div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="flex items-center gap-6">
+<div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div>
+<h4 class="text-xl font-headline font-bold">Get instant updates via Telegram</h4>
+<p class="text-white/80 text-sm">Receive lease renewals, payment receipts, and maintenance alerts instantly.</p>
+</div>
+</div>
+<button class="whitespace-nowrap px-8 py-3 bg-white text-[#0088cc] font-label font-extrabold rounded-lg shadow-xl hover:bg-ivory active:scale-95 transition-all">
+                        Connect Now
+                    </button>
+</div>
+</div>
+</div>
+</main>
+</body></html>
