@@ -45,7 +45,7 @@ export function BlogPage() {
     <>
       <SEO
         title="Prophives Blog"
-        description="Insights on property management, AI, and real estate tech. Discover how automation is reshaping the Dubai market."
+        description="Insights on property management, AI, and real estate tech. Discover how automation is reshaping the property management market."
         canonicalPath={ROUTES.blog}
         ogType="website"
         structuredData={{
@@ -70,7 +70,7 @@ export function BlogPage() {
             Prophives Blog
           </h1>
           <p className="font-['Manrope'] text-lg md:text-xl text-[#6B7280] max-w-2xl mx-auto">
-            Insights on property management, AI, and real estate tech. Discover how automation is reshaping the Dubai market.
+            Insights on property management, AI, and real estate tech. Discover how automation is reshaping the property management market.
           </p>
         </motion.div>
       </header>

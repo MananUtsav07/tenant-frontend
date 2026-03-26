@@ -44,7 +44,10 @@
       "Bash(npm run:*)",
       "Bash(xxd c:/Users/asus/Desktop/tenant-frontend/src/sections/landing/TestimonialSection.tsx)",
       "Skill(react-components)",
-      "Skill(react-components:*)"
+      "Skill(react-components:*)",
+      "Bash(find /c/Users/asus/Desktop/tenant-frontend -name *.png -o -name *.svg -o -name *.jpg -o -name *.webp)",
+      "Bash(find /c/Users/asus/Desktop/tenant-frontend -name *.jpeg -o -name *.jpg)",
+      "Bash(find /c/Users/asus/Desktop/tenant-frontend -name *.svg)"
     ]
   },
   "enableAllProjectMcpServers": true,

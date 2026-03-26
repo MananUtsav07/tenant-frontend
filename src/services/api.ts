@@ -278,6 +278,47 @@ export const api = {
       body,
     }),
 
+  getOwnerIntegrations: (token: string) =>
+    request<{
+      ok: true
+      integrations: {
+        whatsapp: { configured: boolean; provider: string | null; live: boolean }
+        telegram: { configured: boolean }
+        email: { configured: boolean }
+        instagram: { configured: boolean; coming_soon: boolean }
+      }
+    }>('/api/owner/integrations', { token }),
+
+  classifyOwnerTicket: (
+    token: string,
+    body: { subject: string; message: string; ticket_id?: string },
+  ) =>
+    request<{
+      ok: boolean
+      classification?: {
+        category: string
+        confidence: number
+        model: string
+        reasoning?: string
+      }
+      reason?: string
+    }>('/api/owner/ai/classify', { method: 'POST', token, body }),
+
+  summarizeOwnerTicket: (
+    token: string,
+    body: {
+      ticket_id: string
+      subject: string
+      message: string
+      updates?: Array<{ timestamp: string; author: string; message: string }>
+    },
+  ) =>
+    request<{
+      ok: boolean
+      summary?: { summary: string; model: string }
+      reason?: string
+    }>('/api/owner/ai/summarize', { method: 'POST', token, body }),
+
   getOwnerProperties: (token: string) => request<{ ok: true; properties: Property[] }>('/api/owners/properties', { token }),
 
   createOwnerProperty: (token: string, body: { property_name: string; address: string; unit_number?: string }) =>

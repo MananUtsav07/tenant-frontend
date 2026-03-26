@@ -150,7 +150,7 @@ export function PricingPage() {
             </div>
             <div className="mb-8">
               <h3 className="text-xl font-bold mb-2 font-['Sora']">Professional</h3>
-              <p className="text-[#6B7280] text-sm">The full suite for serious property managers in Dubai.</p>
+              <p className="text-[#6B7280] text-sm">The full suite for serious property managers.</p>
             </div>
             <div className="mb-8 text-[#FED609]">
               <span className="text-4xl font-extrabold">$99</span>

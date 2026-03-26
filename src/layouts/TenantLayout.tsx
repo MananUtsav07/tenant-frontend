@@ -1,4 +1,4 @@
-import { LayoutDashboard, LifeBuoy, MessageSquare } from 'lucide-react'
+import { LayoutDashboard, LifeBuoy, MessageSquare, Plug, UserCircle } from 'lucide-react'
 
 import { DashboardLayout } from './DashboardLayout'
 import { useTenantAuth } from '../hooks/useTenantAuth'
@@ -8,6 +8,8 @@ const tenantLinks = [
   { to: ROUTES.tenantDashboard, label: 'Overview', icon: <LayoutDashboard className="h-4 w-4" /> },
   { to: ROUTES.tenantTickets, label: 'Tickets', icon: <MessageSquare className="h-4 w-4" /> },
   { to: ROUTES.tenantSupport, label: 'Support', icon: <LifeBuoy className="h-4 w-4" /> },
+  { to: ROUTES.tenantIntegrations, label: 'Integrations', icon: <Plug className="h-4 w-4" /> },
+  { to: ROUTES.tenantProfile, label: 'Profile', icon: <UserCircle className="h-4 w-4" /> },
 ]
 
 export function TenantLayout() {

@@ -271,32 +271,14 @@ export function OwnerAiSettingsPage() {
                   />
 
                   {/* Smart Reminders */}
-                  <div className="group rounded-2xl border border-[rgba(0,0,0,0.06)] bg-white p-6 shadow-sm transition-all hover:border-[#FED609]/30 hover:shadow-md">
-                    <div className="mb-4 flex items-start justify-between">
-                      <div className="flex gap-2">
-                        <div className="rounded-xl bg-[#FEFAEF] p-3 transition-colors group-hover:bg-[#FFFAE2]">
-                          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
-                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" fill="#25D366"/>
-                          </svg>
-                        </div>
-                        <div className="rounded-xl bg-[#FEFAEF] p-3 transition-colors group-hover:bg-[#FFFAE2]">
-                          <svg className="h-6 w-6 text-[#0088CC]" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.98-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.11.02-1.93 1.23-5.46 3.62-.51.35-.98.52-1.4.51-.46-.01-1.35-.26-2.01-.48-.81-.27-1.45-.42-1.39-.89.03-.25.38-.51 1.07-.78 4.2-1.82 7-3.03 8.4-3.61 4-.17 4.83.1 4.83.1s.05.52.01 1.15z" />
-                          </svg>
-                        </div>
-                      </div>
-                      <GoldToggle
-                        checked={settings.reminder_generation_enabled}
-                        onToggle={() => toggleField('reminder_generation_enabled')}
-                        disabled={isDisabled}
-                      />
-                    </div>
-                    <h5 className="mb-2 font-['Sora'] text-base font-bold text-[#1A1A1A]">Smart Reminders</h5>
-                    <p className="text-sm leading-relaxed text-[#6B7280] font-[Manrope,sans-serif]">
-                      AI generates friendly payment reminders and sends them automatically via WhatsApp
-                      or Telegram bots.
-                    </p>
-                  </div>
+                  <FeatureCard
+                    icon={<CalendarDays className="h-6 w-6 text-[#FED609]" />}
+                    title="Smart Reminders"
+                    description="AI generates friendly payment reminders sent automatically to tenants via their connected messaging channels."
+                    checked={settings.reminder_generation_enabled}
+                    onToggle={() => toggleField('reminder_generation_enabled')}
+                    disabled={isDisabled}
+                  />
 
                   {/* Ticket Summarization */}
                   <FeatureCard
@@ -308,15 +290,6 @@ export function OwnerAiSettingsPage() {
                     disabled={isDisabled}
                   />
 
-                  {/* Reminder Generation */}
-                  <FeatureCard
-                    icon={<CalendarDays className="h-6 w-6 text-[#FED609]" />}
-                    title="Reminder Generation"
-                    description="Automatically create and schedule periodic rent reminders for tenants based on lease agreements."
-                    checked={settings.reminder_generation_enabled}
-                    onToggle={() => toggleField('reminder_generation_enabled')}
-                    disabled={isDisabled}
-                  />
                 </div>
 
                 {/* ── AI Model Selection ── */}
@@ -342,10 +315,10 @@ export function OwnerAiSettingsPage() {
                         disabled={isDisabled}
                         className="w-full rounded-xl border border-[rgba(0,0,0,0.08)] bg-[#FEFAEF] px-4 py-3 font-medium text-[#1A1A1A] transition-all focus:border-[#FED609] focus:outline-none focus:ring-2 focus:ring-[#FED609]/40 disabled:cursor-not-allowed disabled:opacity-60"
                       >
-                        <option value="prophives-lumina-v4.2">Prophives-Lumina v4.2 (Default)</option>
-                        <option value="prophives-fasttrack-v2.0">Prophives-FastTrack v2.0</option>
-                        <option value="gpt-4o">GPT-4o Optimized Integration</option>
-                        <option value={settings.ai_model}>{settings.ai_model}</option>
+                        <option value="gpt-4o-mini">GPT-4o Mini (Default, Fast)</option>
+                        <option value="gpt-4o">GPT-4o (Most Capable)</option>
+                        <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Budget)</option>
                       </select>
                     </div>
                     <div className="flex items-center gap-3 rounded-2xl bg-[#FFFAE2] px-6 py-4 md:w-1/3">

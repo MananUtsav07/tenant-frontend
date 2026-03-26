@@ -21,6 +21,8 @@ import {
 
 import { Button } from '../../components/common/Button'
 import { DataTable } from '../../components/common/DataTable'
+import { OwnerOnboardingWizard } from '../../components/owner/OwnerOnboardingWizard'
+import { useOwnerOnboarding } from '../../hooks/useOwnerOnboarding'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
@@ -34,12 +36,12 @@ import { revealUp, staggerParent, viewportOnce } from '../../utils/motion'
 
 // Bar chart data (static visual, representative of collection trends)
 const chartBars = [
-  { label: 'Jan', pct: 60, opacity: 'bg-[#FED609]/20', tooltip: 'AED 420k' },
-  { label: 'Feb', pct: 75, opacity: 'bg-[#FED609]/40', tooltip: 'AED 510k' },
-  { label: 'Mar', pct: 85, opacity: 'bg-[#FED609]/60', tooltip: 'AED 580k' },
-  { label: 'Apr', pct: 95, opacity: 'bg-[#FED609]', tooltip: 'AED 640k' },
-  { label: 'May', pct: 90, opacity: 'bg-[#FED609]/80', tooltip: 'AED 610k' },
-  { label: 'Jun', pct: 100, opacity: 'bg-[#FED609]', tooltip: 'AED 680k' },
+  { label: 'Jan', pct: 60, opacity: 'bg-[#FED609]/20', tooltip: '$42k' },
+  { label: 'Feb', pct: 75, opacity: 'bg-[#FED609]/40', tooltip: '$51k' },
+  { label: 'Mar', pct: 85, opacity: 'bg-[#FED609]/60', tooltip: '$58k' },
+  { label: 'Apr', pct: 95, opacity: 'bg-[#FED609]', tooltip: '$64k' },
+  { label: 'May', pct: 90, opacity: 'bg-[#FED609]/80', tooltip: '$61k' },
+  { label: 'Jun', pct: 100, opacity: 'bg-[#FED609]', tooltip: '$68k' },
 ]
 
 // Static recent activity items
@@ -73,6 +75,7 @@ const upcomingReminders = [
 
 export function OwnerDashboardPage() {
   const { token, owner } = useOwnerAuth()
+  const { showWizard, dismissWizard } = useOwnerOnboarding()
   const [summary, setSummary] = useState<OwnerSummary | null>(null)
   const [, setPortfolioOverview] = useState<OwnerPortfolioVisibilityOverview | null>(null)
   const [approvals, setApprovals] = useState<OwnerRentPaymentApproval[]>([])
@@ -171,6 +174,7 @@ export function OwnerDashboardPage() {
 
   return (
     <div className="p-6 w-full bg-[#FEFAEF] min-h-screen">
+      {showWizard && <OwnerOnboardingWizard onComplete={dismissWizard} />}
 
       {/* Greeting */}
       <motion.div

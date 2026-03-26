@@ -467,7 +467,7 @@ export function OwnerTenantsPage() {
         <div>
           <h2 className="text-3xl font-bold font-['Sora'] text-[#1A1A1A]">Tenants</h2>
           <p className="text-[#6B7280] mt-1 font-['Manrope'] text-sm">
-            Manage your residents and lease agreements across Dubai properties.
+            Manage your residents and lease agreements across all properties.
           </p>
         </div>
         <div className="flex items-center gap-3">

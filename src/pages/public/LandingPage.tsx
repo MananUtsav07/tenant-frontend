@@ -65,9 +65,9 @@ export function LandingPage() {
   }, [owner, ownerLoading, ownerToken])
 
   usePageSeo({
-    title: 'AI Property Operations Platform for Dubai Real Estate',
+    title: 'AI Property Operations Platform for Modern Real Estate',
     description:
-      'Prophives is a premium AI-powered property operations platform for Dubai real estate teams, with owner and tenant workspaces.',
+      'Prophives is a premium AI-powered property operations platform for real estate teams worldwide, with owner and tenant workspaces.',
     canonicalPath: ROUTES.home,
     structuredData: {
       '@context': 'https://schema.org',
@@ -76,7 +76,7 @@ export function LandingPage() {
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web',
       description:
-        'Premium AI-powered property operations platform for Dubai real estate teams, with owner and tenant workspaces.',
+        'Premium AI-powered property operations platform for real estate teams worldwide, with owner and tenant workspaces.',
       offers: {
         '@type': 'Offer',
         category: 'SaaS',
@@ -116,8 +116,8 @@ export function LandingPage() {
               with AI
             </h1>
             <p className="font-['Manrope'] text-xl md:text-2xl text-[#6B7280] mb-12 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              The premium AI-powered property management platform designed for the modern Dubai real
-              estate market. Automate everything from tenant communication to rent collection.
+              The premium AI-powered property management platform designed for modern property
+              managers everywhere. Automate everything from tenant communication to rent collection.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6">
               <Link
@@ -160,7 +160,7 @@ export function LandingPage() {
             <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[90%] h-[600px] rounded-3xl shadow-2xl overflow-hidden border-8 border-white bg-white transform translate-x-12">
               <img
                 className="w-full h-full object-cover"
-                alt="Modern luxury high-rise apartment building in Dubai"
+                alt="Modern luxury high-rise apartment building"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwGYvpeM85pwKFXm97S1TAATDSM4__Trygy2ql_yytBQ3PtwsoBr96--gxmJ1tNMfkJalxYzSIoxOG5TitKAI8TkAmCuh-HgVJ38g6tv4XlGNyPXwcGHVh7RvK5Ks-VxmOaevdxY3ls6cvgFdCLs-OYhCJoy5zWvuNQy-FHxiWD6PdkJIyIzAwaSdi3fyEPPzolc5u8TXThfIcwgElPPs8urnbO34Aq7_k4t9aCRyv_klF-0EOqdCSCXpXavAV4-aCl0F__5tH7H6N"
               />
             </div>
@@ -209,8 +209,8 @@ export function LandingPage() {
                 <div className="text-5xl font-extrabold text-[#1A1A1A] font-['Sora'] mb-2">
                   {snapshotLoading
                     ? '420+'
-                    : (snapshot?.open_tickets?.toLocaleString('en-AE') ??
-                      ownerSummary?.open_tickets?.toLocaleString('en-AE') ??
+                    : (snapshot?.open_tickets?.toLocaleString() ??
+                      ownerSummary?.open_tickets?.toLocaleString() ??
                       '--')}
                 </div>
                 <div className="text-[#6B7280] font-['DM_Sans'] text-base">Total Properties</div>
@@ -219,8 +219,8 @@ export function LandingPage() {
                 <div className="text-5xl font-extrabold text-[#FED609] font-['Sora'] mb-2">
                   {snapshotLoading
                     ? '1.2k'
-                    : (snapshot?.active_tenants?.toLocaleString('en-AE') ??
-                      ownerSummary?.active_tenants?.toLocaleString('en-AE') ??
+                    : (snapshot?.active_tenants?.toLocaleString() ??
+                      ownerSummary?.active_tenants?.toLocaleString() ??
                       '--')}
                 </div>
                 <div className="text-[#6B7280] font-['DM_Sans'] text-base">Active Tenants</div>
@@ -229,8 +229,8 @@ export function LandingPage() {
                 <div className="text-5xl font-extrabold text-[#1A1A1A] font-['Sora'] mb-2">
                   {snapshotLoading
                     ? '98%'
-                    : (snapshot?.due_this_week?.toLocaleString('en-AE') ??
-                      ownerSummary?.reminders_pending?.toLocaleString('en-AE') ??
+                    : (snapshot?.due_this_week?.toLocaleString() ??
+                      ownerSummary?.reminders_pending?.toLocaleString() ??
                       '--')}
                 </div>
                 <div className="text-[#6B7280] font-['DM_Sans'] text-base">Collection Rate</div>

@@ -7,6 +7,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom'
 
 import { ErrorState } from '../../components/common/ErrorState'
 import { FormInput } from '../../components/common/FormInput'
+import { PasswordStrengthBar } from '../../components/common/PasswordStrengthBar'
 import { getProphivesReactSelectStyles } from '../../components/common/formTheme'
 import { allCountryOptions } from '../../constants/countryCurrency'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
@@ -135,7 +136,7 @@ export function OwnerLoginPage() {
             <div className="absolute inset-0 -rotate-3 rounded-xl bg-white/10" />
             <img
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrcceWusQb9Uk72qkwozr8ouxL_9GqGk78y9O83igns86PzNPcC0xFn9VFMYWUr-j5T8f6jNfnJckd0eCDEYaNBgNo8UOaAj5HNxL5epgeRV_MA0bIeKyEYuxfkXN7Od-ZZLMXNoxgbjwkerfOcA3Tbx-UA9869iqvGzOqaCFJdG4rnw_64jcwB36UPpn0i6lvf0ZEMaO6Nsh8lSj15DuSX3AFJnXPD6CXEtrSkUohDh_AdM4SKSNrWzpVcIxGkuv4auboAd1AcSDE"
-              alt="Dubai property illustration"
+              alt="Property management illustration"
               className="relative z-10 h-full w-full rounded-xl object-cover opacity-80 shadow-2xl grayscale brightness-110 contrast-125 mix-blend-multiply"
             />
           </div>
@@ -144,7 +145,7 @@ export function OwnerLoginPage() {
         {/* Testimonial */}
         <div className="relative z-10 rounded-xl border border-white/20 bg-white/10 p-8 backdrop-blur-md">
           <p className="mb-4 font-['Sora'] text-lg font-semibold italic text-white">
-            "Prophives changed how I manage my Dubai portfolio."
+            "Prophives changed how I manage my property portfolio."
           </p>
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/40 bg-white/20">
@@ -156,7 +157,7 @@ export function OwnerLoginPage() {
             </div>
             <div>
               <p className="font-['DM_Sans'] text-sm font-bold leading-none text-white">Omar K.</p>
-              <p className="text-xs font-medium text-white/70">Portfolio Owner, Dubai Marina</p>
+              <p className="text-xs font-medium text-white/70">Portfolio Owner</p>
             </div>
           </div>
         </div>
@@ -265,6 +266,7 @@ export function OwnerLoginPage() {
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
               </div>
+              {mode === 'register' && form.password && <PasswordStrengthBar password={form.password} />}
             </div>
 
             {/* Register extra fields */}
@@ -403,7 +405,7 @@ export function OwnerLoginPage() {
                 <span className="font-['DM_Sans'] text-xs font-bold">WhatsApp</span>
               </a>
               <a
-                href="https://t.me/"
+                href="https://t.me/prophives"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 rounded-full border border-stone-200 px-4 py-2 transition-colors hover:border-[#0088cc]"

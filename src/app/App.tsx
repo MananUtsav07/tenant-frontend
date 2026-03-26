@@ -29,6 +29,8 @@ const PricingPage = lazyNamedPage(() => import('../pages/public/PricingPage'), '
 const ContactPage = lazyNamedPage(() => import('../pages/public/ContactPage'), 'ContactPage')
 const BlogPage = lazyNamedPage(() => import('../pages/public/BlogPage'), 'BlogPage')
 const BlogPostPage = lazyNamedPage(() => import('../pages/public/BlogPostPage'), 'BlogPostPage')
+const PrivacyPolicyPage = lazyNamedPage(() => import('../pages/public/PrivacyPolicyPage'), 'PrivacyPolicyPage')
+const TermsOfServicePage = lazyNamedPage(() => import('../pages/public/TermsOfServicePage'), 'TermsOfServicePage')
 
 const DocsHomePage = lazyNamedPage(() => import('../pages/docs/DocsHomePage'), 'DocsHomePage')
 const DocsGettingStartedPage = lazyNamedPage(() => import('../pages/docs/DocsGettingStartedPage'), 'DocsGettingStartedPage')
@@ -64,10 +66,14 @@ const OwnerAutomationActivityPage = lazyNamedPage(
   'OwnerAutomationActivityPage',
 )
 const OwnerAiSettingsPage = lazyNamedPage(() => import('../pages/owner/OwnerAiSettingsPage'), 'OwnerAiSettingsPage')
+const OwnerIntegrationsPage = lazyNamedPage(() => import('../pages/owner/OwnerIntegrationsPage'), 'OwnerIntegrationsPage')
+const OwnerProfilePage = lazyNamedPage(() => import('../pages/owner/OwnerProfilePage'), 'OwnerProfilePage')
 
 const TenantDashboardPage = lazyNamedPage(() => import('../pages/tenant/TenantDashboardPage'), 'TenantDashboardPage')
 const TenantTicketsPage = lazyNamedPage(() => import('../pages/tenant/TenantTicketsPage'), 'TenantTicketsPage')
 const TenantSupportPage = lazyNamedPage(() => import('../pages/tenant/TenantSupportPage'), 'TenantSupportPage')
+const TenantIntegrationsPage = lazyNamedPage(() => import('../pages/tenant/TenantIntegrationsPage'), 'TenantIntegrationsPage')
+const TenantProfilePage = lazyNamedPage(() => import('../pages/tenant/TenantProfilePage'), 'TenantProfilePage')
 
 const AdminDashboardPage = lazyNamedPage(() => import('../pages/admin/AdminDashboardPage'), 'AdminDashboardPage')
 const AdminOrganizationsPage = lazyNamedPage(() => import('../pages/admin/AdminOrganizationsPage'), 'AdminOrganizationsPage')
@@ -99,6 +105,8 @@ function AppRoutes() {
         <Route path={ROUTES.contact} element={<ContactPage />} />
         <Route path={ROUTES.blog} element={<BlogPage />} />
         <Route path={ROUTES.blogPost} element={<BlogPostPage />} />
+        <Route path={ROUTES.privacyPolicy} element={<PrivacyPolicyPage />} />
+        <Route path={ROUTES.termsOfService} element={<TermsOfServicePage />} />
         <Route path={ROUTES.docs} element={<DocsHomePage />} />
         <Route path={ROUTES.docsGettingStarted} element={<DocsGettingStartedPage />} />
         <Route path={ROUTES.docsTenantLogin} element={<DocsTenantLoginPage />} />
@@ -140,6 +148,8 @@ function AppRoutes() {
           <Route path={ROUTES.ownerAutomation} element={<OwnerAutomationPage />} />
           <Route path={ROUTES.ownerAutomationActivity} element={<OwnerAutomationActivityPage />} />
           <Route path={ROUTES.ownerAiSettings} element={<OwnerAiSettingsPage />} />
+          <Route path={ROUTES.ownerIntegrations} element={<OwnerIntegrationsPage />} />
+          <Route path={ROUTES.ownerProfile} element={<OwnerProfilePage />} />
           <Route path="/owner/applicants" element={<Navigate to={ROUTES.ownerDashboard} replace />} />
         </Route>
       </Route>
@@ -149,6 +159,8 @@ function AppRoutes() {
           <Route path={ROUTES.tenantDashboard} element={<TenantDashboardPage />} />
           <Route path={ROUTES.tenantTickets} element={<TenantTicketsPage />} />
           <Route path={ROUTES.tenantSupport} element={<TenantSupportPage />} />
+          <Route path={ROUTES.tenantIntegrations} element={<TenantIntegrationsPage />} />
+          <Route path={ROUTES.tenantProfile} element={<TenantProfilePage />} />
         </Route>
       </Route>
 

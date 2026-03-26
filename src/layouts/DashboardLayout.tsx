@@ -31,11 +31,8 @@ export function DashboardLayout({
         {/* Sidebar */}
         <aside className="border-b border-[rgba(0,0,0,0.06)] bg-white p-4 lg:min-h-screen lg:border-b-0 lg:border-r lg:border-[rgba(0,0,0,0.06)] lg:p-5">
           {/* Logo */}
-          <div className="flex items-center gap-2.5 px-2">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#FED609]">
-              <span className="ph-title text-sm font-bold text-[#1A1A1A]">P</span>
-            </span>
-            <span className="ph-title text-base font-bold text-[#1A1A1A]">Prophives</span>
+          <div className="flex items-center px-2">
+            <img src="/prophives-logo.svg" alt="Prophives" className="h-9 w-auto object-contain" />
           </div>
 
           {/* User Info */}

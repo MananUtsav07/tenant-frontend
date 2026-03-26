@@ -136,11 +136,8 @@ export function Navbar() {
       <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-12 2xl:px-16">
         <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between py-3">
         {/* Logo */}
-        <Link to={ROUTES.home} className="inline-flex items-center gap-2.5" onClick={() => setOpen(false)}>
-          <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[#FED609]">
-            <span className="ph-title text-base font-bold text-[#1A1A1A]">P</span>
-          </span>
-          <span className="ph-title text-lg font-bold text-[#1A1A1A]">Prophives</span>
+        <Link to={ROUTES.home} className="inline-flex items-center" onClick={() => setOpen(false)}>
+          <img src="/prophives-logo.svg" alt="Prophives" className="h-10 w-auto object-contain" />
         </Link>
 
         {/* Nav Links */}

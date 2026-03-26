@@ -206,7 +206,7 @@ export function TenantLoginPage() {
                   WhatsApp Support
                 </a>
                 <a
-                  href="https://t.me/"
+                  href="https://t.me/prophives"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 rounded-full border border-gray-100 px-8 py-3.5 font-['DM_Sans'] text-sm font-bold text-[#6B7280] transition-all hover:border-[#0088cc]/30 hover:bg-[#0088cc]/5 hover:text-[#0088cc]"

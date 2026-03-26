@@ -1,4 +1,4 @@
-import { Building2, Copyright, Mail, MessageCircle, Send } from 'lucide-react'
+import { Copyright, Mail, MessageCircle, Send } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { ROUTES } from '../../routes/constants'
@@ -21,17 +21,11 @@ export function Footer() {
   return (
     <footer className="bg-[#1A1A1A] text-white">
       <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-12 2xl:px-16">
-        <div className="mx-auto grid w-full max-w-[1400px] gap-8 py-14 md:grid-cols-[1.2fr_0.8fr_0.8fr_1fr]">
+        <div className="mx-auto grid w-full max-w-[1400px] gap-8 py-14 md:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr_1fr]">
         {/* Brand */}
         <div>
-          <div className="inline-flex items-center gap-2.5">
-            <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[#FED609]">
-              <span className="ph-title text-base font-bold text-[#1A1A1A]">P</span>
-            </span>
-            <div>
-              <h3 className="ph-title text-lg font-bold text-white">Prophives</h3>
-              <p className="text-[11px] uppercase tracking-[0.2em] text-white/50">AI Property Management</p>
-            </div>
+          <div className="inline-flex items-center">
+            <img src="/prophives-logo-original.svg" alt="Prophives" className="h-10 w-auto object-contain rounded-lg" />
           </div>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">
             The smart operations layer for property portfolios. AI-powered automation, integrated messaging, and seamless tenant management.
@@ -74,13 +68,30 @@ export function Footer() {
           </ul>
         </div>
 
+        {/* Legal Links */}
+        <div>
+          <h4 className="text-sm font-semibold uppercase tracking-[0.15em] text-white/40">Legal</h4>
+          <ul className="mt-4 space-y-3 text-sm text-white/60">
+            <li>
+              <Link to="/privacy-policy" className="transition hover:text-[#FED609]">
+                Privacy Policy
+              </Link>
+            </li>
+            <li>
+              <Link to="/terms-of-service" className="transition hover:text-[#FED609]">
+                Terms of Service
+              </Link>
+            </li>
+          </ul>
+        </div>
+
         {/* Contact & Integrations */}
         <div>
           <h4 className="text-sm font-semibold uppercase tracking-[0.15em] text-white/40">Connect</h4>
           <div className="mt-4 space-y-3 text-sm text-white/60">
             <p className="inline-flex items-center gap-2">
               <Mail className="h-4 w-4 text-[#FED609]" />
-              hello@prophives.com
+              support@prohives.com
             </p>
             <p className="inline-flex items-center gap-2">
               <MessageCircle className="h-4 w-4 text-[#25D366]" />
@@ -88,11 +99,14 @@ export function Footer() {
             </p>
             <p className="inline-flex items-center gap-2">
               <Send className="h-4 w-4 text-[#0088cc]" />
-              Telegram Bot
-            </p>
-            <p className="inline-flex items-center gap-2">
-              <Building2 className="h-4 w-4 text-[#FED609]" />
-              Dubai, UAE
+              <a
+                href="https://t.me/prophives"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 hover:text-[#0088cc] transition-colors"
+              >
+                Telegram Bot
+              </a>
             </p>
           </div>
         </div>

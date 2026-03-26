@@ -42,7 +42,13 @@ export const ROUTES = {
   ownerAutomation: '/owner/automation',
   ownerAutomationActivity: '/owner/automation/activity',
   ownerAiSettings: '/owner/ai-settings',
+  ownerIntegrations: '/owner/integrations',
+  ownerProfile: '/owner/profile',
   tenantDashboard: '/tenant/dashboard',
   tenantTickets: '/tenant/tickets',
   tenantSupport: '/tenant/support',
+  tenantIntegrations: '/tenant/integrations',
+  tenantProfile: '/tenant/profile',
+  privacyPolicy: '/privacy-policy',
+  termsOfService: '/terms-of-service',
 } as const

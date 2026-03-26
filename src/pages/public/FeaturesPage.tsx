@@ -172,7 +172,7 @@ export function FeaturesPage() {
             <span className="text-[#FED609]">Manage Properties</span>
           </h1>
           <p className="text-lg md:text-2xl text-[#6B7280] font-medium max-w-4xl mx-auto font-['Manrope'] leading-relaxed">
-            Experience the future of real estate management in Dubai with our AI-driven platform
+            Experience the future of real estate management with our AI-driven platform
             designed for efficiency, clarity, and total control.
           </p>
         </motion.div>
@@ -351,7 +351,7 @@ export function FeaturesPage() {
             Start Managing Smarter Today
           </h2>
           <p className="text-[#6B7280] text-xl mb-12 max-w-2xl mx-auto font-['Manrope'] leading-relaxed">
-            Join hundreds of Dubai property managers who are scaling their business with Prophives
+            Join hundreds of property managers worldwide who are scaling their business with Prophives
             AI.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">

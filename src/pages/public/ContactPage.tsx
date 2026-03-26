@@ -14,7 +14,7 @@ import { revealUp, staggerParent, useMotionVariants, viewportOnce } from '../../
 export function ContactPage() {
   usePageSeo({
     title: 'Contact',
-    description: 'Contact Prophives for demos, onboarding, and rollout planning for premium Dubai real estate operations.',
+    description: 'Contact Prophives for demos, onboarding, and rollout planning for your property management operations.',
   })
 
   const [form, setForm] = useState({
@@ -143,7 +143,7 @@ export function ContactPage() {
               <span className="ph-kicker">Contact Us</span>
               <h1 className="ph-title text-4xl md:text-5xl font-bold text-[#1A1A1A] leading-tight">Get in Touch</h1>
               <p className="text-[#6B7280] text-lg max-w-md">
-                Experience the future of property management in Dubai. Our team is ready to assist you 24/7.
+                Experience the future of property management. Our team is ready to assist you 24/7.
               </p>
             </motion.div>
 
@@ -155,7 +155,7 @@ export function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-bold text-[#1A1A1A]">Email Us</h3>
-                  <p className="text-[#6B7280]">support@prophives.com</p>
+                  <p className="text-[#6B7280]">support@prohives.com</p>
                 </div>
               </div>
 
@@ -204,7 +204,7 @@ export function ContactPage() {
                   Office Location
                 </h4>
                 <p className="text-[#6B7280] mt-2">
-                  Business Bay, Prime Tower<br />Dubai, UAE
+                  Prime Tower, Business Bay
                 </p>
               </div>
               <div>
@@ -222,13 +222,13 @@ export function ContactPage() {
             <motion.div variants={revealVariants} className="relative w-full h-48 rounded-xl overflow-hidden shadow-inner bg-gray-200 group">
               <img
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 opacity-60 group-hover:opacity-100"
-                alt="Modern aerial view of Dubai Business Bay skyline with crystal clear canals and contemporary skyscrapers under bright daylight"
+                alt="Modern city skyline with contemporary skyscrapers"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcqsNdLHfbBMWpJMnYYPjVreaZF2Z7v6STar9oTNMKOQLoBaV78yfgKe9t-9aO4Y0wH-dgTBPDs0aDWx_hHHD8dSIUMqF16PQAqzUVMWAa8Ybj38pQc2V6hNrKahApQWDu2nNp5QtQohgm6iAahPWH6qKjSopKzkwubAJ3PIH5JB1jegU933Ow4-Yu2CX_kgMJQHYAox7enio3Qpk1PvQnEylFKdtNVhwdCPTXItgD-6q1yrthrWIu1N-up3JfiVPL-h6lh4f1rCbC"
               />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg flex items-center gap-2">
                   <span className="w-3 h-3 bg-[#FED609] rounded-full animate-pulse" />
-                  <span className="text-xs font-bold text-[#1A1A1A] uppercase tracking-widest">Our Dubai HQ</span>
+                  <span className="text-xs font-bold text-[#1A1A1A] uppercase tracking-widest">Our HQ</span>
                 </div>
               </div>
             </motion.div>

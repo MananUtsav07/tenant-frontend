@@ -145,7 +145,7 @@ function PropertyFormModal({ form, editingPropertyId, busy, error, onSubmit, onC
                 onChange={(e) => onChange('address', e.target.value)}
                 required
                 autoComplete="off"
-                placeholder="e.g. Dubai Marina, Marina Gate 1"
+                placeholder="e.g. Downtown, Building A"
                 className="w-full rounded-xl border border-neutral-200 bg-[#FEFAEF] px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#6B7280] focus:outline-none focus:ring-2 focus:ring-[#FED609] focus:border-transparent transition-all"
               />
             </div>
@@ -532,7 +532,7 @@ export function OwnerPropertiesPage() {
             <div>
               <h2 className="font-['Sora'] font-bold text-3xl text-[#1A1A1A] tracking-tight">Properties</h2>
               <p className="text-[#6B7280] font-['Manrope'] text-sm mt-1">
-                Manage your Dubai real estate portfolio and track performance.
+                Manage your real estate portfolio and track performance.
               </p>
             </div>
             <button
