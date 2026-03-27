@@ -89,6 +89,9 @@ export function OwnerTicketsPage() {
   const [threadLoading, setThreadLoading] = useState(false)
   const [threadError, setThreadError] = useState<string | null>(null)
 
+  const [aiSummary, setAiSummary] = useState<string | null>(null)
+  const [aiSummaryLoading, setAiSummaryLoading] = useState(false)
+
   const [replyMessage, setReplyMessage] = useState('')
   const [replyBusy, setReplyBusy] = useState(false)
 
@@ -141,6 +144,7 @@ export function OwnerTicketsPage() {
       try {
         setThreadLoading(true)
         setThreadError(null)
+        setAiSummary(null)
         const response = await api.getOwnerTicketDetail(token, ticketId)
         setThread(response.thread)
         setStatusValue(response.thread.ticket.status)
@@ -153,6 +157,29 @@ export function OwnerTicketsPage() {
     },
     [token],
   )
+
+  const handleAiSummarize = async () => {
+    if (!token || !thread) return
+    try {
+      setAiSummaryLoading(true)
+      const updates = thread.messages
+        .filter((m) => m.message_type !== 'initial_message')
+        .map((m) => ({ timestamp: m.created_at, author: m.sender_display_name, message: m.message }))
+      const response = await api.summarizeOwnerTicket(token, {
+        ticket_id: thread.ticket.id,
+        subject: thread.ticket.subject,
+        message: thread.ticket.message,
+        updates,
+      })
+      if (response.ok && response.summary) {
+        setAiSummary(response.summary.summary)
+      }
+    } catch {
+      // Non-critical — silently fail
+    } finally {
+      setAiSummaryLoading(false)
+    }
+  }
 
   useEffect(() => {
     if (!selectedTicketId) return
@@ -694,18 +721,50 @@ export function OwnerTicketsPage() {
                       borderColor: 'rgba(254,214,9,0.1)',
                     }}
                   >
-                    <div className="flex items-center gap-2 mb-2">
-                      <Sparkles className="h-4 w-4" style={{ color: '#FED609' }} />
-                      <h3
-                        className="text-xs font-bold uppercase tracking-wider"
-                        style={{ color: '#1A1A1A', fontFamily: 'DM Sans, sans-serif' }}
-                      >
-                        AI Automation Summary
-                      </h3>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="h-4 w-4" style={{ color: '#FED609' }} />
+                        <h3
+                          className="text-xs font-bold uppercase tracking-wider"
+                          style={{ color: '#1A1A1A', fontFamily: 'DM Sans, sans-serif' }}
+                        >
+                          AI Summary
+                        </h3>
+                      </div>
+                      {!aiSummary && (
+                        <button
+                          type="button"
+                          onClick={() => void handleAiSummarize()}
+                          disabled={aiSummaryLoading}
+                          className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-colors disabled:opacity-50"
+                          style={{ backgroundColor: '#FED609', color: '#1A1A1A' }}
+                        >
+                          <Sparkles className="h-3 w-3" />
+                          {aiSummaryLoading ? 'Generating...' : 'Summarize'}
+                        </button>
+                      )}
                     </div>
-                    <p className="text-sm leading-relaxed italic" style={{ color: '#6B7280' }}>
-                      This ticket was automatically logged and classified. Thread activity below.
-                    </p>
+                    {thread.ticket.ai_category && (
+                      <div className="mb-3">
+                        <span
+                          className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+                          style={{ backgroundColor: 'rgba(254,214,9,0.2)', color: '#92700A', border: '1px solid rgba(254,214,9,0.4)' }}
+                        >
+                          {thread.ticket.ai_category.replace(/_/g, ' ')}
+                        </span>
+                      </div>
+                    )}
+                    {aiSummaryLoading && (
+                      <p className="text-xs italic" style={{ color: '#6B7280' }}>Generating summary...</p>
+                    )}
+                    {aiSummary && (
+                      <p className="text-sm leading-relaxed" style={{ color: '#1A1A1A' }}>{aiSummary}</p>
+                    )}
+                    {!aiSummaryLoading && !aiSummary && (
+                      <p className="text-xs italic" style={{ color: '#6B7280' }}>
+                        Click Summarize to get an AI overview of this ticket thread.
+                      </p>
+                    )}
                   </div>
 
                   {/* Scrollable Content */}

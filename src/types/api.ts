@@ -84,6 +84,8 @@ export type TenantTicket = {
   subject: string
   message: string
   status: 'open' | 'in_progress' | 'resolved' | 'closed'
+  ai_category: string | null
+  ai_confidence: number | null
   created_at: string
   updated_at: string
 }

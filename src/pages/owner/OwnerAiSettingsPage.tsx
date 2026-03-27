@@ -6,7 +6,6 @@ import {
   Info,
   Save,
   Sparkles,
-  Zap,
 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -152,13 +151,10 @@ export function OwnerAiSettingsPage() {
         ticket_classification_enabled: settings.ticket_classification_enabled,
         reminder_generation_enabled: settings.reminder_generation_enabled,
         ticket_summarization_enabled: settings.ticket_summarization_enabled,
-        ai_model: settings.ai_model,
       })
       setSettings(response.settings)
       setAiConfigured(response.ai_configured)
-      setSuccess(
-        'AI settings saved. Supported AI-assisted workflows can use your selected model when automation is enabled.',
-      )
+      setSuccess('AI settings saved. Changes take effect immediately for all enabled workflows.')
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : 'Failed to save AI settings')
     } finally {
@@ -292,52 +288,6 @@ export function OwnerAiSettingsPage() {
 
                 </div>
 
-                {/* ── AI Model Selection ── */}
-                <div className="mt-6 rounded-2xl border border-[rgba(0,0,0,0.06)] bg-white p-8 shadow-sm">
-                  <div className="mb-6 flex items-center gap-2">
-                    <Zap className="h-5 w-5 text-[#FED609]" />
-                    <h5 className="font-['Sora'] text-lg font-bold text-[#1A1A1A]">AI Model Selection</h5>
-                  </div>
-                  <div className="flex flex-col gap-6 md:flex-row md:items-center">
-                    <div className="flex-1">
-                      <label
-                        className="mb-2 block text-xs font-bold uppercase tracking-wide text-[#6B7280] font-[DM_Sans,sans-serif]"
-                      >
-                        Select Primary Engine
-                      </label>
-                      <select
-                        value={settings.ai_model}
-                        onChange={(e) =>
-                          setSettings((current) =>
-                            current ? { ...current, ai_model: e.target.value } : current,
-                          )
-                        }
-                        disabled={isDisabled}
-                        className="w-full rounded-xl border border-[rgba(0,0,0,0.08)] bg-[#FEFAEF] px-4 py-3 font-medium text-[#1A1A1A] transition-all focus:border-[#FED609] focus:outline-none focus:ring-2 focus:ring-[#FED609]/40 disabled:cursor-not-allowed disabled:opacity-60"
-                      >
-                        <option value="gpt-4o-mini">GPT-4o Mini (Default, Fast)</option>
-                        <option value="gpt-4o">GPT-4o (Most Capable)</option>
-                        <option value="gpt-4-turbo">GPT-4 Turbo</option>
-                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Budget)</option>
-                      </select>
-                    </div>
-                    <div className="flex items-center gap-3 rounded-2xl bg-[#FFFAE2] px-6 py-4 md:w-1/3">
-                      <Zap className="h-8 w-8 shrink-0 text-[#FED609]" />
-                      <div>
-                        <p className="text-xs font-bold uppercase text-[#FFD70B] font-[DM_Sans,sans-serif]">Performance</p>
-                        <p className="text-sm font-medium leading-tight text-[#1A1A1A] font-[Manrope,sans-serif]">
-                          Current model processes tickets 3x faster
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Preparation mode notice */}
-                  <div className="mt-6 rounded-xl border border-[#FED609]/30 bg-[#FFFAE2] px-4 py-3 text-xs text-[#92700A] font-[Manrope,sans-serif]">
-                    Preparation mode: toggles and model selection are stored for rollout readiness, but
-                    live workflows remain unchanged.
-                  </div>
-                </div>
               </div>
 
               {/* Right column — analytics */}

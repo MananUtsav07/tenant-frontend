@@ -269,7 +269,6 @@ export const api = {
       ticket_classification_enabled: boolean
       reminder_generation_enabled: boolean
       ticket_summarization_enabled: boolean
-      ai_model: string
     }>,
   ) =>
     request<OwnerAiSettingsResponse>('/api/owner/ai-settings', {
