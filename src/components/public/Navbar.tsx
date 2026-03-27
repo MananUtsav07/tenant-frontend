@@ -137,7 +137,7 @@ export function Navbar() {
         <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between py-3">
         {/* Logo */}
         <Link to={ROUTES.home} className="inline-flex items-center" onClick={() => setOpen(false)}>
-          <img src="/prophives-logo.svg" alt="Prophives" className="h-10 w-auto object-contain" />
+          <img src="/prophives-logo.png" alt="Prophives" className="h-10 w-auto object-contain" />
         </Link>
 
         {/* Nav Links */}

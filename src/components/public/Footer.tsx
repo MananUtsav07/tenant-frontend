@@ -25,7 +25,7 @@ export function Footer() {
         {/* Brand */}
         <div>
           <div className="inline-flex items-center">
-            <img src="/prophives-logo-original.svg" alt="Prophives" className="h-10 w-auto object-contain rounded-lg" />
+            <img src="/prophives-logo.png" alt="Prophives" className="h-10 w-auto object-contain" />
           </div>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">
             The smart operations layer for property portfolios. AI-powered automation, integrated messaging, and seamless tenant management.

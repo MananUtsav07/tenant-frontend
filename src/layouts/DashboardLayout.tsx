@@ -32,7 +32,7 @@ export function DashboardLayout({
         <aside className="border-b border-[rgba(0,0,0,0.06)] bg-white p-4 lg:min-h-screen lg:border-b-0 lg:border-r lg:border-[rgba(0,0,0,0.06)] lg:p-5">
           {/* Logo */}
           <div className="flex items-center px-2">
-            <img src="/prophives-logo.svg" alt="Prophives" className="h-9 w-auto object-contain" />
+            <img src="/prophives-logo.png" alt="Prophives" className="h-9 w-auto object-contain" />
           </div>
 
           {/* User Info */}

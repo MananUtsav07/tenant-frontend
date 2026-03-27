@@ -47,7 +47,13 @@
       "Skill(react-components:*)",
       "Bash(find /c/Users/asus/Desktop/tenant-frontend -name *.png -o -name *.svg -o -name *.jpg -o -name *.webp)",
       "Bash(find /c/Users/asus/Desktop/tenant-frontend -name *.jpeg -o -name *.jpg)",
-      "Bash(find /c/Users/asus/Desktop/tenant-frontend -name *.svg)"
+      "Bash(find /c/Users/asus/Desktop/tenant-frontend -name *.svg)",
+      "Bash(sed 's|<path d=\"\"M0 0 C337.92 0 675.84 0 1024 0 C1024 337.92 1024 675.84 1024 1024 C686.08 1024 348.16 1024 0 1024 C0 686.08 0 348.16 0 0 Z \"\" fill=\"\"#F4F4F4\"\" transform=\"\"translate\\(0,0\\)\"\"/>||' \"/c/Users/asus/Desktop/tenant-frontend/images/prohives-logo-updated.svg\")",
+      "Bash(\"/c/Users/asus/Desktop/tenant-frontend/public/prophives-logo.svg\")",
+      "Bash(sed -i 's|/prophives-logo\\\\.png|/prophives-logo.svg|g' \"/c/Users/asus/Desktop/tenant-frontend/src/components/public/Navbar.tsx\" \"/c/Users/asus/Desktop/tenant-frontend/src/components/public/Footer.tsx\" \"/c/Users/asus/Desktop/tenant-frontend/src/layouts/DashboardLayout.tsx\")",
+      "Bash(sed -i 's|href=\"\"/prophives-logo\\\\.png\"\" type=\"\"image/png\"\"|href=\"\"/prophives-logo.svg\"\" type=\"\"image/svg+xml\"\"|g; s|href=\"\"/prophives-logo\\\\.png\"\"|href=\"\"/prophives-logo.svg\"\"|g' \"/c/Users/asus/Desktop/tenant-frontend/index.html\")",
+      "Bash(python3 -c \":*)",
+      "Bash(python -c \":*)"
     ]
   },
   "enableAllProjectMcpServers": true,
