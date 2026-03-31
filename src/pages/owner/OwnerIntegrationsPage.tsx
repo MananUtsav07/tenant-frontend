@@ -1,14 +1,28 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Mail, Send, MessageCircle, Instagram, CheckCircle2, Clock, Zap } from 'lucide-react'
 import { LoadingState } from '../../components/common/LoadingState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
+import { ROUTES } from '../../routes/constants'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type IntegrationsStatus = {
-  whatsapp: { configured: boolean; provider: string | null; live: boolean }
-  telegram: { configured: boolean }
+  whatsapp: { configured: boolean; provider: string | null; live: boolean; linked: boolean; linked_number: string | null }
+  telegram: {
+    configured: boolean
+    linked: boolean
+    bot_username: string | null
+    connect_url: string | null
+    linked_chat: {
+      chat_id: string
+      username: string | null
+      first_name: string | null
+      last_name: string | null
+      linked_at: string
+    } | null
+  }
   email: { configured: boolean }
   instagram: { configured: boolean; coming_soon: boolean }
 }
@@ -141,6 +155,7 @@ function IntegrationCard({
 
 export function OwnerIntegrationsPage() {
   const { token } = useOwnerAuth()
+  const navigate = useNavigate()
   const [status, setStatus] = useState<IntegrationsStatus | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -168,23 +183,37 @@ export function OwnerIntegrationsPage() {
     void fetchIntegrations()
   }, [fetchIntegrations])
 
+  const openTelegramConnect = useCallback(() => {
+    if (!status?.telegram.connect_url) return
+    window.open(status.telegram.connect_url, '_blank', 'noopener,noreferrer')
+  }, [status?.telegram.connect_url])
+
   // ─── WhatsApp footer action ─────────────────────────────────────────────────
 
   const whatsappFooter = status ? (
-    status.whatsapp.configured ? (
-      <span
-        className="flex items-center gap-1.5 text-sm font-medium text-green-600"
-        style={{ fontFamily: "'DM Sans', sans-serif" }}
-      >
-        <CheckCircle2 className="h-4 w-4" />
-        Connected
-      </span>
-    ) : (
+    !status.whatsapp.configured ? (
       <button
         className="rounded-xl border border-[#FED609] bg-white px-4 py-2 text-sm font-semibold text-[#92700A] transition-colors hover:bg-[#FED609]/10"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
       >
         Setup Required
+      </button>
+    ) : status.whatsapp.linked ? (
+      <span
+        className="flex items-center gap-1.5 text-sm font-medium text-green-600"
+        style={{ fontFamily: "'DM Sans', sans-serif" }}
+      >
+        <CheckCircle2 className="h-4 w-4" />
+        Connected{status.whatsapp.linked_number ? ` (${status.whatsapp.linked_number})` : ''}
+      </span>
+    ) : (
+      <button
+        type="button"
+        onClick={() => navigate(ROUTES.ownerProfile)}
+        className="rounded-xl border border-[#FED609] bg-white px-4 py-2 text-sm font-semibold text-[#92700A] transition-colors hover:bg-[#FED609]/10"
+        style={{ fontFamily: "'DM Sans', sans-serif" }}
+      >
+        Connect WhatsApp
       </button>
     )
   ) : null
@@ -192,7 +221,14 @@ export function OwnerIntegrationsPage() {
   // ─── Telegram footer action ─────────────────────────────────────────────────
 
   const telegramFooter = status ? (
-    status.telegram.configured ? (
+    !status.telegram.configured ? (
+      <button
+        className="rounded-xl border border-[#FED609] bg-white px-4 py-2 text-sm font-semibold text-[#92700A] transition-colors hover:bg-[#FED609]/10"
+        style={{ fontFamily: "'DM Sans', sans-serif" }}
+      >
+        Setup Required
+      </button>
+    ) : status.telegram.linked ? (
       <span
         className="flex items-center gap-1.5 text-sm font-medium text-green-600"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
@@ -202,10 +238,13 @@ export function OwnerIntegrationsPage() {
       </span>
     ) : (
       <button
-        className="rounded-xl border border-[#FED609] bg-white px-4 py-2 text-sm font-semibold text-[#92700A] transition-colors hover:bg-[#FED609]/10"
+        type="button"
+        onClick={openTelegramConnect}
+        disabled={!status.telegram.connect_url}
+        className="rounded-xl border border-[#FED609] bg-white px-4 py-2 text-sm font-semibold text-[#92700A] transition-colors hover:bg-[#FED609]/10 disabled:cursor-not-allowed disabled:opacity-60"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
       >
-        Setup Required
+        Connect Telegram
       </button>
     )
   ) : null
@@ -243,6 +282,14 @@ export function OwnerIntegrationsPage() {
       <span className={status.whatsapp.live ? 'text-green-600' : 'text-orange-500'}>
         {status.whatsapp.live ? 'Live mode' : 'Test mode'}
       </span>
+      {status.whatsapp.linked ? ' · linked to owner' : ' · available to connect'}
+    </span>
+  ) : null
+
+  const telegramProviderLine = status?.telegram.configured ? (
+    <span className="text-xs text-[#6B7280]">
+      {status.telegram.bot_username ? `@${status.telegram.bot_username}` : 'Telegram bot configured'}
+      {status.telegram.linked ? ' · linked to owner' : ' · click connect then press Start'}
     </span>
   ) : null
 
@@ -293,8 +340,8 @@ export function OwnerIntegrationsPage() {
             name="WhatsApp Business"
             badge={
               <StatusBadge
-                variant={status.whatsapp.configured ? 'active' : 'inactive'}
-                label={status.whatsapp.configured ? 'Connected' : 'Not Connected'}
+                variant={status.whatsapp.linked ? 'active' : status.whatsapp.configured ? 'test_mode' : 'inactive'}
+                label={status.whatsapp.linked ? 'Connected' : status.whatsapp.configured ? 'Available' : 'Not Configured'}
               />
             }
             providerLine={whatsappProviderLine}
@@ -314,10 +361,11 @@ export function OwnerIntegrationsPage() {
             name="Telegram"
             badge={
               <StatusBadge
-                variant={status.telegram.configured ? 'active' : 'inactive'}
-                label={status.telegram.configured ? 'Connected' : 'Not Configured'}
+                variant={status.telegram.linked ? 'active' : status.telegram.configured ? 'test_mode' : 'inactive'}
+                label={status.telegram.linked ? 'Connected' : status.telegram.configured ? 'Available' : 'Not Configured'}
               />
             }
+            providerLine={telegramProviderLine}
             description="Send automated notifications to tenants and owners through Telegram. Supports tenant onboarding bots and payment reminders."
             features={[
               { text: 'Payment reminders and confirmation messages' },

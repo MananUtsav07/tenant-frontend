@@ -281,8 +281,20 @@ export const api = {
     request<{
       ok: true
       integrations: {
-        whatsapp: { configured: boolean; provider: string | null; live: boolean }
-        telegram: { configured: boolean }
+        whatsapp: { configured: boolean; provider: string | null; live: boolean; linked: boolean; linked_number: string | null }
+        telegram: {
+          configured: boolean
+          linked: boolean
+          bot_username: string | null
+          connect_url: string | null
+          linked_chat: {
+            chat_id: string
+            username: string | null
+            first_name: string | null
+            last_name: string | null
+            linked_at: string
+          } | null
+        }
         email: { configured: boolean }
         instagram: { configured: boolean; coming_soon: boolean }
       }

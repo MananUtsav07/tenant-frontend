@@ -55,7 +55,13 @@
       "Bash(python3 -c \":*)",
       "Bash(python -c \":*)",
       "Bash(grep -n \"classifyTicketIntent\\\\|summarizeTicket\\\\|classif\\\\|summariz\" /c/Users/asus/Desktop/tenant-backend/src/services/automation/core/*.ts)",
-      "Bash(grep -n \"category\\\\|ai_category\\\\|ai_class\" /c/Users/asus/Desktop/tenant-backend/src/types/*.ts)"
+      "Bash(grep -n \"category\\\\|ai_category\\\\|ai_class\" /c/Users/asus/Desktop/tenant-backend/src/types/*.ts)",
+      "Bash(grep -rn \"webhook\\\\|token.*whatsapp\\\\|whatsapp.*token\\\\|Business.*Account\\\\|phone.*id\\\\|phoneId\" C:UsersIntelDesktoptenant-frontendsrc --include=*.ts --include=*.tsx)",
+      "Bash(grep -n \"getOwnerTelegram\\\\|postOwnerTelegram\\\\|getTenantTelegram\\\\|postTenantTelegram\\\\|postAdminTelegram\" /c/Users/Intel/Desktop/tenant-backend/src/controllers/*.ts)",
+      "Bash(grep -r \"whatsappController\\\\|postWhatsAppWebhook\" /c/Users/Intel/Desktop/tenant-backend/src --include=*.ts)",
+      "Bash(grep -n \"whatsappSchema\\\\|whatsappWebhook\" /c/Users/Intel/Desktop/tenant-backend/src/validations/*.ts)",
+      "Bash(grep -n \"telegram_chat_links\" /c/Users/Intel/Desktop/tenant-backend/supabase/migrations/*.sql)",
+      "Bash(grep -l \"telegram\" /c/Users/Intel/Desktop/tenant-backend/supabase/migrations/*.sql)"
     ]
   },
   "enableAllProjectMcpServers": true,
