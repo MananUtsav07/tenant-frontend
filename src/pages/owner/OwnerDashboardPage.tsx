@@ -46,7 +46,7 @@ function getTimeAgoString(dateString: string): string {
 }
 
 // Helper to get activity icon and color based on status
-function getActivityIcon(flowName: string, status: string) {
+function getActivityIcon(_flowName: string, status: string) {
   const statusColors: Record<string, { bgColor: string; textColor: string; icon: typeof CheckCheck }> = {
     success: { bgColor: 'bg-green-100', textColor: 'text-green-600', icon: CheckCheck },
     failed: { bgColor: 'bg-red-100', textColor: 'text-red-600', icon: AlertTriangle },
