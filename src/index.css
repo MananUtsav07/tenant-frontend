@@ -256,10 +256,40 @@ a {
     background-color 160ms ease;
 }
 
-.ph-form-textarea,
+.ph-form-textarea {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #ffffff;
+  color: var(--ph-text);
+  min-height: 6rem;
+  padding: 0.625rem 0.875rem;
+  outline: none;
+  resize: vertical;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+
 textarea.tf-field {
   min-height: 6rem;
   resize: vertical;
+}
+
+.ph-form-control {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #ffffff;
+  color: var(--ph-text);
+  min-height: 2.75rem;
+  padding: 0.625rem 0.875rem;
+  outline: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
 }
 
 .ph-form-control::placeholder,
@@ -267,6 +297,21 @@ textarea.tf-field {
 .tf-field::placeholder {
   color: var(--ph-text-muted);
   opacity: 1;
+}
+
+.ph-form-select {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #ffffff;
+  color: var(--ph-text);
+  min-height: 2.75rem;
+  padding: 0.625rem 0.875rem;
+  outline: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
 }
 
 .ph-form-control:hover,

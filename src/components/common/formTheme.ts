@@ -37,7 +37,78 @@ export function getProphivesReactSelectStyles<
   Option,
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>,
->(): StylesConfig<Option, IsMulti, Group> {
+>(theme: 'light' | 'dark' = 'dark'): StylesConfig<Option, IsMulti, Group> {
+  if (theme === 'light') {
+    return {
+      control: (baseStyles, state) => ({
+        ...baseStyles,
+        minHeight: '44px',
+        borderRadius: '0.75rem',
+        borderColor: state.isFocused ? '#FED609' : 'rgba(0, 0, 0, 0.12)',
+        background: '#ffffff',
+        boxShadow: state.isFocused
+          ? '0 0 0 3px rgba(254, 214, 9, 0.2)'
+          : 'none',
+        '&:hover': {
+          borderColor: 'rgba(254, 214, 9, 0.5)',
+        },
+      }),
+      valueContainer: (baseStyles) => ({
+        ...baseStyles,
+        padding: '0 0.875rem',
+      }),
+      placeholder: (baseStyles) => ({
+        ...baseStyles,
+        color: '#6B7280',
+      }),
+      input: (baseStyles) => ({
+        ...baseStyles,
+        color: '#1A1A1A',
+      }),
+      singleValue: (baseStyles) => ({
+        ...baseStyles,
+        color: '#1A1A1A',
+      }),
+      menu: (baseStyles) => ({
+        ...baseStyles,
+        overflow: 'hidden',
+        border: '1px solid rgba(0, 0, 0, 0.12)',
+        borderRadius: '0.75rem',
+        background: '#ffffff',
+        boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)',
+      }),
+      menuList: (baseStyles) => ({
+        ...baseStyles,
+        padding: '0.5rem',
+      }),
+      option: (baseStyles, state) => ({
+        ...baseStyles,
+        borderRadius: '0.5rem',
+        padding: '0.625rem 0.875rem',
+        fontSize: '0.875rem',
+        cursor: state.isDisabled ? 'not-allowed' : 'pointer',
+        color: state.isDisabled ? '#9CA3AF' : '#1A1A1A',
+        backgroundColor: state.isSelected
+          ? 'rgba(254, 214, 9, 0.15)'
+          : state.isFocused
+            ? 'rgba(254, 214, 9, 0.08)'
+            : 'transparent',
+      }),
+      indicatorSeparator: (baseStyles) => ({
+        ...baseStyles,
+        backgroundColor: 'rgba(0, 0, 0, 0.12)',
+      }),
+      dropdownIndicator: (baseStyles, state) => ({
+        ...baseStyles,
+        color: state.isFocused ? '#FED609' : '#6B7280',
+        '&:hover': {
+          color: '#FED609',
+        },
+      }),
+    }
+  }
+
+  // Dark theme (original)
   return {
     control: (baseStyles, state) => ({
       ...baseStyles,

@@ -1,4 +1,4 @@
-import { Copyright, Mail, MessageCircle, Send } from 'lucide-react'
+import { Copyright, Mail } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { ROUTES } from '../../routes/constants'
@@ -91,22 +91,7 @@ export function Footer() {
           <div className="mt-4 space-y-3 text-sm text-white/60">
             <p className="inline-flex items-center gap-2">
               <Mail className="h-4 w-4 text-[#FED609]" />
-              support@prohives.com
-            </p>
-            <p className="inline-flex items-center gap-2">
-              <MessageCircle className="h-4 w-4 text-[#25D366]" />
-              WhatsApp Support
-            </p>
-            <p className="inline-flex items-center gap-2">
-              <Send className="h-4 w-4 text-[#0088cc]" />
-              <a
-                href="https://t.me/prophives"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 hover:text-[#0088cc] transition-colors"
-              >
-                Telegram Bot
-              </a>
+              support@prophives.com
             </p>
           </div>
         </div>

@@ -1,5 +1,5 @@
-import { useMemo, useState, type FormEvent } from 'react'
-import { Eye, EyeOff, Lock, Mail, MessageCircle, MoveRight, Send } from 'lucide-react'
+import { useMemo, useState, useEffect, type FormEvent } from 'react'
+import { Eye, EyeOff, Lock, Mail, MoveRight } from 'lucide-react'
 import countryList from 'react-select-country-list'
 import ReactCountryFlag from 'react-country-flag'
 import Select from 'react-select'
@@ -22,6 +22,46 @@ type CountrySelectOption = {
   isSupported: boolean
 }
 
+type Testimonial = {
+  quote: string
+  author: string
+  title: string
+  image: string
+}
+
+const TESTIMONIALS: Testimonial[] = [
+  {
+    quote: 'Prophives changed how I manage my property portfolio.',
+    author: 'Omar K.',
+    title: 'Portfolio Owner',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD2L_L8S2BpUVBstxOk1N46L7Jv2MQnUZ7qC3qrlLlcgFsxnOzDfVUG35zmm_dIHriXbQ6F5kNVLWSfD1OrsJIS_pJ4hTI4nULbllKvk4BjZ55mx1LhSHXOB_eubFRGC0NlUxNvV6cOqdEsopxcFBoDgWqRF2foYmQDOIFZlwuXewyqqqOCf6fqa-U7Qe4HNmj0Tvh_N4kbWRLmX7KR2hLVieKVmFzDhNnunVBWy2GvN35fK6jO-vmjve2yvngbJnja06hOYk_RDPVC',
+  },
+  {
+    quote: 'The AI insights have helped me optimize my rental strategy significantly.',
+    author: 'Sarah M.',
+    title: 'Real Estate Developer',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD2L_L8S2BpUVBstxOk1N46L7Jv2MQnUZ7qC3qrlLlcgFsxnOzDfVUG35zmm_dIHriXbQ6F5kNVLWSfD1OrsJIS_pJ4hTI4nULbllKvk4BjZ55mx1LhSHXOB_eubFRGC0NlUxNvV6cOqdEsopxcFBoDgWqRF2foYmQDOIFZlwuXewyqqqOCf6fqa-U7Qe4HNmj0Tvh_N4kbWRLmX7KR2hLVieKVmFzDhNnunVBWy2GvN35fK6jO-vmjve2yvngbJnja06hOYk_RDPVC',
+  },
+  {
+    quote: 'Managing tenant communications is now effortless with the integrated platform.',
+    author: 'Ahmed Hassan',
+    title: 'Property Manager',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD2L_L8S2BpUVBstxOk1N46L7Jv2MQnUZ7qC3qrlLlcgFsxnOzDfVUG35zmm_dIHriXbQ6F5kNVLWSfD1OrsJIS_pJ4hTI4nULbllKvk4BjZ55mx1LhSHXOB_eubFRGC0NlUxNvV6cOqdEsopxcFBoDgWqRF2foYmQDOIFZlwuXewyqqqOCf6fqa-U7Qe4HNmj0Tvh_N4kbWRLmX7KR2hLVieKVmFzDhNnunVBWy2GvN35fK6jO-vmjve2yvngbJnja06hOYk_RDPVC',
+  },
+  {
+    quote: 'The automated ticket system has reduced our support response time by 70%.',
+    author: 'Layla Ahmed',
+    title: 'Operations Director',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD2L_L8S2BpUVBstxOk1N46L7Jv2MQnUZ7qC3qrlLlcgFsxnOzDfVUG35zmm_dIHriXbQ6F5kNVLWSfD1OrsJIS_pJ4hTI4nULbllKvk4BjZ55mx1LhSHXOB_eubFRGC0NlUxNvV6cOqdEsopxcFBoDgWqRF2foYmQDOIFZlwuXewyqqqOCf6fqa-U7Qe4HNmj0Tvh_N4kbWRLmX7KR2hLVieKVmFzDhNnunVBWy2GvN35fK6jO-vmjve2yvngbJnja06hOYk_RDPVC',
+  },
+  {
+    quote: 'Best investment I made for my property business. Highly recommended!',
+    author: 'Mohammed Ali',
+    title: 'Portfolio Owner',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD2L_L8S2BpUVBstxOk1N46L7Jv2MQnUZ7qC3qrlLlcgFsxnOzDfVUG35zmm_dIHriXbQ6F5kNVLWSfD1OrsJIS_pJ4hTI4nULbllKvk4BjZ55mx1LhSHXOB_eubFRGC0NlUxNvV6cOqdEsopxcFBoDgWqRF2foYmQDOIFZlwuXewyqqqOCf6fqa-U7Qe4HNmj0Tvh_N4kbWRLmX7KR2hLVieKVmFzDhNnunVBWy2GvN35fK6jO-vmjve2yvngbJnja06hOYk_RDPVC',
+  },
+]
+
 export function OwnerLoginPage() {
   const navigate = useNavigate()
   const { owner, login, register } = useOwnerAuth()
@@ -30,6 +70,7 @@ export function OwnerLoginPage() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
+  const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0)
 
   const [form, setForm] = useState({
     email: '',
@@ -37,9 +78,15 @@ export function OwnerLoginPage() {
     full_name: '',
     company_name: '',
     support_email: '',
-    support_whatsapp: '',
     country_code: '',
   })
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTestimonialIndex((prev) => (prev + 1) % TESTIMONIALS.length)
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [])
 
   const supportedCountryCodes = useMemo(() => new Set(allCountryOptions.map((option) => option.code)), [])
   const countryOptions = useMemo<CountrySelectOption[]>(() => {
@@ -99,7 +146,6 @@ export function OwnerLoginPage() {
           full_name: form.full_name || undefined,
           company_name: form.company_name || undefined,
           support_email: form.support_email || undefined,
-          support_whatsapp: form.support_whatsapp || undefined,
           country_code: form.country_code,
         })
         trackEvent('owner_signup_form_submit', { user_type: 'owner' })
@@ -114,24 +160,24 @@ export function OwnerLoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col md:flex-row">
+    <main className="flex flex-col md:flex-row md:min-h-screen">
       {/* Left Side: Brand Identity */}
-      <section className="relative hidden flex-col justify-between overflow-hidden bg-[#FED609] p-12 md:flex md:w-1/2">
+      <section className="relative hidden flex-col justify-between overflow-hidden bg-[#FED609] p-6 md:flex md:w-1/2">
         {/* Decorative blurs */}
         <div className="absolute -mr-32 -mt-32 right-0 top-0 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
         <div className="absolute -mb-48 -ml-48 bottom-0 left-0 h-96 w-96 rounded-full bg-black/5 blur-3xl" />
 
         {/* Logo & Tagline */}
         <div className="relative z-10">
-          <div className="mb-2 font-['Sora'] text-3xl font-black tracking-tighter text-white">Prophives</div>
-          <p className="font-['DM_Sans'] text-sm font-medium uppercase tracking-wide text-white/90">
+          <div className="mb-1 font-['Sora'] text-2xl font-black tracking-tighter text-white">Prophives</div>
+          <p className="font-['DM_Sans'] text-xs font-medium uppercase tracking-wide text-white/90">
             AI-Powered Property Management
           </p>
         </div>
 
         {/* Illustration */}
-        <div className="relative z-10 flex flex-grow items-center justify-center">
-          <div className="relative w-full max-w-md" style={{ aspectRatio: '1' }}>
+        <div className="relative z-10 flex flex-grow items-center justify-center py-4">
+          <div className="relative w-full max-w-xs" style={{ aspectRatio: '1' }}>
             <div className="absolute inset-0 rotate-3 rounded-xl bg-white/20" />
             <div className="absolute inset-0 -rotate-3 rounded-xl bg-white/10" />
             <img
@@ -143,36 +189,58 @@ export function OwnerLoginPage() {
         </div>
 
         {/* Testimonial */}
-        <div className="relative z-10 rounded-xl border border-white/20 bg-white/10 p-8 backdrop-blur-md">
-          <p className="mb-4 font-['Sora'] text-lg font-semibold italic text-white">
-            "Prophives changed how I manage my property portfolio."
-          </p>
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/40 bg-white/20">
-              <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2L_L8S2BpUVBstxOk1N46L7Jv2MQnUZ7qC3qrlLlcgFsxnOzDfVUG35zmm_dIHriXbQ6F5kNVLWSfD1OrsJIS_pJ4hTI4nULbllKvk4BjZ55mx1LhSHXOB_eubFRGC0NlUxNvV6cOqdEsopxcFBoDgWqRF2foYmQDOIFZlwuXewyqqqOCf6fqa-U7Qe4HNmj0Tvh_N4kbWRLmX7KR2hLVieKVmFzDhNnunVBWy2GvN35fK6jO-vmjve2yvngbJnja06hOYk_RDPVC"
-                alt="Omar K."
-                className="h-full w-full object-cover"
+        <div className="relative z-10 space-y-3">
+          <div className="rounded-2xl border-2 border-white/40 bg-linear-to-br from-black/60 to-black/50 p-6 backdrop-blur-lg transition-all duration-500 hover:bg-black/70">
+            <div className="mb-4 flex gap-1">
+              {[...Array(5)].map((_, i) => (
+                <svg key={i} className="h-4 w-4 fill-yellow-300" viewBox="0 0 20 20">
+                  <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                </svg>
+              ))}
+            </div>
+            <p className="mb-4 line-clamp-3 font-['Sora'] text-sm font-semibold leading-relaxed italic text-white">
+              "{TESTIMONIALS[currentTestimonialIndex].quote}"
+            </p>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-yellow-300/50 bg-white/20 shadow-lg">
+                <img
+                  src={TESTIMONIALS[currentTestimonialIndex].image}
+                  alt={TESTIMONIALS[currentTestimonialIndex].author}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div>
+                <p className="font-['DM_Sans'] text-sm font-bold text-white">
+                  {TESTIMONIALS[currentTestimonialIndex].author}
+                </p>
+                <p className="text-xs font-medium text-white/90">{TESTIMONIALS[currentTestimonialIndex].title}</p>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-center gap-2">
+            {TESTIMONIALS.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentTestimonialIndex(index)}
+                className={`h-2 rounded-full transition-all ${
+                  index === currentTestimonialIndex ? 'w-8 bg-white' : 'w-2 bg-white/50'
+                }`}
               />
-            </div>
-            <div>
-              <p className="font-['DM_Sans'] text-sm font-bold leading-none text-white">Omar K.</p>
-              <p className="text-xs font-medium text-white/70">Portfolio Owner</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Right Side: Interaction Area */}
-      <section className="flex w-full items-center justify-center bg-white p-6 md:w-1/2 md:p-12 lg:p-24">
-        <div className="w-full max-w-md">
+      <section className="flex w-full flex-col items-center justify-start bg-white p-4 md:justify-center md:w-1/2 md:p-8 md:min-h-screen lg:p-12">
+        <div className="w-full max-w-md pt-0 md:pt-0">
           {/* Mobile brand */}
-          <div className="mb-8 md:hidden">
+          <div className="mb-4 md:hidden">
             <span className="font-['Sora'] text-2xl font-black text-[#FED609]">Prophives</span>
           </div>
 
           {/* Tabs */}
-          <div className="mb-10 flex gap-8 border-b border-stone-100">
+          <div className="mb-4 flex gap-6 border-b border-stone-100">
             <button
               type="button"
               onClick={() => { setMode('login'); setError(null) }}
@@ -200,11 +268,11 @@ export function OwnerLoginPage() {
           </div>
 
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="font-['Sora'] text-3xl font-bold text-[#1A1A1A]">
+          <div className="mb-5">
+            <h1 className="font-['Sora'] text-2xl font-bold text-[#1A1A1A]">
               {mode === 'login' ? 'Welcome Back' : 'Create Account'}
             </h1>
-            <p className="mt-2 font-['Manrope'] text-[#6B7280]">
+            <p className="mt-0.5 font-['Manrope'] text-sm text-[#6B7280]">
               {mode === 'login'
                 ? 'Access your property dashboard and AI insights.'
                 : 'Set up your Prophives owner workspace.'}
@@ -212,7 +280,7 @@ export function OwnerLoginPage() {
           </div>
 
           {/* Form */}
-          <form className="space-y-5" onSubmit={handleSubmit}>
+          <form className="space-y-4" onSubmit={handleSubmit}>
             {/* Email */}
             <div>
               <label className="mb-2 block font-['DM_Sans'] text-sm font-bold text-[#1A1A1A]">
@@ -277,6 +345,7 @@ export function OwnerLoginPage() {
                   variant="light"
                   name="owner_full_name"
                   autoComplete="name"
+                  placeholder="John Smith"
                   value={form.full_name}
                   onChange={(e) => updateField('full_name', e.target.value)}
                 />
@@ -285,6 +354,7 @@ export function OwnerLoginPage() {
                   variant="light"
                   name="owner_company_name"
                   autoComplete="organization"
+                  placeholder="Your Property Management Company"
                   value={form.company_name}
                   onChange={(e) => updateField('company_name', e.target.value)}
                 />
@@ -294,16 +364,9 @@ export function OwnerLoginPage() {
                   variant="light"
                   name="owner_support_email"
                   autoComplete="email"
+                  placeholder="support@yourcompany.com"
                   value={form.support_email}
                   onChange={(e) => updateField('support_email', e.target.value)}
-                />
-                <FormInput
-                  label="Support WhatsApp"
-                  variant="light"
-                  name="owner_support_whatsapp"
-                  autoComplete="tel"
-                  value={form.support_whatsapp}
-                  onChange={(e) => updateField('support_whatsapp', e.target.value)}
                 />
 
                 <label className="block space-y-2">
@@ -316,11 +379,10 @@ export function OwnerLoginPage() {
                     options={countryOptions}
                     value={selectedCountry}
                     onChange={(option) => updateField('country_code', option?.value ?? '')}
-                    placeholder="Type to search country..."
+                    placeholder="Search and select your country..."
                     noOptionsMessage={() => 'No country found'}
                     isSearchable
-                    styles={getProphivesReactSelectStyles<CountrySelectOption, false>()}
-                    isOptionDisabled={(option) => !option.isSupported}
+                    styles={getProphivesReactSelectStyles<CountrySelectOption, false>('light')}
                     formatOptionLabel={(option) => (
                       <span className="flex items-center gap-2">
                         <ReactCountryFlag
@@ -329,13 +391,12 @@ export function OwnerLoginPage() {
                           aria-label={option.label}
                           style={{ width: '1.1em', height: '1.1em' }}
                         />
-                        <span>{option.isSupported ? option.label : `${option.label} (Coming soon)`}</span>
+                        <span>{option.label}</span>
                       </span>
                     )}
                   />
-                  <span className="text-xs text-[#6B7280]">
-                    Used to set your rent currency and regional pricing. Countries marked "Coming soon" cannot be
-                    selected yet.
+                  <span className="text-xs text-[#6B7280] leading-tight">
+                    Used to set your rent currency and regional pricing.
                   </span>
                 </label>
               </>
@@ -364,13 +425,13 @@ export function OwnerLoginPage() {
             <button
               type="submit"
               disabled={busy}
-              className="w-full rounded-lg bg-[#FED609] py-4 font-['Sora'] font-bold text-[#1A1A1A] shadow-lg shadow-[#FED609]/20 transition-all hover:bg-[#FFD70B] active:scale-[0.98] disabled:opacity-60"
+              className="w-full rounded-lg bg-[#FED609] py-3 font-['Sora'] font-bold text-[#1A1A1A] shadow-lg shadow-[#FED609]/20 transition-all hover:bg-[#FFD70B] active:scale-[0.98] disabled:opacity-60"
             >
               {busy ? 'Please wait...' : mode === 'login' ? 'Sign In' : 'Create Account'}
             </button>
 
             {/* Divider */}
-            <div className="relative py-2">
+            <div className="relative py-1.5">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-stone-100" />
               </div>
@@ -383,38 +444,14 @@ export function OwnerLoginPage() {
             <div className="text-center">
               <Link
                 to={ROUTES.tenantLogin}
-                className="group inline-flex items-center gap-2 font-['DM_Sans'] text-sm font-bold text-[#1A1A1A] transition-colors hover:text-[#FFD70B]"
+                className="group inline-flex items-center gap-1.5 font-['DM_Sans'] text-xs font-bold text-[#1A1A1A] transition-colors hover:text-[#FFD70B]"
               >
                 Login as Tenant
-                <MoveRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <MoveRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
           </form>
 
-          {/* Footer support */}
-          <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-stone-100 pt-8 sm:flex-row">
-            <p className="font-['Manrope'] text-xs font-medium text-[#6B7280]">Need assistance?</p>
-            <div className="flex gap-4">
-              <a
-                href="https://wa.me/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 rounded-full border border-stone-200 px-4 py-2 transition-colors hover:border-[#25D366]"
-              >
-                <MessageCircle className="h-4 w-4 text-[#25D366]" />
-                <span className="font-['DM_Sans'] text-xs font-bold">WhatsApp</span>
-              </a>
-              <a
-                href="https://t.me/prophives"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 rounded-full border border-stone-200 px-4 py-2 transition-colors hover:border-[#0088cc]"
-              >
-                <Send className="h-4 w-4 text-[#0088cc]" />
-                <span className="font-['DM_Sans'] text-xs font-bold">Telegram Bot</span>
-              </a>
-            </div>
-          </div>
         </div>
       </section>
     </main>
