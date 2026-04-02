@@ -1,4 +1,4 @@
-import { Bell, Bot, Briefcase, Building2, Hammer, LayoutDashboard, LifeBuoy, Plug, Sparkles, UserCircle, Users } from 'lucide-react'
+import { Bell, Briefcase, Building2, LayoutDashboard, LifeBuoy, Plug, UserCircle, Users } from 'lucide-react'
 
 import { OwnerNotificationBell } from '../components/owner/OwnerNotificationBell'
 import { OwnerNotificationsProvider } from '../hooks/OwnerNotificationsProvider'
@@ -13,10 +13,10 @@ const ownerLinks = [
   { to: ROUTES.ownerBrokers, label: 'Brokers', icon: <Briefcase className="h-4 w-4" /> },
   { to: ROUTES.ownerTenants, label: 'Tenants', icon: <Users className="h-4 w-4" /> },
   { to: ROUTES.ownerTickets, label: 'Tickets', icon: <LifeBuoy className="h-4 w-4" /> },
-  { to: ROUTES.ownerMaintenance, label: 'Maintenance', icon: <Hammer className="h-4 w-4" /> },
+  // { to: ROUTES.ownerMaintenance, label: 'Maintenance', icon: <Hammer className="h-4 w-4" /> },
   { to: ROUTES.ownerNotifications, label: 'Notifications', icon: <Bell className="h-4 w-4" /> },
-  { to: ROUTES.ownerAutomation, label: 'Automation', icon: <Bot className="h-4 w-4" /> },
-  { to: ROUTES.ownerAiSettings, label: 'AI Settings', icon: <Sparkles className="h-4 w-4" /> },
+  // { to: ROUTES.ownerAutomation, label: 'Automation', icon: <Bot className="h-4 w-4" /> },
+  // { to: ROUTES.ownerAiSettings, label: 'AI Settings', icon: <Sparkles className="h-4 w-4" /> },
   { to: ROUTES.ownerIntegrations, label: 'Integrations', icon: <Plug className="h-4 w-4" /> },
   { to: ROUTES.ownerProfile, label: 'Profile', icon: <UserCircle className="h-4 w-4" /> },
 ]
