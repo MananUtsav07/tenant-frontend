@@ -10,7 +10,7 @@ import { LoadingState } from '../../components/common/LoadingState'
 import { Modal } from '../../components/common/Modal'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { api } from '../../services/api'
-import type { Broker } from '../../types/api'
+import type { Broker, Tenant } from '../../types/api'
 import { formatDateTime } from '../../utils/date'
 
 function buildEmptyBrokerForm() {
@@ -27,11 +27,13 @@ function buildEmptyBrokerForm() {
 export function OwnerBrokersPage() {
   const { token } = useOwnerAuth()
   const [brokers, setBrokers] = useState<Broker[]>([])
+  const [tenants, setTenants] = useState<Tenant[]>([])
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showForm, setShowForm] = useState(false)
   const [editingBrokerId, setEditingBrokerId] = useState<string | null>(null)
+  const [brokerPendingDelete, setBrokerPendingDelete] = useState<Broker | null>(null)
   const [form, setForm] = useState(buildEmptyBrokerForm())
 
   const loadBrokers = useCallback(async () => {
@@ -41,8 +43,12 @@ export function OwnerBrokersPage() {
 
     try {
       setError(null)
-      const response = await api.getOwnerBrokers(token)
-      setBrokers(response.brokers)
+      const [brokerResponse, tenantResponse] = await Promise.all([
+        api.getOwnerBrokers(token),
+        api.getOwnerTenants(token),
+      ])
+      setBrokers(brokerResponse.brokers)
+      setTenants(tenantResponse.tenants)
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : 'Failed to load brokers')
     } finally {
@@ -114,25 +120,24 @@ export function OwnerBrokersPage() {
     setShowForm(true)
   }
 
-  const handleDelete = async (brokerId: string) => {
-    if (!token) {
-      return
-    }
-
-    const confirmed = window.confirm('Delete this broker? Assigned tenants will be unassigned.')
-    if (!confirmed) {
+  const handleDelete = async () => {
+    if (!token || !brokerPendingDelete) {
       return
     }
 
     try {
+      setBusy(true)
       setError(null)
-      await api.deleteOwnerBroker(token, brokerId)
+      await api.deleteOwnerBroker(token, brokerPendingDelete.id)
       await loadBrokers()
-      if (editingBrokerId === brokerId) {
+      if (editingBrokerId === brokerPendingDelete.id) {
         resetForm()
       }
+      setBrokerPendingDelete(null)
     } catch (deleteError) {
       setError(deleteError instanceof Error ? deleteError.message : 'Failed to delete broker')
+    } finally {
+      setBusy(false)
     }
   }
 
@@ -152,9 +157,9 @@ export function OwnerBrokersPage() {
           type="button"
           variant="primary"
           size="sm"
+          iconLeft={<UserRoundPlus className="h-4 w-4" />}
           onClick={() => setShowForm(true)}
         >
-          <UserRoundPlus className="h-4 w-4" />
           Add Broker
         </Button>
       </div>
@@ -230,29 +235,96 @@ export function OwnerBrokersPage() {
 
       {!loading && brokers.length > 0 ? (
         <DataTable headers={['Broker', 'Contact', 'Agency', 'Status', 'Created', 'Actions']}>
-          {brokers.map((broker) => (
+          {brokers.map((broker) => {
+            const assignedTenants = tenants.filter((t) => t.broker_id === broker.id)
+            return (
             <tr key={broker.id} className="border-t border-[var(--ph-line)]">
               <td className="px-4 py-3">
                 <p className="font-medium text-[var(--ph-text)]">{broker.full_name}</p>
                 <p className="text-xs text-[var(--ph-text-muted)]">{broker.email}</p>
+                {assignedTenants.length > 0 ? (
+                  <div className="mt-1.5">
+                    <p className="text-[9px] font-bold uppercase tracking-widest text-[#9CA3AF] mb-1">Assigned Tenants</p>
+                    <div className="flex flex-wrap gap-1">
+                      {assignedTenants.map((t) => (
+                        <span
+                          key={t.id}
+                          className="inline-flex items-center gap-1 rounded-full bg-[#FFFBEB] border border-[#FED609]/30 px-2 py-0.5 text-[10px] font-semibold text-[#A08A57]"
+                        >
+                          <span className="h-1.5 w-1.5 rounded-full bg-[#FED609] shrink-0" />
+                          {t.full_name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="mt-1 text-[10px] text-[#9CA3AF]">No tenants assigned</p>
+                )}
               </td>
               <td className="px-4 py-3 text-[var(--ph-text-soft)]">{broker.phone || '-'}</td>
               <td className="px-4 py-3 text-[var(--ph-text-soft)]">{broker.agency_name || '-'}</td>
               <td className="px-4 py-3 text-[var(--ph-text-soft)]">{broker.is_active ? 'Active' : 'Inactive'}</td>
               <td className="px-4 py-3 text-[var(--ph-text-soft)]">{formatDateTime(broker.created_at)}</td>
               <td className="px-4 py-3">
-                <div className="flex gap-2">
-                  <Button type="button" variant="ghost" size="sm" onClick={() => handleEdit(broker)}>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => handleEdit(broker)}
+                    className="flex h-8 w-8 items-center justify-center rounded-lg text-[#6B7280] transition-colors hover:bg-[#F3F4F6] hover:text-[#1A1A1A]"
+                  >
                     <Pencil className="h-4 w-4" />
-                  </Button>
-                  <Button type="button" variant="ghost" size="sm" onClick={() => void handleDelete(broker.id)}>
-                    <Trash2 className="h-4 w-4 text-rose-400" />
-                  </Button>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setBrokerPendingDelete(broker)}
+                    className="flex h-8 w-8 items-center justify-center rounded-lg text-rose-400 transition-colors hover:bg-rose-50 hover:text-rose-600"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
                 </div>
               </td>
             </tr>
-          ))}
+            )
+          })}
         </DataTable>
+      ) : null}
+
+      {brokerPendingDelete ? (
+        <Modal
+          isOpen
+          onClose={() => setBrokerPendingDelete(null)}
+          title="Delete Broker"
+          size="sm"
+        >
+          <div className="space-y-4 text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-50">
+              <Trash2 className="h-5 w-5 text-red-500" />
+            </div>
+            {error ? (
+              <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600 text-left">{error}</div>
+            ) : null}
+            <p className="text-sm text-[#4B5563]">
+              <span className="font-semibold text-[#1A1A1A]">{brokerPendingDelete.full_name}</span> will be permanently removed. Assigned tenants will be unassigned. This action cannot be undone.
+            </p>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setBrokerPendingDelete(null)}
+                className="flex-1 rounded-xl border border-neutral-200 px-4 py-2.5 text-sm font-medium text-[#6B7280] transition-colors hover:bg-[#FEFAEF] hover:text-[#1A1A1A]"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={busy}
+                onClick={() => void handleDelete()}
+                className="flex-1 rounded-xl bg-red-500 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-600 disabled:opacity-60"
+              >
+                {busy ? 'Deleting...' : 'Delete Broker'}
+              </button>
+            </div>
+          </div>
+        </Modal>
       ) : null}
     </section>
   )

@@ -1,12 +1,11 @@
-import { useCallback, useEffect, useState, type FormEvent } from 'react'
+import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
 import {
   Building2,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Eye,
-  MessageCircle,
   Pencil,
-  Send,
   Trash2,
   UserRoundPlus,
   Users,
@@ -45,7 +44,13 @@ function getNextDueDate(dayOfMonth: number, now = new Date()): Date {
   return new Date(Date.UTC(nextYear, nextMonth, safeDayNextMonth, 9, 0, 0, 0))
 }
 
-function buildEmptyTenantForm(defaultPropertyId = '') {
+const RENT_CURRENCY_OPTIONS = [
+  { code: 'INR', label: 'Rupees (INR)' },
+  { code: 'USD', label: 'Dollar (USD)' },
+  { code: 'AED', label: 'UAE Dirham (AED)' },
+] as const
+
+function buildEmptyTenantForm(defaultPropertyId = '', currencyCode = 'INR') {
   return {
     property_id: defaultPropertyId,
     broker_id: '',
@@ -56,6 +61,7 @@ function buildEmptyTenantForm(defaultPropertyId = '') {
     lease_start_date: '',
     lease_end_date: '',
     monthly_rent: '',
+    currency_code: currencyCode,
     payment_due_day: '1',
     payment_status: 'pending' as Tenant['payment_status'],
     status: 'active' as Tenant['status'],
@@ -109,7 +115,7 @@ type TenantDetailPanelProps = {
   currencyCode: string
   onClose: () => void
   onEdit: (tenant: Tenant) => void
-  onDelete: (tenantId: string) => void
+  onDelete: (tenant: Tenant) => void
   busy: boolean
 }
 
@@ -212,6 +218,21 @@ function TenantDetailPanel({ tenant, propertyName, currencyCode, onClose, onEdit
             </div>
           ) : null}
 
+          {/* Broker */}
+          {tenant.brokers ? (
+            <div>
+              <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mb-1 font-['DM_Sans']">Broker</p>
+              <div className="flex items-center gap-2 rounded-xl bg-[#FEFAEF] border border-[#FED609]/10 px-3 py-2">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-[#1A1A1A] font-['Manrope'] truncate">{tenant.brokers.full_name}</p>
+                  {tenant.brokers.agency_name ? (
+                    <p className="text-xs text-[#6B7280] font-['Manrope'] truncate">{tenant.brokers.agency_name}</p>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+          ) : null}
+
           {/* Access ID */}
           <div>
             <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mb-0.5 font-['DM_Sans']">Access ID</p>
@@ -223,24 +244,6 @@ function TenantDetailPanel({ tenant, propertyName, currencyCode, onClose, onEdit
 
         {/* Actions */}
         <div className="p-5 border-t border-[#FED609]/10 space-y-2">
-          {/* Messaging */}
-          <div className="flex gap-2">
-            <button
-              type="button"
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 font-bold text-xs transition-colors font-['DM_Sans'] border border-[#25D366]/20"
-            >
-              <MessageCircle className="h-4 w-4" />
-              WhatsApp
-            </button>
-            <button
-              type="button"
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#0088cc]/10 text-[#0088cc] hover:bg-[#0088cc]/20 font-bold text-xs transition-colors font-['DM_Sans'] border border-[#0088cc]/20"
-            >
-              <Send className="h-4 w-4" />
-              Telegram
-            </button>
-          </div>
-          {/* Edit / View */}
           <div className="flex gap-2">
             <button
               type="button"
@@ -261,7 +264,7 @@ function TenantDetailPanel({ tenant, propertyName, currencyCode, onClose, onEdit
             </Button>
             <button
               type="button"
-              onClick={() => void onDelete(tenant.id)}
+              onClick={() => onDelete(tenant)}
               disabled={busy}
               className="w-9 h-9 flex items-center justify-center rounded-xl bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-colors border border-red-100 disabled:opacity-40"
             >
@@ -278,17 +281,22 @@ export function OwnerTenantsPage() {
   const { token, owner } = useOwnerAuth()
   const [tenants, setTenants] = useState<Tenant[]>([])
   const [properties, setProperties] = useState<Property[]>([])
-  const [_brokers, setBrokers] = useState<Broker[]>([])
+  const [brokers, setBrokers] = useState<Broker[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [formError, setFormError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [editingTenantId, setEditingTenantId] = useState<string | null>(null)
   const [showTenantForm, setShowTenantForm] = useState(false)
-  const [form, setForm] = useState(buildEmptyTenantForm)
+  const [form, setForm] = useState(() => buildEmptyTenantForm('', owner?.organization?.currency_code ?? 'INR'))
   const [filterPropertyId, setFilterPropertyId] = useState('')
   const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null)
+  const [tenantPendingDelete, setTenantPendingDelete] = useState<Tenant | null>(null)
+  const [showCurrencyMenu, setShowCurrencyMenu] = useState(false)
+  const currencyMenuRef = useRef<HTMLDivElement | null>(null)
   const ownerCurrencyCode = owner?.organization?.currency_code ?? 'INR'
-  const ownerCurrencyMarker = getCurrencyMarker(ownerCurrencyCode)
+  const selectedRentCurrencyCode = form.currency_code || ownerCurrencyCode
+  const selectedRentCurrencyMarker = getCurrencyMarker(selectedRentCurrencyCode)
 
   const loadData = useCallback(async () => {
     if (!token) {
@@ -304,7 +312,7 @@ export function OwnerTenantsPage() {
       ])
       setTenants(tenantResponse.tenants)
       setProperties(propertyResponse.properties)
-      setBrokers(brokerResponse.brokers.filter((broker) => broker.is_active))
+      setBrokers(brokerResponse.brokers)
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : 'Failed to load tenants')
     } finally {
@@ -322,10 +330,27 @@ export function OwnerTenantsPage() {
     }
   }, [properties, form.property_id])
 
+  useEffect(() => {
+    if (!showCurrencyMenu) {
+      return
+    }
+
+    const handlePointerDown = (event: MouseEvent) => {
+      if (currencyMenuRef.current && !currencyMenuRef.current.contains(event.target as Node)) {
+        setShowCurrencyMenu(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handlePointerDown)
+    return () => document.removeEventListener('mousedown', handlePointerDown)
+  }, [showCurrencyMenu])
+
   const resetForm = () => {
-    setForm(buildEmptyTenantForm(properties[0]?.id ?? ''))
+    setForm(buildEmptyTenantForm(properties[0]?.id ?? '', ownerCurrencyCode))
     setEditingTenantId(null)
     setShowTenantForm(false)
+    setFormError(null)
+    setShowCurrencyMenu(false)
   }
 
   const handleCreateTenant = async (event: FormEvent) => {
@@ -342,38 +367,44 @@ export function OwnerTenantsPage() {
     const dueDay = Number(form.payment_due_day)
 
     if (!form.property_id) {
-      setError('Select a property before creating a tenant')
+      setFormError('Select a property before creating a tenant')
       return
     }
 
     if (!trimmedFullName) {
-      setError('Tenant full name is required')
+      setFormError('Tenant full name is required')
+      return
+    }
+
+    if (!trimmedEmail) {
+      setFormError('Tenant email is required to send login credentials')
       return
     }
 
     if (!editingTenantId && trimmedPassword.length < 8) {
-      setError('Tenant password must be at least 8 characters')
+      setFormError('Tenant password must be at least 8 characters')
       return
     }
 
     if (form.monthly_rent.trim().length === 0) {
-      setError('Monthly rent is required')
+      setFormError('Monthly rent is required')
       return
     }
 
     if (Number.isNaN(monthlyRent) || monthlyRent < 0) {
-      setError('Monthly rent must be a valid non-negative number')
+      setFormError('Monthly rent must be a valid non-negative number')
       return
     }
 
     if (!Number.isInteger(dueDay) || dueDay < 1 || dueDay > 31) {
-      setError('Due date must be an integer between 1 and 31')
+      setFormError('Due date must be an integer between 1 and 31')
       return
     }
 
     try {
       setBusy(true)
       setError(null)
+      setFormError(null)
 
       if (editingTenantId) {
         await api.updateOwnerTenant(token, editingTenantId, {
@@ -410,21 +441,28 @@ export function OwnerTenantsPage() {
       resetForm()
       await loadData()
     } catch (createError) {
-      setError(createError instanceof Error ? createError.message : 'Failed to create tenant')
+      setFormError(createError instanceof Error ? createError.message : 'Failed to create tenant')
     } finally {
       setBusy(false)
     }
   }
 
-  const handleDelete = async (tenantId: string) => {
-    if (!token) {
+  const requestDelete = (tenant: Tenant) => {
+    setError(null)
+    setTenantPendingDelete(tenant)
+  }
+
+  const handleDelete = async () => {
+    if (!token || !tenantPendingDelete) {
       return
     }
 
     try {
       setBusy(true)
-      await api.deleteOwnerTenant(token, tenantId)
-      if (selectedTenant?.id === tenantId) setSelectedTenant(null)
+      setError(null)
+      await api.deleteOwnerTenant(token, tenantPendingDelete.id)
+      if (selectedTenant?.id === tenantPendingDelete.id) setSelectedTenant(null)
+      setTenantPendingDelete(null)
       await loadData()
     } catch (deleteError) {
       setError(deleteError instanceof Error ? deleteError.message : 'Failed to delete tenant')
@@ -436,6 +474,8 @@ export function OwnerTenantsPage() {
   const beginEdit = (tenant: Tenant) => {
     setShowTenantForm(true)
     setEditingTenantId(tenant.id)
+    setFormError(null)
+    setShowCurrencyMenu(false)
     setForm({
       property_id: tenant.property_id,
       broker_id: tenant.broker_id ?? '',
@@ -449,6 +489,7 @@ export function OwnerTenantsPage() {
       payment_due_day: String(tenant.payment_due_day),
       payment_status: tenant.payment_status,
       status: tenant.status,
+      currency_code: ownerCurrencyCode,
     })
   }
 
@@ -494,7 +535,9 @@ export function OwnerTenantsPage() {
             onClick={() => {
               setShowTenantForm(true)
               setEditingTenantId(null)
-              setForm(buildEmptyTenantForm(properties[0]?.id ?? ''))
+              setForm(buildEmptyTenantForm(properties[0]?.id ?? '', ownerCurrencyCode))
+              setFormError(null)
+              setShowCurrencyMenu(false)
             }}
             className="bg-[#FED609] hover:bg-[#FFD70B] text-[#1A1A1A] font-bold px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-md font-['DM_Sans'] text-sm"
           >
@@ -531,7 +574,7 @@ export function OwnerTenantsPage() {
       </div>
 
       {/* Error */}
-      {error ? <ErrorState message={error} /> : null}
+      {error && !showTenantForm && !tenantPendingDelete ? <ErrorState message={error} /> : null}
 
       {/* Loading */}
       {loading ? <LoadingState message="Loading tenant records..." rows={4} /> : null}
@@ -594,6 +637,12 @@ export function OwnerTenantsPage() {
                         <td className="px-5 py-4">
                           <p className="font-semibold text-[#1A1A1A] truncate max-w-[140px]">{tenant.full_name}</p>
                           <p className="text-xs text-[#6B7280] truncate">{tenant.email ?? 'No email'}</p>
+                          {tenant.brokers ? (
+                            <p className="text-[11px] text-[#A08A57] font-medium truncate mt-0.5">
+                              <span className="text-[#9CA3AF] font-semibold">Broker:</span>{' '}
+                              {tenant.brokers.full_name}{tenant.brokers.agency_name ? ` · ${tenant.brokers.agency_name}` : ''}
+                            </p>
+                          ) : null}
                         </td>
                         <td className="px-5 py-4 text-[#6B7280] truncate max-w-[120px]">{getPropertyName(tenant.property_id)}</td>
                         <td className="px-5 py-4 text-[#6B7280] hidden md:table-cell">
@@ -612,20 +661,6 @@ export function OwnerTenantsPage() {
                           <div className="flex justify-end gap-1" onClick={(e) => e.stopPropagation()}>
                             <button
                               type="button"
-                              title="Send WhatsApp"
-                              className="p-1.5 hover:bg-green-100 rounded-lg transition-colors text-green-600"
-                            >
-                              <MessageCircle className="w-3.5 h-3.5" />
-                            </button>
-                            <button
-                              type="button"
-                              title="Send Telegram"
-                              className="p-1.5 hover:bg-blue-100 rounded-lg transition-colors text-blue-500"
-                            >
-                              <Send className="w-3.5 h-3.5" />
-                            </button>
-                            <button
-                              type="button"
                               title="Edit tenant"
                               onClick={() => beginEdit(tenant)}
                               className="p-1.5 hover:bg-[#FED609]/20 rounded-lg transition-colors text-[#1A1A1A]"
@@ -635,7 +670,7 @@ export function OwnerTenantsPage() {
                             <button
                               type="button"
                               title="Delete tenant"
-                              onClick={() => void handleDelete(tenant.id)}
+                              onClick={() => requestDelete(tenant)}
                               disabled={busy}
                               className="p-1.5 hover:bg-red-100 rounded-lg transition-colors text-red-500 disabled:opacity-40"
                             >
@@ -687,7 +722,7 @@ export function OwnerTenantsPage() {
                 currencyCode={ownerCurrencyCode}
                 onClose={() => setSelectedTenant(null)}
                 onEdit={beginEdit}
-                onDelete={handleDelete}
+                onDelete={requestDelete}
                 busy={busy}
               />
             </div>
@@ -711,6 +746,12 @@ export function OwnerTenantsPage() {
           size="lg"
         >
           <form onSubmit={handleCreateTenant} autoComplete="off" className="space-y-4">
+            {formError ? (
+              <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+                {formError}
+              </div>
+            ) : null}
+
             {/* Hidden autocomplete traps */}
             <input
               type="text"
@@ -751,14 +792,38 @@ export function OwnerTenantsPage() {
                 </select>
               </label>
 
-              <FormInput
-                label="Full Name"
-                name="tenant_full_name"
-                autoComplete="off"
-                value={form.full_name}
-                onChange={(event) => setForm((current) => ({ ...current, full_name: event.target.value }))}
-                required
-              />
+              <label className="block space-y-2">
+                <span className="text-sm font-medium text-[#4B5563]">Broker</span>
+                <select
+                  name="tenant_broker_id"
+                  autoComplete="off"
+                  className="tf-field"
+                  value={form.broker_id}
+                  onChange={(event) => setForm((current) => ({ ...current, broker_id: event.target.value }))}
+                >
+                  <option value="">No broker assigned</option>
+                  {brokers.filter((b) => b.is_active).map((broker) => (
+                    <option key={broker.id} value={broker.id}>
+                      {broker.full_name}{broker.agency_name ? ` — ${broker.agency_name}` : ''}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="block space-y-2">
+                <span className="text-sm font-medium text-[#4B5563]">
+                  Full Name <span className="text-red-400">*</span>
+                </span>
+                <input
+                  type="text"
+                  name="tenant_full_name"
+                  autoComplete="off"
+                  className="tf-field"
+                  value={form.full_name}
+                  onChange={(event) => setForm((current) => ({ ...current, full_name: event.target.value }))}
+                  required
+                />
+              </label>
               <FormInput
                 label="Email"
                 type="email"
@@ -766,6 +831,7 @@ export function OwnerTenantsPage() {
                 autoComplete="new-password"
                 value={form.email}
                 onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
+                required
               />
               <FormInput
                 label="Phone"
@@ -774,42 +840,108 @@ export function OwnerTenantsPage() {
                 value={form.phone}
                 onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
               />
-              <FormInput
-                label={editingTenantId ? 'Password (leave blank to keep current)' : 'Password'}
-                type="password"
-                name="tenant_access_password"
-                autoComplete="new-password"
-                value={form.password}
-                onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
-                required={!editingTenantId}
-              />
               <label className="block space-y-2">
-                <span className="text-sm font-medium text-[#4B5563]">Monthly Rent</span>
+                <span className="text-sm font-medium text-[#4B5563]">
+                  {editingTenantId ? 'Password (leave blank to keep current)' : <>Password <span className="text-red-400">*</span></>}
+                </span>
                 <input
-                  type="text"
-                  inputMode="decimal"
-                  name="tenant_monthly_rent"
+                  type="password"
+                  name="tenant_access_password"
+                  autoComplete="new-password"
                   className="tf-field"
-                  value={`${ownerCurrencyMarker}${form.monthly_rent}`}
-                  onChange={(event) =>
-                    setForm((current) => ({
-                      ...current,
-                      monthly_rent: sanitizeRentInput(event.target.value, ownerCurrencyMarker),
-                    }))
-                  }
+                  value={form.password}
+                  onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
+                  required={!editingTenantId}
+                />
+              </label>
+              <label className="block space-y-2">
+                <span className="text-sm font-medium text-[#4B5563]">
+                  Monthly Rent <span className="text-red-400">*</span>
+                </span>
+                <div className="flex items-center gap-2">
+                  <div ref={currencyMenuRef} className="relative w-[96px] shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => setShowCurrencyMenu((current) => !current)}
+                      className={`flex h-[52px] w-full items-center justify-between rounded-xl border bg-white px-3 text-sm font-medium text-[#1A1A1A] outline-none transition-all duration-150 ${
+                        showCurrencyMenu
+                          ? 'border-[#FED609] shadow-[0_0_0_3px_rgba(254,214,9,0.2)]'
+                          : 'border-[rgba(0,0,0,0.12)] hover:border-[rgba(254,214,9,0.5)]'
+                      }`}
+                    >
+                      <span>{selectedRentCurrencyCode}</span>
+                      <ChevronDown className={`h-4 w-4 text-[#6B7280] transition-transform duration-150 ${showCurrencyMenu ? 'rotate-180' : ''}`} />
+                    </button>
+                    {showCurrencyMenu ? (
+                      <div className="absolute left-0 top-[calc(100%+6px)] z-20 w-[168px] overflow-hidden rounded-xl border border-[#E5E7EB] bg-white shadow-[0_8px_24px_rgba(26,26,26,0.1)]">
+                        {RENT_CURRENCY_OPTIONS.map((option) => {
+                          const isSelected = option.code === selectedRentCurrencyCode
+                          const currencyName = option.label.replace(/ \(.*\)$/, '')
+
+                          return (
+                            <button
+                              key={option.code}
+                              type="button"
+                              onClick={() => {
+                                setForm((current) => ({
+                                  ...current,
+                                  currency_code: option.code,
+                                }))
+                                setShowCurrencyMenu(false)
+                              }}
+                              className={`flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm transition-colors ${
+                                isSelected
+                                  ? 'bg-[#FFFBEB] text-[#1A1A1A]'
+                                  : 'text-[#4B5563] hover:bg-[#FEFAEF]'
+                              }`}
+                            >
+                              <span className="font-semibold text-[#1A1A1A]">{option.code}</span>
+                              <span className="truncate text-xs text-[#9CA3AF]">{currencyName}</span>
+                              {isSelected ? <span className="ml-auto shrink-0 text-xs font-bold text-[#FED609]">✓</span> : null}
+                            </button>
+                          )
+                        })}
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className="flex h-[52px] min-w-0 flex-1 items-center overflow-hidden rounded-xl border border-[rgba(0,0,0,0.12)] bg-white transition-all duration-150 hover:border-[rgba(254,214,9,0.5)] focus-within:border-[#FED609] focus-within:shadow-[0_0_0_3px_rgba(254,214,9,0.2)]">
+                    <div className="flex h-full min-w-13 items-center justify-center border-r border-[#E5E7EB] bg-[#F9FAFB] px-3 text-sm font-semibold text-[#6B7280]">
+                      {selectedRentCurrencyMarker}
+                    </div>
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      name="tenant_monthly_rent"
+                      className="w-full border-0 bg-transparent px-4 py-3 text-sm text-[#1A1A1A] caret-[#1A1A1A] outline-none focus:outline-none focus-visible:outline-none"
+                      style={{ outline: 'none' }}
+                      value={form.monthly_rent}
+                      placeholder="0000"
+                      onChange={(event) =>
+                        setForm((current) => ({
+                          ...current,
+                          monthly_rent: sanitizeRentInput(event.target.value, selectedRentCurrencyMarker),
+                        }))
+                      }
+                      required
+                    />
+                  </div>
+                </div>
+              </label>
+              <label className="block space-y-2">
+                <span className="text-sm font-medium text-[#4B5563]">
+                  Due Date <span className="text-red-400">*</span>
+                </span>
+                <input
+                  type="number"
+                  name="tenant_due_day"
+                  min={1}
+                  max={31}
+                  className="tf-field"
+                  value={form.payment_due_day}
+                  onChange={(event) => setForm((current) => ({ ...current, payment_due_day: event.target.value }))}
                   required
                 />
               </label>
-              <FormInput
-                label="Due Date"
-                type="number"
-                name="tenant_due_day"
-                min={1}
-                max={31}
-                value={form.payment_due_day}
-                onChange={(event) => setForm((current) => ({ ...current, payment_due_day: event.target.value }))}
-                required
-              />
               <FormInput
                 label="Lease Start"
                 type="date"
@@ -886,6 +1018,46 @@ export function OwnerTenantsPage() {
               </Button>
             </div>
           </form>
+        </Modal>
+      ) : null}
+
+      {tenantPendingDelete ? (
+        <Modal
+          isOpen
+          onClose={() => setTenantPendingDelete(null)}
+          title="Delete Tenant"
+          size="sm"
+        >
+          <div className="space-y-4 text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-50">
+              <Trash2 className="h-5 w-5 text-red-500" />
+            </div>
+            {error ? (
+              <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600 text-left">
+                {error}
+              </div>
+            ) : null}
+            <p className="text-sm text-[#4B5563]">
+              <span className="font-semibold text-[#1A1A1A]">{tenantPendingDelete.full_name}</span> will be permanently removed. This action cannot be undone.
+            </p>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setTenantPendingDelete(null)}
+                className="flex-1 rounded-xl border border-neutral-200 px-4 py-2.5 text-sm font-medium text-[#6B7280] transition-colors hover:bg-[#FEFAEF] hover:text-[#1A1A1A]"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => void handleDelete()}
+                disabled={busy}
+                className="flex-1 rounded-xl bg-red-500 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-600 disabled:opacity-60"
+              >
+                {busy ? 'Deleting...' : 'Delete Tenant'}
+              </button>
+            </div>
+          </div>
         </Modal>
       ) : null}
     </div>
