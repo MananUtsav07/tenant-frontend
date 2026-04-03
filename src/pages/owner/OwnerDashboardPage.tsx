@@ -8,11 +8,7 @@ import {
   CheckCheck,
   ChevronRight,
   Clock3,
-  MessageCircle,
-  Send,
-  Sparkles,
   TrendingUp,
-  UserPlus,
   Users,
   Wallet,
   Wrench,
@@ -75,7 +71,6 @@ export function OwnerDashboardPage() {
   const [totalProperties, setTotalProperties] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [processing, setProcessing] = useState(false)
   const [reviewingApprovalId, setReviewingApprovalId] = useState<string | null>(null)
   const [rejectionNotes, setRejectionNotes] = useState<Record<string, string>>({})
 
@@ -196,22 +191,6 @@ export function OwnerDashboardPage() {
     void loadDashboard()
   }, [loadDashboard])
 
-  const handleProcessReminders = async () => {
-    if (!token) {
-      return
-    }
-
-    try {
-      setProcessing(true)
-      await api.processOwnerReminders(token)
-      await loadDashboard()
-    } catch (processError) {
-      setError(processError instanceof Error ? processError.message : 'Failed to process reminders')
-    } finally {
-      setProcessing(false)
-    }
-  }
-
   const handleReviewApproval = async (approvalId: string, action: 'approve' | 'reject') => {
     if (!token) {
       return
@@ -252,24 +231,13 @@ export function OwnerDashboardPage() {
         animate="show"
         className="mb-8 px-2"
       >
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <h1 className="font-['Sora'] text-3xl font-extrabold tracking-tight text-white">
-              Welcome back, {ownerName}
-            </h1>
-            <p className="font-['Manrope'] text-[#8D8D96] font-medium mt-1">
-              Here is what&apos;s happening with your portfolio today.
-            </p>
-          </div>
-          <Button
-            type="button"
-            onClick={() => void handleProcessReminders()}
-            disabled={processing}
-            variant="secondary"
-            iconLeft={<Clock3 className="h-4 w-4" />}
-          >
-            {processing ? 'Processing...' : 'Process reminder cycle'}
-          </Button>
+        <div>
+          <h1 className="font-['Sora'] text-3xl font-extrabold tracking-tight text-white">
+            Welcome back, {ownerName}
+          </h1>
+          <p className="font-['Manrope'] text-[#8D8D96] font-medium mt-1">
+            Here is what&apos;s happening with your portfolio today.
+          </p>
         </div>
       </motion.div>
 
@@ -535,68 +503,6 @@ export function OwnerDashboardPage() {
             {/* Right Column: Quick Actions + Upcoming Reminders + AI Insights */}
             <div className="lg:col-span-4 space-y-8">
 
-              {/* Quick Actions */}
-              <motion.div
-                variants={revealUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={viewportOnce}
-                className="bg-[#101114] p-6 rounded-xl shadow-sm border border-[#272839]"
-              >
-                <h2 className="font-['Sora'] text-lg font-bold text-white mb-6">Quick Actions</h2>
-                <div className="grid grid-cols-2 gap-4">
-                  <Link
-                    to={ROUTES.ownerProperties}
-                    className="flex flex-col items-center gap-3 p-4 rounded-xl border border-[#272839] hover:bg-[#141519] hover:border-[#4E79FF] transition-all group"
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-[#4E79FF]/15 flex items-center justify-center text-[#4E79FF] group-hover:scale-110 transition-transform">
-                      <Building2 className="w-5 h-5" />
-                    </div>
-                    <span className="text-xs font-bold text-white">Add Property</span>
-                  </Link>
-                  <Link
-                    to={ROUTES.ownerTenants}
-                    className="flex flex-col items-center gap-3 p-4 rounded-xl border border-[#272839] hover:bg-[#141519] hover:border-[#4E79FF] transition-all group"
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-[#4E79FF]/15 flex items-center justify-center text-[#4E79FF] group-hover:scale-110 transition-transform">
-                      <UserPlus className="w-5 h-5" />
-                    </div>
-                    <span className="text-xs font-bold text-white">Add Tenant</span>
-                  </Link>
-                  <Link
-                    to={ROUTES.ownerTickets}
-                    className="flex flex-col items-center gap-3 p-4 rounded-xl border border-[#272839] hover:bg-[#141519] hover:border-[#4E79FF] transition-all group"
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-[#4E79FF]/15 flex items-center justify-center text-[#4E79FF] group-hover:scale-110 transition-transform">
-                      <AlertTriangle className="w-5 h-5" />
-                    </div>
-                    <span className="text-xs font-bold text-white">View Tickets</span>
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={() => void handleProcessReminders()}
-                    disabled={processing}
-                    className="flex flex-col items-center gap-3 p-4 rounded-xl border border-[#272839] hover:bg-[#141519] hover:border-[#4E79FF] transition-all group disabled:opacity-60"
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-[#32C382]/15 flex items-center justify-center text-[#32C382] group-hover:scale-110 transition-transform">
-                      <MessageCircle className="w-5 h-5" />
-                    </div>
-                    <span className="text-xs font-bold text-white">
-                      {processing ? 'Sending...' : 'Send Reminder'}
-                    </span>
-                  </button>
-                </div>
-
-                {/* Telegram quick action */}
-                <button
-                  type="button"
-                  className="mt-4 w-full flex items-center gap-3 rounded-xl bg-[#2251E3] px-4 py-3 font-bold text-white text-sm transition-all hover:brightness-105 active:scale-95"
-                >
-                  <Send className="h-5 w-5" />
-                  Send Reminder via Telegram
-                </button>
-              </motion.div>
-
               {/* Upcoming Reminders */}
               <motion.div
                 variants={revealUp}
@@ -650,33 +556,6 @@ export function OwnerDashboardPage() {
                 </button>
               </motion.div>
 
-              {/* AI Insights */}
-              <motion.div
-                variants={revealUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={viewportOnce}
-                className="group relative overflow-hidden rounded-xl bg-[#101114] p-6 shadow-lg border border-[#272839]"
-              >
-                <div className="relative z-10">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Sparkles className="h-5 w-5 text-[#4E79FF]" />
-                    <span className="text-xs font-black uppercase tracking-widest text-[#4E79FF]">AI Insight</span>
-                  </div>
-                  <p className="text-sm leading-relaxed text-white mb-4">
-                    You could increase revenue by{' '}
-                    <span className="text-[#4E79FF] font-bold">4.2%</span>{' '}
-                    by optimizing service charge distribution in your portfolio.
-                  </p>
-                  <Link
-                    to={ROUTES.ownerAiSettings}
-                    className="text-xs font-bold bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-colors text-white inline-block"
-                  >
-                    View Analysis
-                  </Link>
-                </div>
-                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-[#4E79FF]/20 blur-3xl rounded-full" />
-              </motion.div>
             </div>
           </div>
         </>
