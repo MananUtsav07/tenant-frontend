@@ -46,7 +46,7 @@ export function Modal({ isOpen, onClose, title, size = 'md', children, className
   const content = (
     <AnimatePresence>
       {isOpen ? (
-        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4 pt-[8vh]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto p-4">
           {/* Backdrop */}
           <motion.div
             className="fixed inset-0 bg-black/60"

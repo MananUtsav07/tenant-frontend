@@ -204,6 +204,8 @@ export const api = {
   patchOwnerMe: (
     token: string,
     body: Partial<{
+      full_name: string | null
+      company_name: string | null
       support_email: string | null
       support_whatsapp: string | null
     }>,

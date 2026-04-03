@@ -1,9 +1,12 @@
 import { useState } from 'react'
-import { Building2, Mail, Phone, Save, Shield, User } from 'lucide-react'
+import { AlertTriangle, Building2, Mail, Pencil, Phone, Save, Shield, Trash2, User, X } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 import { ErrorState } from '../../components/common/ErrorState'
+import { Modal } from '../../components/common/Modal'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { api } from '../../services/api'
+import { revealUp } from '../../utils/motion'
 
 // ─── Read-only field ─────────────────────────────────────────────────────────
 
@@ -36,11 +39,17 @@ function SectionLabel({ icon, children }: { icon: React.ReactNode; children: Rea
 export function OwnerProfilePage() {
   const { owner, token } = useOwnerAuth()
 
+  const [isEditing, setIsEditing] = useState(false)
+  const [fullName, setFullName] = useState(owner?.full_name ?? '')
+  const [companyName, setCompanyName] = useState(owner?.company_name ?? '')
   const [supportEmail, setSupportEmail] = useState(owner?.support_email ?? '')
   const [supportWhatsapp, setSupportWhatsapp] = useState(owner?.support_whatsapp ?? '')
   const [saving, setSaving] = useState(false)
   const [success, setSuccess] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [deleteConfirmText, setDeleteConfirmText] = useState('')
+  const [deleteBusy, setDeleteBusy] = useState(false)
 
   const handleSave = async () => {
     if (!token) return
@@ -49,14 +58,50 @@ export function OwnerProfilePage() {
     setSuccess(null)
     try {
       await api.patchOwnerMe(token, {
+        full_name: fullName.trim() || null,
+        company_name: companyName.trim() || null,
         support_email: supportEmail.trim() || null,
         support_whatsapp: supportWhatsapp.trim() || null,
       })
-      setSuccess('Contact info updated.')
+      setSuccess('Profile updated successfully.')
+      setIsEditing(false)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to save')
     } finally {
       setSaving(false)
+    }
+  }
+
+  const handleCancel = () => {
+    setFullName(owner?.full_name ?? '')
+    setCompanyName(owner?.company_name ?? '')
+    setSupportEmail(owner?.support_email ?? '')
+    setSupportWhatsapp(owner?.support_whatsapp ?? '')
+    setIsEditing(false)
+    setError(null)
+  }
+
+  const handleDeleteAccount = async () => {
+    if (!token || deleteConfirmText !== 'DELETE MY ACCOUNT') {
+      return
+    }
+
+    try {
+      setDeleteBusy(true)
+      setError(null)
+      // Send email request to support for account deletion
+      await api.sendContactMessage({
+        name: owner?.full_name || owner?.company_name || 'Owner',
+        email: owner?.email || '',
+        message: `I would like to request permanent deletion of my Prophives account. I understand this action cannot be undone and all associated data will be removed.`
+      })
+      setSuccess('Deletion request sent to support. Please check your email for confirmation.')
+      setShowDeleteModal(false)
+      setDeleteConfirmText('')
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to send deletion request')
+    } finally {
+      setDeleteBusy(false)
     }
   }
 
@@ -100,19 +145,94 @@ export function OwnerProfilePage() {
                 border: '1.5px solid #272839',
               }}
             >
-              <SectionLabel icon={<User className="h-4 w-4 text-[#4E79FF]" />}>
-                Profile Overview
-              </SectionLabel>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4 text-[#4E79FF]" />
+                  <h3 className="font-['Sora'] text-base font-bold text-white">Profile Overview</h3>
+                </div>
+                {!isEditing && (
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(true)}
+                    className="flex items-center gap-1.5 rounded-lg border border-[#272839] bg-[#141519] px-3 py-1.5 text-xs font-semibold text-[#8D8D96] transition-all hover:border-[#4E79FF]/40 hover:bg-[#4E79FF]/10 hover:text-[#4E79FF] font-['DM_Sans']"
+                  >
+                    <Pencil className="h-3.5 w-3.5" />
+                    Edit
+                  </button>
+                )}
+              </div>
 
               <div className="space-y-5">
-                <ReadOnlyField label="Full Name" value={owner?.full_name} />
-                <ReadOnlyField label="Company Name" value={owner?.company_name} />
+                {isEditing ? (
+                  <>
+                    {/* Full Name - Editable */}
+                    <div>
+                      <label
+                        htmlFor="full-name"
+                        className="mb-1.5 block text-[10px] uppercase tracking-widest font-bold text-[#8D8D96] font-[DM_Sans,sans-serif]"
+                      >
+                        Full Name
+                      </label>
+                      <input
+                        id="full-name"
+                        type="text"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        placeholder="Your full name"
+                        className="w-full rounded-xl border border-[#272839] bg-[#06070B] px-4 py-3 text-sm font-medium text-white placeholder-[#6B7280]/60 transition-all focus:border-[#4E79FF] focus:outline-none focus:ring-2 focus:ring-[#4E79FF]/30 font-[Manrope,sans-serif]"
+                      />
+                    </div>
+
+                    {/* Company Name - Editable */}
+                    <div>
+                      <label
+                        htmlFor="company-name"
+                        className="mb-1.5 block text-[10px] uppercase tracking-widest font-bold text-[#8D8D96] font-[DM_Sans,sans-serif]"
+                      >
+                        Company Name
+                      </label>
+                      <input
+                        id="company-name"
+                        type="text"
+                        value={companyName}
+                        onChange={(e) => setCompanyName(e.target.value)}
+                        placeholder="Your company name"
+                        className="w-full rounded-xl border border-[#272839] bg-[#06070B] px-4 py-3 text-sm font-medium text-white placeholder-[#6B7280]/60 transition-all focus:border-[#4E79FF] focus:outline-none focus:ring-2 focus:ring-[#4E79FF]/30 font-[Manrope,sans-serif]"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <ReadOnlyField label="Full Name" value={owner?.full_name} />
+                    <ReadOnlyField label="Company Name" value={owner?.company_name} />
+                  </>
+                )}
+
+                {/* Login Email (Always Read-only) */}
                 <ReadOnlyField label="Login Email" value={owner?.email} />
               </div>
 
-              <div className="mt-5 rounded-xl bg-[#141519] px-4 py-3 text-xs leading-relaxed text-[#4E79FF] font-[Manrope,sans-serif]">
-                Contact support to update your name, company, or login email.
-              </div>
+              {isEditing && (
+                <div className="mt-6 flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => void handleSave()}
+                    disabled={saving}
+                    className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-[#4E79FF] px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-[#3E68EE] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed font-['DM_Sans']"
+                  >
+                    <Save className="h-4 w-4" />
+                    {saving ? 'Saving...' : 'Save Changes'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCancel}
+                    disabled={saving}
+                    className="flex-1 rounded-xl border border-[#272839] bg-[#141519] px-4 py-2.5 text-sm font-semibold text-[#8D8D96] transition-colors hover:border-[#4E79FF]/30 hover:text-white disabled:opacity-50 font-['DM_Sans']"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Section 3: Organization Info */}
@@ -197,8 +317,9 @@ export function OwnerProfilePage() {
                     type="email"
                     value={supportEmail}
                     onChange={(e) => setSupportEmail(e.target.value)}
+                    disabled={!isEditing}
                     placeholder="support@yourcompany.com"
-                    className="w-full rounded-xl border border-[#272839] bg-[#06070B] px-4 py-3 text-sm font-medium text-white placeholder-[#6B7280]/60 transition-all focus:border-[#4E79FF] focus:outline-none focus:ring-2 focus:ring-[#4E79FF]/30 font-[Manrope,sans-serif]"
+                    className="w-full rounded-xl border border-[#272839] bg-[#06070B] px-4 py-3 text-sm font-medium text-white placeholder-[#6B7280]/60 transition-all focus:border-[#4E79FF] focus:outline-none focus:ring-2 focus:ring-[#4E79FF]/30 font-[Manrope,sans-serif] disabled:opacity-60 disabled:cursor-not-allowed"
                   />
                 </div>
 
@@ -216,8 +337,9 @@ export function OwnerProfilePage() {
                     type="text"
                     value={supportWhatsapp}
                     onChange={(e) => setSupportWhatsapp(e.target.value)}
+                    disabled={!isEditing}
                     placeholder="+1 234 567 8900"
-                    className="w-full rounded-xl border border-[#272839] bg-[#06070B] px-4 py-3 text-sm font-medium text-white placeholder-[#6B7280]/60 transition-all focus:border-[#4E79FF] focus:outline-none focus:ring-2 focus:ring-[#4E79FF]/30 font-[Manrope,sans-serif]"
+                    className="w-full rounded-xl border border-[#272839] bg-[#06070B] px-4 py-3 text-sm font-medium text-white placeholder-[#6B7280]/60 transition-all focus:border-[#4E79FF] focus:outline-none focus:ring-2 focus:ring-[#4E79FF]/30 font-[Manrope,sans-serif] disabled:opacity-60 disabled:cursor-not-allowed"
                   />
                 </div>
               </div>
@@ -234,18 +356,12 @@ export function OwnerProfilePage() {
                 </div>
               )}
 
-              {/* Save button */}
-              <div className="mt-6 flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => void handleSave()}
-                  disabled={saving}
-                  className="flex items-center gap-2 rounded-xl bg-[#2251E3] px-8 py-3 font-['Sora'] font-bold text-white shadow-md transition-all hover:bg-[#3E68EE] active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  <Save className="h-4 w-4" />
-                  {saving ? 'Saving...' : 'Save Changes'}
-                </button>
-              </div>
+              {/* Show Save/Cancel buttons when editing - note: they're on Profile Overview section above */}
+              {!isEditing && (
+                <div className="mt-4 text-xs text-[#8D8D96] font-[Manrope,sans-serif]">
+                  Click "Edit" in Profile Overview to modify your contact information.
+                </div>
+              )}
             </div>
 
             {/* Section 4: Danger Zone */}
@@ -259,29 +375,70 @@ export function OwnerProfilePage() {
                 cannot be undone.
               </p>
 
-              <p className="mb-4 text-xs text-[#8D8D96] font-[Manrope,sans-serif]">
-                Contact{' '}
-                <a
-                  href="mailto:support@prohives.com"
-                  className="font-semibold text-[#F25461] underline underline-offset-2 hover:text-[#F25461]"
-                >
-                  support@prohives.com
-                </a>{' '}
-                to request account deletion.
-              </p>
-
               <button
                 type="button"
-                disabled
-                title="Contact support to delete your account"
-                className="cursor-not-allowed rounded-xl border border-[#F25461]/30 bg-[#F25461]/15 px-6 py-2.5 text-sm font-bold text-[#F25461] opacity-60 font-['Sora']"
+                onClick={() => setShowDeleteModal(true)}
+                className="flex items-center gap-2 rounded-xl border border-[#F25461]/40 bg-[#F25461]/10 px-6 py-2.5 text-sm font-bold text-[#F25461] transition-all hover:border-[#F25461]/60 hover:bg-[#F25461]/15 active:scale-95 font-['Sora']"
               >
+                <Trash2 className="h-4 w-4" />
                 Delete Account
               </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <Modal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)} title="Delete Account" size="sm">
+        <div className="space-y-4">
+          <div className="flex items-center justify-center h-12 w-12 rounded-full bg-[#F25461]/15 mx-auto">
+            <AlertTriangle className="h-6 w-6 text-[#F25461]" />
+          </div>
+
+          <div className="text-center">
+            <p className="font-semibold text-white mb-2">Are you sure?</p>
+            <p className="text-sm text-[#8D8D96]">
+              This will permanently delete your account and all associated properties, tenants, and data. This action cannot be undone.
+            </p>
+          </div>
+
+          <div className="bg-[#141519] rounded-lg p-3">
+            <p className="text-xs text-[#8D8D96] mb-2 font-['DM_Sans']">
+              Type the following to confirm deletion:
+            </p>
+            <p className="text-sm font-bold text-white font-['Manrope']">DELETE MY ACCOUNT</p>
+          </div>
+
+          <input
+            type="text"
+            value={deleteConfirmText}
+            onChange={(e) => setDeleteConfirmText(e.target.value)}
+            placeholder="Type DELETE MY ACCOUNT"
+            className="w-full rounded-lg border border-[#272839] bg-[#06070B] px-4 py-3 text-sm text-white placeholder-[#8D8D96] focus:outline-none focus:ring-2 focus:ring-[#F25461]/50 transition-all font-['Manrope']"
+          />
+
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={() => {
+                setShowDeleteModal(false)
+                setDeleteConfirmText('')
+              }}
+              className="flex-1 rounded-lg border border-[#272839] bg-[#141519] px-4 py-2.5 text-sm font-semibold text-[#8D8D96] transition-colors hover:border-[#4E79FF]/30 hover:text-white"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => void handleDeleteAccount()}
+              disabled={deleteBusy || deleteConfirmText !== 'DELETE MY ACCOUNT'}
+              className="flex-1 rounded-lg bg-[#F25461] px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-[#E63D52] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {deleteBusy ? 'Requesting...' : 'Delete Account'}
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   )
 }

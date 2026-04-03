@@ -14,7 +14,6 @@ import {
   Wrench,
 } from 'lucide-react'
 
-import { Button } from '../../components/common/Button'
 import { DataTable } from '../../components/common/DataTable'
 import { OwnerOnboardingWizard } from '../../components/owner/OwnerOnboardingWizard'
 import { useOwnerOnboarding } from '../../hooks/useOwnerOnboarding'
@@ -426,7 +425,7 @@ export function OwnerDashboardPage() {
                     View All
                   </Link>
                 </div>
-                <div className="divide-y divide-gray-50">
+                <div className="divide-y divide-[#272839]">
                   {notifications.length > 0 ? (
                     notifications.map((notif) => {
                       const timeAgo = getTimeAgoString(notif.created_at)
@@ -436,7 +435,7 @@ export function OwnerDashboardPage() {
                         </div>
                       )
                       return (
-                        <div key={notif.id} className={`p-6 flex items-start gap-4 hover:bg-[#141519] transition-colors ${!notif.is_read ? 'border-l-2 border-[#4E79FF]' : ''}`}>
+                        <div key={notif.id} className="p-6 flex items-start gap-4 hover:bg-[#141519] transition-colors">
                           {icon}
                           <div className="flex-1">
                             <div className="flex justify-between items-start gap-2">
@@ -627,9 +626,9 @@ export function OwnerDashboardPage() {
                       <StatusBadge status={approval.status} />
                     </td>
                     <td className="px-4 py-3">
-                      <div className="flex min-w-[280px] flex-col gap-2">
+                      <div className="flex min-w-[260px] flex-col gap-2">
                         <input
-                          className="tf-field h-9 px-3 text-sm"
+                          className="w-full rounded-lg border border-[#272839] bg-[#06070B] px-3 py-2 text-sm text-white placeholder-[#8D8D96] focus:outline-none focus:ring-2 focus:ring-[#4E79FF] transition-all font-['Manrope']"
                           placeholder="Optional reject note"
                           value={rejectionNotes[approval.id] ?? ''}
                           onChange={(event) =>
@@ -640,25 +639,22 @@ export function OwnerDashboardPage() {
                           }
                         />
                         <div className="flex gap-2">
-                          <Button
+                          <button
                             type="button"
-                            size="sm"
-                            variant="primary"
                             disabled={reviewingApprovalId === approval.id}
                             onClick={() => void handleReviewApproval(approval.id, 'approve')}
+                            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#4E79FF] px-3 py-2 text-xs font-bold text-white transition-all hover:bg-[#3E68EE] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed font-['DM_Sans']"
                           >
                             Approve
-                          </Button>
-                          <Button
+                          </button>
+                          <button
                             type="button"
-                            size="sm"
-                            variant="outline"
-                            className="border-red-300 bg-[#F25461]/15 text-red-700 hover:bg-red-100"
                             disabled={reviewingApprovalId === approval.id}
                             onClick={() => void handleReviewApproval(approval.id, 'reject')}
+                            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-[#272839] bg-[#141519] px-3 py-2 text-xs font-bold text-[#F25461] transition-all hover:border-[#F25461]/40 hover:bg-[#F25461]/10 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed font-['DM_Sans']"
                           >
                             Reject
-                          </Button>
+                          </button>
                         </div>
                       </div>
                     </td>

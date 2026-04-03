@@ -305,19 +305,15 @@ export function OwnerTicketsPage() {
           <div className="flex flex-wrap gap-2 mb-6">
             {filterPills.map((pill) => {
               const isActive = filterStatus === pill.value
-              const isAll = pill.value === 'all'
               return (
                 <button
                   key={pill.value}
                   onClick={() => handleFilterChange(pill.value)}
-                  className="px-5 py-2 rounded-full text-sm font-medium transition-colors"
-                  style={
+                  className={`px-5 py-2 rounded-full text-sm font-semibold transition-all active:scale-95 font-['DM_Sans'] ${
                     isActive
-                      ? isAll
-                        ? { backgroundColor: '#FFFFFF', color: '#ffffff' }
-                        : { backgroundColor: '#4E79FF', color: '#FFFFFF' }
-                      : { backgroundColor: '#ffffff', border: '1px solid rgba(78,121,255,0.2)', color: '#8D8D96' }
-                  }
+                      ? 'bg-[#4E79FF] text-white shadow-md shadow-[#4E79FF]/20'
+                      : 'bg-[#141519] border border-[#272839] text-[#8D8D96] hover:border-[#4E79FF]/40 hover:text-white'
+                  }`}
                 >
                   {pill.label}
                 </button>

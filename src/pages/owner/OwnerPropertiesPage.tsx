@@ -3,7 +3,6 @@ import {
   Building2,
   ChevronLeft,
   ChevronRight,
-  Filter,
   MapPin,
   Pencil,
   PlusCircle,
@@ -249,22 +248,24 @@ function PropertyCard({ property, onEdit, onDelete }: PropertyCardProps) {
                 <span className="truncate">{property.address}</span>
               </p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => onEdit(property)}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#F3E19D] bg-[#141519] text-white"
+                className="group flex items-center gap-1.5 rounded-lg border border-[#272839] bg-[#141519] px-3 py-2 text-[#8D8D96] transition-all hover:border-[#4E79FF]/50 hover:bg-[#4E79FF]/10 hover:text-[#4E79FF] active:scale-95"
                 title="Edit property"
               >
-                <Pencil className="h-4 w-4" />
+                <Pencil className="h-3.5 w-3.5 transition-transform group-hover:scale-110" />
+                <span className="text-xs font-semibold font-['DM_Sans']">Edit</span>
               </button>
               <button
                 type="button"
                 onClick={() => onDelete(property)}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-red-100 bg-[#F25461]/15 text-[#F25461]"
+                className="group flex items-center gap-1.5 rounded-lg border border-[#272839] bg-[#141519] px-3 py-2 text-[#8D8D96] transition-all hover:border-[#F25461]/40 hover:bg-[#F25461]/10 hover:text-[#F25461] active:scale-95"
                 title="Delete property"
               >
-                <Trash2 className="h-4 w-4" />
+                <Trash2 className="h-3.5 w-3.5 transition-transform group-hover:scale-110" />
+                <span className="text-xs font-semibold font-['DM_Sans']">Delete</span>
               </button>
             </div>
           </div>
@@ -326,10 +327,8 @@ export function OwnerPropertiesPage() {
   // Delete confirmation state
   const [deletingProperty, setDeletingProperty] = useState<Property | null>(null)
 
-  // Filter / search state
+  // Search state
   const [searchQuery, setSearchQuery] = useState('')
-  const [statusFilter, setStatusFilter] = useState('all')
-  const [locationFilter, setLocationFilter] = useState('all')
 
   const loadProperties = useCallback(async () => {
     if (!token) {
@@ -424,32 +423,12 @@ export function OwnerPropertiesPage() {
     }
   }
 
-  // Derive unique location fragments for filter
-  const locationOptions = Array.from(
-    new Set(properties.map((p) => p.address.split(',')[0]?.trim()).filter(Boolean))
-  )
-
   // Filtered properties
-  const filteredProperties = properties.filter((p) => {
-    const matchesSearch =
-      searchQuery === '' ||
-      p.property_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.address.toLowerCase().includes(searchQuery.toLowerCase())
-
-    const matchesStatus =
-      statusFilter === 'all' ||
-      (statusFilter === 'active' && (p.occupancy_status === 'occupied' || !p.occupancy_status)) ||
-      (statusFilter === 'vacant' &&
-        (p.occupancy_status === 'vacant' ||
-          p.occupancy_status === 'pre_vacant' ||
-          p.occupancy_status === 'relisting_in_progress'))
-
-    const matchesLocation =
-      locationFilter === 'all' ||
-      p.address.toLowerCase().includes(locationFilter.toLowerCase())
-
-    return matchesSearch && matchesStatus && matchesLocation
-  })
+  const filteredProperties = properties.filter((p) =>
+    searchQuery === '' ||
+    p.property_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    p.address.toLowerCase().includes(searchQuery.toLowerCase())
+  )
 
   return (
     <div className="min-h-full bg-[#06070B]">
@@ -491,47 +470,16 @@ export function OwnerPropertiesPage() {
             className="bg-[#101114] p-4 rounded-xl shadow-sm flex flex-wrap items-center gap-4 border border-[#272839]"
           >
             {/* Search */}
-            <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8D8D96]" />
+            <div className="relative flex-1">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8D8D96]" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search properties or addresses..."
-                className="w-full bg-[#06070B] border border-[#272839] rounded-xl py-2.5 pl-9 pr-4 text-sm focus:ring-2 focus:ring-[#4E79FF] focus:outline-none transition-all font-['Manrope']"
+                className="w-full bg-[#06070B] border border-[#272839] rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-[#8D8D96] focus:ring-2 focus:ring-[#4E79FF] focus:outline-none transition-all font-['Manrope']"
               />
             </div>
-
-            {/* Status filter */}
-            <div className="flex items-center gap-2 bg-[#06070B] px-4 py-2 rounded-lg border border-[#272839] min-w-[200px]">
-              <Filter className="h-4 w-4 text-[#8D8D96] flex-shrink-0" />
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="bg-transparent border-none text-sm font-medium focus:ring-0 cursor-pointer w-full text-white outline-none font-['DM_Sans']"
-              >
-                <option value="all">Status: All</option>
-                <option value="active">Active</option>
-                <option value="vacant">Vacant</option>
-              </select>
-            </div>
-
-            {/* Location filter */}
-            {locationOptions.length > 0 ? (
-              <div className="flex items-center gap-2 bg-[#06070B] px-4 py-2 rounded-lg border border-[#272839] min-w-[200px]">
-                <MapPin className="h-4 w-4 text-[#8D8D96] flex-shrink-0" />
-                <select
-                  value={locationFilter}
-                  onChange={(e) => setLocationFilter(e.target.value)}
-                  className="bg-transparent border-none text-sm font-medium focus:ring-0 cursor-pointer w-full text-white outline-none font-['DM_Sans']"
-                >
-                  <option value="all">Location: All Areas</option>
-                  {locationOptions.map((loc) => (
-                    <option key={loc} value={loc}>{loc}</option>
-                  ))}
-                </select>
-              </div>
-            ) : null}
 
           </motion.div>
         </div>
@@ -594,13 +542,13 @@ export function OwnerPropertiesPage() {
           >
             <Search className="h-10 w-10 text-[#8D8D96] mb-4" />
             <h3 className="font-['Sora'] font-bold text-lg text-white mb-1">No results found</h3>
-            <p className="text-[#8D8D96] text-sm font-['Manrope']">Try adjusting your search or filters.</p>
+            <p className="text-[#8D8D96] text-sm font-['Manrope']">Try adjusting your search.</p>
             <button
               type="button"
-              onClick={() => { setSearchQuery(''); setStatusFilter('all'); setLocationFilter('all') }}
+              onClick={() => setSearchQuery('')}
               className="mt-4 text-[#4E79FF] font-semibold text-sm hover:underline font-['DM_Sans']"
             >
-              Clear filters
+              Clear search
             </button>
           </motion.div>
         ) : null}

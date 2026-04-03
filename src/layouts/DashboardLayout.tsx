@@ -6,6 +6,7 @@ type DashboardNavItem = {
   to: string
   label: string
   icon?: ReactNode
+  badge?: { count: number; color?: 'red' | 'yellow'; tooltip?: string }
 }
 
 type DashboardLayoutProps = {
@@ -49,15 +50,33 @@ export function DashboardLayout({
                 to={item.to}
                 end={item.to.split('/').length <= 3}
                 className={({ isActive }) =>
-                  `group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
+                  `group flex items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
                     isActive
                       ? 'border-l-3 border-[#2251E3] bg-[rgba(34,81,227,0.1)] text-white font-semibold'
                       : 'text-[#8D8D96] hover:bg-[rgba(255,255,255,0.04)] hover:text-white'
                   }`
                 }
               >
-                {item.icon ? <span className="text-current opacity-70">{item.icon}</span> : null}
-                <span>{item.label}</span>
+                <div className="flex items-center gap-3 min-w-0">
+                  {item.icon ? <span className="text-current opacity-70 flex-shrink-0">{item.icon}</span> : null}
+                  <div className="flex flex-col gap-0.5 min-w-0">
+                    <span className="truncate">{item.label}</span>
+                    {item.badge && item.badge.count > 0 ? (
+                      <span className="text-[9px] text-[#F25461] font-semibold leading-none truncate">
+                        {item.badge.tooltip}
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
+                {item.badge && item.badge.count > 0 ? (
+                  <span
+                    className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold text-white flex-shrink-0 ${
+                      item.badge.color === 'yellow' ? 'bg-[#EBCF42]' : 'bg-[#F25461]'
+                    }`}
+                  >
+                    {item.badge.count > 9 ? '9+' : item.badge.count}
+                  </span>
+                ) : null}
               </NavLink>
             ))}
           </nav>
