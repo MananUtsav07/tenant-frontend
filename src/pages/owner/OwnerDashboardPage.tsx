@@ -8,7 +8,6 @@ import {
   CheckCheck,
   ChevronRight,
   Clock3,
-  CreditCard,
   MessageCircle,
   Send,
   Sparkles,
@@ -30,48 +29,38 @@ import { StatusBadge } from '../../components/common/StatusBadge'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
-import type { OwnerPortfolioVisibilityOverview, OwnerRentPaymentApproval, OwnerSummary } from '../../types/api'
+import type { ComplianceUpcomingItem, OwnerNotification, OwnerPortfolioVisibilityOverview, OwnerRentPaymentApproval, OwnerSummary, AutomationRun } from '../../types/api'
 import { formatCurrency, formatDate, formatDateTime } from '../../utils/date'
 import { revealUp, staggerParent, viewportOnce } from '../../utils/motion'
 
-// Bar chart data (static visual, representative of collection trends)
-const chartBars = [
-  { label: 'Jan', pct: 60, opacity: 'bg-[#FED609]/20', tooltip: '$42k' },
-  { label: 'Feb', pct: 75, opacity: 'bg-[#FED609]/40', tooltip: '$51k' },
-  { label: 'Mar', pct: 85, opacity: 'bg-[#FED609]/60', tooltip: '$58k' },
-  { label: 'Apr', pct: 95, opacity: 'bg-[#FED609]', tooltip: '$64k' },
-  { label: 'May', pct: 90, opacity: 'bg-[#FED609]/80', tooltip: '$61k' },
-  { label: 'Jun', pct: 100, opacity: 'bg-[#FED609]', tooltip: '$68k' },
-]
+// Helper to get time difference string
+function getTimeAgoString(dateString: string): string {
+  const now = new Date()
+  const date = new Date(dateString)
+  const seconds = Math.floor((now.getTime() - date.getTime()) / 1000)
 
-// Static recent activity items
-const recentActivity = [
-  {
-    icon: <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 shrink-0"><CheckCheck className="w-5 h-5" /></div>,
-    title: 'Rent payment received',
-    time: '2 mins ago',
-    description: 'Unit 402, Marina Gate — processed and logged.',
-  },
-  {
-    icon: <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 shrink-0"><Wrench className="w-5 h-5" /></div>,
-    title: 'New ticket: AC Maintenance',
-    time: '1 hour ago',
-    description: 'Reported by a tenant in Business Bay Tower A.',
-  },
-  {
-    icon: <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shrink-0"><CreditCard className="w-5 h-5" /></div>,
-    title: 'Lease agreement signed',
-    time: '5 hours ago',
-    description: 'New tenant for JVC Villa #18 finalized documentation.',
-  },
-]
+  if (seconds < 60) return 'Just now'
+  if (seconds < 3600) return `${Math.floor(seconds / 60)} mins ago`
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`
+  return `${Math.floor(seconds / 86400)} days ago`
+}
 
-// Upcoming reminders (static illustrative)
-const upcomingReminders = [
-  { month: 'Oct', day: '05', title: 'Bulk Rent Due', sub: '12 Units - Downtown', highlight: true },
-  { month: 'Oct', day: '12', title: 'Lease Expiry', sub: 'Marina Heights #1204', highlight: false },
-  { month: 'Oct', day: '20', title: 'Utility Inspection', sub: 'Palm Jumeirah Villa 4', highlight: false },
-]
+// Helper to get activity icon and color based on status
+function getActivityIcon(_flowName: string, status: string) {
+  const statusColors: Record<string, { bgColor: string; textColor: string; icon: typeof CheckCheck }> = {
+    success: { bgColor: 'bg-green-100', textColor: 'text-green-600', icon: CheckCheck },
+    failed: { bgColor: 'bg-red-100', textColor: 'text-red-600', icon: AlertTriangle },
+    partial: { bgColor: 'bg-amber-100', textColor: 'text-amber-600', icon: Wrench },
+    skipped: { bgColor: 'bg-gray-100', textColor: 'text-gray-600', icon: Clock3 },
+  }
+
+  const config = statusColors[status] || statusColors.partial
+  const Icon = config.icon
+
+  return {
+    icon: <div className={`w-10 h-10 rounded-full ${config.bgColor} flex items-center justify-center ${config.textColor} shrink-0`}><Icon className="w-5 h-5" /></div>,
+  }
+}
 
 export function OwnerDashboardPage() {
   const { token, owner } = useOwnerAuth()
@@ -79,6 +68,11 @@ export function OwnerDashboardPage() {
   const [summary, setSummary] = useState<OwnerSummary | null>(null)
   const [, setPortfolioOverview] = useState<OwnerPortfolioVisibilityOverview | null>(null)
   const [approvals, setApprovals] = useState<OwnerRentPaymentApproval[]>([])
+  const [recentActivity, setRecentActivity] = useState<AutomationRun[]>([])
+  const [notifications, setNotifications] = useState<OwnerNotification[]>([])
+  const [upcomingItems, setUpcomingItems] = useState<ComplianceUpcomingItem[]>([])
+  const [chartBars, setChartBars] = useState<Array<{ label: string; pct: number; opacity: string; tooltip: string }>>([])
+  const [totalProperties, setTotalProperties] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [processing, setProcessing] = useState(false)
@@ -112,9 +106,84 @@ export function OwnerDashboardPage() {
       } catch (approvalsError) {
         if (approvalsError instanceof Error && approvalsError.message.toLowerCase().includes('route not found')) {
           setApprovals([])
-          return
+        } else {
+          throw approvalsError
         }
-        throw approvalsError
+      }
+
+      // Fetch total properties count
+      try {
+        const propertiesResponse = await api.getOwnerProperties(token)
+        setTotalProperties(propertiesResponse.properties?.length || 0)
+      } catch (propertiesError) {
+        if (!(propertiesError instanceof Error && propertiesError.message.toLowerCase().includes('route not found'))) {
+          console.error('Failed to load properties:', propertiesError)
+        }
+      }
+
+      // Fetch recent automation activities
+      try {
+        const activityResponse = await api.getOwnerAutomationActivity(token, { page: 1, page_size: 3 })
+        setRecentActivity(activityResponse.items || [])
+      } catch (activityError) {
+        if (!(activityError instanceof Error && activityError.message.toLowerCase().includes('route not found'))) {
+          console.error('Failed to load automation activity:', activityError)
+        }
+      }
+
+      // Fetch recent notifications for activity feed
+      try {
+        const notificationsResponse = await api.getOwnerNotifications(token)
+        setNotifications((notificationsResponse.notifications || []).slice(0, 5))
+      } catch (notifError) {
+        if (!(notifError instanceof Error && notifError.message.toLowerCase().includes('route not found'))) {
+          console.error('Failed to load notifications:', notifError)
+        }
+      }
+
+      // Fetch compliance upcoming items for reminders
+      try {
+        const complianceResponse = await api.getOwnerAutomationCompliance(token)
+        setUpcomingItems(complianceResponse.compliance?.upcoming_items || [])
+      } catch (complianceError) {
+        if (!(complianceError instanceof Error && complianceError.message.toLowerCase().includes('route not found'))) {
+          console.error('Failed to load compliance data:', complianceError)
+        }
+      }
+
+      // Fetch cash flow data for chart
+      try {
+        const cashFlowResponse = await api.getOwnerAutomationCashFlow(token)
+        if (cashFlowResponse.ok && cashFlowResponse.cash_flow) {
+          const cf = cashFlowResponse.cash_flow
+          // Build chart bars from recent snapshots (last 6 months)
+          const recentSnapshots = cf.recent_snapshots?.slice(-6) || []
+          const maxAmount = Math.max(...recentSnapshots.map(s => s.portfolio_gross_rent || 0), 100000)
+
+          const bars = recentSnapshots.map((snapshot) => {
+            const monthIndex = snapshot.report_month - 1
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            const month = monthNames[monthIndex] || 'N/A'
+
+            // Use portfolio gross rent as the amount
+            const amount = snapshot.portfolio_gross_rent || 0
+            const tooltip = formatCurrency(amount)
+
+            // Calculate percentage relative to max
+            const pct = Math.min(100, (amount / maxAmount) * 100)
+
+            const opacityLevels = ['bg-[#FED609]/20', 'bg-[#FED609]/40', 'bg-[#FED609]/60', 'bg-[#FED609]/80', 'bg-[#FED609]']
+            const opacityIndex = Math.floor((pct / 100) * (opacityLevels.length - 1))
+            const opacity = opacityLevels[opacityIndex]
+
+            return { label: month, pct, opacity, tooltip }
+          })
+          setChartBars(bars)
+        }
+      } catch (cashFlowError) {
+        if (!(cashFlowError instanceof Error && cashFlowError.message.toLowerCase().includes('route not found'))) {
+          console.error('Failed to load cash flow data:', cashFlowError)
+        }
       }
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : 'Failed to load dashboard data')
@@ -174,7 +243,7 @@ export function OwnerDashboardPage() {
 
   return (
     <div className="p-6 w-full bg-[#FEFAEF] min-h-screen">
-      {showWizard && <OwnerOnboardingWizard onComplete={dismissWizard} />}
+      {showWizard && <OwnerOnboardingWizard onComplete={dismissWizard} onSkip={dismissWizard} />}
 
       {/* Greeting */}
       <motion.div
@@ -231,7 +300,7 @@ export function OwnerDashboardPage() {
               </div>
               <div className="text-[#6B7280] text-sm font-['DM_Sans'] font-medium mb-1 uppercase tracking-wider">Total Properties</div>
               <div className="font-['Sora'] text-3xl font-extrabold text-[#1A1A1A]">
-                {summary.active_tenants > 0 ? '—' : '0'}
+                {totalProperties}
               </div>
             </motion.div>
 
@@ -322,47 +391,57 @@ export function OwnerDashboardPage() {
                   </div>
                 </div>
                 {/* CSS Bar Chart */}
-                <div className="flex items-end justify-between h-64 gap-6 px-2">
-                  {chartBars.map((bar) => (
-                    <div key={bar.label} className="flex flex-col items-center gap-2 flex-1">
-                      <div
-                        className={`w-full ${bar.opacity} rounded-t-lg relative group`}
-                        style={{ height: `${bar.pct}%` }}
-                      >
-                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#1A1A1A] text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                          {bar.tooltip}
+                {chartBars.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center h-64 text-center text-[#6B7280]">
+                    <TrendingUp className="w-10 h-10 text-[#FED609]/40 mb-3" />
+                    <p className="text-sm font-['Manrope'] font-medium">No collection data yet</p>
+                    <p className="text-xs mt-1">Chart will populate once rent payments are recorded</p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex items-end justify-between h-64 gap-6 px-2">
+                      {chartBars.map((bar) => (
+                        <div key={bar.label} className="flex flex-col items-center gap-2 flex-1">
+                          <div
+                            className={`w-full ${bar.opacity} rounded-t-lg relative group`}
+                            style={{ height: `${bar.pct}%` }}
+                          >
+                            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#1A1A1A] text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                              {bar.tooltip}
+                            </div>
+                          </div>
+                          <span className="text-[10px] font-bold text-[#6B7280] uppercase">{bar.label}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Portfolio metrics row below chart */}
+                    <div className="mt-6 grid grid-cols-2 gap-4 pt-4 border-t border-[#FEFAEF]">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#FFFAE2]">
+                          <Bell className="h-4 w-4 text-[#FED609]" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-[#1A1A1A]">Reminders Pending</p>
+                          <p className="text-lg font-['Sora'] font-bold text-[#1A1A1A]">{summary.reminders_pending}</p>
                         </div>
                       </div>
-                      <span className="text-[10px] font-bold text-[#6B7280] uppercase">{bar.label}</span>
+                      <div className="flex items-center gap-3">
+                        <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${summary.overdue_rent > 0 ? 'bg-red-50' : 'bg-emerald-50'}`}>
+                          <TrendingUp className={`h-4 w-4 ${summary.overdue_rent > 0 ? 'text-red-500' : 'text-emerald-500'}`} />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-[#1A1A1A]">
+                            {summary.overdue_rent > 0 ? 'Overdue Rent' : 'Collections Stable'}
+                          </p>
+                          <p className="text-lg font-['Sora'] font-bold text-[#1A1A1A]">
+                            {summary.overdue_rent > 0 ? summary.overdue_rent : '✓'}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                  ))}
-                </div>
-
-                {/* Portfolio metrics row below chart */}
-                <div className="mt-6 grid grid-cols-2 gap-4 pt-4 border-t border-[#FEFAEF]">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#FFFAE2]">
-                      <Bell className="h-4 w-4 text-[#FED609]" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-[#1A1A1A]">Reminders Pending</p>
-                      <p className="text-lg font-['Sora'] font-bold text-[#1A1A1A]">{summary.reminders_pending}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${summary.overdue_rent > 0 ? 'bg-red-50' : 'bg-emerald-50'}`}>
-                      <TrendingUp className={`h-4 w-4 ${summary.overdue_rent > 0 ? 'text-red-500' : 'text-emerald-500'}`} />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-[#1A1A1A]">
-                        {summary.overdue_rent > 0 ? 'Overdue Rent' : 'Collections Stable'}
-                      </p>
-                      <p className="text-lg font-['Sora'] font-bold text-[#1A1A1A]">
-                        {summary.overdue_rent > 0 ? summary.overdue_rent : '✓'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                  </>
+                )}
               </motion.div>
 
               {/* Recent Activity */}
@@ -380,18 +459,51 @@ export function OwnerDashboardPage() {
                   </Link>
                 </div>
                 <div className="divide-y divide-gray-50">
-                  {recentActivity.map((item, idx) => (
-                    <div key={idx} className="p-6 flex items-start gap-4 hover:bg-[#FFFAE2] transition-colors">
-                      {item.icon}
-                      <div className="flex-1">
-                        <div className="flex justify-between items-start">
-                          <p className="font-bold text-[#1A1A1A] font-['Manrope']">{item.title}</p>
-                          <span className="text-xs text-[#6B7280]">{item.time}</span>
+                  {notifications.length > 0 ? (
+                    notifications.map((notif) => {
+                      const timeAgo = getTimeAgoString(notif.created_at)
+                      const icon = (
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${notif.is_read ? 'bg-gray-100 text-gray-400' : 'bg-[#FED609]/15 text-[#D4A800]'}`}>
+                          <Bell className="w-5 h-5" />
                         </div>
-                        <p className="text-sm text-[#6B7280] font-['Manrope'] mt-1">{item.description}</p>
-                      </div>
+                      )
+                      return (
+                        <div key={notif.id} className={`p-6 flex items-start gap-4 hover:bg-[#FFFAE2] transition-colors ${!notif.is_read ? 'border-l-2 border-[#FED609]' : ''}`}>
+                          {icon}
+                          <div className="flex-1">
+                            <div className="flex justify-between items-start gap-2">
+                              <p className="font-bold text-[#1A1A1A] font-['Manrope'] text-sm">{notif.title}</p>
+                              <span className="text-xs text-[#6B7280] shrink-0">{timeAgo}</span>
+                            </div>
+                            <p className="text-sm text-[#6B7280] font-['Manrope'] mt-1">{notif.message}</p>
+                          </div>
+                        </div>
+                      )
+                    })
+                  ) : recentActivity.length > 0 ? (
+                    recentActivity.map((item) => {
+                      const { icon } = getActivityIcon(item.flow_name, item.status)
+                      const timeAgo = getTimeAgoString(item.started_at)
+                      const title = `${item.flow_name} — ${item.status === 'success' ? 'completed' : item.status}`
+                      const description = `Processed ${item.processed_count} item${item.processed_count !== 1 ? 's' : ''}`
+                      return (
+                        <div key={item.id} className="p-6 flex items-start gap-4 hover:bg-[#FFFAE2] transition-colors">
+                          {icon}
+                          <div className="flex-1">
+                            <div className="flex justify-between items-start">
+                              <p className="font-bold text-[#1A1A1A] font-['Manrope'] text-sm">{title}</p>
+                              <span className="text-xs text-[#6B7280]">{timeAgo}</span>
+                            </div>
+                            <p className="text-sm text-[#6B7280] font-['Manrope'] mt-1">{description}</p>
+                          </div>
+                        </div>
+                      )
+                    })
+                  ) : (
+                    <div className="p-6 text-center text-[#6B7280] font-['Manrope'] text-sm">
+                      No recent activity yet.
                     </div>
-                  ))}
+                  )}
                 </div>
 
                 {/* Unread notifications banner inside activity section */}
@@ -493,28 +605,42 @@ export function OwnerDashboardPage() {
                 viewport={viewportOnce}
                 className="bg-white p-6 rounded-xl shadow-sm"
               >
-                <h2 className="font-['Sora'] text-lg font-bold text-[#1A1A1A] mb-6">Upcoming Reminders</h2>
-                <div className="space-y-4">
-                  {upcomingReminders.map((reminder, idx) => (
-                    <div
-                      key={idx}
-                      className={`flex items-center gap-4 p-3 rounded-lg transition-colors ${
-                        reminder.highlight
-                          ? 'bg-[#FFFAE2] border-l-4 border-[#FED609]'
-                          : 'hover:bg-gray-50'
-                      }`}
-                    >
-                      <div className="text-center shrink-0 w-12">
-                        <div className="text-[10px] uppercase font-bold text-[#6B7280]">{reminder.month}</div>
-                        <div className="font-['Sora'] text-lg font-black text-[#1A1A1A]">{reminder.day}</div>
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-bold text-[#1A1A1A]">{reminder.title}</p>
-                        <p className="text-[11px] text-[#6B7280]">{reminder.sub}</p>
-                      </div>
-                      <ChevronRight className="w-4 h-4 text-gray-300" />
+                <h2 className="font-['Sora'] text-lg font-bold text-[#1A1A1A] mb-4">Upcoming Reminders</h2>
+                <div className="space-y-3">
+                  {upcomingItems.length > 0 ? (
+                    upcomingItems.slice(0, 4).map((item) => {
+                      const date = new Date(item.relevant_date)
+                      const month = date.toLocaleString('default', { month: 'short' }).toUpperCase()
+                      const day = date.getDate().toString()
+                      const isUrgent = item.days_remaining <= 30
+                      const propertyLabel = item.unit_number
+                        ? `${item.property_name} #${item.unit_number}`
+                        : item.property_name
+                      return (
+                        <div
+                          key={item.legal_date_id}
+                          className={`flex items-center gap-4 p-3 rounded-lg transition-colors ${isUrgent ? 'bg-[#FFFAE2] border-l-4 border-[#FED609]' : 'hover:bg-gray-50'}`}
+                        >
+                          <div className="text-center shrink-0 w-12">
+                            <div className="text-[10px] uppercase font-bold text-[#6B7280]">{month}</div>
+                            <div className="font-['Sora'] text-lg font-black text-[#1A1A1A]">{day}</div>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-bold text-[#1A1A1A] truncate">{item.trigger_label}</p>
+                            <p className="text-[11px] text-[#6B7280] truncate">{propertyLabel}</p>
+                          </div>
+                          <span className={`text-[10px] font-bold shrink-0 px-2 py-0.5 rounded-full ${isUrgent ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-500'}`}>
+                            {item.days_remaining}d
+                          </span>
+                        </div>
+                      )
+                    })
+                  ) : (
+                    <div className="p-4 text-center text-[#6B7280] text-sm font-['Manrope']">
+                      <p>No upcoming reminders</p>
+                      <p className="text-[11px] mt-1">You're all caught up!</p>
                     </div>
-                  ))}
+                  )}
                 </div>
                 <button
                   type="button"

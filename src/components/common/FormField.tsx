@@ -30,7 +30,7 @@ export function FormLabel({ children, hidden = false, required = false, classNam
       {...props}
     >
       {children}
-      {required && !hidden ? <span className="ml-1 text-[var(--ph-accent)]">*</span> : null}
+      {required && !hidden ? <span className="ml-1 text-red-400">*</span> : null}
     </label>
   )
 }

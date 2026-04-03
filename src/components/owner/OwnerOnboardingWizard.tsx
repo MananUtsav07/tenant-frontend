@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { CheckCircle2, ChevronRight } from 'lucide-react'
+import { CheckCircle2, ChevronRight, X } from 'lucide-react'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { api } from '../../services/api'
 
 type Props = {
   onComplete: () => void
+  onSkip: () => void
 }
 
 const STEP_SUBTITLES: Record<number, string> = {
@@ -50,7 +51,7 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
   )
 }
 
-export function OwnerOnboardingWizard({ onComplete }: Props) {
+export function OwnerOnboardingWizard({ onComplete, onSkip }: Props) {
   const { token } = useOwnerAuth()
 
   const [step, setStep] = useState(1)
@@ -162,7 +163,16 @@ export function OwnerOnboardingWizard({ onComplete }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1A1A1A]/60 backdrop-blur-sm px-4">
-      <div className="bg-white rounded-3xl p-8 md:p-12 max-w-lg w-full mx-4 shadow-2xl">
+      <div className="bg-white rounded-3xl p-8 md:p-12 max-w-lg w-full mx-4 shadow-2xl relative">
+        {/* Close Button */}
+        <button
+          onClick={onSkip}
+          className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition-colors rounded-lg p-1 hover:bg-gray-100"
+          aria-label="Close onboarding"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
         {/* Header */}
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold font-['Sora'] text-[#1A1A1A] mb-1">

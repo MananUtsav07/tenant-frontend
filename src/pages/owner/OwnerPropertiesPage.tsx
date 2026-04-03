@@ -1,38 +1,23 @@
 import { motion } from 'framer-motion'
 import {
-  ArrowRight,
   Building2,
   ChevronLeft,
   ChevronRight,
   Filter,
-  History,
   MapPin,
   Pencil,
   PlusCircle,
   Search,
   Trash2,
-  Users,
   X,
 } from 'lucide-react'
 import { useCallback, useEffect, useState, type FormEvent } from 'react'
 
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
+import { Modal } from '../../components/common/Modal'
 import { api } from '../../services/api'
 import type { Property } from '../../types/api'
 import { revealUp, staggerParent, viewportOnce } from '../../utils/motion'
-
-// Stitch design images for property cards (rotate through for real data)
-const PROPERTY_IMAGES = [
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuBuOh6Ghq5qV_ZHhNV_nlpsLMA0w20wiGhgZdjGy0LPWBgTLDj0f_fi7owZe-HD6iVEwQcC-sjmctxKOSL0ey2AtJdmwkrMTo0KoBhqAMQT4DbkL_Os7S34MLTC62UHRCb1OGK7TuEVziVXmN09fHRUD_3_4k1phiOqesjx5D5TQfneGUGWSJObn7dP03vt6bP2lr1PpMbvIaY7WJiK19aRJa1qgY19M3nhXJbnC5USfd5FIJsVOsxGlh2qRpvxMwYXmBlCZ5fuK_1q',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuA7S2XZsu66OeHiAzcIKmfHOr3hP37QPcgJh8sr2MLvc3EouQFRk1yaJj8cIvd3Y4mNVX58gyAE6-xIA_H2hsffhGcJ5IHd-miEgxHnMxayGQ9cVuZXgMhbg3Q0ual2gwbW4objBu07-8bazTegy7GU7QKwBSZorJ-hOnZTy2TCC5SRfGGLEEM_CtfxDn3u9Kx_7MXUTaeMEx9J5RIwuwd8-zy80b_fM3Kr1H4zQCM20HgQ1WAw3aU0NDANGSKMm2N6-U9ZHhRYe8yM',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuA08hlFZko0q43wOXDctQ0NL076gl4qRZBmxx_3qZlFpcsq0orONAE-1ml-w2zMb7GgO_6riT4SwqRYlHR_SJFWnD_xMTZ1cFQzdXQ6w_-8h1NPUC1U4oCVqrJspMDz-41BB7g5FOPQh04CbQ34-X0A-NpcOepffBzh-RUcOr9BDymq0PzlmLJzKmBLt8Nx4qCXGYRWux55EnZxkO19sIFVoVCnyaMagvHSSGqDB4ED5HBi-PozjfJU-LnLa2wFofE4Faf2hUjuX2IF',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuBl1LE1DxVdZCWnTcnshShc82OO1bSH7-M5lNrUnPuc1aCNph21Tth6Ox_nzL3lAnWF43EkSJigOf8t9wYfLvKt21s5tZG0D8BebQBCHRACYzErBIwqeBXsU4PJgniJk9flnItgwvwrpss3cvjncQLR9in7ahp9EwAo_qQjaVjPPp-F_7-5E9LoZidbofezUdUg3aemAGcUYnaoxjGg0joxG_uJnhvKf06LuIuJU90p5J9je6xn9rB8_B84iZ9pRzjJqOS8uPTpSfdv',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuCjv_jFj40ez08ynQz_TvpmwwwRsEX7drkUjvLnj-FOK6ijAx1JNQPONLfjh7IcrPmCQyaWdPf5O8CbU-LitoaUqsXwuZXFcngjfu1IqrWrHYMhhEdWO6O1tPhGA3dNFOQqlXkElYoTG0OtadJBfnSXIz7JegLP2FNDEZWgQbw2ojAx0kuTfFQ48dytr_QUukRsYQtZ1Jmms4Yf0mXC7RjIBVzBAPKdeMSjyWwfxmZ_SGDq96v0BOQOQoUAlbBMjEKWBrangpqN1py8',
-]
-
-function getPropertyImage(index: number): string {
-  return PROPERTY_IMAGES[index % PROPERTY_IMAGES.length]
-}
 
 function getStatusConfig(status: Property['occupancy_status']) {
   switch (status) {
@@ -207,33 +192,19 @@ type DeleteConfirmProps = {
 
 function DeleteConfirmModal({ propertyName, busy, onConfirm, onCancel }: DeleteConfirmProps) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="absolute inset-0 bg-[#1A1A1A]/40 backdrop-blur-sm"
-        onClick={onCancel}
-      />
-      <motion.div
-        initial={{ opacity: 0, y: 16, scale: 0.97 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 16, scale: 0.97 }}
-        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-        className="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl border border-neutral-100 p-8 text-center"
-      >
-        <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-4">
-          <Trash2 className="h-6 w-6 text-red-500" />
+    <Modal isOpen onClose={onCancel} title="Delete Property" size="sm">
+      <div className="space-y-4 text-center">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-50">
+          <Trash2 className="h-5 w-5 text-red-500" />
         </div>
-        <h3 className="font-['Sora'] font-bold text-lg text-[#1A1A1A] mb-2">Delete Property?</h3>
-        <p className="text-[#6B7280] text-sm mb-6">
+        <p className="text-sm text-[#4B5563]">
           <span className="font-semibold text-[#1A1A1A]">{propertyName}</span> will be permanently removed. This action cannot be undone.
         </p>
         <div className="flex gap-3">
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 py-3 px-4 rounded-xl border border-neutral-200 text-[#6B7280] hover:text-[#1A1A1A] hover:bg-[#FEFAEF] font-medium text-sm transition-colors"
+            className="flex-1 rounded-xl border border-neutral-200 px-4 py-2.5 text-sm font-medium text-[#6B7280] transition-colors hover:bg-[#FEFAEF] hover:text-[#1A1A1A]"
           >
             Cancel
           </button>
@@ -241,111 +212,71 @@ function DeleteConfirmModal({ propertyName, busy, onConfirm, onCancel }: DeleteC
             type="button"
             onClick={onConfirm}
             disabled={busy}
-            className="flex-1 py-3 px-4 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold text-sm transition-colors active:scale-95 disabled:opacity-60"
+            className="flex-1 rounded-xl bg-red-500 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-600 disabled:opacity-60"
           >
-            {busy ? 'Deleting…' : 'Delete'}
+            {busy ? 'Deleting...' : 'Delete Property'}
           </button>
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </Modal>
   )
 }
 
 // Single property card matching updated Stitch design
 type PropertyCardProps = {
   property: Property
-  index: number
   onEdit: (property: Property) => void
   onDelete: (property: Property) => void
 }
 
-function PropertyCard({ property, index, onEdit, onDelete }: PropertyCardProps) {
-  const { label, badgeClass, borderClass, unitBadgeClass } = getStatusConfig(property.occupancy_status)
-  const isVacant = label === 'Vacant'
-  const imageUrl = getPropertyImage(index)
+function PropertyCard({ property, onEdit, onDelete }: PropertyCardProps) {
+  const { borderClass, unitBadgeClass } = getStatusConfig(property.occupancy_status)
 
   return (
     <motion.div
       variants={revealUp}
-      className={`bg-white rounded-[12px] shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden flex flex-col ${borderClass}`}
+      className={`flex h-full flex-col rounded-[28px] border border-[#F1E4B8] bg-white p-6 shadow-[0_16px_45px_rgba(26,26,26,0.08)] ${borderClass}`}
     >
-      {/* Card Image */}
-      <div className="relative h-48 bg-[#FEFAEF] overflow-hidden">
-        <img
-          src={imageUrl}
-          alt={property.property_name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-        />
-
-        {/* Status badge */}
-        <div className="absolute top-4 left-4">
-          <span className={`${badgeClass} text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm`}>
-            {label}
-          </span>
-        </div>
-
-        {/* Edit / Delete overlay buttons */}
-        <div className="absolute bottom-3 right-3 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          <button
-            type="button"
-            onClick={() => onEdit(property)}
-            className="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-[#1A1A1A] hover:bg-[#FED609] transition-all shadow-sm"
-            title="Edit property"
-          >
-            <Pencil className="h-3.5 w-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => onDelete(property)}
-            className="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm"
-            title="Delete property"
-          >
-            <Trash2 className="h-3.5 w-3.5" />
-          </button>
-        </div>
-      </div>
-
-      {/* Card Body */}
-      <div className="p-6 flex-1 flex flex-col">
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="font-['Sora'] font-bold text-lg text-[#1A1A1A] group-hover:text-[#D4A800] transition-colors truncate pr-2 leading-tight">
-            {property.property_name}
-          </h3>
-          {property.unit_number ? (
-            <span className={`text-[10px] font-bold px-2 py-0.5 rounded whitespace-nowrap ml-2 shrink-0 ${unitBadgeClass}`}>
-              {property.unit_number}
-            </span>
-          ) : null}
-        </div>
-
-        <p className="text-[#6B7280] text-sm flex items-center gap-1 mb-4 truncate font-['Manrope']">
-          <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
-          <span className="truncate">{property.address}</span>
-        </p>
-
-        {/* Stats row */}
-        <div className="flex items-center gap-4 mt-auto py-4 border-t border-neutral-50">
-          <div className="flex items-center gap-2">
-            <Users className={`h-5 w-5 ${isVacant ? 'text-neutral-300' : 'text-[#FED609]'}`} />
-            <span className={`text-sm font-bold font-['DM_Sans'] ${isVacant ? 'text-neutral-400' : 'text-[#1A1A1A]'}`}>
-              {isVacant ? '00' : 'Active'}
-            </span>
+      <div className="flex h-full flex-col">
+        <div>
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="min-w-0">
+              <h3 className="font-['Sora'] text-2xl font-bold leading-tight text-[#1A1A1A]">
+                {property.property_name}
+              </h3>
+              <p className="mt-3 flex items-center gap-2 font-['Manrope'] text-sm text-[#6B7280]">
+                <MapPin className="h-4 w-4 flex-shrink-0 text-[#A08A57]" />
+                <span className="truncate">{property.address}</span>
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => onEdit(property)}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#F3E19D] bg-[#FFF9E7] text-[#1A1A1A]"
+                title="Edit property"
+              >
+                <Pencil className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => onDelete(property)}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-red-100 bg-red-50 text-red-500"
+                title="Delete property"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-[#FED609]" />
-            <span className="text-sm font-bold text-[#1A1A1A] font-['DM_Sans']">Property</span>
+
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            {property.unit_number ? (
+              <span className={`rounded-full px-4 py-2 text-[11px] font-bold uppercase tracking-[0.16em] ${unitBadgeClass}`}>
+                {property.unit_number}
+              </span>
+            ) : null}
           </div>
         </div>
-
-        {/* View Details link */}
-        <button
-          type="button"
-          onClick={() => onEdit(property)}
-          className="mt-4 text-[#FED609] font-bold text-sm flex items-center justify-center gap-2 group/link hover:text-[#D4A800] transition-colors font-['DM_Sans']"
-        >
-          View Details
-          <ArrowRight className="h-3.5 w-3.5 group-hover/link:translate-x-1 transition-transform" />
-        </button>
       </div>
     </motion.div>
   )
@@ -354,20 +285,23 @@ function PropertyCard({ property, index, onEdit, onDelete }: PropertyCardProps) 
 // Skeleton card for loading state
 function PropertyCardSkeleton() {
   return (
-    <div className="bg-white rounded-[12px] shadow-sm border-l-4 border-neutral-100 overflow-hidden flex flex-col animate-pulse">
-      <div className="h-48 bg-neutral-100" />
-      <div className="p-6 flex-1 flex flex-col gap-3">
-        <div className="flex justify-between">
-          <div className="h-4 bg-neutral-100 rounded w-2/3" />
-          <div className="h-4 bg-neutral-100 rounded w-12" />
+    <div className="flex flex-col rounded-[28px] border border-[#F1E4B8] bg-white p-6 shadow-[0_16px_45px_rgba(26,26,26,0.08)] animate-pulse">
+      <div className="flex flex-1 flex-col justify-between gap-5">
+        <div>
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0 flex-1">
+              <div className="h-5 w-2/3 rounded bg-neutral-100" />
+              <div className="mt-3 h-4 w-3/4 rounded bg-neutral-100" />
+            </div>
+            <div className="flex gap-2">
+              <div className="h-10 w-10 rounded-full bg-neutral-100" />
+              <div className="h-10 w-10 rounded-full bg-neutral-100" />
+            </div>
+          </div>
+          <div className="mt-5 flex gap-3">
+            <div className="h-10 w-24 rounded-full bg-neutral-100" />
+          </div>
         </div>
-        <div className="h-3 bg-neutral-100 rounded w-3/4" />
-        <div className="h-px bg-neutral-100 mt-2" />
-        <div className="flex gap-4 pt-1">
-          <div className="h-3 bg-neutral-100 rounded w-16" />
-          <div className="h-3 bg-neutral-100 rounded w-14" />
-        </div>
-        <div className="h-4 bg-neutral-100 rounded w-24 mx-auto mt-1" />
       </div>
     </div>
   )
@@ -599,14 +533,6 @@ export function OwnerPropertiesPage() {
               </div>
             ) : null}
 
-            {/* Recent activity button */}
-            <button
-              type="button"
-              className="ml-auto text-[#6B7280] hover:text-[#1A1A1A] flex items-center gap-1 text-sm font-medium transition-colors font-['DM_Sans']"
-            >
-              <History className="h-4 w-4" />
-              Recent Activity
-            </button>
           </motion.div>
         </div>
 
@@ -679,20 +605,19 @@ export function OwnerPropertiesPage() {
           </motion.div>
         ) : null}
 
-        {/* Property Grid - expanded to 4 cols on xl per new design */}
+        {/* Property Grid */}
         {!loading && filteredProperties.length > 0 ? (
           <motion.div
             variants={staggerParent}
             initial="hidden"
             animate="show"
             viewport={viewportOnce}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6"
+            className="grid grid-cols-1 gap-6 2xl:grid-cols-2"
           >
-            {filteredProperties.map((property, index) => (
+            {filteredProperties.map((property) => (
               <PropertyCard
                 key={property.id}
                 property={property}
-                index={index}
                 onEdit={beginEdit}
                 onDelete={beginDelete}
               />

@@ -63,7 +63,12 @@
       "Bash(grep -n \"telegram_chat_links\" /c/Users/Intel/Desktop/tenant-backend/supabase/migrations/*.sql)",
       "Bash(grep -l \"telegram\" /c/Users/Intel/Desktop/tenant-backend/supabase/migrations/*.sql)",
       "Bash(claude plugin:*)",
-      "Bash(uipro init:*)"
+      "Bash(uipro init:*)",
+      "Bash(grep -n \"listOwnerAwaitingRentPaymentApprovals\" /c/Users/Intel/Desktop/tenant-backend/src/services/*.ts)",
+      "Bash(grep -n \"CREATE TABLE properties\\\\|CREATE TABLE tenants\\\\|CREATE TABLE rent_payment_approvals\" /c/Users/Intel/Desktop/tenant-backend/supabase/migrations/*.sql)",
+      "Bash(grep -n \"CREATE TABLE rent_payment_approvals\\\\|create table.*rent_payment\" /c/Users/Intel/Desktop/tenant-backend/supabase/migrations/*.sql)",
+      "Bash(grep -n \"listOwnerTickets\\\\|listOwnerAutomationActivity\\\\|getOwnerComplianceOverview\\\\|getOwnerPortfolioVisibilityOverview\\\\|getOwnerCashFlowOverview\\\\|getOwnerVacancyCampaignOverview\" /c/Users/Intel/Desktop/tenant-backend/src/services/*.ts)",
+      "Bash(grep -n \"getOwnerCashFlowOverview\" /c/Users/Intel/Desktop/tenant-backend/src/services/*.ts)"
     ]
   },
   "enableAllProjectMcpServers": true,
