@@ -377,7 +377,7 @@ export function LandingPage() {
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="w-full bg-[#2251E3] rounded-[3rem] p-16 md:p-28 text-center overflow-hidden relative"
+          className="w-full bg-[#1A3A8A] rounded-[3rem] p-16 md:p-28 text-center overflow-hidden relative"
         >
           <div className="relative z-10">
             <h2 className="font-['Sora'] text-4xl md:text-6xl font-black text-white mb-8">
@@ -389,7 +389,8 @@ export function LandingPage() {
             </p>
             <Link
               to={ROUTES.ownerLogin}
-              className="inline-block px-12 py-6 bg-white text-[#2251E3] font-bold rounded-2xl shadow-xl hover:shadow-2xl hover:bg-[rgba(255,255,255,0.9)] transition-all font-['DM_Sans'] text-xl"
+              className="inline-block px-12 py-6 bg-white rounded-2xl shadow-lg hover:shadow-xl hover:bg-white/95 active:scale-95 transition-all font-['DM_Sans'] text-lg font-bold"
+              style={{ color: '#4E79FF' }}
             >
               Start Your 14-Day Free Trial
             </Link>

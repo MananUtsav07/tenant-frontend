@@ -20,31 +20,31 @@ const TESTIMONIALS: Testimonial[] = [
     quote: 'Prophives makes managing my apartment so much easier!',
     author: 'Fatima Al-Mansouri',
     title: 'Tenant',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD2L_L8S2BpUVBstxOk1N46L7Jv2MQnUZ7qC3qrlLlcgFsxnOzDfVUG35zmm_dIHriXbQ6F5kNVLWSfD1OrsJIS_pJ4hTI4nULbllKvk4BjZ55mx1LhSHXOB_eubFRGC0NlUxNvV6cOqdEsopxcFBoDgWqRF2foYmQDOIFZlwuXewyqqqOCf6fqa-U7Qe4HNmj0Tvh_N4kbWRLmX7KR2hLVieKVmFzDhNnunVBWy2GvN35fK6jO-vmjve2yvngbJnja06hOYk_RDPVC',
+    image: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%2306B6D4%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2255%22 font-size=%2244%22 fill=%22white%22 text-anchor=%22middle%22 dominant-baseline=%22central%22%3EFM%3C/text%3E%3C/svg%3E',
   },
   {
     quote: 'Quick and seamless ticket support whenever I need it.',
     author: 'Rashid Ahmed',
     title: 'Resident',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD2L_L8S2BpUVBstxOk1N46L7Jv2MQnUZ7qC3qrlLlcgFsxnOzDfVUG35zmm_dIHriXbQ6F5kNVLWSfD1OrsJIS_pJ4hTI4nULbllKvk4BjZ55mx1LhSHXOB_eubFRGC0NlUxNvV6cOqdEsopxcFBoDgWqRF2foYmQDOIFZlwuXewyqqqOCf6fqa-U7Qe4HNmj0Tvh_N4kbWRLmX7KR2hLVieKVmFzDhNnunVBWy2GvN35fK6jO-vmjve2yvngbJnja06hOYk_RDPVC',
+    image: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%2314B8A6%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2255%22 font-size=%2248%22 fill=%22white%22 text-anchor=%22middle%22 dominant-baseline=%22central%22%3ERA%3C/text%3E%3C/svg%3E',
   },
   {
     quote: 'Love how easy it is to access my lease and payment history.',
     author: 'Noor Hassan',
     title: 'Tenant',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD2L_L8S2BpUVBstxOk1N46L7Jv2MQnUZ7qC3qrlLlcgFsxnOzDfVUG35zmm_dIHriXbQ6F5kNVLWSfD1OrsJIS_pJ4hTI4nULbllKvk4BjZ55mx1LhSHXOB_eubFRGC0NlUxNvV6cOqdEsopxcFBoDgWqRF2foYmQDOIFZlwuXewyqqqOCf6fqa-U7Qe4HNmj0Tvh_N4kbWRLmX7KR2hLVieKVmFzDhNnunVBWy2GvN35fK6jO-vmjve2yvngbJnja06hOYk_RDPVC',
+    image: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%238B5CF6%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2255%22 font-size=%2248%22 fill=%22white%22 text-anchor=%22middle%22 dominant-baseline=%22central%22%3ENH%3C/text%3E%3C/svg%3E',
   },
   {
     quote: 'The platform is intuitive and customer support is responsive.',
     author: 'Ibrahim Al-Marri',
     title: 'Resident',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD2L_L8S2BpUVBstxOk1N46L7Jv2MQnUZ7qC3qrlLlcgFsxnOzDfVUG35zmm_dIHriXbQ6F5kNVLWSfD1OrsJIS_pJ4hTI4nULbllKvk4BjZ55mx1LhSHXOB_eubFRGC0NlUxNvV6cOqdEsopxcFBoDgWqRF2foYmQDOIFZlwuXewyqqqOCf6fqa-U7Qe4HNmj0Tvh_N4kbWRLmX7KR2hLVieKVmFzDhNnunVBWy2GvN35fK6jO-vmjve2yvngbJnja06hOYk_RDPVC',
+    image: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23F59E0B%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2255%22 font-size=%2244%22 fill=%22white%22 text-anchor=%22middle%22 dominant-baseline=%22central%22%3EIM%3C/text%3E%3C/svg%3E',
   },
   {
     quote: 'Best app for managing my rental payments and maintenance requests!',
     author: 'Aisha Mohammed',
     title: 'Tenant',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD2L_L8S2BpUVBstxOk1N46L7Jv2MQnUZ7qC3qrlLlcgFsxnOzDfVUG35zmm_dIHriXbQ6F5kNVLWSfD1OrsJIS_pJ4hTI4nULbllKvk4BjZ55mx1LhSHXOB_eubFRGC0NlUxNvV6cOqdEsopxcFBoDgWqRF2foYmQDOIFZlwuXewyqqqOCf6fqa-U7Qe4HNmj0Tvh_N4kbWRLmX7KR2hLVieKVmFzDhNnunVBWy2GvN35fK6jO-vmjve2yvngbJnja06hOYk_RDPVC',
+    image: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23EF4444%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2255%22 font-size=%2244%22 fill=%22white%22 text-anchor=%22middle%22 dominant-baseline=%22central%22%3EAM%3C/text%3E%3C/svg%3E',
   },
 ]
 
@@ -94,7 +94,7 @@ export function TenantLoginPage() {
     <div className="flex min-h-screen flex-col bg-[#06070B] font-['Manrope'] text-white antialiased">
       <main className="flex flex-col md:flex-row md:flex-1">
         {/* Left Side: Visual & Branding (40%) */}
-        <section className="relative hidden flex-col justify-between overflow-hidden bg-[#2251E3] p-6 md:flex md:w-[40%]">
+        <section className="relative hidden flex-col justify-between overflow-hidden bg-[#1A3A8A] p-6 md:flex md:w-[40%]">
           {/* Brand Logo */}
           <div className="z-10">
             <span className="font-['Sora'] text-2xl font-black tracking-tight text-white">Prophives</span>

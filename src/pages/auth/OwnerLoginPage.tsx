@@ -34,31 +34,31 @@ const TESTIMONIALS: Testimonial[] = [
     quote: 'Prophives changed how I manage my property portfolio.',
     author: 'Omar K.',
     title: 'Portfolio Owner',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD2L_L8S2BpUVBstxOk1N46L7Jv2MQnUZ7qC3qrlLlcgFsxnOzDfVUG35zmm_dIHriXbQ6F5kNVLWSfD1OrsJIS_pJ4hTI4nULbllKvk4BjZ55mx1LhSHXOB_eubFRGC0NlUxNvV6cOqdEsopxcFBoDgWqRF2foYmQDOIFZlwuXewyqqqOCf6fqa-U7Qe4HNmj0Tvh_N4kbWRLmX7KR2hLVieKVmFzDhNnunVBWy2GvN35fK6jO-vmjve2yvngbJnja06hOYk_RDPVC',
+    image: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%234F46E5%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2255%22 font-size=%2248%22 fill=%22white%22 text-anchor=%22middle%22 dominant-baseline=%22central%22%3EOK%3C/text%3E%3C/svg%3E',
   },
   {
     quote: 'The AI insights have helped me optimize my rental strategy significantly.',
     author: 'Sarah M.',
     title: 'Real Estate Developer',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD2L_L8S2BpUVBstxOk1N46L7Jv2MQnUZ7qC3qrlLlcgFsxnOzDfVUG35zmm_dIHriXbQ6F5kNVLWSfD1OrsJIS_pJ4hTI4nULbllKvk4BjZ55mx1LhSHXOB_eubFRGC0NlUxNvV6cOqdEsopxcFBoDgWqRF2foYmQDOIFZlwuXewyqqqOCf6fqa-U7Qe4HNmj0Tvh_N4kbWRLmX7KR2hLVieKVmFzDhNnunVBWy2GvN35fK6jO-vmjve2yvngbJnja06hOYk_RDPVC',
+    image: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%2310B981%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2255%22 font-size=%2248%22 fill=%22white%22 text-anchor=%22middle%22 dominant-baseline=%22central%22%3ESM%3C/text%3E%3C/svg%3E',
   },
   {
     quote: 'Managing tenant communications is now effortless with the integrated platform.',
     author: 'Ahmed Hassan',
     title: 'Property Manager',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD2L_L8S2BpUVBstxOk1N46L7Jv2MQnUZ7qC3qrlLlcgFsxnOzDfVUG35zmm_dIHriXbQ6F5kNVLWSfD1OrsJIS_pJ4hTI4nULbllKvk4BjZ55mx1LhSHXOB_eubFRGC0NlUxNvV6cOqdEsopxcFBoDgWqRF2foYmQDOIFZlwuXewyqqqOCf6fqa-U7Qe4HNmj0Tvh_N4kbWRLmX7KR2hLVieKVmFzDhNnunVBWy2GvN35fK6jO-vmjve2yvngbJnja06hOYk_RDPVC',
+    image: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22F59E0B%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2255%22 font-size=%2240%22 fill=%22white%22 text-anchor=%22middle%22 dominant-baseline=%22central%22%3EAH%3C/text%3E%3C/svg%3E',
   },
   {
     quote: 'The automated ticket system has reduced our support response time by 70%.',
     author: 'Layla Ahmed',
     title: 'Operations Director',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD2L_L8S2BpUVBstxOk1N46L7Jv2MQnUZ7qC3qrlLlcgFsxnOzDfVUG35zmm_dIHriXbQ6F5kNVLWSfD1OrsJIS_pJ4hTI4nULbllKvk4BjZ55mx1LhSHXOB_eubFRGC0NlUxNvV6cOqdEsopxcFBoDgWqRF2foYmQDOIFZlwuXewyqqqOCf6fqa-U7Qe4HNmj0Tvh_N4kbWRLmX7KR2hLVieKVmFzDhNnunVBWy2GvN35fK6jO-vmjve2yvngbJnja06hOYk_RDPVC',
+    image: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%228B5CF6%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2255%22 font-size=%2248%22 fill=%22white%22 text-anchor=%22middle%22 dominant-baseline=%22central%22%3ELA%3C/text%3E%3C/svg%3E',
   },
   {
     quote: 'Best investment I made for my property business. Highly recommended!',
     author: 'Mohammed Ali',
     title: 'Portfolio Owner',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD2L_L8S2BpUVBstxOk1N46L7Jv2MQnUZ7qC3qrlLlcgFsxnOzDfVUG35zmm_dIHriXbQ6F5kNVLWSfD1OrsJIS_pJ4hTI4nULbllKvk4BjZ55mx1LhSHXOB_eubFRGC0NlUxNvV6cOqdEsopxcFBoDgWqRF2foYmQDOIFZlwuXewyqqqOCf6fqa-U7Qe4HNmj0Tvh_N4kbWRLmX7KR2hLVieKVmFzDhNnunVBWy2GvN35fK6jO-vmjve2yvngbJnja06hOYk_RDPVC',
+    image: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22EC4899%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2255%22 font-size=%2248%22 fill=%22white%22 text-anchor=%22middle%22 dominant-baseline=%22central%22%3EMA%3C/text%3E%3C/svg%3E',
   },
 ]
 
@@ -162,7 +162,7 @@ export function OwnerLoginPage() {
   return (
     <main className="flex flex-col md:flex-row md:min-h-screen">
       {/* Left Side: Brand Identity */}
-      <section className="relative hidden flex-col justify-between overflow-hidden bg-[#2251E3] p-6 md:flex md:w-1/2">
+      <section className="relative hidden flex-col justify-between overflow-hidden bg-[#1A3A8A] p-6 md:flex md:w-1/2">
         {/* Decorative blurs */}
         <div className="absolute -mr-32 -mt-32 right-0 top-0 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
         <div className="absolute -mb-48 -ml-48 bottom-0 left-0 h-96 w-96 rounded-full bg-black/10 blur-3xl" />
