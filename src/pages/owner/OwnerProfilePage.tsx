@@ -1,12 +1,10 @@
 import { useState } from 'react'
-import { AlertTriangle, Building2, Mail, Pencil, Phone, Save, Shield, Trash2, User, X } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { AlertTriangle, Building2, Mail, Pencil, Phone, Save, Shield, Trash2, User } from 'lucide-react'
 
 import { ErrorState } from '../../components/common/ErrorState'
 import { Modal } from '../../components/common/Modal'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { api } from '../../services/api'
-import { revealUp } from '../../utils/motion'
 
 // ─── Read-only field ─────────────────────────────────────────────────────────
 
