@@ -88,12 +88,11 @@ export function LandingPage() {
     <>
       {/* Hero */}
       <section
-        className="min-h-[90vh] flex items-center px-8 lg:px-16 overflow-hidden relative"
-        style={{ background: 'radial-gradient(circle at top right, #FFFAE2 0%, #FEFAEF 100%)' }}
+        className="min-h-screen flex items-center px-8 lg:px-16 overflow-hidden relative bg-[#06070B]"
       >
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-[#FED609]/20 rounded-full blur-[100px]" />
-          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#FFFAE2] rounded-full blur-[80px]" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-[#2251E3]/10 rounded-full blur-[100px]" />
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#4E79FF]/05 rounded-full blur-[80px]" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center w-full max-w-none">
@@ -105,44 +104,44 @@ export function LandingPage() {
             viewport={viewportOnce}
             className="z-10 text-center lg:text-left"
           >
-            <div className="inline-flex items-center gap-2 bg-[#FED609]/15 text-[#1A1A1A] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest font-['DM_Sans'] mb-8">
-              <span className="w-2 h-2 rounded-full bg-[#FED609] inline-block" />
+            <div className="inline-flex items-center gap-2 bg-[rgba(34,81,227,0.12)] text-[#4E79FF] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest font-['DM_Sans'] mb-8">
+              <span className="w-2 h-2 rounded-full bg-[#2251E3] inline-block" />
               AI-Powered Property Management
             </div>
 
-            <h1 className="font-['Sora'] text-6xl md:text-8xl font-extrabold text-[#1A1A1A] leading-[1.05] tracking-tight mb-8">
+            <h1 className="font-['Sora'] text-6xl md:text-8xl font-extrabold text-white leading-[1.05] tracking-tight mb-8">
               Manage Your Properties{' '}
-              <span className="text-[#FED609] underline decoration-[#FED609]/20">Smarter</span>{' '}
+              <span className="text-[#4E79FF]">Smarter</span>{' '}
               with AI
             </h1>
-            <p className="font-['Manrope'] text-xl md:text-2xl text-[#6B7280] mb-12 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+            <p className="font-['Manrope'] text-xl md:text-2xl text-[#8D8D96] mb-12 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
               The premium AI-powered property management platform designed for modern property
               managers everywhere. Automate everything from tenant communication to rent collection.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6">
               <Link
                 to={ROUTES.ownerLogin}
-                className="w-full sm:w-auto px-10 py-5 bg-[#FED609] text-[#1A1A1A] font-bold rounded-xl shadow-lg hover:bg-[#FFD70B] hover:shadow-2xl transition-all font-['DM_Sans'] text-xl text-center"
+                className="w-full sm:w-auto px-10 py-5 bg-[#2251E3] text-white font-bold rounded-xl shadow-lg shadow-[#2251E3]/30 hover:bg-[#4E79FF] hover:shadow-2xl transition-all font-['DM_Sans'] text-xl text-center"
               >
                 Get Started for Free
               </Link>
               <Link
                 to={ROUTES.contact}
-                className="w-full sm:w-auto px-10 py-5 border-2 border-[#FED609] text-[#1A1A1A] font-bold rounded-xl hover:bg-[#FED609]/5 transition-all font-['DM_Sans'] text-xl text-center"
+                className="w-full sm:w-auto px-10 py-5 border-2 border-[#272839] text-white font-bold rounded-xl hover:border-[#2251E3] hover:bg-[rgba(34,81,227,0.06)] transition-all font-['DM_Sans'] text-xl text-center"
               >
                 Book a Demo
               </Link>
             </div>
 
-            <div className="mt-10 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-sm text-[#6B7280] font-['DM_Sans']">
+            <div className="mt-10 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-sm text-[#8D8D96] font-['DM_Sans']">
               <span className="flex items-center gap-1.5">
-                <span className="text-[#FED609]">✓</span> No credit card required
+                <span className="text-[#32C382]">✓</span> No credit card required
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="text-[#FED609]">✓</span> 14-day free trial
+                <span className="text-[#32C382]">✓</span> 14-day free trial
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="text-[#FED609]">✓</span> Cancel anytime
+                <span className="text-[#32C382]">✓</span> Cancel anytime
               </span>
             </div>
           </motion.div>
@@ -155,31 +154,31 @@ export function LandingPage() {
             viewport={viewportOnce}
             className="relative hidden lg:block h-[700px] w-full"
           >
-            <div className="absolute top-0 right-0 w-96 h-96 bg-[#FED609]/20 rounded-full blur-[100px]" />
-            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#FFFAE2] rounded-full blur-[80px]" />
-            <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[90%] h-[600px] rounded-3xl shadow-2xl overflow-hidden border-8 border-white bg-white transform translate-x-12">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-[#2251E3]/10 rounded-full blur-[100px]" />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#101114] rounded-full blur-[80px]" />
+            <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[90%] h-[600px] rounded-3xl shadow-2xl overflow-hidden border-8 border-[#272839] bg-[#101114] transform translate-x-12">
               <img
                 className="w-full h-full object-cover"
                 alt="Modern luxury high-rise apartment building"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwGYvpeM85pwKFXm97S1TAATDSM4__Trygy2ql_yytBQ3PtwsoBr96--gxmJ1tNMfkJalxYzSIoxOG5TitKAI8TkAmCuh-HgVJ38g6tv4XlGNyPXwcGHVh7RvK5Ks-VxmOaevdxY3ls6cvgFdCLs-OYhCJoy5zWvuNQy-FHxiWD6PdkJIyIzAwaSdi3fyEPPzolc5u8TXThfIcwgElPPs8urnbO34Aq7_k4t9aCRyv_klF-0EOqdCSCXpXavAV4-aCl0F__5tH7H6N"
               />
             </div>
-            <div className="absolute bottom-12 left-8 bg-white rounded-2xl shadow-xl p-4 border border-[#FED609]/20 flex items-center gap-3 z-10">
-              <div className="w-10 h-10 bg-[#FED609] rounded-xl flex items-center justify-center">
-                <Wallet className="h-5 w-5 text-[#1A1A1A]" />
+            <div className="absolute bottom-12 left-8 bg-[#101114] border border-[#272839] rounded-2xl shadow-xl p-4 flex items-center gap-3 z-10">
+              <div className="w-10 h-10 bg-[#2251E3] rounded-xl flex items-center justify-center">
+                <Wallet className="h-5 w-5 text-white" />
               </div>
               <div>
-                <p className="text-xs text-[#6B7280] font-['DM_Sans']">Collection Rate</p>
-                <p className="text-xl font-extrabold text-[#1A1A1A] font-['Sora']">98.5%</p>
+                <p className="text-xs text-[#8D8D96] font-['DM_Sans']">Collection Rate</p>
+                <p className="text-xl font-extrabold text-white font-['Sora']">98.5%</p>
               </div>
             </div>
-            <div className="absolute top-12 left-8 bg-white rounded-2xl shadow-xl p-4 border border-[#FED609]/20 flex items-center gap-3 z-10">
-              <div className="w-10 h-10 bg-[#FFFAE2] rounded-xl flex items-center justify-center">
-                <BrainCircuit className="h-5 w-5 text-[#FED609]" />
+            <div className="absolute top-12 left-8 bg-[#101114] border border-[#272839] rounded-2xl shadow-xl p-4 flex items-center gap-3 z-10">
+              <div className="w-10 h-10 bg-[rgba(34,81,227,0.15)] rounded-xl flex items-center justify-center">
+                <BrainCircuit className="h-5 w-5 text-[#4E79FF]" />
               </div>
               <div>
-                <p className="text-xs text-[#6B7280] font-['DM_Sans']">AI Tickets Resolved</p>
-                <p className="text-lg font-extrabold text-[#1A1A1A] font-['Sora']">40+ hrs/wk</p>
+                <p className="text-xs text-[#8D8D96] font-['DM_Sans']">AI Tickets Resolved</p>
+                <p className="text-lg font-extrabold text-white font-['Sora']">40+ hrs/wk</p>
               </div>
             </div>
           </motion.div>
@@ -187,53 +186,53 @@ export function LandingPage() {
       </section>
 
       {/* Floating Stats Card */}
-      <section className="relative z-20 px-8">
+      <section className="relative z-20 px-8 bg-[#06070B]">
         <motion.div
           variants={revealVariants}
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="w-full bg-white rounded-2xl shadow-xl p-10 md:p-16 border border-[#FED609]/10"
+          className="w-full bg-[#101114] rounded-2xl shadow-xl p-10 md:p-16 border border-[#272839]"
         >
           <div className="flex flex-col lg:flex-row justify-between items-center gap-12">
             <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
-              <span className="text-[#FED609] font-bold font-['DM_Sans'] text-sm uppercase tracking-widest mb-2">
+              <span className="text-[#4E79FF] font-bold font-['DM_Sans'] text-sm uppercase tracking-widest mb-2">
                 Live Portfolio
               </span>
-              <h3 className="font-['Sora'] text-4xl font-bold text-[#1A1A1A]">
+              <h3 className="font-['Sora'] text-4xl font-bold text-white">
                 Real-time Performance Metrics
               </h3>
             </div>
             <div className="flex flex-wrap justify-center gap-16 md:gap-32">
               <div className="text-center">
-                <div className="text-5xl font-extrabold text-[#1A1A1A] font-['Sora'] mb-2">
+                <div className="text-5xl font-extrabold text-white font-['Sora'] mb-2">
                   {snapshotLoading
                     ? '420+'
                     : (snapshot?.open_tickets?.toLocaleString() ??
                       ownerSummary?.open_tickets?.toLocaleString() ??
                       '--')}
                 </div>
-                <div className="text-[#6B7280] font-['DM_Sans'] text-base">Total Properties</div>
+                <div className="text-[#8D8D96] font-['DM_Sans'] text-base">Total Properties</div>
               </div>
               <div className="text-center">
-                <div className="text-5xl font-extrabold text-[#FED609] font-['Sora'] mb-2">
+                <div className="text-5xl font-extrabold text-[#4E79FF] font-['Sora'] mb-2">
                   {snapshotLoading
                     ? '1.2k'
                     : (snapshot?.active_tenants?.toLocaleString() ??
                       ownerSummary?.active_tenants?.toLocaleString() ??
                       '--')}
                 </div>
-                <div className="text-[#6B7280] font-['DM_Sans'] text-base">Active Tenants</div>
+                <div className="text-[#8D8D96] font-['DM_Sans'] text-base">Active Tenants</div>
               </div>
               <div className="text-center">
-                <div className="text-5xl font-extrabold text-[#1A1A1A] font-['Sora'] mb-2">
+                <div className="text-5xl font-extrabold text-white font-['Sora'] mb-2">
                   {snapshotLoading
                     ? '98%'
                     : (snapshot?.due_this_week?.toLocaleString() ??
                       ownerSummary?.reminders_pending?.toLocaleString() ??
                       '--')}
                 </div>
-                <div className="text-[#6B7280] font-['DM_Sans'] text-base">Collection Rate</div>
+                <div className="text-[#8D8D96] font-['DM_Sans'] text-base">Collection Rate</div>
               </div>
             </div>
           </div>
@@ -241,7 +240,7 @@ export function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-32 px-8 bg-white w-full">
+      <section className="py-32 px-8 bg-[#06070B] w-full">
         <motion.div
           variants={revealVariants}
           initial="hidden"
@@ -249,13 +248,13 @@ export function LandingPage() {
           viewport={viewportOnce}
           className="text-center mb-24"
         >
-          <span className="inline-block text-sm font-bold uppercase tracking-widest text-[#FED609] font-['DM_Sans'] mb-4">
+          <span className="inline-block text-sm font-bold uppercase tracking-widest text-[#4E79FF] font-['DM_Sans'] mb-4">
             Platform Features
           </span>
-          <h2 className="font-['Sora'] text-5xl font-bold mb-6 text-[#1A1A1A]">
+          <h2 className="font-['Sora'] text-5xl font-bold mb-6 text-white">
             Powerful Features for Modern Landlords
           </h2>
-          <p className="text-[#6B7280] text-xl max-w-3xl mx-auto font-['Manrope']">
+          <p className="text-[#8D8D96] text-xl max-w-3xl mx-auto font-['Manrope']">
             Everything you need to scale your property portfolio without the administrative headache.
             Our tools are built for speed and efficiency.
           </p>
@@ -269,17 +268,17 @@ export function LandingPage() {
         >
           {[
             {
-              icon: <BrainCircuit className="h-9 w-9 text-[#1A1A1A]" />,
+              icon: <BrainCircuit className="h-9 w-9 text-white" />,
               title: 'AI Automation',
               desc: 'Our neural engine handles complex scheduling, document processing, and tenant screening automatically, saving you hours of manual work every week.',
             },
             {
-              icon: <MessageCircle className="h-9 w-9 text-[#1A1A1A]" />,
+              icon: <MessageCircle className="h-9 w-9 text-white" />,
               title: 'WhatsApp & Telegram',
               desc: 'Connect with your tenants where they already are. Send automated reminders and receive maintenance requests via our intelligent bots.',
             },
             {
-              icon: <Wallet className="h-9 w-9 text-[#1A1A1A]" />,
+              icon: <Wallet className="h-9 w-9 text-white" />,
               title: 'Payment Tracking',
               desc: 'Automated bank reconciliation and instant rent alerts. Never chase a missed payment manually again with our integrated finance engine.',
             },
@@ -287,13 +286,13 @@ export function LandingPage() {
             <motion.div
               key={f.title}
               variants={revealVariants}
-              className="p-12 rounded-3xl bg-[#FEFAEF] border border-transparent hover:border-[#FED609] transition-all group"
+              className="p-12 rounded-3xl bg-[#101114] border border-[#272839] hover:border-[rgba(34,81,227,0.4)] transition-all group"
             >
-              <div className="w-20 h-20 bg-[#FED609] rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform shadow-lg shadow-[#FED609]/10">
+              <div className="w-20 h-20 bg-[#2251E3] rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform shadow-lg shadow-[#2251E3]/20">
                 {f.icon}
               </div>
-              <h4 className="font-['Sora'] text-2xl font-bold mb-4 text-[#1A1A1A]">{f.title}</h4>
-              <p className="text-[#6B7280] text-lg font-['Manrope'] leading-relaxed">{f.desc}</p>
+              <h4 className="font-['Sora'] text-2xl font-bold mb-4 text-white">{f.title}</h4>
+              <p className="text-[#8D8D96] text-lg font-['Manrope'] leading-relaxed">{f.desc}</p>
             </motion.div>
           ))}
         </motion.div>
@@ -306,7 +305,7 @@ export function LandingPage() {
         >
           <Link
             to={ROUTES.features}
-            className="inline-flex items-center gap-2 font-bold text-[#1A1A1A] hover:text-[#FED609] transition-colors font-['DM_Sans']"
+            className="inline-flex items-center gap-2 font-bold text-[#4E79FF] hover:text-white transition-colors font-['DM_Sans']"
           >
             Explore all features <ArrowRight className="h-4 w-4" />
           </Link>
@@ -314,7 +313,7 @@ export function LandingPage() {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-32 px-8 bg-[#FFFAE2] w-full">
+      <section className="py-32 px-8 bg-[#101114] w-full">
         <motion.div
           variants={revealVariants}
           initial="hidden"
@@ -322,11 +321,11 @@ export function LandingPage() {
           viewport={viewportOnce}
           className="text-center mb-24"
         >
-          <span className="inline-block text-sm font-bold uppercase tracking-widest text-[#FED609] font-['DM_Sans'] mb-4">
+          <span className="inline-block text-sm font-bold uppercase tracking-widest text-[#4E79FF] font-['DM_Sans'] mb-4">
             Simple Onboarding
           </span>
-          <h2 className="font-['Sora'] text-5xl font-bold mb-6 text-[#1A1A1A]">How It Works</h2>
-          <p className="text-[#6B7280] text-xl max-w-3xl mx-auto font-['Manrope']">
+          <h2 className="font-['Sora'] text-5xl font-bold mb-6 text-white">How It Works</h2>
+          <p className="text-[#8D8D96] text-xl max-w-3xl mx-auto font-['Manrope']">
             Get up and running in minutes, not months. We've simplified the entire onboarding
             process.
           </p>
@@ -360,43 +359,43 @@ export function LandingPage() {
               variants={revealVariants}
               className="relative flex flex-col items-center text-center px-8"
             >
-              <div className="w-20 h-20 bg-[#FED609] rounded-full flex items-center justify-center text-3xl font-black font-['Sora'] mb-8 z-10 shadow-xl shadow-[#FED609]/30 text-[#1A1A1A]">
+              <div className="w-20 h-20 bg-[#2251E3] rounded-full flex items-center justify-center text-3xl font-black font-['Sora'] mb-8 z-10 shadow-xl shadow-[#2251E3]/20 text-white">
                 {item.step}
               </div>
-              <h5 className="font-['Sora'] text-2xl font-bold mb-4 text-[#1A1A1A]">{item.title}</h5>
-              <p className="text-[#6B7280] text-lg font-['Manrope']">{item.desc}</p>
+              <h5 className="font-['Sora'] text-2xl font-bold mb-4 text-white">{item.title}</h5>
+              <p className="text-[#8D8D96] text-lg font-['Manrope']">{item.desc}</p>
             </motion.div>
           ))}
-          <div className="hidden md:block absolute top-10 left-[15%] right-[15%] h-0.5 border-t-2 border-dashed border-[#FED609]/40" />
+          <div className="hidden md:block absolute top-10 left-[15%] right-[15%] h-0.5 border-t-2 border-dashed border-[#272839]" />
         </motion.div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 px-8">
+      <section className="py-24 px-8 bg-[#06070B]">
         <motion.div
           variants={revealVariants}
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="w-full bg-[#FED609] rounded-[3rem] p-16 md:p-28 text-center overflow-hidden relative"
+          className="w-full bg-[#2251E3] rounded-[3rem] p-16 md:p-28 text-center overflow-hidden relative"
         >
           <div className="relative z-10">
-            <h2 className="font-['Sora'] text-4xl md:text-6xl font-black text-[#1A1A1A] mb-8">
+            <h2 className="font-['Sora'] text-4xl md:text-6xl font-black text-white mb-8">
               Ready to simplify property management?
             </h2>
-            <p className="text-[#1A1A1A]/80 font-['Manrope'] text-xl md:text-2xl mb-12 max-w-3xl mx-auto">
+            <p className="text-white/80 font-['Manrope'] text-xl md:text-2xl mb-12 max-w-3xl mx-auto">
               Join hundreds of property owners who have saved over 40 hours a week using our AI
               platform. Experience the future of real estate.
             </p>
             <Link
               to={ROUTES.ownerLogin}
-              className="inline-block px-12 py-6 bg-white text-[#1A1A1A] font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all font-['DM_Sans'] text-xl"
+              className="inline-block px-12 py-6 bg-white text-[#2251E3] font-bold rounded-2xl shadow-xl hover:shadow-2xl hover:bg-[rgba(255,255,255,0.9)] transition-all font-['DM_Sans'] text-xl"
             >
               Start Your 14-Day Free Trial
             </Link>
           </div>
-          <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-white/20 rounded-full blur-[100px]" />
-          <div className="absolute -top-32 -left-32 w-96 h-96 bg-white/10 rounded-full blur-[80px]" />
+          <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-white/10 rounded-full blur-[100px]" />
+          <div className="absolute -top-32 -left-32 w-96 h-96 bg-white/5 rounded-full blur-[80px]" />
         </motion.div>
       </section>
     </>

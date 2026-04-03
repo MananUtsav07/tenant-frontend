@@ -152,3 +152,94 @@ npm run build      # Production build
 npm run preview    # Preview production build
 npm run lint       # Run ESLint
 ```
+
+## WhatsApp Integration
+
+### Owner-side configuration
+| File | What it does |
+|------|-------------|
+| `src/pages/owner/OwnerProfilePage.tsx` | Phone input field saves `support_whatsapp` via `patchOwnerMe()` |
+| `src/pages/owner/OwnerNotificationsPage.tsx` | Alternative input for WhatsApp number (E.164: +9198XXXXXXX). Help text: owner must send `help` to the Meta test number to verify bot replies |
+| `src/pages/owner/OwnerIntegrationsPage.tsx` | Status card: if not configured → "Setup Required" button; if configured but not linked → navigates to `ROUTES.ownerProfile`; if linked → shows green "Connected (number)" |
+
+### Tenant-side
+| File | What it does |
+|------|-------------|
+| `src/pages/tenant/TenantSupportPage.tsx` | Lines 121–198: fetches `getTenantOwnerContact()`, generates `wa.me/{digits}` URL, renders "Chat on WhatsApp" green button |
+
+### API
+- `patchOwnerMe({ support_whatsapp })` in `src/services/api.ts` — saves owner's WhatsApp number
+- `getTenantOwnerContact(token)` in `src/services/api.ts` — returns `support_whatsapp` for tenant to dial
+- Type: `TenantOwnerContact.support_whatsapp: string | null` in `src/types/api.ts`
+
+### Integration status object (from backend)
+```ts
+whatsapp: {
+  configured: boolean        // Backend has Meta credentials set
+  provider: string | null    // "meta" | "stub"
+  live: boolean              // live vs test mode
+  linked: boolean            // Owner has a support_whatsapp set
+  linked_number: string | null
+}
+```
+
+## Telegram Integration
+
+Telegram uses an OAuth-style connect flow (unlike WhatsApp's simple phone number save).
+
+### Integration status object (from backend)
+```ts
+telegram: {
+  configured: boolean        // Backend has bot credentials set
+  linked: boolean            // Owner has connected a Telegram chat
+  bot_username: string | null
+  connect_url: string | null // Owner-specific onboarding URL — open in new tab to link
+  linked_chat: {
+    chat_id: string
+    username: string | null
+    first_name: string | null
+    last_name: string | null
+    linked_at: string
+  } | null
+}
+```
+
+### OwnerIntegrationsPage behaviour
+- If `telegram.linked` → show linked chat info
+- If not linked but `connect_url` exists → `openTelegramConnect()` opens `connect_url` in new tab (`window.open(..., '_blank', 'noopener,noreferrer')`)
+
+## AI Features
+
+### Ticket Summarization (Owner)
+`src/pages/owner/OwnerTicketsPage.tsx` — `handleAiSummarize()` calls `api.summarizeOwnerTicket()` with:
+```ts
+{ ticket_id, subject, message, updates: [{ timestamp, author, message }] }
+```
+Returns `{ ok, summary: { summary: string } }`. Displayed inline in the ticket detail panel. Silently fails (non-critical).
+
+### AI Settings Page (`OwnerAiSettingsPage.tsx`)
+- AI model selector **removed** — backend now manages model selection
+- Toggles: `ticket_classification_enabled`, `reminder_generation_enabled`, `ticket_summarization_enabled`
+- `ai_model` field removed from `patchOwnerAiSettings` payload
+
+### Ticket AI fields (`TenantTicket` type)
+```ts
+ai_category: string | null
+ai_confidence: number | null
+```
+
+## Auth Pages
+
+### OwnerLoginPage
+- Registration form **no longer collects `support_whatsapp`** (removed from form and API payload)
+- Left panel shows a rotating testimonial carousel (5 items, auto-advances every 3 s via `setInterval`)
+
+## Shared Components
+
+### `formTheme.ts` — `getProphivesReactSelectStyles`
+Accepts an optional `theme: 'light' | 'dark'` parameter (default `'dark'`).
+- `'dark'` → existing dark/cream background styles
+- `'light'` → white background, `#1A1A1A` text, lighter borders — for use on white card surfaces
+
+## Related Backend
+Backend at `c:\Users\asus\Desktop\tenant-backend` — see its `CLAUDE.md` for full WhatsApp/Telegram server-side details, env vars, and webhook setup checklist.

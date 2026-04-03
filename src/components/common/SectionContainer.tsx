@@ -19,12 +19,12 @@ const containerWidths: Record<NonNullable<SectionContainerProps['size']>, string
 }
 
 const toneClassNames: Record<string, string> = {
-  panel: 'bg-white',
-  hero: 'bg-[#FEFAEF]',
-  navy: 'bg-[#1A1A1A] text-white',
-  cream: 'bg-[#FEFAEF]',
-  ivory: 'bg-[#FFFAE2]',
-  gold: 'bg-[#FED609]',
+  panel: 'bg-[#101114]',
+  hero: 'bg-[#06070B]',
+  navy: 'bg-[#06070B] text-white',
+  cream: 'bg-[#06070B]',
+  ivory: 'bg-[#101114]',
+  gold: 'bg-[#2251E3]',
 }
 
 export function SectionContainer({

@@ -58,7 +58,7 @@ export function BlogPage() {
       />
 
       {/* Header Section */}
-      <header className="bg-[#FEFAEF] py-16 md:py-24 px-6">
+      <header className="bg-[#06070B] py-16 md:py-24 px-6">
         <motion.div
           className="max-w-7xl mx-auto text-center"
           variants={revealUpMotion}
@@ -66,10 +66,10 @@ export function BlogPage() {
           whileInView="show"
           viewport={viewportOnce}
         >
-          <h1 className="font-['Sora'] text-4xl md:text-6xl font-extrabold text-[#1A1A1A] mb-6">
+          <h1 className="font-['Sora'] text-4xl md:text-6xl font-extrabold text-white mb-6">
             Prophives Blog
           </h1>
-          <p className="font-['Manrope'] text-lg md:text-xl text-[#6B7280] max-w-2xl mx-auto">
+          <p className="font-['Manrope'] text-lg md:text-xl text-[#8D8D96] max-w-2xl mx-auto">
             Insights on property management, AI, and real estate tech. Discover how automation is reshaping the property management market.
           </p>
         </motion.div>
@@ -77,7 +77,7 @@ export function BlogPage() {
 
       {/* Error State */}
       {error ? (
-        <div className="bg-[#FEFAEF] px-6 py-8">
+        <div className="bg-[#06070B] px-6 py-8">
           <div className="max-w-7xl mx-auto">
             <ErrorState message={error} variant="light" />
           </div>
@@ -86,7 +86,7 @@ export function BlogPage() {
 
       {/* Loading State */}
       {loading ? (
-        <div className="bg-[#FEFAEF] px-6 py-8">
+        <div className="bg-[#06070B] px-6 py-8">
           <div className="max-w-7xl mx-auto">
             <LoadingState message="Loading articles..." variant="message" />
           </div>
@@ -95,7 +95,7 @@ export function BlogPage() {
 
       {/* Empty State */}
       {!loading && posts.length === 0 && !error ? (
-        <div className="bg-[#FEFAEF] px-6 py-8">
+        <div className="bg-[#06070B] px-6 py-8">
           <div className="max-w-7xl mx-auto">
             <EmptyState title="No articles published yet" description="Published articles will appear here." />
           </div>
@@ -112,7 +112,7 @@ export function BlogPage() {
             whileInView="show"
             viewport={viewportOnce}
           >
-            <article className="bg-white rounded-xl shadow-xl overflow-hidden flex flex-col md:flex-row min-h-[450px]">
+            <article className="bg-[#101114] border border-[#272839] rounded-xl shadow-xl overflow-hidden flex flex-col md:flex-row min-h-[450px]">
               {/* Featured Image */}
               <div className="md:w-3/5 relative overflow-hidden">
                 {featuredPost.cover_image ? (
@@ -132,17 +132,17 @@ export function BlogPage() {
               </div>
               {/* Featured Content */}
               <div className="md:w-2/5 p-8 md:p-12 flex flex-col justify-center">
-                <span className="inline-block px-3 py-1 bg-[#FFFAE2] text-[#FFD70B] font-['DM_Sans'] text-xs font-bold uppercase tracking-wider rounded-full mb-4">
+                <span className="inline-block px-3 py-1 bg-[rgba(34,81,227,0.12)] text-[#4E79FF] font-['DM_Sans'] text-xs font-bold uppercase tracking-wider rounded-full mb-4">
                   Featured
                 </span>
-                <h2 className="font-['Sora'] text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-4 leading-tight">
+                <h2 className="font-['Sora'] text-2xl md:text-3xl font-bold text-white mb-4 leading-tight">
                   {featuredPost.title}
                 </h2>
-                <p className="text-[#6B7280] mb-6 font-['Manrope'] leading-relaxed">
+                <p className="text-[#8D8D96] mb-6 font-['Manrope'] leading-relaxed">
                   {featuredPost.excerpt}
                 </p>
                 <div className="flex items-center space-x-4 mb-8">
-                  <div className="w-10 h-10 rounded-full bg-[#FEFAEF] flex items-center justify-center overflow-hidden">
+                  <div className="w-10 h-10 rounded-full bg-[#141519] flex items-center justify-center overflow-hidden border border-[#272839]">
                     <img
                       alt="Author"
                       className="w-full h-full object-cover"
@@ -150,13 +150,13 @@ export function BlogPage() {
                     />
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-[#1A1A1A]">{featuredPost.author}</p>
-                    <p className="text-xs text-[#6B7280]">{formatDate(featuredPost.created_at)}</p>
+                    <p className="text-sm font-bold text-white">{featuredPost.author}</p>
+                    <p className="text-xs text-[#8D8D96]">{formatDate(featuredPost.created_at)}</p>
                   </div>
                 </div>
                 <Link
                   to={`/blog/${featuredPost.slug}`}
-                  className="inline-flex items-center font-bold text-[#FED609] hover:text-[#FFD70B] transition-colors group"
+                  className="inline-flex items-center font-bold text-[#4E79FF] hover:text-[#2251E3] transition-colors group"
                 >
                   Read More
                   <ArrowRight className="ml-1 h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -169,7 +169,7 @@ export function BlogPage() {
 
       {/* Blog Grid Section */}
       {!loading && gridPosts.length > 0 ? (
-        <section className="bg-[#FEFAEF] py-20 px-6">
+        <section className="bg-[#06070B] py-20 px-6">
           <div className="max-w-7xl mx-auto">
             <motion.div
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
@@ -182,7 +182,7 @@ export function BlogPage() {
                 <motion.article
                   key={post.id}
                   variants={revealUpMotion}
-                  className="bg-white rounded-xl shadow-sm overflow-hidden flex flex-col transition-all duration-300 hover:shadow-md hover:border-[#FED609] border-2 border-transparent group"
+                  className="bg-[#101114] rounded-xl overflow-hidden flex flex-col transition-all duration-300 hover:border-[rgba(34,81,227,0.4)] border border-[#272839] group"
                 >
                   {/* Card Image */}
                   <div className="h-48 overflow-hidden">
@@ -194,33 +194,33 @@ export function BlogPage() {
                         loading="lazy"
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-[#FFFAE2]">
-                        <span className="font-['Sora'] text-3xl font-bold text-[#FED609]/30">P</span>
+                      <div className="flex h-full w-full items-center justify-center bg-[#141519]">
+                        <span className="font-['Sora'] text-3xl font-bold text-[#2251E3]/30">P</span>
                       </div>
                     )}
                   </div>
                   {/* Card Content */}
                   <div className="p-6 flex flex-col flex-grow">
-                    <h3 className="font-['Sora'] text-xl font-bold text-[#1A1A1A] mb-3 leading-snug">
-                      <Link to={`/blog/${post.slug}`} className="hover:text-[#FFD70B] transition-colors">
+                    <h3 className="font-['Sora'] text-xl font-bold text-white mb-3 leading-snug">
+                      <Link to={`/blog/${post.slug}`} className="hover:text-[#4E79FF] transition-colors">
                         {post.title}
                       </Link>
                     </h3>
-                    <p className="text-[#6B7280] text-sm mb-6 line-clamp-2">
+                    <p className="text-[#8D8D96] text-sm mb-6 line-clamp-2">
                       {post.excerpt}
                     </p>
                     <div className="mt-auto flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 rounded-full bg-gray-100 overflow-hidden">
+                        <div className="w-8 h-8 rounded-full bg-[#141519] overflow-hidden border border-[#272839]">
                           <img
                             alt="Author"
                             className="w-full h-full object-cover"
                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrERI4JJ_FURnyzuFjYAquzwniQs6rCOLhY4_-BmXzyrmvEakETSRvRAvkf-y2CuKn5w4GeIqBnfzb6JtjvxlOoym6qZamg1xIAliEjFJZ8ryZ_B46IKwELU0Km1xmL3pHjROM3eUy58QVRj9kLVGJ9V8QoHxUxhfCkybHAyJEpYBHAh6q1D_ZtndpIUBc1v9yTXkmr5tBgOuCK_bLvONH5BqFoKc2GS9BVngTJqUvqtoadGjGvVNiCbLaDrHuYFjBpJgPHqFEJCFM"
                           />
                         </div>
-                        <span className="text-xs font-semibold text-[#1A1A1A]">{post.author}</span>
+                        <span className="text-xs font-semibold text-white">{post.author}</span>
                       </div>
-                      <div className="font-['DM_Sans'] text-[10px] uppercase text-[#6B7280]">
+                      <div className="font-['DM_Sans'] text-[10px] uppercase text-[#8D8D96]">
                         {formatDate(post.created_at)}
                       </div>
                     </div>
@@ -233,29 +233,29 @@ export function BlogPage() {
             <div className="mt-16 flex justify-center items-center space-x-4">
               <a
                 href="#"
-                className="w-10 h-10 flex items-center justify-center rounded-lg bg-[#FED609] text-[#1A1A1A] font-bold shadow-sm"
+                className="w-10 h-10 flex items-center justify-center rounded-lg bg-[#2251E3] text-white font-bold shadow-sm"
               >
                 1
               </a>
               <a
                 href="#"
-                className="w-10 h-10 flex items-center justify-center rounded-lg bg-white text-[#6B7280] hover:text-[#FED609] transition-colors font-medium shadow-sm"
+                className="w-10 h-10 flex items-center justify-center rounded-lg bg-[#101114] border border-[#272839] text-[#8D8D96] hover:text-[#4E79FF] transition-colors font-medium"
               >
                 2
               </a>
               <a
                 href="#"
-                className="w-10 h-10 flex items-center justify-center rounded-lg bg-white text-[#6B7280] hover:text-[#FED609] transition-colors font-medium shadow-sm"
+                className="w-10 h-10 flex items-center justify-center rounded-lg bg-[#101114] border border-[#272839] text-[#8D8D96] hover:text-[#4E79FF] transition-colors font-medium"
               >
                 3
               </a>
               <a
                 href="#"
-                className="w-10 h-10 flex items-center justify-center rounded-lg bg-white text-[#6B7280] hover:text-[#FED609] transition-colors font-medium shadow-sm"
+                className="w-10 h-10 flex items-center justify-center rounded-lg bg-[#101114] border border-[#272839] text-[#8D8D96] hover:text-[#4E79FF] transition-colors font-medium"
               >
                 4
               </a>
-              <a href="#" className="text-[#6B7280] hover:text-[#FED609] transition-colors">
+              <a href="#" className="text-[#8D8D96] hover:text-[#4E79FF] transition-colors">
                 <ChevronRight className="h-5 w-5" />
               </a>
             </div>
@@ -264,7 +264,7 @@ export function BlogPage() {
       ) : null}
 
       {/* Newsletter CTA Section */}
-      <section className="bg-[#FFFAE2] py-20 px-6">
+      <section className="bg-[#101114] border-t border-[#272839] py-20 px-6">
         <motion.div
           className="max-w-4xl mx-auto text-center"
           variants={revealUpMotion}
@@ -272,19 +272,19 @@ export function BlogPage() {
           whileInView="show"
           viewport={viewportOnce}
         >
-          <h2 className="font-['Sora'] text-3xl md:text-4xl font-extrabold text-[#1A1A1A] mb-4">
+          <h2 className="font-['Sora'] text-3xl md:text-4xl font-extrabold text-white mb-4">
             Stay Updated
           </h2>
-          <p className="font-['Manrope'] text-[#6B7280] mb-8 max-w-lg mx-auto">
+          <p className="font-['Manrope'] text-[#8D8D96] mb-8 max-w-lg mx-auto">
             Get the latest property management insights delivered to your inbox weekly.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
             <input
-              className="flex-grow px-6 py-4 rounded-xl border-2 border-white focus:border-[#FED609] focus:ring-0 outline-none font-['Manrope'] shadow-sm"
+              className="flex-grow px-6 py-4 rounded-xl border border-[#272839] bg-[#06070B] text-white placeholder-[#8D8D96] focus:border-[#2251E3] focus:ring-2 focus:ring-[rgba(34,81,227,0.2)] outline-none font-['Manrope']"
               placeholder="Enter your email address"
               type="email"
             />
-            <button className="bg-[#FED609] hover:bg-[#FFD70B] text-[#1A1A1A] px-8 py-4 rounded-xl font-bold transition-all duration-200 shadow-md">
+            <button className="bg-[#2251E3] hover:bg-[#4E79FF] text-white px-8 py-4 rounded-xl font-bold transition-all duration-200 shadow-md">
               Subscribe
             </button>
           </div>

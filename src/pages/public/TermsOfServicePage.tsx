@@ -91,16 +91,16 @@ const sections: TermsSection[] = [
               ],
             },
           ].map(({ title, points }) => (
-            <div key={title} className="rounded-lg border border-gray-200 bg-white p-5">
-              <p className="mb-3 font-semibold text-[#1A1A1A]" style={{ fontFamily: 'Sora, sans-serif' }}>
+            <div key={title} className="rounded-lg border border-[#272839] bg-[#141519] p-5">
+              <p className="mb-3 font-semibold text-white" style={{ fontFamily: 'Sora, sans-serif' }}>
                 {title}
               </p>
               <ul className="space-y-1.5">
                 {points.map((point) => (
-                  <li key={point} className="flex items-start gap-2 text-sm text-[#6B7280]">
+                  <li key={point} className="flex items-start gap-2 text-sm text-[#8D8D96]">
                     <span
                       className="mt-0.5 shrink-0 h-4 w-4 rounded-full flex items-center justify-center text-xs font-bold"
-                      style={{ backgroundColor: '#FED609', color: '#1A1A1A' }}
+                      style={{ backgroundColor: '#2251E3', color: '#FFFFFF' }}
                     >
                       ✓
                     </span>
@@ -114,7 +114,7 @@ const sections: TermsSection[] = [
         <p className="mt-4">
           You are responsible for maintaining the confidentiality of your account credentials and for all activity
           that occurs under your account. You must notify us immediately if you suspect unauthorised access at{' '}
-          <a href="mailto:support@prohives.com" className="font-medium underline" style={{ color: '#D4A800' }}>
+          <a href="mailto:support@prohives.com" className="font-medium underline text-[#4E79FF] hover:text-[#2251E3]">
             support@prohives.com
           </a>
           .
@@ -164,12 +164,12 @@ const sections: TermsSection[] = [
       <>
         <div
           className="mb-5 rounded-lg border-l-4 p-4"
-          style={{ borderColor: '#FED609', backgroundColor: '#FFFAE2' }}
+          style={{ borderColor: '#2251E3', backgroundColor: 'rgba(34,81,227,0.08)' }}
         >
-          <p className="font-semibold text-[#1A1A1A] mb-1" style={{ fontFamily: 'Sora, sans-serif' }}>
+          <p className="font-semibold text-white mb-1" style={{ fontFamily: 'Sora, sans-serif' }}>
             Important Disclaimer
           </p>
-          <p className="text-sm text-[#6B7280]">
+          <p className="text-sm text-[#8D8D96]">
             AI-generated outputs — including ticket classifications, summaries, suggested responses, and automated
             messages — are provided for informational and operational convenience only. They do not constitute
             legal advice, financial advice, or professional recommendations of any kind.
@@ -377,10 +377,10 @@ const sections: TermsSection[] = [
           If you have questions about these Terms of Service, need to report a legal concern, or wish to contact us
           regarding your account or subscription, please reach out to our legal team:
         </p>
-        <div className="mt-4 rounded-lg border border-gray-200 bg-[#FFFAE2] p-5 space-y-2">
+        <div className="mt-4 rounded-lg border border-[#272839] bg-[#141519] p-5 space-y-2">
           <p>
             <strong>Email:</strong>{' '}
-            <a href="mailto:support@prohives.com" className="font-medium underline" style={{ color: '#D4A800' }}>
+            <a href="mailto:support@prohives.com" className="font-medium underline text-[#4E79FF] hover:text-[#2251E3]">
               support@prohives.com
             </a>
           </p>
@@ -388,9 +388,9 @@ const sections: TermsSection[] = [
             <strong>Subject line:</strong> Legal Inquiry — [Your Name / Account Email]
           </p>
         </div>
-        <p className="mt-4 text-sm text-[#6B7280]">
+        <p className="mt-4 text-sm text-[#8D8D96]">
           For privacy-related requests, please use{' '}
-          <a href="mailto:support@prohives.com" className="font-medium underline" style={{ color: '#D4A800' }}>
+          <a href="mailto:support@prohives.com" className="font-medium underline text-[#4E79FF] hover:text-[#2251E3]">
             support@prohives.com
           </a>{' '}
           instead.
@@ -411,25 +411,25 @@ export function TermsOfServicePage() {
   })
 
   return (
-    <div style={{ backgroundColor: '#FEFAEF', minHeight: '100vh', fontFamily: 'Manrope, sans-serif' }}>
+    <div style={{ backgroundColor: '#06070B', minHeight: '100vh', fontFamily: 'Manrope, sans-serif', color: '#C0C0C5' }}>
       {/* Hero */}
       <div
-        style={{ backgroundColor: '#1A1A1A' }}
-        className="relative overflow-hidden"
+        style={{ backgroundColor: '#101114' }}
+        className="relative overflow-hidden border-b border-[#272839]"
       >
         <div
           className="absolute inset-0 opacity-10"
           style={{
             backgroundImage:
-              'radial-gradient(circle at 20% 50%, #FED609 0%, transparent 50%), radial-gradient(circle at 80% 50%, #FED609 0%, transparent 50%)',
+              'radial-gradient(circle at 20% 50%, #2251E3 0%, transparent 50%), radial-gradient(circle at 80% 50%, #2251E3 0%, transparent 50%)',
           }}
         />
         <div className="relative mx-auto max-w-4xl px-6 py-16 md:py-20">
           <span
             className="inline-block mb-4 rounded-full px-3 py-1 text-xs font-semibold tracking-widest uppercase"
             style={{
-              backgroundColor: '#FED609',
-              color: '#1A1A1A',
+              backgroundColor: 'rgba(34,81,227,0.15)',
+              color: '#4E79FF',
               fontFamily: 'DM Sans, sans-serif',
             }}
           >
@@ -441,11 +441,11 @@ export function TermsOfServicePage() {
           >
             Terms of Service
           </h1>
-          <p className="mt-4 text-base md:text-lg text-gray-300 max-w-2xl">
+          <p className="mt-4 text-base md:text-lg text-[#C0C0C5] max-w-2xl">
             Please read these terms carefully before using Prophives. They form a binding agreement between you and
             Prophives governing your use of our property management platform.
           </p>
-          <p className="mt-6 text-sm text-gray-500">Last updated: January 2025</p>
+          <p className="mt-6 text-sm text-[#8D8D96]">Last updated: January 2025</p>
         </div>
       </div>
 
@@ -453,11 +453,11 @@ export function TermsOfServicePage() {
       <div className="mx-auto max-w-4xl px-6 py-12 md:py-16">
         {/* TOC */}
         <nav
-          className="mb-12 rounded-xl border border-gray-200 bg-white p-6"
+          className="mb-12 rounded-xl border border-[#272839] bg-[#101114] p-6"
           aria-label="Table of contents"
         >
           <p
-            className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#6B7280]"
+            className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#8D8D96]"
             style={{ fontFamily: 'DM Sans, sans-serif' }}
           >
             Contents
@@ -467,8 +467,7 @@ export function TermsOfServicePage() {
               <li key={section.id}>
                 <a
                   href={`#${section.id}`}
-                  className="text-sm font-medium transition-colors duration-150 hover:text-[#D4A800]"
-                  style={{ color: '#1A1A1A' }}
+                  className="text-sm font-medium text-[#C0C0C5] transition-colors duration-150 hover:text-[#4E79FF]"
                 >
                   {section.heading}
                 </a>
@@ -482,19 +481,19 @@ export function TermsOfServicePage() {
           {sections.map((section) => (
             <section key={section.id} id={section.id} className="scroll-mt-24">
               <h2
-                className="mb-4 text-xl md:text-2xl font-bold text-[#1A1A1A] border-b border-gray-200 pb-3"
+                className="mb-4 text-xl md:text-2xl font-bold text-white border-b border-[#272839] pb-3"
                 style={{ fontFamily: 'Sora, sans-serif' }}
               >
                 {section.heading}
               </h2>
-              <div className="text-[#1A1A1A] leading-relaxed text-[15px]">{section.content}</div>
+              <div className="text-[#C0C0C5] leading-relaxed text-[15px]">{section.content}</div>
             </section>
           ))}
         </div>
 
         {/* Footer note */}
-        <div className="mt-16 rounded-xl border border-gray-200 bg-white px-6 py-5 text-sm text-[#6B7280] text-center">
-          These Terms of Service are effective as of <strong className="text-[#1A1A1A]">January 2025</strong>.
+        <div className="mt-16 rounded-xl border border-[#272839] bg-[#101114] px-6 py-5 text-sm text-[#8D8D96] text-center">
+          These Terms of Service are effective as of <strong className="text-white">January 2025</strong>.
           Continued use of Prophives after any update constitutes acceptance of the revised Terms.
         </div>
       </div>

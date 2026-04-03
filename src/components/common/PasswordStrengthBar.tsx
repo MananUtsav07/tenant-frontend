@@ -13,7 +13,7 @@ export function PasswordStrengthBar({ password }: { password: string }) {
       : score === 2
         ? 'bg-orange-400'
         : score === 3
-          ? 'bg-[#FED609]'
+          ? 'bg-[#EBCF42]'
           : score === 4
             ? 'bg-green-500'
             : ''
@@ -24,7 +24,7 @@ export function PasswordStrengthBar({ password }: { password: string }) {
         {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
-            className={`h-1.5 w-8 rounded-full transition-colors ${i <= score ? barColor : 'bg-gray-200'}`}
+            className={`h-1.5 w-8 rounded-full transition-colors ${i <= score ? barColor : 'bg-[#272839]'}`}
           />
         ))}
       </div>
@@ -36,7 +36,7 @@ export function PasswordStrengthBar({ password }: { password: string }) {
               : score === 2
                 ? 'text-orange-500'
                 : score === 3
-                  ? 'text-[#92700A]'
+                  ? 'text-[#EBCF42]'
                   : 'text-green-600'
           }`}
         >

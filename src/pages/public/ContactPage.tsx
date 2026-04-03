@@ -66,7 +66,7 @@ export function ContactPage() {
             viewport={viewportOnce}
             className="order-2 lg:order-1"
           >
-            <div className="bg-white p-8 md:p-10 rounded-xl shadow-sm border border-gray-100">
+            <div className="bg-[#101114] p-8 md:p-10 rounded-xl shadow-sm border border-[#272839]">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FormInput
@@ -91,11 +91,11 @@ export function ContactPage() {
                 </div>
 
                 <label className="block space-y-2">
-                  <span className="text-sm font-bold font-[family-name:var(--font-label,'DM_Sans',sans-serif)] text-[#1A1A1A]">Subject</span>
+                  <span className="text-sm font-bold font-[family-name:var(--font-label,'DM_Sans',sans-serif)] text-white">Subject</span>
                   <select
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
-                    className="w-full px-4 py-3 bg-[#FFFAE2] border border-[rgba(0,0,0,0.12)] rounded-xl focus:ring-2 focus:ring-[rgba(254,214,9,0.2)] focus:border-[#FED609] text-[#1A1A1A] transition-all outline-none appearance-none"
+                    className="w-full px-4 py-3 bg-[#101114] border border-[#272839] rounded-xl focus:ring-2 focus:ring-[rgba(34,81,227,0.2)] focus:border-[#2251E3] text-white transition-all outline-none appearance-none"
                   >
                     <option>General Inquiry</option>
                     <option>Property Listing Support</option>
@@ -117,9 +117,9 @@ export function ContactPage() {
                   placeholder="How can we help you today?"
                 />
 
-                {error ? <p className="rounded-xl border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p> : null}
+                {error ? <p className="rounded-xl border border-[rgba(242,84,97,0.3)] bg-[rgba(242,84,97,0.08)] px-3 py-2 text-sm text-[#F25461]">{error}</p> : null}
                 {success ? (
-                  <p className="rounded-xl border border-emerald-300 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+                  <p className="rounded-xl border border-[rgba(50,195,130,0.3)] bg-[rgba(50,195,130,0.08)] px-3 py-2 text-sm text-[#32C382]">
                     {success}
                   </p>
                 ) : null}
@@ -141,8 +141,8 @@ export function ContactPage() {
           >
             <motion.div variants={revealVariants} className="space-y-4">
               <span className="ph-kicker">Contact Us</span>
-              <h1 className="ph-title text-4xl md:text-5xl font-bold text-[#1A1A1A] leading-tight">Get in Touch</h1>
-              <p className="text-[#6B7280] text-lg max-w-md">
+              <h1 className="ph-title text-4xl md:text-5xl font-bold text-white leading-tight">Get in Touch</h1>
+              <p className="text-[#8D8D96] text-lg max-w-md">
                 Experience the future of property management. Our team is ready to assist you 24/7.
               </p>
             </motion.div>
@@ -150,27 +150,27 @@ export function ContactPage() {
             <motion.div variants={revealVariants} className="space-y-6">
               {/* Email */}
               <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm shrink-0">
-                  <Mail className="h-5 w-5 text-[#FED609]" />
+                <div className="w-12 h-12 rounded-full bg-[rgba(34,81,227,0.1)] border border-[rgba(34,81,227,0.2)] flex items-center justify-center shrink-0">
+                  <Mail className="h-5 w-5 text-[#4E79FF]" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-[#1A1A1A]">Email Us</h3>
-                  <p className="text-[#6B7280]">support@prohives.com</p>
+                  <h3 className="font-bold text-white">Email Us</h3>
+                  <p className="text-[#8D8D96]">support@prohives.com</p>
                 </div>
               </div>
 
               {/* WhatsApp */}
               <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm shrink-0">
+                <div className="w-12 h-12 rounded-full bg-[rgba(37,211,102,0.1)] border border-[rgba(37,211,102,0.2)] flex items-center justify-center shrink-0">
                   <MessageCircle className="h-5 w-5 text-[#25D366]" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-[#1A1A1A]">WhatsApp</h3>
+                  <h3 className="font-bold text-white">WhatsApp</h3>
                   <a
                     href="https://wa.me/971000000000"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#6B7280] hover:text-[#25D366] transition-colors"
+                    className="text-[#8D8D96] hover:text-[#25D366] transition-colors"
                   >
                     Chat with an Agent
                   </a>
@@ -179,16 +179,16 @@ export function ContactPage() {
 
               {/* Telegram */}
               <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm shrink-0">
+                <div className="w-12 h-12 rounded-full bg-[rgba(0,136,204,0.1)] border border-[rgba(0,136,204,0.2)] flex items-center justify-center shrink-0">
                   <Send className="h-5 w-5 text-[#0088cc]" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-[#1A1A1A]">Telegram</h3>
+                  <h3 className="font-bold text-white">Telegram</h3>
                   <a
                     href="https://t.me/prophives"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#6B7280] hover:text-[#0088cc] transition-colors"
+                    className="text-[#8D8D96] hover:text-[#0088cc] transition-colors"
                   >
                     Join our Support Bot
                   </a>
@@ -197,38 +197,38 @@ export function ContactPage() {
             </motion.div>
 
             {/* Office Location & Operating Hours */}
-            <motion.div variants={revealVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-gray-200">
+            <motion.div variants={revealVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-[#272839]">
               <div>
-                <h4 className="font-bold text-[#1A1A1A] flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-[#FED609]" />
+                <h4 className="font-bold text-white flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-[#4E79FF]" />
                   Office Location
                 </h4>
-                <p className="text-[#6B7280] mt-2">
+                <p className="text-[#8D8D96] mt-2">
                   Prime Tower, Business Bay
                 </p>
               </div>
               <div>
-                <h4 className="font-bold text-[#1A1A1A] flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-[#FED609]" />
+                <h4 className="font-bold text-white flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-[#4E79FF]" />
                   Operating Hours
                 </h4>
-                <p className="text-[#6B7280] mt-2">
+                <p className="text-[#8D8D96] mt-2">
                   Mon - Fri: 9am - 6pm<br />Sat: 10am - 2pm
                 </p>
               </div>
             </motion.div>
 
             {/* Map Image */}
-            <motion.div variants={revealVariants} className="relative w-full h-48 rounded-xl overflow-hidden shadow-inner bg-gray-200 group">
+            <motion.div variants={revealVariants} className="relative w-full h-48 rounded-xl overflow-hidden shadow-inner bg-[#141519] group">
               <img
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 opacity-60 group-hover:opacity-100"
                 alt="Modern city skyline with contemporary skyscrapers"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcqsNdLHfbBMWpJMnYYPjVreaZF2Z7v6STar9oTNMKOQLoBaV78yfgKe9t-9aO4Y0wH-dgTBPDs0aDWx_hHHD8dSIUMqF16PQAqzUVMWAa8Ybj38pQc2V6hNrKahApQWDu2nNp5QtQohgm6iAahPWH6qKjSopKzkwubAJ3PIH5JB1jegU933Ow4-Yu2CX_kgMJQHYAox7enio3Qpk1PvQnEylFKdtNVhwdCPTXItgD-6q1yrthrWIu1N-up3JfiVPL-h6lh4f1rCbC"
               />
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg flex items-center gap-2">
-                  <span className="w-3 h-3 bg-[#FED609] rounded-full animate-pulse" />
-                  <span className="text-xs font-bold text-[#1A1A1A] uppercase tracking-widest">Our HQ</span>
+                <div className="bg-[#101114]/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg flex items-center gap-2">
+                  <span className="w-3 h-3 bg-[#2251E3] rounded-full animate-pulse" />
+                  <span className="text-xs font-bold text-white uppercase tracking-widest">Our HQ</span>
                 </div>
               </div>
             </motion.div>
@@ -246,41 +246,41 @@ export function ContactPage() {
           className="text-center space-y-8"
         >
           <motion.div variants={revealVariants} className="space-y-2">
-            <h2 className="ph-title text-3xl font-bold text-[#1A1A1A]">Prefer self-service?</h2>
-            <p className="text-[#6B7280]">Find quick answers and detailed guides in our knowledge base.</p>
+            <h2 className="ph-title text-3xl font-bold text-white">Prefer self-service?</h2>
+            <p className="text-[#8D8D96]">Find quick answers and detailed guides in our knowledge base.</p>
           </motion.div>
 
           <motion.div variants={revealVariants} className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
             <Link
               to="/docs"
-              className="flex items-center justify-between p-6 bg-white rounded-xl hover:shadow-md transition-all group border border-transparent hover:border-[#FED609]/20"
+              className="flex items-center justify-between p-6 bg-[#101114] rounded-xl hover:shadow-md transition-all group border border-[#272839] hover:border-[rgba(34,81,227,0.4)]"
             >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-[#FEFAEF] rounded-lg flex items-center justify-center text-[#FED609] group-hover:bg-[#FED609] group-hover:text-[#1A1A1A] transition-colors">
+                <div className="w-12 h-12 bg-[rgba(34,81,227,0.1)] rounded-lg flex items-center justify-center text-[#4E79FF] group-hover:bg-[#2251E3] group-hover:text-white transition-colors">
                   <BookOpen className="h-5 w-5" />
                 </div>
                 <div className="text-left">
-                  <h4 className="font-bold text-[#1A1A1A]">Documentation</h4>
-                  <p className="text-sm text-[#6B7280]">Complete platform guides</p>
+                  <h4 className="font-bold text-white">Documentation</h4>
+                  <p className="text-sm text-[#8D8D96]">Complete platform guides</p>
                 </div>
               </div>
-              <ArrowRight className="h-5 w-5 text-[#6B7280] group-hover:text-[#FED609] transition-colors" />
+              <ArrowRight className="h-5 w-5 text-[#8D8D96] group-hover:text-[#4E79FF] transition-colors" />
             </Link>
 
             <Link
               to="/docs/faq"
-              className="flex items-center justify-between p-6 bg-white rounded-xl hover:shadow-md transition-all group border border-transparent hover:border-[#FED609]/20"
+              className="flex items-center justify-between p-6 bg-[#101114] rounded-xl hover:shadow-md transition-all group border border-[#272839] hover:border-[rgba(34,81,227,0.4)]"
             >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-[#FEFAEF] rounded-lg flex items-center justify-center text-[#FED609] group-hover:bg-[#FED609] group-hover:text-[#1A1A1A] transition-colors">
+                <div className="w-12 h-12 bg-[rgba(34,81,227,0.1)] rounded-lg flex items-center justify-center text-[#4E79FF] group-hover:bg-[#2251E3] group-hover:text-white transition-colors">
                   <CircleHelp className="h-5 w-5" />
                 </div>
                 <div className="text-left">
-                  <h4 className="font-bold text-[#1A1A1A]">F.A.Q.</h4>
-                  <p className="text-sm text-[#6B7280]">Instant answers to common questions</p>
+                  <h4 className="font-bold text-white">F.A.Q.</h4>
+                  <p className="text-sm text-[#8D8D96]">Instant answers to common questions</p>
                 </div>
               </div>
-              <ArrowRight className="h-5 w-5 text-[#6B7280] group-hover:text-[#FED609] transition-colors" />
+              <ArrowRight className="h-5 w-5 text-[#8D8D96] group-hover:text-[#4E79FF] transition-colors" />
             </Link>
           </motion.div>
         </motion.div>

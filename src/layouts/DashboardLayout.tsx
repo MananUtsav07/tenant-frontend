@@ -26,19 +26,19 @@ export function DashboardLayout({
   onLogout,
 }: DashboardLayoutProps) {
   return (
-    <div className="min-h-screen bg-[#FEFAEF] text-[#1A1A1A]">
+    <div className="min-h-screen bg-[#06070B] text-white">
       <div className="grid min-h-screen w-full grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)]">
         {/* Sidebar */}
-        <aside className="border-b border-[rgba(0,0,0,0.06)] bg-white p-4 lg:min-h-screen lg:border-b-0 lg:border-r lg:border-[rgba(0,0,0,0.06)] lg:p-5">
+        <aside className="border-b border-[#272839] bg-[#101114] p-4 lg:min-h-screen lg:border-b-0 lg:border-r lg:border-[#272839] lg:p-5">
           {/* Logo */}
           <div className="flex items-center px-2">
             <img src="/prophives-logo.png" alt="Prophives" className="h-9 w-auto object-contain" />
           </div>
 
           {/* User Info */}
-          <div className="mt-5 rounded-xl bg-[#FEFAEF] p-3.5">
-            <p className="text-sm font-semibold text-[#1A1A1A]">{identityPrimary}</p>
-            {identitySecondary ? <p className="mt-0.5 text-xs text-[#6B7280]">{identitySecondary}</p> : null}
+          <div className="mt-5 rounded-xl bg-[#141519] border border-[#272839] p-3.5">
+            <p className="text-sm font-semibold text-white">{identityPrimary}</p>
+            {identitySecondary ? <p className="mt-0.5 text-xs text-[#8D8D96]">{identitySecondary}</p> : null}
           </div>
 
           {/* Navigation */}
@@ -51,8 +51,8 @@ export function DashboardLayout({
                 className={({ isActive }) =>
                   `group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
                     isActive
-                      ? 'border-l-3 border-[#FED609] bg-[rgba(254,214,9,0.1)] text-[#1A1A1A] font-semibold'
-                      : 'text-[#6B7280] hover:bg-[rgba(0,0,0,0.02)] hover:text-[#1A1A1A]'
+                      ? 'border-l-3 border-[#2251E3] bg-[rgba(34,81,227,0.1)] text-white font-semibold'
+                      : 'text-[#8D8D96] hover:bg-[rgba(255,255,255,0.04)] hover:text-white'
                   }`
                 }
               >
@@ -66,7 +66,7 @@ export function DashboardLayout({
           <button
             type="button"
             onClick={onLogout}
-            className="mt-8 flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-[#6B7280] transition hover:bg-[rgba(0,0,0,0.02)] hover:text-[#1A1A1A]"
+            className="mt-8 flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-[#8D8D96] transition hover:bg-[rgba(255,255,255,0.04)] hover:text-white"
           >
             <LogOut className="h-4 w-4" />
             Logout

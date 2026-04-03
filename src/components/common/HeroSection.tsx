@@ -65,10 +65,10 @@ export function HeroSection({
           <span className="ph-kicker">
             {badge}
           </span>
-          <h1 className="ph-title mt-6 max-w-4xl text-4xl font-bold leading-[1.05] text-[#1A1A1A] sm:text-5xl lg:text-6xl">
+          <h1 className="ph-title mt-6 max-w-4xl text-4xl font-bold leading-[1.05] text-white sm:text-5xl lg:text-6xl">
             {heading}
           </h1>
-          <div className="mt-5 max-w-2xl text-lg leading-relaxed text-[#6B7280] md:text-xl">{subheading}</div>
+          <div className="mt-5 max-w-2xl text-lg leading-relaxed text-[#8D8D96] md:text-xl">{subheading}</div>
           <div className="mt-8 flex flex-wrap gap-3">
             {actions.map((action, index) => (
               <motion.div key={action.label} variants={fadeVariants} transition={{ delay: index * 0.05 }}>
@@ -85,14 +85,14 @@ export function HeroSection({
               </motion.div>
             ))}
           </div>
-          <ul className="mt-8 grid gap-3 text-sm text-[#4B5563] sm:grid-cols-2">
+          <ul className="mt-8 grid gap-3 text-sm text-[#C0C0C5] sm:grid-cols-2">
             {highlights.map((highlight) => (
               <motion.li
                 key={highlight}
                 variants={fadeVariants}
-                className="flex items-start gap-3 rounded-xl border border-[rgba(0,0,0,0.06)] bg-white px-4 py-3 shadow-sm"
+                className="flex items-start gap-3 rounded-xl border border-[#272839] bg-[#101114] px-4 py-3 shadow-sm"
               >
-                <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#FED609] shadow-[0_0_0_4px_rgba(254,214,9,0.15)]" />
+                <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#2251E3] shadow-[0_0_0_4px_rgba(34,81,227,0.15)]" />
                 <span>{highlight}</span>
               </motion.li>
             ))}
@@ -116,7 +116,7 @@ export function HeroSection({
           >
             <div
               className={clsx(
-                'h-full rounded-2xl border border-[rgba(0,0,0,0.06)] bg-white p-6 shadow-lg sm:p-7',
+                'h-full rounded-2xl border border-[#272839] bg-[#101114] p-6 shadow-lg sm:p-7',
                 fullViewport && 'min-h-[420px] lg:min-h-0',
               )}
             >

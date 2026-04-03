@@ -21,14 +21,10 @@ import { usePageSeo } from '../../hooks/usePageSeo'
 import { ROUTES } from '../../routes/constants'
 import { revealUp, staggerParent, useMotionVariants, viewportOnce } from '../../utils/motion'
 
-/* ------------------------------------------------------------------ */
-/*  Data                                                               */
-/* ------------------------------------------------------------------ */
-
 const featureShowcases = [
   {
     kicker: 'Intelligence',
-    kickerColor: 'text-[#FED609]',
+    kickerColor: 'text-[#4E79FF]',
     kickerIcon: <BrainCircuit className="h-5 w-5" />,
     title: 'AI-Powered Automation',
     description:
@@ -60,7 +56,7 @@ const featureShowcases = [
     description:
       'Stay updated on the go. Our Telegram bot provides real-time notifications for support ticket updates, ensuring property managers are always in the loop without checking the dashboard.',
     bullets: ['Real-time support updates', 'Lightning-fast bot interactions'],
-    bulletIcons: [<Bell className="h-[18px] w-[18px] text-[#FED609]" key="bell" />, <Zap className="h-[18px] w-[18px] text-[#FED609]" key="zap" />],
+    bulletIcons: [<Bell className="h-[18px] w-[18px] text-[#4E79FF]" key="bell" />, <Zap className="h-[18px] w-[18px] text-[#4E79FF]" key="zap" />],
     image:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuDgy10SfKkjioA7tFp-_ir32zWqTNurmf1n03vnXNqS_PGPBuWEOCUnCK30_zZsXgz8fP7-YJW7Cc6ew_zHjciuPlLs0GnEpXObkEzkAg_cr2_rhCM_AxpBlIktEdpQNeBAPlIZ9LoDUHOWHfmVzMuZhuv29izzvU5HsyAQLTq288bi896m_mLNlcHlKy8Ie9PTzUWzyl8OClsK4ktsgfhD6QkajR8Tas1RQhkKb-euAWJwJ0RK0nYNHWXIxjT9yh1uAlx4hEwOJZNY',
     imageAlt: 'Telegram Bot UI',
@@ -68,7 +64,7 @@ const featureShowcases = [
   },
   {
     kicker: 'Finance',
-    kickerColor: 'text-[#FED609]',
+    kickerColor: 'text-[#4E79FF]',
     kickerIcon: <Wallet className="h-5 w-5" />,
     title: 'Payment Tracking',
     description:
@@ -84,7 +80,7 @@ const featureShowcases = [
   },
   {
     kicker: 'Experience',
-    kickerColor: 'text-[#FED609]',
+    kickerColor: 'text-[#4E79FF]',
     kickerIcon: <UserCircle className="h-5 w-5" />,
     title: 'Tenant Portal',
     description:
@@ -97,7 +93,7 @@ const featureShowcases = [
   },
   {
     kicker: 'Alerts',
-    kickerColor: 'text-[#FED609]',
+    kickerColor: 'text-[#4E79FF]',
     kickerIcon: <Bell className="h-5 w-5" />,
     title: 'Smart Notifications',
     description:
@@ -118,10 +114,6 @@ const integrations = [
   { icon: <Landmark className="h-7 w-7" />, label: 'Bank Direct' },
 ]
 
-/* ------------------------------------------------------------------ */
-/*  Structured data kept for SEO                                       */
-/* ------------------------------------------------------------------ */
-
 const featureItemsForSeo = [
   'AI-Powered Automation',
   'WhatsApp Integration',
@@ -130,10 +122,6 @@ const featureItemsForSeo = [
   'Tenant Portal',
   'Smart Notifications',
 ]
-
-/* ------------------------------------------------------------------ */
-/*  Page Component                                                     */
-/* ------------------------------------------------------------------ */
 
 export function FeaturesPage() {
   usePageSeo({
@@ -159,7 +147,7 @@ export function FeaturesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="py-20 md:py-32 px-6 bg-[#FEFAEF]">
+      <section className="py-20 md:py-32 px-6 bg-[#06070B]">
         <motion.div
           variants={revealVariants}
           initial="hidden"
@@ -167,22 +155,22 @@ export function FeaturesPage() {
           viewport={viewportOnce}
           className="w-full text-center"
         >
-          <h1 className="font-['Sora'] text-4xl md:text-7xl font-extrabold tracking-tight text-[#1A1A1A] mb-6 leading-[1.08]">
+          <h1 className="font-['Sora'] text-4xl md:text-7xl font-extrabold tracking-tight text-white mb-6 leading-[1.08]">
             Everything You Need to{' '}
-            <span className="text-[#FED609]">Manage Properties</span>
+            <span className="text-[#4E79FF]">Manage Properties</span>
           </h1>
-          <p className="text-lg md:text-2xl text-[#6B7280] font-medium max-w-4xl mx-auto font-['Manrope'] leading-relaxed">
+          <p className="text-lg md:text-2xl text-[#8D8D96] font-medium max-w-4xl mx-auto font-['Manrope'] leading-relaxed">
             Experience the future of real estate management with our AI-driven platform
             designed for efficiency, clarity, and total control.
           </p>
         </motion.div>
       </section>
 
-      {/* Feature Showcase — full-bleed alternating layout */}
-      <section className="w-full space-y-0 pb-24">
+      {/* Feature Showcase */}
+      <section className="w-full space-y-0 pb-24 bg-[#06070B]">
         {featureShowcases.map((feature) => {
           const imageBlock = (
-            <div className="bg-white">
+            <div className="bg-[#101114]">
               <img
                 alt={feature.imageAlt}
                 src={feature.image}
@@ -194,9 +182,8 @@ export function FeaturesPage() {
           const textBlock = (
             <motion.div
               variants={revealVariants}
-              className="p-12 lg:p-24 xl:p-32"
+              className="p-12 lg:p-24 xl:p-32 bg-[#06070B]"
             >
-              {/* Kicker */}
               <div className={`flex items-center gap-2 ${feature.kickerColor} mb-4`}>
                 {feature.kickerIcon}
                 <span className="font-bold text-sm tracking-widest uppercase font-['DM_Sans']">
@@ -204,14 +191,13 @@ export function FeaturesPage() {
                 </span>
               </div>
 
-              <h2 className="font-['Sora'] text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-6 leading-tight">
+              <h2 className="font-['Sora'] text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
                 {feature.title}
               </h2>
-              <p className="text-[#6B7280] leading-relaxed mb-6 font-['Manrope'] text-lg">
+              <p className="text-[#8D8D96] leading-relaxed mb-6 font-['Manrope'] text-lg">
                 {feature.description}
               </p>
 
-              {/* Bullet list */}
               {'bullets' in feature && feature.bullets && (
                 <ul className="space-y-3 mb-6">
                   {feature.bullets.map((bullet, i) => (
@@ -219,9 +205,9 @@ export function FeaturesPage() {
                       {'bulletIcons' in feature && feature.bulletIcons ? (
                         feature.bulletIcons[i]
                       ) : (
-                        <CheckCircle className="h-5 w-5 text-[#FED609] shrink-0" />
+                        <CheckCircle className="h-5 w-5 text-[#4E79FF] shrink-0" />
                       )}
-                      <span className="font-medium text-lg text-[#1A1A1A] font-['Manrope']">
+                      <span className="font-medium text-lg text-white font-['Manrope']">
                         {bullet}
                       </span>
                     </li>
@@ -229,44 +215,40 @@ export function FeaturesPage() {
                 </ul>
               )}
 
-              {/* Quote callout */}
               {'quote' in feature && feature.quote && (
-                <div className="bg-[#FFFAE2] p-8 rounded-lg border-l-4 border-[#FED609] shadow-sm">
-                  <p className="italic text-[#1A1A1A] text-lg font-medium font-['Manrope']">
+                <div className="bg-[#101114] p-8 rounded-lg border-l-4 border-[#2251E3] shadow-sm">
+                  <p className="italic text-[#C0C0C5] text-lg font-medium font-['Manrope']">
                     {feature.quote}
                   </p>
                 </div>
               )}
 
-              {/* Stat cards */}
               {'stats' in feature && feature.stats && (
                 <div className="grid grid-cols-2 gap-6">
                   {feature.stats.map((stat) => (
                     <div
                       key={stat.label}
-                      className="p-6 bg-white border border-[#FED609]/20 rounded-xl shadow-sm hover:border-[#FED609] transition-colors"
+                      className="p-6 bg-[#101114] border border-[#272839] rounded-xl shadow-sm hover:border-[rgba(34,81,227,0.4)] transition-colors"
                     >
-                      <p className="text-sm text-[#6B7280] font-['DM_Sans'] uppercase tracking-wider mb-1">
+                      <p className="text-sm text-[#8D8D96] font-['DM_Sans'] uppercase tracking-wider mb-1">
                         {stat.label}
                       </p>
-                      <p className="text-3xl font-bold text-[#FED609] font-['Sora']">{stat.value}</p>
+                      <p className="text-3xl font-bold text-[#4E79FF] font-['Sora']">{stat.value}</p>
                     </div>
                   ))}
                 </div>
               )}
 
-              {/* Link button */}
               {'linkText' in feature && feature.linkText && (
                 <Link
                   to={ROUTES.features}
-                  className="inline-flex items-center gap-2 font-bold text-xl text-[#FED609] hover:text-[#FFD70B] transition-colors font-['DM_Sans']"
+                  className="inline-flex items-center gap-2 font-bold text-xl text-[#4E79FF] hover:text-white transition-colors font-['DM_Sans']"
                 >
                   {feature.linkText}
                   <ArrowRight className="h-5 w-5" />
                 </Link>
               )}
 
-              {/* Channel icons */}
               {'channelIcons' in feature && feature.channelIcons && (
                 <div className="flex gap-6">
                   {[
@@ -278,7 +260,7 @@ export function FeaturesPage() {
                   ].map((item, i) => (
                     <span
                       key={i}
-                      className="w-14 h-14 rounded-full bg-[#FFFAE2] flex items-center justify-center text-[#FED609] border border-[#FED609]/20 shadow-sm hover:bg-[#FED609] hover:text-[#1A1A1A] transition-colors cursor-default"
+                      className="w-14 h-14 rounded-full bg-[rgba(34,81,227,0.1)] flex items-center justify-center text-[#4E79FF] border border-[rgba(34,81,227,0.2)] shadow-sm hover:bg-[#2251E3] hover:text-white transition-colors cursor-default"
                       title={item.label}
                     >
                       {item.icon}
@@ -296,7 +278,7 @@ export function FeaturesPage() {
               initial="hidden"
               whileInView="show"
               viewport={viewportOnce}
-              className="grid md:grid-cols-2 items-center"
+              className="grid md:grid-cols-2 items-center border-b border-[#272839]"
             >
               {feature.imageFirst ? (
                 <>
@@ -315,7 +297,7 @@ export function FeaturesPage() {
       </section>
 
       {/* Integration Banner */}
-      <section className="bg-[#FED609] py-16">
+      <section className="bg-[#2251E3] py-16">
         <div className="w-full px-6 overflow-hidden">
           <motion.div
             variants={staggerVariants}
@@ -328,7 +310,7 @@ export function FeaturesPage() {
               <motion.div
                 key={item.label}
                 variants={revealVariants}
-                className="flex items-center gap-4 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
+                className="flex items-center gap-4 text-white/70 hover:text-white transition-colors"
               >
                 <span className="text-[1.75rem]">{item.icon}</span>
                 <span className="font-bold text-xl tracking-tight font-['DM_Sans']">{item.label}</span>
@@ -339,7 +321,7 @@ export function FeaturesPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-32 px-6 bg-[#FFFAE2]">
+      <section className="py-32 px-6 bg-[#101114]">
         <motion.div
           variants={revealVariants}
           initial="hidden"
@@ -347,23 +329,23 @@ export function FeaturesPage() {
           viewport={viewportOnce}
           className="w-full text-center"
         >
-          <h2 className="font-['Sora'] text-4xl md:text-6xl font-extrabold text-[#1A1A1A] mb-8 tracking-tight leading-tight">
+          <h2 className="font-['Sora'] text-4xl md:text-6xl font-extrabold text-white mb-8 tracking-tight leading-tight">
             Start Managing Smarter Today
           </h2>
-          <p className="text-[#6B7280] text-xl mb-12 max-w-2xl mx-auto font-['Manrope'] leading-relaxed">
+          <p className="text-[#8D8D96] text-xl mb-12 max-w-2xl mx-auto font-['Manrope'] leading-relaxed">
             Join hundreds of property managers worldwide who are scaling their business with Prophives
             AI.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
             <Link
               to={ROUTES.contact}
-              className="w-full sm:w-auto bg-[#FED609] text-[#1A1A1A] px-12 py-5 rounded-full font-bold text-xl active:scale-95 duration-150 hover:bg-[#FFD70B] shadow-lg text-center transition-all font-['DM_Sans']"
+              className="w-full sm:w-auto bg-[#2251E3] text-white px-12 py-5 rounded-full font-bold text-xl active:scale-95 duration-150 hover:bg-[#4E79FF] shadow-lg shadow-[#2251E3]/30 text-center transition-all font-['DM_Sans']"
             >
               Get Started Free
             </Link>
             <Link
               to={ROUTES.pricing}
-              className="w-full sm:w-auto border-2 border-[#FED609] text-[#1A1A1A] px-12 py-5 rounded-full font-bold text-xl active:scale-95 duration-150 hover:bg-white transition-all text-center font-['DM_Sans']"
+              className="w-full sm:w-auto border-2 border-[#272839] text-white px-12 py-5 rounded-full font-bold text-xl active:scale-95 duration-150 hover:border-[#2251E3] hover:bg-[rgba(34,81,227,0.08)] transition-all text-center font-['DM_Sans']"
             >
               Book a Demo
             </Link>

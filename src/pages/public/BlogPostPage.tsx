@@ -67,7 +67,7 @@ export function BlogPostPage() {
         <SEO title="Article" description="Prophives insights article." canonicalPath={ROUTES.blog} />
       )}
 
-      <Button to={ROUTES.blog} variant="ghost" className="px-0 text-[#92700A] hover:bg-transparent hover:text-[#7A5E08]">
+      <Button to={ROUTES.blog} variant="ghost" className="px-0 text-[#4E79FF] hover:bg-transparent hover:text-[#2251E3]">
         Back to insights
       </Button>
 
@@ -75,16 +75,16 @@ export function BlogPostPage() {
       {loading ? <div className="mt-6"><LoadingState message="Loading article..." variant="message" /></div> : null}
 
       {!loading && post ? (
-        <article className="mt-6 rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-6 shadow-sm md:p-8">
+        <article className="mt-6 rounded-xl border border-[#272839] bg-[#101114] p-6 shadow-sm md:p-8">
           {post.cover_image ? (
             <img src={post.cover_image} alt={post.title} loading="lazy" className="mb-6 h-64 w-full rounded-xl object-cover" />
           ) : null}
 
-          <p className="ph-label text-xs uppercase tracking-[0.18em] text-[#6B7280]">{formatDate(post.created_at)}</p>
-          <h1 className="ph-title mt-3 text-4xl font-semibold text-[#1A1A1A]">{post.title}</h1>
-          <p className="mt-2 text-sm text-[#6B7280]">By {post.author}</p>
+          <p className="ph-label text-xs uppercase tracking-[0.18em] text-[#8D8D96]">{formatDate(post.created_at)}</p>
+          <h1 className="ph-title mt-3 text-4xl font-semibold text-white">{post.title}</h1>
+          <p className="mt-2 text-sm text-[#8D8D96]">By {post.author}</p>
 
-          <div className="mt-8 space-y-4 text-[#4B5563] [&_h1]:text-3xl [&_h1]:font-semibold [&_h1]:text-[#1A1A1A] [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-[#1A1A1A] [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-[#1A1A1A] [&_li]:ml-5 [&_li]:list-disc [&_p]:leading-relaxed">
+          <div className="mt-8 space-y-4 text-[#C0C0C5] [&_h1]:text-3xl [&_h1]:font-semibold [&_h1]:text-white [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-white [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-white [&_li]:ml-5 [&_li]:list-disc [&_p]:leading-relaxed">
             <ReactMarkdown>{post.content}</ReactMarkdown>
           </div>
         </article>

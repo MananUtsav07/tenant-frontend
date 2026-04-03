@@ -43,7 +43,7 @@ const sections: PolicySection[] = [
       <>
         <p>We collect several categories of information to operate and improve our Service:</p>
 
-        <h3 className="mt-6 mb-2 text-base font-semibold text-[#1A1A1A]" style={{ fontFamily: 'Sora, sans-serif' }}>
+        <h3 className="mt-6 mb-2 text-base font-semibold text-white" style={{ fontFamily: 'Sora, sans-serif' }}>
           Account Data
         </h3>
         <p>
@@ -52,7 +52,7 @@ const sections: PolicySection[] = [
           provide business name, trade licence number, and billing contact details.
         </p>
 
-        <h3 className="mt-6 mb-2 text-base font-semibold text-[#1A1A1A]" style={{ fontFamily: 'Sora, sans-serif' }}>
+        <h3 className="mt-6 mb-2 text-base font-semibold text-white" style={{ fontFamily: 'Sora, sans-serif' }}>
           Property Data
         </h3>
         <p>
@@ -60,7 +60,7 @@ const sections: PolicySection[] = [
           lease start and end dates, and any attachments such as floor plans or photographs uploaded to the platform.
         </p>
 
-        <h3 className="mt-6 mb-2 text-base font-semibold text-[#1A1A1A]" style={{ fontFamily: 'Sora, sans-serif' }}>
+        <h3 className="mt-6 mb-2 text-base font-semibold text-white" style={{ fontFamily: 'Sora, sans-serif' }}>
           Tenant Data
         </h3>
         <p>
@@ -69,7 +69,7 @@ const sections: PolicySection[] = [
           tenants opt in to automated messaging.
         </p>
 
-        <h3 className="mt-6 mb-2 text-base font-semibold text-[#1A1A1A]" style={{ fontFamily: 'Sora, sans-serif' }}>
+        <h3 className="mt-6 mb-2 text-base font-semibold text-white" style={{ fontFamily: 'Sora, sans-serif' }}>
           Payment Data
         </h3>
         <p>
@@ -78,7 +78,7 @@ const sections: PolicySection[] = [
           infrastructure.
         </p>
 
-        <h3 className="mt-6 mb-2 text-base font-semibold text-[#1A1A1A]" style={{ fontFamily: 'Sora, sans-serif' }}>
+        <h3 className="mt-6 mb-2 text-base font-semibold text-white" style={{ fontFamily: 'Sora, sans-serif' }}>
           Usage Analytics
         </h3>
         <p>
@@ -125,7 +125,7 @@ const sections: PolicySection[] = [
             <li key={label} className="flex gap-3">
               <span
                 className="mt-0.5 h-5 w-5 shrink-0 rounded-full flex items-center justify-center text-xs font-bold"
-                style={{ backgroundColor: '#FED609', color: '#1A1A1A' }}
+                style={{ backgroundColor: '#2251E3', color: '#FFFFFF' }}
               >
                 ✓
               </span>
@@ -176,24 +176,24 @@ const sections: PolicySection[] = [
           ].map(({ name, role, detail }) => (
             <div
               key={name}
-              className="rounded-lg border border-gray-200 bg-white p-5"
+              className="rounded-lg border border-[#272839] bg-[#141519] p-5"
             >
               <div className="flex items-center gap-3 mb-2">
                 <span
                   className="inline-block rounded px-2 py-0.5 text-xs font-semibold"
-                  style={{ backgroundColor: '#FED609', color: '#1A1A1A', fontFamily: 'DM Sans, sans-serif' }}
+                  style={{ backgroundColor: 'rgba(34,81,227,0.15)', color: '#4E79FF', fontFamily: 'DM Sans, sans-serif' }}
                 >
                   {role}
                 </span>
-                <span className="font-semibold text-[#1A1A1A]" style={{ fontFamily: 'Sora, sans-serif' }}>
+                <span className="font-semibold text-white" style={{ fontFamily: 'Sora, sans-serif' }}>
                   {name}
                 </span>
               </div>
-              <p className="text-sm text-[#6B7280]">{detail}</p>
+              <p className="text-sm text-[#8D8D96]">{detail}</p>
             </div>
           ))}
         </div>
-        <p className="mt-4 text-sm text-[#6B7280]">
+        <p className="mt-4 text-sm text-[#8D8D96]">
           We may also disclose information where required by law, regulation, court order, or to protect the rights,
           safety, and property of Prophives, our users, or the public.
         </p>
@@ -209,7 +209,7 @@ const sections: PolicySection[] = [
           We retain your data for as long as your account is active and as necessary to provide the Service and comply
           with our legal obligations.
         </p>
-        <ul className="mt-4 space-y-2 list-disc list-inside text-[#1A1A1A]">
+        <ul className="mt-4 space-y-2 list-disc list-inside text-[#C0C0C5]">
           <li>
             <strong>Active accounts:</strong> All account, property, tenant, and ticket data is retained while your
             subscription is active.
@@ -248,17 +248,17 @@ const sections: PolicySection[] = [
             { right: 'Objection', desc: 'Object to processing of your data for specific purposes such as marketing.' },
             { right: 'Restriction', desc: 'Request that we limit the processing of your data in certain circumstances.' },
           ].map(({ right, desc }) => (
-            <div key={right} className="rounded-lg border border-gray-200 bg-[#FFFAE2] p-4">
-              <p className="font-semibold text-[#1A1A1A] mb-1" style={{ fontFamily: 'Sora, sans-serif' }}>
+            <div key={right} className="rounded-lg border border-[#272839] bg-[#141519] p-4">
+              <p className="font-semibold text-white mb-1" style={{ fontFamily: 'Sora, sans-serif' }}>
                 {right}
               </p>
-              <p className="text-sm text-[#6B7280]">{desc}</p>
+              <p className="text-sm text-[#8D8D96]">{desc}</p>
             </div>
           ))}
         </div>
         <p className="mt-4">
           To exercise any of these rights, contact us at{' '}
-          <a href="mailto:support@prohives.com" className="font-medium underline" style={{ color: '#D4A800' }}>
+          <a href="mailto:support@prohives.com" className="font-medium underline text-[#4E79FF] hover:text-[#2251E3]">
             support@prohives.com
           </a>
           . We will respond within 30 days. We may need to verify your identity before processing your request.
@@ -300,7 +300,7 @@ const sections: PolicySection[] = [
         <p className="mt-4">
           Despite our efforts, no method of transmission over the internet or electronic storage is 100% secure. If
           you believe your account has been compromised, contact us immediately at{' '}
-          <a href="mailto:support@prohives.com" className="font-medium underline" style={{ color: '#D4A800' }}>
+          <a href="mailto:support@prohives.com" className="font-medium underline text-[#4E79FF] hover:text-[#2251E3]">
             support@prohives.com
           </a>
           .
@@ -317,37 +317,37 @@ const sections: PolicySection[] = [
           Prophives uses a minimal set of cookies required to operate the platform. We do not use advertising cookies,
           cross-site tracking cookies, or any third-party analytics cookies that profile individual users.
         </p>
-        <div className="mt-4 overflow-hidden rounded-lg border border-gray-200">
+        <div className="mt-4 overflow-hidden rounded-lg border border-[#272839]">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-200" style={{ backgroundColor: '#FED609' }}>
-                <th className="px-4 py-3 text-left font-semibold text-[#1A1A1A]" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+              <tr className="border-b border-[#272839] bg-[#2251E3]">
+                <th className="px-4 py-3 text-left font-semibold text-white" style={{ fontFamily: 'DM Sans, sans-serif' }}>
                   Cookie
                 </th>
-                <th className="px-4 py-3 text-left font-semibold text-[#1A1A1A]" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+                <th className="px-4 py-3 text-left font-semibold text-white" style={{ fontFamily: 'DM Sans, sans-serif' }}>
                   Purpose
                 </th>
-                <th className="px-4 py-3 text-left font-semibold text-[#1A1A1A]" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+                <th className="px-4 py-3 text-left font-semibold text-white" style={{ fontFamily: 'DM Sans, sans-serif' }}>
                   Expiry
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 bg-white">
+            <tbody className="divide-y divide-[#272839] bg-[#101114]">
               {[
                 { name: 'sb-auth-token', purpose: 'Supabase authentication session token', expiry: '1 hour' },
                 { name: 'sb-refresh-token', purpose: 'Supabase session refresh token', expiry: '7 days' },
                 { name: 'ph-pref', purpose: 'User interface preferences (theme, language)', expiry: '1 year' },
               ].map(({ name, purpose, expiry }) => (
                 <tr key={name}>
-                  <td className="px-4 py-3 font-mono text-xs text-[#1A1A1A]">{name}</td>
-                  <td className="px-4 py-3 text-[#6B7280]">{purpose}</td>
-                  <td className="px-4 py-3 text-[#6B7280]">{expiry}</td>
+                  <td className="px-4 py-3 font-mono text-xs text-[#C0C0C5]">{name}</td>
+                  <td className="px-4 py-3 text-[#8D8D96]">{purpose}</td>
+                  <td className="px-4 py-3 text-[#8D8D96]">{expiry}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <p className="mt-4 text-sm text-[#6B7280]">
+        <p className="mt-4 text-sm text-[#8D8D96]">
           You can disable cookies in your browser settings, however doing so may impair core platform functionality
           such as login session persistence.
         </p>
@@ -363,10 +363,10 @@ const sections: PolicySection[] = [
           If you have questions about this Privacy Policy, wish to exercise your data rights, or want to report a
           privacy concern, please contact our privacy team:
         </p>
-        <div className="mt-4 rounded-lg border border-gray-200 bg-[#FFFAE2] p-5 space-y-2">
+        <div className="mt-4 rounded-lg border border-[#272839] bg-[#141519] p-5 space-y-2">
           <p>
             <strong>Email:</strong>{' '}
-            <a href="mailto:support@prohives.com" className="font-medium underline" style={{ color: '#D4A800' }}>
+            <a href="mailto:support@prohives.com" className="font-medium underline text-[#4E79FF] hover:text-[#2251E3]">
               support@prohives.com
             </a>
           </p>
@@ -374,7 +374,7 @@ const sections: PolicySection[] = [
             <strong>Subject line:</strong> Privacy Request — [Your Name / Account Email]
           </p>
         </div>
-        <p className="mt-4 text-sm text-[#6B7280]">
+        <p className="mt-4 text-sm text-[#8D8D96]">
           We are committed to resolving privacy inquiries promptly. If you are unsatisfied with our response, you
           may have the right to lodge a complaint with a relevant data protection authority in your jurisdiction.
         </p>
@@ -394,25 +394,25 @@ export function PrivacyPolicyPage() {
   })
 
   return (
-    <div style={{ backgroundColor: '#FEFAEF', minHeight: '100vh', fontFamily: 'Manrope, sans-serif' }}>
+    <div style={{ backgroundColor: '#06070B', minHeight: '100vh', fontFamily: 'Manrope, sans-serif', color: '#C0C0C5' }}>
       {/* Hero */}
       <div
-        style={{ backgroundColor: '#1A1A1A' }}
-        className="relative overflow-hidden"
+        style={{ backgroundColor: '#101114' }}
+        className="relative overflow-hidden border-b border-[#272839]"
       >
         <div
           className="absolute inset-0 opacity-10"
           style={{
             backgroundImage:
-              'radial-gradient(circle at 20% 50%, #FED609 0%, transparent 50%), radial-gradient(circle at 80% 50%, #FED609 0%, transparent 50%)',
+              'radial-gradient(circle at 20% 50%, #2251E3 0%, transparent 50%), radial-gradient(circle at 80% 50%, #2251E3 0%, transparent 50%)',
           }}
         />
         <div className="relative mx-auto max-w-4xl px-6 py-16 md:py-20">
           <span
             className="inline-block mb-4 rounded-full px-3 py-1 text-xs font-semibold tracking-widest uppercase"
             style={{
-              backgroundColor: '#FED609',
-              color: '#1A1A1A',
+              backgroundColor: 'rgba(34,81,227,0.15)',
+              color: '#4E79FF',
               fontFamily: 'DM Sans, sans-serif',
             }}
           >
@@ -424,11 +424,11 @@ export function PrivacyPolicyPage() {
           >
             Privacy Policy
           </h1>
-          <p className="mt-4 text-base md:text-lg text-gray-300 max-w-2xl">
+          <p className="mt-4 text-base md:text-lg text-[#C0C0C5] max-w-2xl">
             We believe in full transparency. This policy explains exactly what data Prophives collects, how it is
             used, and how we keep it safe.
           </p>
-          <p className="mt-6 text-sm text-gray-500">Last updated: January 2025</p>
+          <p className="mt-6 text-sm text-[#8D8D96]">Last updated: January 2025</p>
         </div>
       </div>
 
@@ -436,11 +436,11 @@ export function PrivacyPolicyPage() {
       <div className="mx-auto max-w-4xl px-6 py-12 md:py-16">
         {/* TOC */}
         <nav
-          className="mb-12 rounded-xl border border-gray-200 bg-white p-6"
+          className="mb-12 rounded-xl border border-[#272839] bg-[#101114] p-6"
           aria-label="Table of contents"
         >
           <p
-            className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#6B7280]"
+            className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#8D8D96]"
             style={{ fontFamily: 'DM Sans, sans-serif' }}
           >
             Contents
@@ -450,8 +450,7 @@ export function PrivacyPolicyPage() {
               <li key={section.id}>
                 <a
                   href={`#${section.id}`}
-                  className="text-sm font-medium transition-colors duration-150 hover:text-[#D4A800]"
-                  style={{ color: '#1A1A1A' }}
+                  className="text-sm font-medium text-[#C0C0C5] transition-colors duration-150 hover:text-[#4E79FF]"
                 >
                   {section.heading}
                 </a>
@@ -465,19 +464,19 @@ export function PrivacyPolicyPage() {
           {sections.map((section) => (
             <section key={section.id} id={section.id} className="scroll-mt-24">
               <h2
-                className="mb-4 text-xl md:text-2xl font-bold text-[#1A1A1A] border-b border-gray-200 pb-3"
+                className="mb-4 text-xl md:text-2xl font-bold text-white border-b border-[#272839] pb-3"
                 style={{ fontFamily: 'Sora, sans-serif' }}
               >
                 {section.heading}
               </h2>
-              <div className="text-[#1A1A1A] leading-relaxed text-[15px]">{section.content}</div>
+              <div className="text-[#C0C0C5] leading-relaxed text-[15px]">{section.content}</div>
             </section>
           ))}
         </div>
 
         {/* Footer note */}
-        <div className="mt-16 rounded-xl border border-gray-200 bg-white px-6 py-5 text-sm text-[#6B7280] text-center">
-          This Privacy Policy is effective as of <strong className="text-[#1A1A1A]">January 2025</strong>. Continued
+        <div className="mt-16 rounded-xl border border-[#272839] bg-[#101114] px-6 py-5 text-sm text-[#8D8D96] text-center">
+          This Privacy Policy is effective as of <strong className="text-white">January 2025</strong>. Continued
           use of Prophives after any update constitutes acceptance of the revised policy.
         </div>
       </div>

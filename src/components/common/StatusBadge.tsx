@@ -1,4 +1,4 @@
-﻿import clsx from 'clsx'
+import clsx from 'clsx'
 import { Circle } from 'lucide-react'
 
 type StatusBadgeProps = {
@@ -6,24 +6,24 @@ type StatusBadgeProps = {
 }
 
 const statusClass: Record<string, string> = {
-  open: 'border-[rgba(254,214,9,0.3)] bg-[rgba(254,214,9,0.08)] text-[#92750A]',
-  in_progress: 'border-sky-500/20 bg-sky-50 text-sky-700',
-  resolved: 'border-emerald-500/20 bg-emerald-50 text-emerald-700',
-  closed: 'border-[rgba(0,0,0,0.08)] bg-gray-50 text-[#6B7280]',
-  pending: 'border-[rgba(254,214,9,0.3)] bg-[rgba(254,214,9,0.08)] text-[#92750A]',
-  paid: 'border-emerald-500/20 bg-emerald-50 text-emerald-700',
-  approved: 'border-emerald-500/20 bg-emerald-50 text-emerald-700',
-  overdue: 'border-red-200 bg-red-50 text-red-700',
-  partial: 'border-sky-500/20 bg-sky-50 text-sky-700',
-  awaiting_owner_approval: 'border-[rgba(254,214,9,0.3)] bg-[rgba(254,214,9,0.08)] text-[#92750A]',
-  rejected: 'border-rose-200 bg-rose-50 text-rose-700',
-  active: 'border-emerald-500/20 bg-emerald-50 text-emerald-700',
-  inactive: 'border-[rgba(0,0,0,0.08)] bg-gray-50 text-[#6B7280]',
-  terminated: 'border-rose-200 bg-rose-50 text-rose-700',
-  sent: 'border-emerald-500/20 bg-emerald-50 text-emerald-700',
-  failed: 'border-red-200 bg-red-50 text-red-700',
-  unread: 'border-sky-500/20 bg-sky-50 text-sky-700',
-  read: 'border-[rgba(0,0,0,0.08)] bg-gray-50 text-[#6B7280]',
+  open: 'border-[rgba(235,207,66,0.3)] bg-[rgba(235,207,66,0.08)] text-[#EBCF42]',
+  in_progress: 'border-[rgba(78,121,255,0.3)] bg-[rgba(78,121,255,0.08)] text-[#4E79FF]',
+  resolved: 'border-[rgba(50,195,130,0.3)] bg-[rgba(50,195,130,0.08)] text-[#32C382]',
+  closed: 'border-[#272839] bg-[rgba(141,141,150,0.08)] text-[#8D8D96]',
+  pending: 'border-[rgba(235,207,66,0.3)] bg-[rgba(235,207,66,0.08)] text-[#EBCF42]',
+  paid: 'border-[rgba(50,195,130,0.3)] bg-[rgba(50,195,130,0.08)] text-[#32C382]',
+  approved: 'border-[rgba(50,195,130,0.3)] bg-[rgba(50,195,130,0.08)] text-[#32C382]',
+  overdue: 'border-[rgba(242,84,97,0.3)] bg-[rgba(242,84,97,0.08)] text-[#F25461]',
+  partial: 'border-[rgba(78,121,255,0.3)] bg-[rgba(78,121,255,0.08)] text-[#4E79FF]',
+  awaiting_owner_approval: 'border-[rgba(235,207,66,0.3)] bg-[rgba(235,207,66,0.08)] text-[#EBCF42]',
+  rejected: 'border-[rgba(242,84,97,0.3)] bg-[rgba(242,84,97,0.08)] text-[#F25461]',
+  active: 'border-[rgba(50,195,130,0.3)] bg-[rgba(50,195,130,0.08)] text-[#32C382]',
+  inactive: 'border-[#272839] bg-[rgba(141,141,150,0.08)] text-[#8D8D96]',
+  terminated: 'border-[rgba(242,84,97,0.3)] bg-[rgba(242,84,97,0.08)] text-[#F25461]',
+  sent: 'border-[rgba(50,195,130,0.3)] bg-[rgba(50,195,130,0.08)] text-[#32C382]',
+  failed: 'border-[rgba(242,84,97,0.3)] bg-[rgba(242,84,97,0.08)] text-[#F25461]',
+  unread: 'border-[rgba(78,121,255,0.3)] bg-[rgba(78,121,255,0.08)] text-[#4E79FF]',
+  read: 'border-[#272839] bg-[rgba(141,141,150,0.08)] text-[#8D8D96]',
 }
 
 export function StatusBadge({ status }: StatusBadgeProps) {
@@ -33,7 +33,7 @@ export function StatusBadge({ status }: StatusBadgeProps) {
     <span
       className={clsx(
         'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold capitalize',
-        statusClass[status] ?? 'border-[rgba(0,0,0,0.08)] bg-gray-50 text-[#6B7280]',
+        statusClass[status] ?? 'border-[#272839] bg-[rgba(141,141,150,0.08)] text-[#8D8D96]',
       )}
     >
       <Circle className="h-2.5 w-2.5 fill-current stroke-none" />

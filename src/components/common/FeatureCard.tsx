@@ -21,13 +21,13 @@ export function FeatureCard({ icon, title, description, detail }: FeatureCardPro
       whileInView="show"
       viewport={viewportOnce}
       whileHover={motionEnabled ? { y: -4 } : undefined}
-      className="group h-full rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-6 shadow-sm transition-all hover:border-[rgba(254,214,9,0.3)] hover:shadow-md"
+      className="group h-full rounded-xl border border-[#272839] bg-[#101114] p-6 shadow-sm transition-all hover:border-[rgba(34,81,227,0.4)] hover:shadow-md"
     >
-      <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[rgba(254,214,9,0.12)] text-[#92700A] transition-transform duration-200 group-hover:scale-105">
+      <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[rgba(34,81,227,0.12)] text-[#4E79FF] transition-transform duration-200 group-hover:scale-105">
         {icon}
       </div>
-      <h3 className="ph-title mt-4 text-lg font-bold text-[#1A1A1A]">{title}</h3>
-      <p className="mt-2 text-sm leading-relaxed text-[#6B7280]">{description}</p>
+      <h3 className="ph-title mt-4 text-lg font-bold text-white">{title}</h3>
+      <p className="mt-2 text-sm leading-relaxed text-[#8D8D96]">{description}</p>
       {detail ? (
         <p className="ph-badge ph-badge-gold mt-4">
           {detail}

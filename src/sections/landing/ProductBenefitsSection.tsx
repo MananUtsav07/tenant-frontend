@@ -36,10 +36,10 @@ export function ProductBenefitsSection() {
       <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
         <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
           <span className="ph-kicker">Why Prophives</span>
-          <h2 className="mt-5 text-3xl font-semibold text-[#1A1A1A] md:text-5xl">
+          <h2 className="mt-5 text-3xl font-semibold text-white md:text-5xl">
             Built for teams managing premium assets, not generic rentals
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-[#6B7280] md:text-lg">
+          <p className="mt-4 text-base leading-relaxed text-[#8D8D96] md:text-lg">
             Prophives helps Dubai real estate operators move faster with fewer gaps by bringing AI-assisted service,
             collections discipline, and portfolio visibility into one authoritative environment.
           </p>
@@ -56,13 +56,13 @@ export function ProductBenefitsSection() {
             <motion.article
               key={benefit.title}
               variants={revealVariants}
-              className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-5 shadow-sm"
+              className="rounded-xl border border-[#272839] bg-[#101114] p-5 shadow-sm"
             >
-              <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-[rgba(254,214,9,0.25)] bg-[rgba(254,214,9,0.1)] text-[#D4A800]">
+              <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-[rgba(34,81,227,0.25)] bg-[rgba(34,81,227,0.1)] text-[#4E79FF]">
                 {benefit.icon}
               </div>
-              <h3 className="mt-4 text-lg font-semibold text-[#1A1A1A]">{benefit.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#6B7280]">{benefit.description}</p>
+              <h3 className="mt-4 text-lg font-semibold text-white">{benefit.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-[#8D8D96]">{benefit.description}</p>
             </motion.article>
           ))}
         </motion.div>

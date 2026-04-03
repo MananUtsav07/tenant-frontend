@@ -34,15 +34,15 @@ export function NotificationList({
         >
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="inline-flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
-                <Bell className="h-4 w-4 text-[#D4A800]" />
+              <p className="inline-flex items-center gap-2 text-sm font-semibold text-white">
+                <Bell className="h-4 w-4 text-[#4E79FF]" />
                 {notification.title}
               </p>
-              <p className="mt-1 text-sm text-[#6B7280]">{notification.message}</p>
-              <p className="mt-2 text-xs text-[#6B7280]">{formatDateTime(notification.created_at)}</p>
+              <p className="mt-1 text-sm text-[#8D8D96]">{notification.message}</p>
+              <p className="mt-2 text-xs text-[#8D8D96]">{formatDateTime(notification.created_at)}</p>
             </div>
             {!notification.is_read ? (
-              <span className="inline-flex h-2.5 w-2.5 rounded-full bg-[#FED609]" aria-label="unread" />
+              <span className="inline-flex h-2.5 w-2.5 rounded-full bg-[#2251E3]" aria-label="unread" />
             ) : null}
           </div>
           {onMarkRead && !notification.is_read ? (

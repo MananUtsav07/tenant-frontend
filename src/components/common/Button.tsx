@@ -40,19 +40,19 @@ function isLinkButton(props: ButtonProps): props is ButtonAsLink {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    'border border-[#FFD70B] bg-[#FED609] text-[#1A1A1A] shadow-[0_2px_8px_rgba(254,214,9,0.3)] hover:bg-[#FFD70B] hover:shadow-[0_4px_16px_rgba(254,214,9,0.35)] active:translate-y-px',
+    'border border-[#2251E3] bg-[#2251E3] text-white shadow-[0_2px_8px_rgba(34,81,227,0.35)] hover:bg-[#4E79FF] hover:border-[#4E79FF] hover:shadow-[0_4px_16px_rgba(34,81,227,0.4)] active:translate-y-px',
   secondary:
-    'border border-[rgba(0,0,0,0.1)] bg-white text-[#1A1A1A] shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:border-[rgba(254,214,9,0.4)] hover:shadow-[0_2px_8px_rgba(0,0,0,0.08)]',
+    'border border-[#272839] bg-[#101114] text-white shadow-[0_1px_3px_rgba(0,0,0,0.3)] hover:border-[rgba(34,81,227,0.5)] hover:shadow-[0_2px_8px_rgba(0,0,0,0.4)]',
   outline:
-    'border border-[#FED609] bg-transparent text-[#92700A] hover:bg-[rgba(254,214,9,0.06)] hover:text-[#1A1A1A]',
+    'border border-[#2251E3] bg-transparent text-[#4E79FF] hover:bg-[rgba(34,81,227,0.08)] hover:text-white',
   ghost:
-    'bg-transparent text-[var(--ph-text-muted)] hover:bg-[rgba(0,0,0,0.04)] hover:text-[var(--ph-text)] active:bg-[rgba(0,0,0,0.06)]',
+    'bg-transparent text-[var(--ph-text-muted)] hover:bg-[rgba(34,81,227,0.06)] hover:text-[var(--ph-text)] active:bg-[rgba(34,81,227,0.1)]',
   whatsapp:
     'border border-[#25D366] bg-[#25D366] text-white shadow-[0_2px_8px_rgba(37,211,102,0.25)] hover:bg-[#20BD5A] active:translate-y-px',
   telegram:
     'border border-[#0088cc] bg-[#0088cc] text-white shadow-[0_2px_8px_rgba(0,136,204,0.25)] hover:bg-[#0077b5] active:translate-y-px',
   danger:
-    'border border-[#EF4444] bg-transparent text-[#EF4444] hover:bg-[rgba(239,68,68,0.06)]',
+    'border border-[#F25461] bg-transparent text-[#F25461] hover:bg-[rgba(242,84,97,0.08)]',
 }
 
 const sizeClasses: Record<Size, string> = {
@@ -63,7 +63,7 @@ const sizeClasses: Record<Size, string> = {
 
 function buttonClassName(variant: Variant, size: Size, className?: string) {
   return clsx(
-    'group inline-flex items-center justify-center gap-2 rounded-full font-semibold tracking-[0.01em] ring-offset-[var(--ph-bg)] transition duration-200 ease-out focus-visible:ring-2 focus-visible:ring-[rgba(254,214,9,0.5)] disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none',
+    'group inline-flex items-center justify-center gap-2 rounded-full font-semibold tracking-[0.01em] ring-offset-[var(--ph-bg)] transition duration-200 ease-out focus-visible:ring-2 focus-visible:ring-[rgba(34,81,227,0.5)] disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none',
     variantClasses[variant],
     sizeClasses[size],
     className,

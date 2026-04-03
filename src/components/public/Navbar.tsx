@@ -129,7 +129,7 @@ export function Navbar() {
     <header
       className={`sticky top-0 z-40 transition-all duration-300 ${
         scrolled
-          ? 'border-b border-[rgba(0,0,0,0.06)] bg-white/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] backdrop-blur-xl'
+          ? 'border-b border-[#272839] bg-[#06070B]/90 shadow-[0_1px_3px_rgba(0,0,0,0.4)] backdrop-blur-xl'
           : 'bg-transparent'
       }`}
     >
@@ -148,8 +148,8 @@ export function Navbar() {
                 <span
                   className={
                     isActive
-                      ? 'text-[#1A1A1A] font-semibold'
-                      : 'text-[#6B7280] transition-colors hover:text-[#1A1A1A]'
+                      ? 'text-white font-semibold'
+                      : 'text-[#8D8D96] transition-colors hover:text-white'
                   }
                 >
                   {item.label}
@@ -180,19 +180,19 @@ export function Navbar() {
             <div className="relative" ref={profileMenuRef}>
               <button
                 type="button"
-                className="inline-flex items-center gap-2 rounded-full border border-[rgba(0,0,0,0.08)] bg-white px-2 py-1 shadow-sm transition hover:border-[rgba(254,214,9,0.4)]"
+                className="inline-flex items-center gap-2 rounded-full border border-[#272839] bg-[#101114] px-2 py-1 shadow-sm transition hover:border-[rgba(34,81,227,0.5)]"
                 onClick={() => setProfileMenuOpen((current) => !current)}
                 aria-expanded={profileMenuOpen}
                 aria-haspopup="menu"
               >
-                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[rgba(254,214,9,0.15)] text-xs font-semibold uppercase text-[#92700A]">
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[rgba(34,81,227,0.15)] text-xs font-semibold uppercase text-[#4E79FF]">
                   {avatarInitials}
                 </span>
-                <span className="hidden max-w-[10rem] truncate text-sm font-medium text-[#1A1A1A] lg:block">
+                <span className="hidden max-w-[10rem] truncate text-sm font-medium text-white lg:block">
                   {activeSession.name}
                 </span>
                 <ChevronDown
-                  className={`h-3.5 w-3.5 text-[#6B7280] transition-transform ${profileMenuOpen ? 'rotate-180' : ''}`}
+                  className={`h-3.5 w-3.5 text-[#8D8D96] transition-transform ${profileMenuOpen ? 'rotate-180' : ''}`}
                 />
               </button>
 
@@ -203,12 +203,12 @@ export function Navbar() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.16 }}
-                    className="absolute right-0 mt-2 w-44 rounded-xl border border-[rgba(0,0,0,0.08)] bg-white p-1 shadow-lg"
+                    className="absolute right-0 mt-2 w-44 rounded-xl border border-[#272839] bg-[#101114] p-1 shadow-lg"
                   >
                     <button
                       type="button"
                       onClick={handleLogout}
-                      className="inline-flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-[#6B7280] transition hover:bg-[rgba(0,0,0,0.03)] hover:text-[#1A1A1A]"
+                      className="inline-flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-[#8D8D96] transition hover:bg-[rgba(34,81,227,0.08)] hover:text-white"
                     >
                       <LogOut className="h-4 w-4" />
                       Logout
@@ -223,7 +223,7 @@ export function Navbar() {
         {/* Mobile Toggle */}
         <button
           type="button"
-          className="rounded-lg border border-[rgba(0,0,0,0.08)] bg-white p-2 text-[#1A1A1A] md:hidden"
+          className="rounded-lg border border-[#272839] bg-[#101114] p-2 text-white md:hidden"
           aria-expanded={open}
           onClick={() => setOpen((current) => !current)}
         >
@@ -241,7 +241,7 @@ export function Navbar() {
             exit="hidden"
             variants={menuVariants}
             viewport={viewportOnce}
-            className="border-t border-[rgba(0,0,0,0.06)] bg-white px-4 py-4 shadow-lg md:hidden"
+            className="border-t border-[#272839] bg-[#06070B] px-4 py-4 shadow-lg md:hidden"
           >
             <nav className="space-y-1">
               {navItems.map((item) => (
@@ -252,8 +252,8 @@ export function Navbar() {
                   className={({ isActive }) =>
                     `block rounded-lg px-4 py-2.5 text-sm ${
                       isActive
-                        ? 'bg-[rgba(254,214,9,0.1)] font-semibold text-[#1A1A1A]'
-                        : 'text-[#6B7280] hover:bg-[rgba(0,0,0,0.02)] hover:text-[#1A1A1A]'
+                        ? 'bg-[rgba(34,81,227,0.12)] font-semibold text-white'
+                        : 'text-[#8D8D96] hover:bg-[rgba(34,81,227,0.06)] hover:text-white'
                     }`
                   }
                 >
@@ -286,13 +286,13 @@ export function Navbar() {
                   <Button to={activeSession.dashboardTo} variant="primary" onClick={() => setOpen(false)}>
                     {activeSession.dashboardLabel}
                   </Button>
-                  <div className="mt-1 inline-flex items-center gap-3 rounded-xl border border-[rgba(0,0,0,0.06)] bg-[#FEFAEF] px-4 py-3">
-                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[rgba(254,214,9,0.15)] text-xs font-semibold uppercase text-[#92700A]">
+                  <div className="mt-1 inline-flex items-center gap-3 rounded-xl border border-[#272839] bg-[#101114] px-4 py-3">
+                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[rgba(34,81,227,0.15)] text-xs font-semibold uppercase text-[#4E79FF]">
                       {avatarInitials}
                     </span>
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-[#1A1A1A]">{activeSession.name}</p>
-                      <p className="text-xs text-[#6B7280] capitalize">{activeSession.role}</p>
+                      <p className="truncate text-sm font-medium text-white">{activeSession.name}</p>
+                      <p className="text-xs text-[#8D8D96] capitalize">{activeSession.role}</p>
                     </div>
                   </div>
                   <Button

@@ -61,7 +61,9 @@
       "Bash(grep -r \"whatsappController\\\\|postWhatsAppWebhook\" /c/Users/Intel/Desktop/tenant-backend/src --include=*.ts)",
       "Bash(grep -n \"whatsappSchema\\\\|whatsappWebhook\" /c/Users/Intel/Desktop/tenant-backend/src/validations/*.ts)",
       "Bash(grep -n \"telegram_chat_links\" /c/Users/Intel/Desktop/tenant-backend/supabase/migrations/*.sql)",
-      "Bash(grep -l \"telegram\" /c/Users/Intel/Desktop/tenant-backend/supabase/migrations/*.sql)"
+      "Bash(grep -l \"telegram\" /c/Users/Intel/Desktop/tenant-backend/supabase/migrations/*.sql)",
+      "Bash(claude plugin:*)",
+      "Bash(uipro init:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

@@ -35,7 +35,7 @@ export function TestimonialSection() {
     <SectionContainer size="wide" tone="cream">
       <motion.div variants={revealVariants} initial="hidden" whileInView="show" viewport={viewportOnce}>
         <span className="ph-kicker">Operator Feedback</span>
-        <h2 className="mt-5 text-3xl font-semibold text-[#1A1A1A] md:text-5xl">
+        <h2 className="mt-5 text-3xl font-semibold text-white md:text-5xl">
           Trusted by teams that expect luxury-grade execution
         </h2>
       </motion.div>
@@ -51,12 +51,12 @@ export function TestimonialSection() {
           <motion.article
             key={testimonial.name}
             variants={revealVariants}
-            className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white p-6 shadow-sm"
+            className="rounded-xl border border-[#272839] bg-[#101114] p-6 shadow-sm"
           >
-            <p className="text-lg leading-relaxed text-[#4B5563]">&ldquo;{testimonial.quote}&rdquo;</p>
-            <div className="mt-6 border-t border-[rgba(0,0,0,0.06)] pt-4">
-              <p className="text-base font-semibold text-[#1A1A1A]">{testimonial.name}</p>
-              <p className="text-sm text-[#6B7280]">
+            <p className="text-lg leading-relaxed text-[#C0C0C5]">&ldquo;{testimonial.quote}&rdquo;</p>
+            <div className="mt-6 border-t border-[#272839] pt-4">
+              <p className="text-base font-semibold text-white">{testimonial.name}</p>
+              <p className="text-sm text-[#8D8D96]">
                 {testimonial.role} &middot; {testimonial.company}
               </p>
             </div>

@@ -19,7 +19,7 @@ const workspaceLinks = [
 
 export function Footer() {
   return (
-    <footer className="bg-[#1A1A1A] text-white">
+    <footer className="bg-[#06070B] text-white border-t border-[#272839]">
       <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-12 2xl:px-16">
         <div className="mx-auto grid w-full max-w-[1400px] gap-8 py-14 md:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr_1fr]">
         {/* Brand */}
@@ -46,7 +46,7 @@ export function Footer() {
           <ul className="mt-4 space-y-3 text-sm text-white/60">
             {productLinks.map((link) => (
               <li key={link.to}>
-                <Link to={link.to} className="transition hover:text-[#FED609]">
+                <Link to={link.to} className="transition hover:text-[#4E79FF]">
                   {link.label}
                 </Link>
               </li>
@@ -60,7 +60,7 @@ export function Footer() {
           <ul className="mt-4 space-y-3 text-sm text-white/60">
             {workspaceLinks.map((link) => (
               <li key={link.to}>
-                <Link to={link.to} className="transition hover:text-[#FED609]">
+                <Link to={link.to} className="transition hover:text-[#4E79FF]">
                   {link.label}
                 </Link>
               </li>
@@ -73,12 +73,12 @@ export function Footer() {
           <h4 className="text-sm font-semibold uppercase tracking-[0.15em] text-white/40">Legal</h4>
           <ul className="mt-4 space-y-3 text-sm text-white/60">
             <li>
-              <Link to="/privacy-policy" className="transition hover:text-[#FED609]">
+              <Link to="/privacy-policy" className="transition hover:text-[#4E79FF]">
                 Privacy Policy
               </Link>
             </li>
             <li>
-              <Link to="/terms-of-service" className="transition hover:text-[#FED609]">
+              <Link to="/terms-of-service" className="transition hover:text-[#4E79FF]">
                 Terms of Service
               </Link>
             </li>
@@ -90,7 +90,7 @@ export function Footer() {
           <h4 className="text-sm font-semibold uppercase tracking-[0.15em] text-white/40">Connect</h4>
           <div className="mt-4 space-y-3 text-sm text-white/60">
             <p className="inline-flex items-center gap-2">
-              <Mail className="h-4 w-4 text-[#FED609]" />
+              <Mail className="h-4 w-4 text-[#4E79FF]" />
               support@prophives.com
             </p>
           </div>

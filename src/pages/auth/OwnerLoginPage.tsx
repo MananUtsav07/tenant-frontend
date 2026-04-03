@@ -162,10 +162,10 @@ export function OwnerLoginPage() {
   return (
     <main className="flex flex-col md:flex-row md:min-h-screen">
       {/* Left Side: Brand Identity */}
-      <section className="relative hidden flex-col justify-between overflow-hidden bg-[#FED609] p-6 md:flex md:w-1/2">
+      <section className="relative hidden flex-col justify-between overflow-hidden bg-[#2251E3] p-6 md:flex md:w-1/2">
         {/* Decorative blurs */}
         <div className="absolute -mr-32 -mt-32 right-0 top-0 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
-        <div className="absolute -mb-48 -ml-48 bottom-0 left-0 h-96 w-96 rounded-full bg-black/5 blur-3xl" />
+        <div className="absolute -mb-48 -ml-48 bottom-0 left-0 h-96 w-96 rounded-full bg-black/10 blur-3xl" />
 
         {/* Logo & Tagline */}
         <div className="relative z-10">
@@ -190,10 +190,10 @@ export function OwnerLoginPage() {
 
         {/* Testimonial */}
         <div className="relative z-10 space-y-3">
-          <div className="rounded-2xl border-2 border-white/40 bg-linear-to-br from-black/60 to-black/50 p-6 backdrop-blur-lg transition-all duration-500 hover:bg-black/70">
+          <div className="rounded-2xl border-2 border-white/20 bg-[rgba(0,0,0,0.3)] p-6 backdrop-blur-lg transition-all duration-500 hover:bg-[rgba(0,0,0,0.4)]">
             <div className="mb-4 flex gap-1">
               {[...Array(5)].map((_, i) => (
-                <svg key={i} className="h-4 w-4 fill-yellow-300" viewBox="0 0 20 20">
+                <svg key={i} className="h-4 w-4 fill-[#4E79FF]" viewBox="0 0 20 20">
                   <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
                 </svg>
               ))}
@@ -202,7 +202,7 @@ export function OwnerLoginPage() {
               "{TESTIMONIALS[currentTestimonialIndex].quote}"
             </p>
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-yellow-300/50 bg-white/20 shadow-lg">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-white/30 bg-white/20 shadow-lg">
                 <img
                   src={TESTIMONIALS[currentTestimonialIndex].image}
                   alt={TESTIMONIALS[currentTestimonialIndex].author}
@@ -213,7 +213,7 @@ export function OwnerLoginPage() {
                 <p className="font-['DM_Sans'] text-sm font-bold text-white">
                   {TESTIMONIALS[currentTestimonialIndex].author}
                 </p>
-                <p className="text-xs font-medium text-white/90">{TESTIMONIALS[currentTestimonialIndex].title}</p>
+                <p className="text-xs font-medium text-white/80">{TESTIMONIALS[currentTestimonialIndex].title}</p>
               </div>
             </div>
           </div>
@@ -223,7 +223,7 @@ export function OwnerLoginPage() {
                 key={index}
                 onClick={() => setCurrentTestimonialIndex(index)}
                 className={`h-2 rounded-full transition-all ${
-                  index === currentTestimonialIndex ? 'w-8 bg-white' : 'w-2 bg-white/50'
+                  index === currentTestimonialIndex ? 'w-8 bg-white' : 'w-2 bg-white/40'
                 }`}
               />
             ))}
@@ -232,47 +232,47 @@ export function OwnerLoginPage() {
       </section>
 
       {/* Right Side: Interaction Area */}
-      <section className="flex w-full flex-col items-center justify-start bg-white p-4 md:justify-center md:w-1/2 md:p-8 md:min-h-screen lg:p-12">
+      <section className="flex w-full flex-col items-center justify-start bg-[#06070B] p-4 md:justify-center md:w-1/2 md:p-8 md:min-h-screen lg:p-12">
         <div className="w-full max-w-md pt-0 md:pt-0">
           {/* Mobile brand */}
           <div className="mb-4 md:hidden">
-            <span className="font-['Sora'] text-2xl font-black text-[#FED609]">Prophives</span>
+            <span className="font-['Sora'] text-2xl font-black text-[#4E79FF]">Prophives</span>
           </div>
 
           {/* Tabs */}
-          <div className="mb-4 flex gap-6 border-b border-stone-100">
+          <div className="mb-4 flex gap-6 border-b border-[#272839]">
             <button
               type="button"
               onClick={() => { setMode('login'); setError(null) }}
               className={`relative pb-4 font-['Sora'] font-bold transition-colors ${
-                mode === 'login' ? 'text-[#1A1A1A]' : 'text-[#6B7280] hover:text-[#1A1A1A]'
+                mode === 'login' ? 'text-white' : 'text-[#8D8D96] hover:text-white'
               }`}
             >
               Login
               {mode === 'login' && (
-                <span className="absolute bottom-0 left-0 h-1 w-full rounded-t-full bg-[#FED609]" />
+                <span className="absolute bottom-0 left-0 h-1 w-full rounded-t-full bg-[#2251E3]" />
               )}
             </button>
             <button
               type="button"
               onClick={() => { setMode('register'); setError(null) }}
               className={`relative pb-4 font-['Sora'] font-bold transition-colors ${
-                mode === 'register' ? 'text-[#1A1A1A]' : 'text-[#6B7280] hover:text-[#1A1A1A]'
+                mode === 'register' ? 'text-white' : 'text-[#8D8D96] hover:text-white'
               }`}
             >
               Register
               {mode === 'register' && (
-                <span className="absolute bottom-0 left-0 h-1 w-full rounded-t-full bg-[#FED609]" />
+                <span className="absolute bottom-0 left-0 h-1 w-full rounded-t-full bg-[#2251E3]" />
               )}
             </button>
           </div>
 
           {/* Header */}
           <div className="mb-5">
-            <h1 className="font-['Sora'] text-2xl font-bold text-[#1A1A1A]">
+            <h1 className="font-['Sora'] text-2xl font-bold text-white">
               {mode === 'login' ? 'Welcome Back' : 'Create Account'}
             </h1>
-            <p className="mt-0.5 font-['Manrope'] text-sm text-[#6B7280]">
+            <p className="mt-0.5 font-['Manrope'] text-sm text-[#8D8D96]">
               {mode === 'login'
                 ? 'Access your property dashboard and AI insights.'
                 : 'Set up your Prophives owner workspace.'}
@@ -283,11 +283,11 @@ export function OwnerLoginPage() {
           <form className="space-y-4" onSubmit={handleSubmit}>
             {/* Email */}
             <div>
-              <label className="mb-2 block font-['DM_Sans'] text-sm font-bold text-[#1A1A1A]">
+              <label className="mb-2 block font-['DM_Sans'] text-sm font-bold text-white">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#6B7280]" />
+                <Mail className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#8D8D96]" />
                 <input
                   type="email"
                   name="owner_email"
@@ -296,7 +296,7 @@ export function OwnerLoginPage() {
                   value={form.email}
                   onChange={(e) => updateField('email', e.target.value)}
                   required
-                  className="w-full rounded-lg border-transparent bg-[#FEFAEF] py-3 pl-12 pr-4 font-['Manrope'] text-[#1A1A1A] transition-all focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#FED609]"
+                  className="w-full rounded-lg border border-[#272839] bg-[#101114] py-3 pl-12 pr-4 font-['Manrope'] text-white placeholder-[#8D8D96] transition-all focus:border-[#2251E3] focus:outline-none focus:ring-2 focus:ring-[rgba(34,81,227,0.2)]"
                 />
               </div>
             </div>
@@ -304,18 +304,18 @@ export function OwnerLoginPage() {
             {/* Password */}
             <div>
               <div className="mb-2 flex items-center justify-between">
-                <label className="font-['DM_Sans'] text-sm font-bold text-[#1A1A1A]">Password</label>
+                <label className="font-['DM_Sans'] text-sm font-bold text-white">Password</label>
                 {mode === 'login' && (
                   <Link
                     to={ROUTES.ownerForgotPassword}
-                    className="font-['DM_Sans'] text-sm font-bold text-[#FFD70B] hover:underline"
+                    className="font-['DM_Sans'] text-sm font-bold text-[#4E79FF] hover:underline"
                   >
                     Forgot password?
                   </Link>
                 )}
               </div>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#6B7280]" />
+                <Lock className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#8D8D96]" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="owner_password"
@@ -324,12 +324,12 @@ export function OwnerLoginPage() {
                   value={form.password}
                   onChange={(e) => updateField('password', e.target.value)}
                   required
-                  className="w-full rounded-lg border-transparent bg-[#FEFAEF] py-3 pl-12 pr-12 font-['Manrope'] text-[#1A1A1A] transition-all focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#FED609]"
+                  className="w-full rounded-lg border border-[#272839] bg-[#101114] py-3 pl-12 pr-12 font-['Manrope'] text-white placeholder-[#8D8D96] transition-all focus:border-[#2251E3] focus:outline-none focus:ring-2 focus:ring-[rgba(34,81,227,0.2)]"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#6B7280] hover:text-[#1A1A1A]"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8D8D96] hover:text-white"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -342,7 +342,7 @@ export function OwnerLoginPage() {
               <>
                 <FormInput
                   label="Full Name"
-                  variant="light"
+                  variant="dark"
                   name="owner_full_name"
                   autoComplete="name"
                   placeholder="John Smith"
@@ -351,7 +351,7 @@ export function OwnerLoginPage() {
                 />
                 <FormInput
                   label="Company Name"
-                  variant="light"
+                  variant="dark"
                   name="owner_company_name"
                   autoComplete="organization"
                   placeholder="Your Property Management Company"
@@ -361,7 +361,7 @@ export function OwnerLoginPage() {
                 <FormInput
                   label="Support Email"
                   type="email"
-                  variant="light"
+                  variant="dark"
                   name="owner_support_email"
                   autoComplete="email"
                   placeholder="support@yourcompany.com"
@@ -370,7 +370,7 @@ export function OwnerLoginPage() {
                 />
 
                 <label className="block space-y-2">
-                  <span className="font-['DM_Sans'] text-sm font-bold text-[#1A1A1A]">
+                  <span className="font-['DM_Sans'] text-sm font-bold text-white">
                     Country where your properties are located
                   </span>
                   <Select<CountrySelectOption, false>
@@ -382,7 +382,7 @@ export function OwnerLoginPage() {
                     placeholder="Search and select your country..."
                     noOptionsMessage={() => 'No country found'}
                     isSearchable
-                    styles={getProphivesReactSelectStyles<CountrySelectOption, false>('light')}
+                    styles={getProphivesReactSelectStyles<CountrySelectOption, false>('dark')}
                     formatOptionLabel={(option) => (
                       <span className="flex items-center gap-2">
                         <ReactCountryFlag
@@ -395,7 +395,7 @@ export function OwnerLoginPage() {
                       </span>
                     )}
                   />
-                  <span className="text-xs text-[#6B7280] leading-tight">
+                  <span className="text-xs text-[#8D8D96] leading-tight">
                     Used to set your rent currency and regional pricing.
                   </span>
                 </label>
@@ -408,11 +408,11 @@ export function OwnerLoginPage() {
                 <input
                   id="remember"
                   type="checkbox"
-                  className="h-5 w-5 cursor-pointer rounded border-stone-200 text-[#FED609] focus:ring-[#FED609]"
+                  className="h-5 w-5 cursor-pointer rounded border-[#272839] text-[#2251E3] focus:ring-[#2251E3] bg-[#101114]"
                 />
                 <label
                   htmlFor="remember"
-                  className="ml-3 cursor-pointer select-none font-['Manrope'] text-sm font-medium text-[#6B7280]"
+                  className="ml-3 cursor-pointer select-none font-['Manrope'] text-sm font-medium text-[#8D8D96]"
                 >
                   Remember me for 30 days
                 </label>
@@ -425,7 +425,7 @@ export function OwnerLoginPage() {
             <button
               type="submit"
               disabled={busy}
-              className="w-full rounded-lg bg-[#FED609] py-3 font-['Sora'] font-bold text-[#1A1A1A] shadow-lg shadow-[#FED609]/20 transition-all hover:bg-[#FFD70B] active:scale-[0.98] disabled:opacity-60"
+              className="w-full rounded-lg bg-[#2251E3] py-3 font-['Sora'] font-bold text-white shadow-lg shadow-[#2251E3]/25 transition-all hover:bg-[#4E79FF] active:scale-[0.98] disabled:opacity-60"
             >
               {busy ? 'Please wait...' : mode === 'login' ? 'Sign In' : 'Create Account'}
             </button>
@@ -433,10 +433,10 @@ export function OwnerLoginPage() {
             {/* Divider */}
             <div className="relative py-1.5">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-stone-100" />
+                <div className="w-full border-t border-[#272839]" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-4 font-['DM_Sans'] font-bold tracking-widest text-[#6B7280]">or</span>
+                <span className="bg-[#06070B] px-4 font-['DM_Sans'] font-bold tracking-widest text-[#8D8D96]">or</span>
               </div>
             </div>
 
@@ -444,7 +444,7 @@ export function OwnerLoginPage() {
             <div className="text-center">
               <Link
                 to={ROUTES.tenantLogin}
-                className="group inline-flex items-center gap-1.5 font-['DM_Sans'] text-xs font-bold text-[#1A1A1A] transition-colors hover:text-[#FFD70B]"
+                className="group inline-flex items-center gap-1.5 font-['DM_Sans'] text-xs font-bold text-white transition-colors hover:text-[#4E79FF]"
               >
                 Login as Tenant
                 <MoveRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
