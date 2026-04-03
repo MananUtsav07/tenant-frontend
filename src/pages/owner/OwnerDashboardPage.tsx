@@ -172,7 +172,7 @@ export function OwnerDashboardPage() {
             // Calculate percentage relative to max
             const pct = Math.min(100, (amount / maxAmount) * 100)
 
-            const opacityLevels = ['bg-[#FED609]/20', 'bg-[#FED609]/40', 'bg-[#FED609]/60', 'bg-[#FED609]/80', 'bg-[#FED609]']
+            const opacityLevels = ['bg-[#4E79FF]/20', 'bg-[#4E79FF]/40', 'bg-[#4E79FF]/60', 'bg-[#4E79FF]/80', 'bg-[#4E79FF]']
             const opacityIndex = Math.floor((pct / 100) * (opacityLevels.length - 1))
             const opacity = opacityLevels[opacityIndex]
 
@@ -242,7 +242,7 @@ export function OwnerDashboardPage() {
   const ownerName = owner?.full_name || owner?.company_name || 'Owner'
 
   return (
-    <div className="p-6 w-full bg-[#FEFAEF] min-h-screen">
+    <div className="p-6 w-full bg-[#06070B] min-h-screen text-white">
       {showWizard && <OwnerOnboardingWizard onComplete={dismissWizard} onSkip={dismissWizard} />}
 
       {/* Greeting */}
@@ -254,10 +254,10 @@ export function OwnerDashboardPage() {
       >
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="font-['Sora'] text-3xl font-extrabold tracking-tight text-[#1A1A1A]">
+            <h1 className="font-['Sora'] text-3xl font-extrabold tracking-tight text-white">
               Welcome back, {ownerName}
             </h1>
-            <p className="font-['Manrope'] text-[#6B7280] font-medium mt-1">
+            <p className="font-['Manrope'] text-[#8D8D96] font-medium mt-1">
               Here is what&apos;s happening with your portfolio today.
             </p>
           </div>
@@ -290,16 +290,16 @@ export function OwnerDashboardPage() {
               variants={revealUp}
               whileInView="show"
               viewport={viewportOnce}
-              className="bg-white p-6 rounded-xl shadow-sm border border-transparent hover:border-[#FED609]/20 transition-all group"
+              className="bg-[#101114] p-6 rounded-xl shadow-sm border border-[#272839] hover:border-[#4E79FF]/30 transition-all group"
             >
               <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 rounded-full bg-[#FED609]/10 flex items-center justify-center text-[#FED609] group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-full bg-[#4E79FF]/15 flex items-center justify-center text-[#4E79FF] group-hover:scale-110 transition-transform">
                   <Building2 className="w-6 h-6" />
                 </div>
-                <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">Portfolio</span>
+                <span className="text-xs font-bold text-[#32C382] bg-[#32C382]/15 px-2 py-1 rounded">Portfolio</span>
               </div>
-              <div className="text-[#6B7280] text-sm font-['DM_Sans'] font-medium mb-1 uppercase tracking-wider">Total Properties</div>
-              <div className="font-['Sora'] text-3xl font-extrabold text-[#1A1A1A]">
+              <div className="text-[#8D8D96] text-sm font-['DM_Sans'] font-medium mb-1 uppercase tracking-wider">Total Properties</div>
+              <div className="font-['Sora'] text-3xl font-extrabold text-white">
                 {totalProperties}
               </div>
             </motion.div>
@@ -309,18 +309,18 @@ export function OwnerDashboardPage() {
               variants={revealUp}
               whileInView="show"
               viewport={viewportOnce}
-              className="bg-white p-6 rounded-xl shadow-sm border border-transparent hover:border-[#FED609]/20 transition-all group"
+              className="bg-[#101114] p-6 rounded-xl shadow-sm border border-[#272839] hover:border-[#4E79FF]/30 transition-all group"
             >
               <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 rounded-full bg-[#FED609]/10 flex items-center justify-center text-[#FED609] group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-full bg-[#4E79FF]/15 flex items-center justify-center text-[#4E79FF] group-hover:scale-110 transition-transform">
                   <Users className="w-6 h-6" />
                 </div>
-                <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">
+                <span className="text-xs font-bold text-[#32C382] bg-[#32C382]/15 px-2 py-1 rounded">
                   Active
                 </span>
               </div>
-              <div className="text-[#6B7280] text-sm font-['DM_Sans'] font-medium mb-1 uppercase tracking-wider">Active Tenants</div>
-              <div className="font-['Sora'] text-3xl font-extrabold text-[#1A1A1A]">{summary.active_tenants}</div>
+              <div className="text-[#8D8D96] text-sm font-['DM_Sans'] font-medium mb-1 uppercase tracking-wider">Active Tenants</div>
+              <div className="font-['Sora'] text-3xl font-extrabold text-white">{summary.active_tenants}</div>
             </motion.div>
 
             {/* Open Tickets */}
@@ -328,20 +328,20 @@ export function OwnerDashboardPage() {
               variants={revealUp}
               whileInView="show"
               viewport={viewportOnce}
-              className="bg-white p-6 rounded-xl shadow-sm border border-transparent hover:border-[#FED609]/20 transition-all group"
+              className="bg-[#101114] p-6 rounded-xl shadow-sm border border-[#272839] hover:border-[#4E79FF]/30 transition-all group"
             >
               <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 rounded-full bg-[#FED609]/10 flex items-center justify-center text-[#FED609] group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-full bg-[#4E79FF]/15 flex items-center justify-center text-[#4E79FF] group-hover:scale-110 transition-transform">
                   <AlertTriangle className="w-6 h-6" />
                 </div>
                 {summary.open_tickets > 0 && (
-                  <span className="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded">
+                  <span className="text-xs font-bold text-[#EBCF42] bg-[#EBCF42]/15 px-2 py-1 rounded">
                     {summary.open_tickets > 3 ? `${summary.open_tickets} open` : 'Urgent'}
                   </span>
                 )}
               </div>
-              <div className="text-[#6B7280] text-sm font-['DM_Sans'] font-medium mb-1 uppercase tracking-wider">Open Tickets</div>
-              <div className="font-['Sora'] text-3xl font-extrabold text-[#1A1A1A]">{summary.open_tickets}</div>
+              <div className="text-[#8D8D96] text-sm font-['DM_Sans'] font-medium mb-1 uppercase tracking-wider">Open Tickets</div>
+              <div className="font-['Sora'] text-3xl font-extrabold text-white">{summary.open_tickets}</div>
             </motion.div>
 
             {/* Pending Payments / Awaiting Approvals */}
@@ -349,20 +349,20 @@ export function OwnerDashboardPage() {
               variants={revealUp}
               whileInView="show"
               viewport={viewportOnce}
-              className="bg-white p-6 rounded-xl shadow-sm border border-transparent hover:border-[#FED609]/20 transition-all group"
+              className="bg-[#101114] p-6 rounded-xl shadow-sm border border-[#272839] hover:border-[#4E79FF]/30 transition-all group"
             >
               <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 rounded-full bg-[#FED609]/10 flex items-center justify-center text-[#FED609] group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-full bg-[#4E79FF]/15 flex items-center justify-center text-[#4E79FF] group-hover:scale-110 transition-transform">
                   <Wallet className="w-6 h-6" />
                 </div>
                 {summary.awaiting_approvals > 0 && (
-                  <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-1 rounded">
+                  <span className="text-xs font-bold text-[#F25461] bg-[#F25461]/15 px-2 py-1 rounded">
                     Pending
                   </span>
                 )}
               </div>
-              <div className="text-[#6B7280] text-sm font-['DM_Sans'] font-medium mb-1 uppercase tracking-wider">Pending Payments</div>
-              <div className="font-['Sora'] text-3xl font-extrabold text-[#1A1A1A]">{summary.awaiting_approvals}</div>
+              <div className="text-[#8D8D96] text-sm font-['DM_Sans'] font-medium mb-1 uppercase tracking-wider">Pending Payments</div>
+              <div className="font-['Sora'] text-3xl font-extrabold text-white">{summary.awaiting_approvals}</div>
             </motion.div>
           </motion.div>
 
@@ -378,22 +378,22 @@ export function OwnerDashboardPage() {
                 initial="hidden"
                 whileInView="show"
                 viewport={viewportOnce}
-                className="bg-white p-8 rounded-xl shadow-sm"
+                className="bg-[#101114] p-8 rounded-xl shadow-sm border border-[#272839]"
               >
                 <div className="flex items-center justify-between mb-8">
                   <div>
-                    <h2 className="font-['Sora'] text-xl font-bold text-[#1A1A1A]">Rent Collection</h2>
-                    <p className="text-sm text-[#6B7280] font-['Manrope']">Monthly collection trends for 2024</p>
+                    <h2 className="font-['Sora'] text-xl font-bold text-white">Rent Collection</h2>
+                    <p className="text-sm text-[#8D8D96] font-['Manrope']">Monthly collection trends for 2024</p>
                   </div>
                   <div className="flex gap-2">
-                    <button type="button" className="px-3 py-1 text-xs font-bold bg-[#FED609] text-[#1A1A1A] rounded-full">Monthly</button>
-                    <button type="button" className="px-3 py-1 text-xs font-bold bg-gray-100 hover:bg-gray-200 rounded-full transition-colors">Quarterly</button>
+                    <button type="button" className="px-3 py-1 text-xs font-bold bg-[#4E79FF] text-white rounded-full">Monthly</button>
+                    <button type="button" className="px-3 py-1 text-xs font-bold bg-white/8 hover:bg-white/12 text-[#8D8D96] rounded-full transition-colors border border-[#272839]">Quarterly</button>
                   </div>
                 </div>
                 {/* CSS Bar Chart */}
                 {chartBars.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-64 text-center text-[#6B7280]">
-                    <TrendingUp className="w-10 h-10 text-[#FED609]/40 mb-3" />
+                  <div className="flex flex-col items-center justify-center h-64 text-center text-[#8D8D96]">
+                    <TrendingUp className="w-10 h-10 text-[#4E79FF]/45 mb-3" />
                     <p className="text-sm font-['Manrope'] font-medium">No collection data yet</p>
                     <p className="text-xs mt-1">Chart will populate once rent payments are recorded</p>
                   </div>
@@ -406,35 +406,35 @@ export function OwnerDashboardPage() {
                             className={`w-full ${bar.opacity} rounded-t-lg relative group`}
                             style={{ height: `${bar.pct}%` }}
                           >
-                            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#1A1A1A] text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#06070B] border border-[#272839] text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                               {bar.tooltip}
                             </div>
                           </div>
-                          <span className="text-[10px] font-bold text-[#6B7280] uppercase">{bar.label}</span>
+                          <span className="text-[10px] font-bold text-[#8D8D96] uppercase">{bar.label}</span>
                         </div>
                       ))}
                     </div>
 
                     {/* Portfolio metrics row below chart */}
-                    <div className="mt-6 grid grid-cols-2 gap-4 pt-4 border-t border-[#FEFAEF]">
+                    <div className="mt-6 grid grid-cols-2 gap-4 pt-4 border-t border-[#272839]">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#FFFAE2]">
-                          <Bell className="h-4 w-4 text-[#FED609]" />
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#141519]">
+                          <Bell className="h-4 w-4 text-[#4E79FF]" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-[#1A1A1A]">Reminders Pending</p>
-                          <p className="text-lg font-['Sora'] font-bold text-[#1A1A1A]">{summary.reminders_pending}</p>
+                          <p className="text-xs font-bold text-white">Reminders Pending</p>
+                          <p className="text-lg font-['Sora'] font-bold text-white">{summary.reminders_pending}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
-                        <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${summary.overdue_rent > 0 ? 'bg-red-50' : 'bg-emerald-50'}`}>
-                          <TrendingUp className={`h-4 w-4 ${summary.overdue_rent > 0 ? 'text-red-500' : 'text-emerald-500'}`} />
+                        <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${summary.overdue_rent > 0 ? 'bg-[#F25461]/15' : 'bg-[#32C382]/15'}`}>
+                          <TrendingUp className={`h-4 w-4 ${summary.overdue_rent > 0 ? 'text-[#F25461]' : 'text-[#32C382]'}`} />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-[#1A1A1A]">
+                          <p className="text-xs font-bold text-white">
                             {summary.overdue_rent > 0 ? 'Overdue Rent' : 'Collections Stable'}
                           </p>
-                          <p className="text-lg font-['Sora'] font-bold text-[#1A1A1A]">
+                          <p className="text-lg font-['Sora'] font-bold text-white">
                             {summary.overdue_rent > 0 ? summary.overdue_rent : '✓'}
                           </p>
                         </div>
@@ -450,11 +450,11 @@ export function OwnerDashboardPage() {
                 initial="hidden"
                 whileInView="show"
                 viewport={viewportOnce}
-                className="bg-white rounded-xl shadow-sm overflow-hidden"
+                className="bg-[#101114] rounded-xl shadow-sm overflow-hidden border border-[#272839]"
               >
-                <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-                  <h2 className="font-['Sora'] text-xl font-bold text-[#1A1A1A]">Recent Activity</h2>
-                  <Link to={ROUTES.ownerTenants} className="text-[#FED609] font-bold text-sm hover:underline">
+                <div className="p-6 border-b border-[#272839] flex items-center justify-between">
+                  <h2 className="font-['Sora'] text-xl font-bold text-white">Recent Activity</h2>
+                  <Link to={ROUTES.ownerTenants} className="text-[#4E79FF] font-bold text-sm hover:underline">
                     View All
                   </Link>
                 </div>
@@ -463,19 +463,19 @@ export function OwnerDashboardPage() {
                     notifications.map((notif) => {
                       const timeAgo = getTimeAgoString(notif.created_at)
                       const icon = (
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${notif.is_read ? 'bg-gray-100 text-gray-400' : 'bg-[#FED609]/15 text-[#D4A800]'}`}>
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${notif.is_read ? 'bg-white/8 text-[#8D8D96]' : 'bg-[#4E79FF]/15 text-[#4E79FF]'}`}>
                           <Bell className="w-5 h-5" />
                         </div>
                       )
                       return (
-                        <div key={notif.id} className={`p-6 flex items-start gap-4 hover:bg-[#FFFAE2] transition-colors ${!notif.is_read ? 'border-l-2 border-[#FED609]' : ''}`}>
+                        <div key={notif.id} className={`p-6 flex items-start gap-4 hover:bg-[#141519] transition-colors ${!notif.is_read ? 'border-l-2 border-[#4E79FF]' : ''}`}>
                           {icon}
                           <div className="flex-1">
                             <div className="flex justify-between items-start gap-2">
-                              <p className="font-bold text-[#1A1A1A] font-['Manrope'] text-sm">{notif.title}</p>
-                              <span className="text-xs text-[#6B7280] shrink-0">{timeAgo}</span>
+                              <p className="font-bold text-white font-['Manrope'] text-sm">{notif.title}</p>
+                              <span className="text-xs text-[#8D8D96] shrink-0">{timeAgo}</span>
                             </div>
-                            <p className="text-sm text-[#6B7280] font-['Manrope'] mt-1">{notif.message}</p>
+                            <p className="text-sm text-[#8D8D96] font-['Manrope'] mt-1">{notif.message}</p>
                           </div>
                         </div>
                       )
@@ -487,20 +487,20 @@ export function OwnerDashboardPage() {
                       const title = `${item.flow_name} — ${item.status === 'success' ? 'completed' : item.status}`
                       const description = `Processed ${item.processed_count} item${item.processed_count !== 1 ? 's' : ''}`
                       return (
-                        <div key={item.id} className="p-6 flex items-start gap-4 hover:bg-[#FFFAE2] transition-colors">
+                        <div key={item.id} className="p-6 flex items-start gap-4 hover:bg-[#141519] transition-colors">
                           {icon}
                           <div className="flex-1">
                             <div className="flex justify-between items-start">
-                              <p className="font-bold text-[#1A1A1A] font-['Manrope'] text-sm">{title}</p>
-                              <span className="text-xs text-[#6B7280]">{timeAgo}</span>
+                              <p className="font-bold text-white font-['Manrope'] text-sm">{title}</p>
+                              <span className="text-xs text-[#8D8D96]">{timeAgo}</span>
                             </div>
-                            <p className="text-sm text-[#6B7280] font-['Manrope'] mt-1">{description}</p>
+                            <p className="text-sm text-[#8D8D96] font-['Manrope'] mt-1">{description}</p>
                           </div>
                         </div>
                       )
                     })
                   ) : (
-                    <div className="p-6 text-center text-[#6B7280] font-['Manrope'] text-sm">
+                    <div className="p-6 text-center text-[#8D8D96] font-['Manrope'] text-sm">
                       No recent activity yet.
                     </div>
                   )}
@@ -508,21 +508,21 @@ export function OwnerDashboardPage() {
 
                 {/* Unread notifications banner inside activity section */}
                 {summary.unread_notifications > 0 && (
-                  <div className="flex items-center justify-between p-5 border-t border-[#FEFAEF] bg-[rgba(254,214,9,0.04)]">
+                  <div className="flex items-center justify-between p-5 border-t border-[#272839] bg-[#141519]">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#FED609]">
-                        <Bell className="h-4 w-4 text-[#1A1A1A]" />
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#4E79FF]">
+                        <Bell className="h-4 w-4 text-white" />
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-[#1A1A1A]">
+                        <p className="text-sm font-bold text-white">
                           {summary.unread_notifications} unread notification{summary.unread_notifications !== 1 ? 's' : ''}
                         </p>
-                        <p className="text-xs text-[#6B7280]">Awaiting your review</p>
+                        <p className="text-xs text-[#8D8D96]">Awaiting your review</p>
                       </div>
                     </div>
                     <Link
                       to={ROUTES.ownerNotifications}
-                      className="flex items-center gap-2 rounded-lg bg-[#FED609] px-4 py-2 text-sm font-bold text-[#1A1A1A] hover:bg-[#FFD70B] active:scale-95 transition-all"
+                      className="flex items-center gap-2 rounded-lg bg-[#4E79FF] px-4 py-2 text-sm font-bold text-white hover:bg-[#3E68EE] active:scale-95 transition-all"
                     >
                       View all
                       <ChevronRight className="h-4 w-4" />
@@ -541,47 +541,47 @@ export function OwnerDashboardPage() {
                 initial="hidden"
                 whileInView="show"
                 viewport={viewportOnce}
-                className="bg-white p-6 rounded-xl shadow-sm"
+                className="bg-[#101114] p-6 rounded-xl shadow-sm border border-[#272839]"
               >
-                <h2 className="font-['Sora'] text-lg font-bold text-[#1A1A1A] mb-6">Quick Actions</h2>
+                <h2 className="font-['Sora'] text-lg font-bold text-white mb-6">Quick Actions</h2>
                 <div className="grid grid-cols-2 gap-4">
                   <Link
                     to={ROUTES.ownerProperties}
-                    className="flex flex-col items-center gap-3 p-4 rounded-xl border border-yellow-100 hover:bg-[#FED609]/10 hover:border-[#FED609] transition-all group"
+                    className="flex flex-col items-center gap-3 p-4 rounded-xl border border-[#272839] hover:bg-[#141519] hover:border-[#4E79FF] transition-all group"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-[#FED609]/10 flex items-center justify-center text-[#FED609] group-hover:scale-110 transition-transform">
+                    <div className="w-10 h-10 rounded-lg bg-[#4E79FF]/15 flex items-center justify-center text-[#4E79FF] group-hover:scale-110 transition-transform">
                       <Building2 className="w-5 h-5" />
                     </div>
-                    <span className="text-xs font-bold text-[#1A1A1A]">Add Property</span>
+                    <span className="text-xs font-bold text-white">Add Property</span>
                   </Link>
                   <Link
                     to={ROUTES.ownerTenants}
-                    className="flex flex-col items-center gap-3 p-4 rounded-xl border border-yellow-100 hover:bg-[#FED609]/10 hover:border-[#FED609] transition-all group"
+                    className="flex flex-col items-center gap-3 p-4 rounded-xl border border-[#272839] hover:bg-[#141519] hover:border-[#4E79FF] transition-all group"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-[#FED609]/10 flex items-center justify-center text-[#FED609] group-hover:scale-110 transition-transform">
+                    <div className="w-10 h-10 rounded-lg bg-[#4E79FF]/15 flex items-center justify-center text-[#4E79FF] group-hover:scale-110 transition-transform">
                       <UserPlus className="w-5 h-5" />
                     </div>
-                    <span className="text-xs font-bold text-[#1A1A1A]">Add Tenant</span>
+                    <span className="text-xs font-bold text-white">Add Tenant</span>
                   </Link>
                   <Link
                     to={ROUTES.ownerTickets}
-                    className="flex flex-col items-center gap-3 p-4 rounded-xl border border-yellow-100 hover:bg-[#FED609]/10 hover:border-[#FED609] transition-all group"
+                    className="flex flex-col items-center gap-3 p-4 rounded-xl border border-[#272839] hover:bg-[#141519] hover:border-[#4E79FF] transition-all group"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-[#FED609]/10 flex items-center justify-center text-[#FED609] group-hover:scale-110 transition-transform">
+                    <div className="w-10 h-10 rounded-lg bg-[#4E79FF]/15 flex items-center justify-center text-[#4E79FF] group-hover:scale-110 transition-transform">
                       <AlertTriangle className="w-5 h-5" />
                     </div>
-                    <span className="text-xs font-bold text-[#1A1A1A]">View Tickets</span>
+                    <span className="text-xs font-bold text-white">View Tickets</span>
                   </Link>
                   <button
                     type="button"
                     onClick={() => void handleProcessReminders()}
                     disabled={processing}
-                    className="flex flex-col items-center gap-3 p-4 rounded-xl border border-yellow-100 hover:bg-[#FED609]/10 hover:border-[#FED609] transition-all group disabled:opacity-60"
+                    className="flex flex-col items-center gap-3 p-4 rounded-xl border border-[#272839] hover:bg-[#141519] hover:border-[#4E79FF] transition-all group disabled:opacity-60"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-[#25D366]/10 flex items-center justify-center text-[#25D366] group-hover:scale-110 transition-transform">
+                    <div className="w-10 h-10 rounded-lg bg-[#32C382]/15 flex items-center justify-center text-[#32C382] group-hover:scale-110 transition-transform">
                       <MessageCircle className="w-5 h-5" />
                     </div>
-                    <span className="text-xs font-bold text-[#1A1A1A]">
+                    <span className="text-xs font-bold text-white">
                       {processing ? 'Sending...' : 'Send Reminder'}
                     </span>
                   </button>
@@ -590,7 +590,7 @@ export function OwnerDashboardPage() {
                 {/* Telegram quick action */}
                 <button
                   type="button"
-                  className="mt-4 w-full flex items-center gap-3 rounded-xl bg-[#0088cc] px-4 py-3 font-bold text-white text-sm transition-all hover:brightness-105 active:scale-95"
+                  className="mt-4 w-full flex items-center gap-3 rounded-xl bg-[#2251E3] px-4 py-3 font-bold text-white text-sm transition-all hover:brightness-105 active:scale-95"
                 >
                   <Send className="h-5 w-5" />
                   Send Reminder via Telegram
@@ -603,9 +603,9 @@ export function OwnerDashboardPage() {
                 initial="hidden"
                 whileInView="show"
                 viewport={viewportOnce}
-                className="bg-white p-6 rounded-xl shadow-sm"
+                className="bg-[#101114] p-6 rounded-xl shadow-sm border border-[#272839]"
               >
-                <h2 className="font-['Sora'] text-lg font-bold text-[#1A1A1A] mb-4">Upcoming Reminders</h2>
+                <h2 className="font-['Sora'] text-lg font-bold text-white mb-4">Upcoming Reminders</h2>
                 <div className="space-y-3">
                   {upcomingItems.length > 0 ? (
                     upcomingItems.slice(0, 4).map((item) => {
@@ -619,24 +619,24 @@ export function OwnerDashboardPage() {
                       return (
                         <div
                           key={item.legal_date_id}
-                          className={`flex items-center gap-4 p-3 rounded-lg transition-colors ${isUrgent ? 'bg-[#FFFAE2] border-l-4 border-[#FED609]' : 'hover:bg-gray-50'}`}
+                          className={`flex items-center gap-4 p-3 rounded-lg transition-colors ${isUrgent ? 'bg-[#141519] border-l-4 border-[#4E79FF]' : 'hover:bg-white/4'}`}
                         >
                           <div className="text-center shrink-0 w-12">
-                            <div className="text-[10px] uppercase font-bold text-[#6B7280]">{month}</div>
-                            <div className="font-['Sora'] text-lg font-black text-[#1A1A1A]">{day}</div>
+                            <div className="text-[10px] uppercase font-bold text-[#8D8D96]">{month}</div>
+                            <div className="font-['Sora'] text-lg font-black text-white">{day}</div>
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-bold text-[#1A1A1A] truncate">{item.trigger_label}</p>
-                            <p className="text-[11px] text-[#6B7280] truncate">{propertyLabel}</p>
+                            <p className="text-sm font-bold text-white truncate">{item.trigger_label}</p>
+                            <p className="text-[11px] text-[#8D8D96] truncate">{propertyLabel}</p>
                           </div>
-                          <span className={`text-[10px] font-bold shrink-0 px-2 py-0.5 rounded-full ${isUrgent ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-500'}`}>
+                          <span className={`text-[10px] font-bold shrink-0 px-2 py-0.5 rounded-full ${isUrgent ? 'bg-[#EBCF42]/15 text-[#EBCF42]' : 'bg-white/8 text-[#8D8D96]'}`}>
                             {item.days_remaining}d
                           </span>
                         </div>
                       )
                     })
                   ) : (
-                    <div className="p-4 text-center text-[#6B7280] text-sm font-['Manrope']">
+                    <div className="p-4 text-center text-[#8D8D96] text-sm font-['Manrope']">
                       <p>No upcoming reminders</p>
                       <p className="text-[11px] mt-1">You're all caught up!</p>
                     </div>
@@ -644,7 +644,7 @@ export function OwnerDashboardPage() {
                 </div>
                 <button
                   type="button"
-                  className="w-full mt-6 py-3 border-2 border-dashed border-gray-200 text-gray-400 font-bold text-sm rounded-xl hover:border-[#FED609] hover:text-[#FED609] transition-all"
+                  className="w-full mt-6 py-3 border-2 border-dashed border-[#272839] text-[#8D8D96] font-bold text-sm rounded-xl hover:border-[#4E79FF] hover:text-[#4E79FF] transition-all bg-[#101114]"
                 >
                   + New Reminder
                 </button>
@@ -656,16 +656,16 @@ export function OwnerDashboardPage() {
                 initial="hidden"
                 whileInView="show"
                 viewport={viewportOnce}
-                className="group relative overflow-hidden rounded-xl bg-[#1A1A1A] p-6 shadow-lg"
+                className="group relative overflow-hidden rounded-xl bg-[#101114] p-6 shadow-lg border border-[#272839]"
               >
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-4">
-                    <Sparkles className="h-5 w-5 text-[#FED609]" />
-                    <span className="text-xs font-black uppercase tracking-widest text-[#FED609]">AI Insight</span>
+                    <Sparkles className="h-5 w-5 text-[#4E79FF]" />
+                    <span className="text-xs font-black uppercase tracking-widest text-[#4E79FF]">AI Insight</span>
                   </div>
                   <p className="text-sm leading-relaxed text-white mb-4">
                     You could increase revenue by{' '}
-                    <span className="text-[#FED609] font-bold">4.2%</span>{' '}
+                    <span className="text-[#4E79FF] font-bold">4.2%</span>{' '}
                     by optimizing service charge distribution in your portfolio.
                   </p>
                   <Link
@@ -675,7 +675,7 @@ export function OwnerDashboardPage() {
                     View Analysis
                   </Link>
                 </div>
-                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-[#FED609]/20 blur-3xl rounded-full" />
+                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-[#4E79FF]/20 blur-3xl rounded-full" />
               </motion.div>
             </div>
           </div>
@@ -703,13 +703,13 @@ export function OwnerDashboardPage() {
             className="flex items-center justify-between"
           >
             <div>
-              <h3 className="font-['Sora'] text-2xl font-bold text-[#1A1A1A]">Awaiting approvals</h3>
-              <p className="text-sm text-[#6B7280]">
+              <h3 className="font-['Sora'] text-2xl font-bold text-white">Awaiting approvals</h3>
+              <p className="text-sm text-[#8D8D96]">
                 Review resident rent payment confirmations pending your verification.
               </p>
             </div>
             {approvals.length > 0 && (
-              <span className="rounded bg-orange-50 px-2 py-1 text-[10px] font-bold uppercase text-orange-600">
+              <span className="rounded bg-[#EBCF42]/15 px-2 py-1 text-[10px] font-bold uppercase text-[#EBCF42]">
                 Action Required
               </span>
             )}
@@ -732,18 +732,18 @@ export function OwnerDashboardPage() {
                 {approvals.map((approval) => (
                   <tr key={approval.id}>
                     <td className="px-4 py-3">
-                      <p className="font-medium text-[#1A1A1A]">{approval.tenants?.full_name ?? '-'}</p>
-                      <p className="text-xs text-[#6B7280]">{approval.tenants?.tenant_access_id ?? '-'}</p>
+                      <p className="font-medium text-white">{approval.tenants?.full_name ?? '-'}</p>
+                      <p className="text-xs text-[#8D8D96]">{approval.tenants?.tenant_access_id ?? '-'}</p>
                     </td>
-                    <td className="px-4 py-3 text-[#4B5563]">
+                    <td className="px-4 py-3 text-[#C0C0C5]">
                       {approval.properties?.property_name ?? '-'}
                       {approval.properties?.unit_number ? ` (${approval.properties.unit_number})` : ''}
                     </td>
-                    <td className="px-4 py-3 text-[#4B5563]">{formatDate(approval.due_date)}</td>
-                    <td className="px-4 py-3 font-bold text-[#1A1A1A]">
+                    <td className="px-4 py-3 text-[#C0C0C5]">{formatDate(approval.due_date)}</td>
+                    <td className="px-4 py-3 font-bold text-white">
                       {formatCurrency(approval.amount_paid, owner?.organization?.currency_code)}
                     </td>
-                    <td className="px-4 py-3 text-[#6B7280]">{formatDateTime(approval.created_at)}</td>
+                    <td className="px-4 py-3 text-[#8D8D96]">{formatDateTime(approval.created_at)}</td>
                     <td className="px-4 py-3">
                       <StatusBadge status={approval.status} />
                     </td>
@@ -774,7 +774,7 @@ export function OwnerDashboardPage() {
                             type="button"
                             size="sm"
                             variant="outline"
-                            className="border-red-300 bg-red-50 text-red-700 hover:bg-red-100"
+                            className="border-red-300 bg-[#F25461]/15 text-red-700 hover:bg-red-100"
                             disabled={reviewingApprovalId === approval.id}
                             onClick={() => void handleReviewApproval(approval.id, 'reject')}
                           >
@@ -793,3 +793,5 @@ export function OwnerDashboardPage() {
     </div>
   )
 }
+
+

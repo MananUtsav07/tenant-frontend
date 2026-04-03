@@ -24,25 +24,25 @@ function getStatusConfig(status: Property['occupancy_status']) {
     case 'occupied':
       return {
         label: 'Active',
-        badgeClass: 'bg-[#FED609] text-[#1A1A1A]',
-        borderClass: 'border-l-4 border-[#FED609]',
-        unitBadgeClass: 'bg-[#FFFAE2] text-[#D4A800] border border-[#FED609]/20',
+        badgeClass: 'bg-[#32C382]/15 text-[#32C382]',
+        borderClass: 'border-l-4 border-[#32C382]',
+        unitBadgeClass: 'bg-[#141519] text-[#4E79FF] border border-[#4E79FF]/25',
       }
     case 'vacant':
     case 'pre_vacant':
     case 'relisting_in_progress':
       return {
         label: 'Vacant',
-        badgeClass: 'bg-neutral-200 text-neutral-600',
-        borderClass: 'border-l-4 border-neutral-300',
-        unitBadgeClass: 'bg-neutral-100 text-neutral-500 border border-neutral-200',
+        badgeClass: 'bg-white/8 text-[#8D8D96]',
+        borderClass: 'border-l-4 border-[#272839]',
+        unitBadgeClass: 'bg-white/8 text-[#8D8D96] border border-[#272839]',
       }
     default:
       return {
         label: 'Active',
-        badgeClass: 'bg-[#FED609] text-[#1A1A1A]',
-        borderClass: 'border-l-4 border-[#FED609]',
-        unitBadgeClass: 'bg-[#FFFAE2] text-[#D4A800] border border-[#FED609]/20',
+        badgeClass: 'bg-[#32C382]/15 text-[#32C382]',
+        borderClass: 'border-l-4 border-[#32C382]',
+        unitBadgeClass: 'bg-[#141519] text-[#4E79FF] border border-[#4E79FF]/25',
       }
   }
 }
@@ -75,38 +75,38 @@ function PropertyFormModal({ form, editingPropertyId, busy, error, onSubmit, onC
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 24, scale: 0.97 }}
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-neutral-100 overflow-hidden"
+        className="relative w-full max-w-lg bg-[#101114] rounded-2xl shadow-2xl border border-[#272839] overflow-hidden"
       >
         {/* Gold top accent */}
-        <div className="h-1.5 bg-[#FED609] w-full" />
+        <div className="h-1.5 bg-[#4E79FF] w-full" />
         <div className="p-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="font-['Sora'] font-bold text-xl text-[#1A1A1A]">
+              <h3 className="font-['Sora'] font-bold text-xl text-white">
                 {editingPropertyId ? 'Edit Property' : 'Add New Property'}
               </h3>
-              <p className="text-[#6B7280] text-sm mt-0.5">
+              <p className="text-[#8D8D96] text-sm mt-0.5">
                 {editingPropertyId ? 'Update the details below.' : 'Fill in the details to list your property.'}
               </p>
             </div>
             <button
               type="button"
               onClick={onCancel}
-              className="w-9 h-9 rounded-full flex items-center justify-center text-[#6B7280] hover:bg-[#FFFAE2] hover:text-[#1A1A1A] transition-colors"
+              className="w-9 h-9 rounded-full flex items-center justify-center text-[#8D8D96] hover:bg-white/4 hover:text-white transition-colors"
             >
               <X className="h-5 w-5" />
             </button>
           </div>
 
           {error ? (
-            <div className="mb-5 rounded-xl bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-600">
+            <div className="mb-5 rounded-xl bg-[#F25461]/15 border border-red-100 px-4 py-3 text-sm text-red-600">
               {error}
             </div>
           ) : null}
 
           <form onSubmit={onSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5 font-['DM_Sans']">
+              <label className="block text-sm font-semibold text-white mb-1.5 font-['DM_Sans']">
                 Property Name <span className="text-red-400">*</span>
               </label>
               <input
@@ -116,12 +116,12 @@ function PropertyFormModal({ form, editingPropertyId, busy, error, onSubmit, onC
                 required
                 autoComplete="off"
                 placeholder="e.g. Skyview Penthouse"
-                className="w-full rounded-xl border border-neutral-200 bg-[#FEFAEF] px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#6B7280] focus:outline-none focus:ring-2 focus:ring-[#FED609] focus:border-transparent transition-all"
+                className="w-full rounded-xl border border-[#272839] bg-[#141519] px-4 py-3 text-sm text-white placeholder-[#8D8D96] focus:outline-none focus:ring-2 focus:ring-[#4E79FF] focus:border-transparent transition-all"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5 font-['DM_Sans']">
+              <label className="block text-sm font-semibold text-white mb-1.5 font-['DM_Sans']">
                 Address <span className="text-red-400">*</span>
               </label>
               <input
@@ -131,13 +131,13 @@ function PropertyFormModal({ form, editingPropertyId, busy, error, onSubmit, onC
                 required
                 autoComplete="off"
                 placeholder="e.g. Downtown, Building A"
-                className="w-full rounded-xl border border-neutral-200 bg-[#FEFAEF] px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#6B7280] focus:outline-none focus:ring-2 focus:ring-[#FED609] focus:border-transparent transition-all"
+                className="w-full rounded-xl border border-[#272839] bg-[#141519] px-4 py-3 text-sm text-white placeholder-[#8D8D96] focus:outline-none focus:ring-2 focus:ring-[#4E79FF] focus:border-transparent transition-all"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5 font-['DM_Sans']">
-                Unit Number <span className="text-[#6B7280] font-normal">(optional)</span>
+              <label className="block text-sm font-semibold text-white mb-1.5 font-['DM_Sans']">
+                Unit Number <span className="text-[#8D8D96] font-normal">(optional)</span>
               </label>
               <input
                 type="text"
@@ -145,7 +145,7 @@ function PropertyFormModal({ form, editingPropertyId, busy, error, onSubmit, onC
                 onChange={(e) => onChange('unit_number', e.target.value)}
                 autoComplete="off"
                 placeholder="e.g. Unit 4402"
-                className="w-full rounded-xl border border-neutral-200 bg-[#FEFAEF] px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#6B7280] focus:outline-none focus:ring-2 focus:ring-[#FED609] focus:border-transparent transition-all"
+                className="w-full rounded-xl border border-[#272839] bg-[#141519] px-4 py-3 text-sm text-white placeholder-[#8D8D96] focus:outline-none focus:ring-2 focus:ring-[#4E79FF] focus:border-transparent transition-all"
               />
             </div>
 
@@ -153,7 +153,7 @@ function PropertyFormModal({ form, editingPropertyId, busy, error, onSubmit, onC
               <button
                 type="submit"
                 disabled={busy}
-                className="flex-1 bg-[#FED609] hover:bg-[#FFD70B] text-[#1A1A1A] font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="flex-1 bg-[#4E79FF] hover:bg-[#3E68EE] text-white font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {editingPropertyId ? (
                   <>
@@ -170,7 +170,7 @@ function PropertyFormModal({ form, editingPropertyId, busy, error, onSubmit, onC
               <button
                 type="button"
                 onClick={onCancel}
-                className="px-5 py-3 rounded-xl border border-neutral-200 text-[#6B7280] hover:text-[#1A1A1A] hover:bg-[#FEFAEF] font-medium text-sm transition-colors"
+                className="px-5 py-3 rounded-xl border border-[#272839] text-[#8D8D96] hover:text-white hover:bg-[#06070B] font-medium text-sm transition-colors"
               >
                 Cancel
               </button>
@@ -194,17 +194,17 @@ function DeleteConfirmModal({ propertyName, busy, onConfirm, onCancel }: DeleteC
   return (
     <Modal isOpen onClose={onCancel} title="Delete Property" size="sm">
       <div className="space-y-4 text-center">
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-50">
-          <Trash2 className="h-5 w-5 text-red-500" />
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#F25461]/15">
+          <Trash2 className="h-5 w-5 text-[#F25461]" />
         </div>
-        <p className="text-sm text-[#4B5563]">
-          <span className="font-semibold text-[#1A1A1A]">{propertyName}</span> will be permanently removed. This action cannot be undone.
+        <p className="text-sm text-[#C0C0C5]">
+          <span className="font-semibold text-white">{propertyName}</span> will be permanently removed. This action cannot be undone.
         </p>
         <div className="flex gap-3">
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 rounded-xl border border-neutral-200 px-4 py-2.5 text-sm font-medium text-[#6B7280] transition-colors hover:bg-[#FEFAEF] hover:text-[#1A1A1A]"
+            className="flex-1 rounded-xl border border-[#272839] px-4 py-2.5 text-sm font-medium text-[#8D8D96] transition-colors hover:bg-[#06070B] hover:text-white"
           >
             Cancel
           </button>
@@ -212,7 +212,7 @@ function DeleteConfirmModal({ propertyName, busy, onConfirm, onCancel }: DeleteC
             type="button"
             onClick={onConfirm}
             disabled={busy}
-            className="flex-1 rounded-xl bg-red-500 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-600 disabled:opacity-60"
+            className="flex-1 rounded-xl bg-[#F25461]/150 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-600 disabled:opacity-60"
           >
             {busy ? 'Deleting...' : 'Delete Property'}
           </button>
@@ -235,16 +235,16 @@ function PropertyCard({ property, onEdit, onDelete }: PropertyCardProps) {
   return (
     <motion.div
       variants={revealUp}
-      className={`flex h-full flex-col rounded-[28px] border border-[#F1E4B8] bg-white p-6 shadow-[0_16px_45px_rgba(26,26,26,0.08)] ${borderClass}`}
+      className={`flex h-full flex-col rounded-[28px] border border-[#272839] bg-[#101114] p-6 shadow-[0_16px_45px_rgba(26,26,26,0.08)] ${borderClass}`}
     >
       <div className="flex h-full flex-col">
         <div>
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="min-w-0">
-              <h3 className="font-['Sora'] text-2xl font-bold leading-tight text-[#1A1A1A]">
+              <h3 className="font-['Sora'] text-2xl font-bold leading-tight text-white">
                 {property.property_name}
               </h3>
-              <p className="mt-3 flex items-center gap-2 font-['Manrope'] text-sm text-[#6B7280]">
+              <p className="mt-3 flex items-center gap-2 font-['Manrope'] text-sm text-[#8D8D96]">
                 <MapPin className="h-4 w-4 flex-shrink-0 text-[#A08A57]" />
                 <span className="truncate">{property.address}</span>
               </p>
@@ -253,7 +253,7 @@ function PropertyCard({ property, onEdit, onDelete }: PropertyCardProps) {
               <button
                 type="button"
                 onClick={() => onEdit(property)}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#F3E19D] bg-[#FFF9E7] text-[#1A1A1A]"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#F3E19D] bg-[#141519] text-white"
                 title="Edit property"
               >
                 <Pencil className="h-4 w-4" />
@@ -261,7 +261,7 @@ function PropertyCard({ property, onEdit, onDelete }: PropertyCardProps) {
               <button
                 type="button"
                 onClick={() => onDelete(property)}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-red-100 bg-red-50 text-red-500"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-red-100 bg-[#F25461]/15 text-[#F25461]"
                 title="Delete property"
               >
                 <Trash2 className="h-4 w-4" />
@@ -285,21 +285,21 @@ function PropertyCard({ property, onEdit, onDelete }: PropertyCardProps) {
 // Skeleton card for loading state
 function PropertyCardSkeleton() {
   return (
-    <div className="flex flex-col rounded-[28px] border border-[#F1E4B8] bg-white p-6 shadow-[0_16px_45px_rgba(26,26,26,0.08)] animate-pulse">
+    <div className="flex flex-col rounded-[28px] border border-[#272839] bg-[#101114] p-6 shadow-[0_16px_45px_rgba(26,26,26,0.08)] animate-pulse">
       <div className="flex flex-1 flex-col justify-between gap-5">
         <div>
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0 flex-1">
-              <div className="h-5 w-2/3 rounded bg-neutral-100" />
-              <div className="mt-3 h-4 w-3/4 rounded bg-neutral-100" />
+              <div className="h-5 w-2/3 rounded bg-white/8" />
+              <div className="mt-3 h-4 w-3/4 rounded bg-white/8" />
             </div>
             <div className="flex gap-2">
-              <div className="h-10 w-10 rounded-full bg-neutral-100" />
-              <div className="h-10 w-10 rounded-full bg-neutral-100" />
+              <div className="h-10 w-10 rounded-full bg-white/8" />
+              <div className="h-10 w-10 rounded-full bg-white/8" />
             </div>
           </div>
           <div className="mt-5 flex gap-3">
-            <div className="h-10 w-24 rounded-full bg-neutral-100" />
+            <div className="h-10 w-24 rounded-full bg-white/8" />
           </div>
         </div>
       </div>
@@ -452,7 +452,7 @@ export function OwnerPropertiesPage() {
   })
 
   return (
-    <div className="min-h-full bg-[#FEFAEF]">
+    <div className="min-h-full bg-[#06070B]">
       <div className="pt-6 pb-12 px-6 w-full">
 
         {/* Page Header Section */}
@@ -464,8 +464,8 @@ export function OwnerPropertiesPage() {
             className="flex items-center justify-between"
           >
             <div>
-              <h2 className="font-['Sora'] font-bold text-3xl text-[#1A1A1A] tracking-tight">Properties</h2>
-              <p className="text-[#6B7280] font-['Manrope'] text-sm mt-1">
+              <h2 className="font-['Sora'] font-bold text-3xl text-white tracking-tight">Properties</h2>
+              <p className="text-[#8D8D96] font-['Manrope'] text-sm mt-1">
                 Manage your real estate portfolio and track performance.
               </p>
             </div>
@@ -475,7 +475,7 @@ export function OwnerPropertiesPage() {
                 resetForm()
                 setShowForm(true)
               }}
-              className="bg-[#FED609] hover:bg-[#FFD70B] text-[#1A1A1A] font-bold py-3 px-6 rounded-lg flex items-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95 font-['DM_Sans']"
+              className="bg-[#4E79FF] hover:bg-[#3E68EE] text-white font-bold py-3 px-6 rounded-lg flex items-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95 font-['DM_Sans']"
             >
               <PlusCircle className="h-5 w-5" />
               Add Property
@@ -488,27 +488,27 @@ export function OwnerPropertiesPage() {
             initial="hidden"
             animate="show"
             transition={{ delay: 0.05 }}
-            className="bg-white p-4 rounded-xl shadow-sm flex flex-wrap items-center gap-4 border border-[#FFFAE2]"
+            className="bg-[#101114] p-4 rounded-xl shadow-sm flex flex-wrap items-center gap-4 border border-[#272839]"
           >
             {/* Search */}
             <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6B7280]" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8D8D96]" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search properties or addresses..."
-                className="w-full bg-[#FEFAEF] border border-neutral-100 rounded-xl py-2.5 pl-9 pr-4 text-sm focus:ring-2 focus:ring-[#FED609] focus:outline-none transition-all font-['Manrope']"
+                className="w-full bg-[#06070B] border border-[#272839] rounded-xl py-2.5 pl-9 pr-4 text-sm focus:ring-2 focus:ring-[#4E79FF] focus:outline-none transition-all font-['Manrope']"
               />
             </div>
 
             {/* Status filter */}
-            <div className="flex items-center gap-2 bg-[#FEFAEF] px-4 py-2 rounded-lg border border-neutral-100 min-w-[200px]">
-              <Filter className="h-4 w-4 text-[#6B7280] flex-shrink-0" />
+            <div className="flex items-center gap-2 bg-[#06070B] px-4 py-2 rounded-lg border border-[#272839] min-w-[200px]">
+              <Filter className="h-4 w-4 text-[#8D8D96] flex-shrink-0" />
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="bg-transparent border-none text-sm font-medium focus:ring-0 cursor-pointer w-full text-[#1A1A1A] outline-none font-['DM_Sans']"
+                className="bg-transparent border-none text-sm font-medium focus:ring-0 cursor-pointer w-full text-white outline-none font-['DM_Sans']"
               >
                 <option value="all">Status: All</option>
                 <option value="active">Active</option>
@@ -518,12 +518,12 @@ export function OwnerPropertiesPage() {
 
             {/* Location filter */}
             {locationOptions.length > 0 ? (
-              <div className="flex items-center gap-2 bg-[#FEFAEF] px-4 py-2 rounded-lg border border-neutral-100 min-w-[200px]">
-                <MapPin className="h-4 w-4 text-[#6B7280] flex-shrink-0" />
+              <div className="flex items-center gap-2 bg-[#06070B] px-4 py-2 rounded-lg border border-[#272839] min-w-[200px]">
+                <MapPin className="h-4 w-4 text-[#8D8D96] flex-shrink-0" />
                 <select
                   value={locationFilter}
                   onChange={(e) => setLocationFilter(e.target.value)}
-                  className="bg-transparent border-none text-sm font-medium focus:ring-0 cursor-pointer w-full text-[#1A1A1A] outline-none font-['DM_Sans']"
+                  className="bg-transparent border-none text-sm font-medium focus:ring-0 cursor-pointer w-full text-white outline-none font-['DM_Sans']"
                 >
                   <option value="all">Location: All Areas</option>
                   {locationOptions.map((loc) => (
@@ -542,7 +542,7 @@ export function OwnerPropertiesPage() {
             variants={revealUp}
             initial="hidden"
             animate="show"
-            className="mb-6 rounded-xl bg-red-50 border border-red-100 px-5 py-4 text-sm text-red-600 flex items-center gap-3"
+            className="mb-6 rounded-xl bg-[#F25461]/15 border border-red-100 px-5 py-4 text-sm text-red-600 flex items-center gap-3"
           >
             <div className="w-2 h-2 rounded-full bg-red-400 flex-shrink-0" />
             {error}
@@ -566,17 +566,17 @@ export function OwnerPropertiesPage() {
             animate="show"
             className="flex flex-col items-center justify-center py-24 text-center"
           >
-            <div className="w-20 h-20 rounded-2xl bg-[#FFFAE2] flex items-center justify-center mb-6 border border-[#FED609]/20">
-              <Building2 className="h-9 w-9 text-[#FED609]" />
+            <div className="w-20 h-20 rounded-2xl bg-[#141519] flex items-center justify-center mb-6 border border-[#4E79FF]/25">
+              <Building2 className="h-9 w-9 text-[#4E79FF]" />
             </div>
-            <h3 className="font-['Sora'] font-bold text-xl text-[#1A1A1A] mb-2">No properties yet</h3>
-            <p className="text-[#6B7280] text-sm max-w-xs mb-8 font-['Manrope']">
+            <h3 className="font-['Sora'] font-bold text-xl text-white mb-2">No properties yet</h3>
+            <p className="text-[#8D8D96] text-sm max-w-xs mb-8 font-['Manrope']">
               Create your first property to onboard tenants and start tracking rent and support.
             </p>
             <button
               type="button"
               onClick={() => setShowForm(true)}
-              className="bg-[#FED609] hover:bg-[#FFD70B] text-[#1A1A1A] font-bold py-3 px-8 rounded-lg flex items-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95 font-['DM_Sans']"
+              className="bg-[#4E79FF] hover:bg-[#3E68EE] text-white font-bold py-3 px-8 rounded-lg flex items-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95 font-['DM_Sans']"
             >
               <PlusCircle className="h-5 w-5" />
               Add Your First Property
@@ -592,13 +592,13 @@ export function OwnerPropertiesPage() {
             animate="show"
             className="flex flex-col items-center justify-center py-20 text-center"
           >
-            <Search className="h-10 w-10 text-[#6B7280] mb-4" />
-            <h3 className="font-['Sora'] font-bold text-lg text-[#1A1A1A] mb-1">No results found</h3>
-            <p className="text-[#6B7280] text-sm font-['Manrope']">Try adjusting your search or filters.</p>
+            <Search className="h-10 w-10 text-[#8D8D96] mb-4" />
+            <h3 className="font-['Sora'] font-bold text-lg text-white mb-1">No results found</h3>
+            <p className="text-[#8D8D96] text-sm font-['Manrope']">Try adjusting your search or filters.</p>
             <button
               type="button"
               onClick={() => { setSearchQuery(''); setStatusFilter('all'); setLocationFilter('all') }}
-              className="mt-4 text-[#D4A800] font-semibold text-sm hover:underline font-['DM_Sans']"
+              className="mt-4 text-[#4E79FF] font-semibold text-sm hover:underline font-['DM_Sans']"
             >
               Clear filters
             </button>
@@ -630,38 +630,38 @@ export function OwnerPropertiesPage() {
           <div className="mt-16 flex items-center justify-center gap-2">
             <button
               type="button"
-              className="w-10 h-10 rounded-lg flex items-center justify-center text-[#6B7280] hover:bg-[#FFFAE2] hover:text-[#1A1A1A] transition-colors"
+              className="w-10 h-10 rounded-lg flex items-center justify-center text-[#8D8D96] hover:bg-white/4 hover:text-white transition-colors"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
             <button
               type="button"
-              className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#FED609] text-[#1A1A1A] font-bold shadow-sm"
+              className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#2251E3] text-white font-bold shadow-sm"
             >
               1
             </button>
             <button
               type="button"
-              className="w-10 h-10 rounded-lg flex items-center justify-center text-[#1A1A1A] font-medium hover:bg-[#FFFAE2] transition-colors"
+              className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-medium hover:bg-[#141519] transition-colors"
             >
               2
             </button>
             <button
               type="button"
-              className="w-10 h-10 rounded-lg flex items-center justify-center text-[#1A1A1A] font-medium hover:bg-[#FFFAE2] transition-colors"
+              className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-medium hover:bg-[#141519] transition-colors"
             >
               3
             </button>
-            <span className="mx-1 text-[#6B7280]">...</span>
+            <span className="mx-1 text-[#8D8D96]">...</span>
             <button
               type="button"
-              className="w-10 h-10 rounded-lg flex items-center justify-center text-[#1A1A1A] font-medium hover:bg-[#FFFAE2] transition-colors"
+              className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-medium hover:bg-[#141519] transition-colors"
             >
               {Math.ceil(filteredProperties.length / 9)}
             </button>
             <button
               type="button"
-              className="w-10 h-10 rounded-lg flex items-center justify-center text-[#6B7280] hover:bg-[#FFFAE2] hover:text-[#1A1A1A] transition-colors"
+              className="w-10 h-10 rounded-lg flex items-center justify-center text-[#8D8D96] hover:bg-white/4 hover:text-white transition-colors"
             >
               <ChevronRight className="h-5 w-5" />
             </button>
@@ -694,3 +694,5 @@ export function OwnerPropertiesPage() {
     </div>
   )
 }
+
+

@@ -142,14 +142,14 @@ export function OwnerBrokersPage() {
   }
 
   return (
-    <section className="space-y-6">
+    <section className="space-y-6 min-h-screen bg-[#06070B] p-6 text-white">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="ph-title inline-flex items-center gap-2 text-2xl font-semibold text-[var(--ph-text)]">
-            <Briefcase className="h-6 w-6 text-[var(--ph-accent)]" />
+          <h2 className="ph-title inline-flex items-center gap-2 text-2xl font-semibold text-white">
+            <Briefcase className="h-6 w-6 text-[#4E79FF]" />
             Brokers
           </h2>
-          <p className="mt-2 text-sm text-[var(--ph-text-muted)]">
+          <p className="mt-2 text-sm text-[#8D8D96]">
             Manage broker directory and assign brokers while creating or updating tenants.
           </p>
         </div>
@@ -209,7 +209,7 @@ export function OwnerBrokersPage() {
             value={form.notes}
             onChange={(event) => setForm((current) => ({ ...current, notes: event.target.value }))}
           />
-          <label className="inline-flex items-center gap-2 text-sm text-[var(--ph-text-soft)]">
+          <label className="inline-flex items-center gap-2 text-sm text-[#C0C0C5]">
             <input
               type="checkbox"
               checked={form.is_active}
@@ -238,10 +238,10 @@ export function OwnerBrokersPage() {
           {brokers.map((broker) => {
             const assignedTenants = tenants.filter((t) => t.broker_id === broker.id)
             return (
-            <tr key={broker.id} className="border-t border-[var(--ph-line)]">
+            <tr key={broker.id} className="border-t border-[#272839]">
               <td className="px-4 py-3">
-                <p className="font-medium text-[var(--ph-text)]">{broker.full_name}</p>
-                <p className="text-xs text-[var(--ph-text-muted)]">{broker.email}</p>
+                <p className="font-medium text-white">{broker.full_name}</p>
+                <p className="text-xs text-[#8D8D96]">{broker.email}</p>
                 {assignedTenants.length > 0 ? (
                   <div className="mt-1.5">
                     <p className="text-[9px] font-bold uppercase tracking-widest text-[#9CA3AF] mb-1">Assigned Tenants</p>
@@ -249,9 +249,9 @@ export function OwnerBrokersPage() {
                       {assignedTenants.map((t) => (
                         <span
                           key={t.id}
-                          className="inline-flex items-center gap-1 rounded-full bg-[#FFFBEB] border border-[#FED609]/30 px-2 py-0.5 text-[10px] font-semibold text-[#A08A57]"
+                          className="inline-flex items-center gap-1 rounded-full bg-[#141519] border border-[#4E79FF]/30 px-2 py-0.5 text-[10px] font-semibold text-[#4E79FF]"
                         >
-                          <span className="h-1.5 w-1.5 rounded-full bg-[#FED609] shrink-0" />
+                          <span className="h-1.5 w-1.5 rounded-full bg-[#4E79FF] shrink-0" />
                           {t.full_name}
                         </span>
                       ))}
@@ -261,23 +261,23 @@ export function OwnerBrokersPage() {
                   <p className="mt-1 text-[10px] text-[#9CA3AF]">No tenants assigned</p>
                 )}
               </td>
-              <td className="px-4 py-3 text-[var(--ph-text-soft)]">{broker.phone || '-'}</td>
-              <td className="px-4 py-3 text-[var(--ph-text-soft)]">{broker.agency_name || '-'}</td>
-              <td className="px-4 py-3 text-[var(--ph-text-soft)]">{broker.is_active ? 'Active' : 'Inactive'}</td>
-              <td className="px-4 py-3 text-[var(--ph-text-soft)]">{formatDateTime(broker.created_at)}</td>
+              <td className="px-4 py-3 text-[#C0C0C5]">{broker.phone || '-'}</td>
+              <td className="px-4 py-3 text-[#C0C0C5]">{broker.agency_name || '-'}</td>
+              <td className="px-4 py-3 text-[#C0C0C5]">{broker.is_active ? 'Active' : 'Inactive'}</td>
+              <td className="px-4 py-3 text-[#C0C0C5]">{formatDateTime(broker.created_at)}</td>
               <td className="px-4 py-3">
                 <div className="flex items-center gap-1">
                   <button
                     type="button"
                     onClick={() => handleEdit(broker)}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg text-[#6B7280] transition-colors hover:bg-[#F3F4F6] hover:text-[#1A1A1A]"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg text-[#8D8D96] transition-colors hover:bg-white/4 hover:text-white"
                   >
                     <Pencil className="h-4 w-4" />
                   </button>
                   <button
                     type="button"
                     onClick={() => setBrokerPendingDelete(broker)}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg text-rose-400 transition-colors hover:bg-rose-50 hover:text-rose-600"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg text-[#F25461] transition-colors hover:bg-[#F25461]/15 hover:text-[#F25461]"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -297,20 +297,20 @@ export function OwnerBrokersPage() {
           size="sm"
         >
           <div className="space-y-4 text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-50">
-              <Trash2 className="h-5 w-5 text-red-500" />
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#F25461]/15">
+              <Trash2 className="h-5 w-5 text-[#F25461]" />
             </div>
             {error ? (
-              <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600 text-left">{error}</div>
+              <div className="rounded-xl border border-[#F25461]/30 bg-[#F25461]/15 px-4 py-3 text-sm text-red-600 text-left">{error}</div>
             ) : null}
-            <p className="text-sm text-[#4B5563]">
-              <span className="font-semibold text-[#1A1A1A]">{brokerPendingDelete.full_name}</span> will be permanently removed. Assigned tenants will be unassigned. This action cannot be undone.
+            <p className="text-sm text-[#C0C0C5]">
+              <span className="font-semibold text-white">{brokerPendingDelete.full_name}</span> will be permanently removed. Assigned tenants will be unassigned. This action cannot be undone.
             </p>
             <div className="flex gap-3">
               <button
                 type="button"
                 onClick={() => setBrokerPendingDelete(null)}
-                className="flex-1 rounded-xl border border-neutral-200 px-4 py-2.5 text-sm font-medium text-[#6B7280] transition-colors hover:bg-[#FEFAEF] hover:text-[#1A1A1A]"
+                className="flex-1 rounded-xl border border-[#272839] px-4 py-2.5 text-sm font-medium text-[#8D8D96] transition-colors hover:bg-[#141519] hover:text-white"
               >
                 Cancel
               </button>
@@ -318,7 +318,7 @@ export function OwnerBrokersPage() {
                 type="button"
                 disabled={busy}
                 onClick={() => void handleDelete()}
-                className="flex-1 rounded-xl bg-red-500 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-600 disabled:opacity-60"
+                className="flex-1 rounded-xl bg-[#F25461]/150 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-600 disabled:opacity-60"
               >
                 {busy ? 'Deleting...' : 'Delete Broker'}
               </button>
@@ -329,3 +329,4 @@ export function OwnerBrokersPage() {
     </section>
   )
 }
+

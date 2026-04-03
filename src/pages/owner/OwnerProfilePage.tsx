@@ -10,11 +10,11 @@ import { api } from '../../services/api'
 function ReadOnlyField({ label, value }: { label: string; value: string | null | undefined }) {
   return (
     <div>
-      <p className="mb-1 text-[10px] uppercase tracking-widest font-bold text-[#6B7280] font-[DM_Sans,sans-serif]">
+      <p className="mb-1 text-[10px] uppercase tracking-widest font-bold text-[#8D8D96] font-[DM_Sans,sans-serif]">
         {label}
       </p>
-      <p className="font-medium text-[#1A1A1A] font-[Manrope,sans-serif] break-all">
-        {value ?? <span className="text-[#6B7280] italic">Not set</span>}
+      <p className="font-medium text-white font-[Manrope,sans-serif] break-all">
+        {value ?? <span className="text-[#8D8D96] italic">Not set</span>}
       </p>
     </div>
   )
@@ -26,7 +26,7 @@ function SectionLabel({ icon, children }: { icon: React.ReactNode; children: Rea
   return (
     <div className="mb-4 flex items-center gap-2">
       {icon}
-      <h3 className="font-['Sora'] text-base font-bold text-[#1A1A1A]">{children}</h3>
+      <h3 className="font-['Sora'] text-base font-bold text-white">{children}</h3>
     </div>
   )
 }
@@ -68,21 +68,21 @@ export function OwnerProfilePage() {
     : null
 
   return (
-    <div className="min-h-screen bg-[#FEFAEF]">
+    <div className="min-h-screen bg-[#06070B] text-white">
       <div className="mx-auto max-w-4xl p-6 lg:p-8">
 
         {/* ── Page Header ── */}
         <header className="mb-8">
-          <p className="mb-1 text-[10px] uppercase tracking-widest font-bold text-[#92700A] font-[DM_Sans,sans-serif]">
+          <p className="mb-1 text-[10px] uppercase tracking-widest font-bold text-[#4E79FF] font-[DM_Sans,sans-serif]">
             Owner Portal
           </p>
           <div className="mb-1 flex items-center gap-2">
-            <User className="h-7 w-7 text-[#FED609]" />
-            <h2 className="font-['Sora'] text-3xl font-extrabold tracking-tight text-[#1A1A1A]">
+            <User className="h-7 w-7 text-[#4E79FF]" />
+            <h2 className="font-['Sora'] text-3xl font-extrabold tracking-tight text-white">
               Profile &amp; Settings
             </h2>
           </div>
-          <p className="font-medium text-[#6B7280] font-[Manrope,sans-serif]">
+          <p className="font-medium text-[#8D8D96] font-[Manrope,sans-serif]">
             Manage your account details and contact preferences.
           </p>
         </header>
@@ -95,12 +95,12 @@ export function OwnerProfilePage() {
 
             {/* Section 1: Profile Overview */}
             <div
-              className="rounded-2xl bg-white p-6 shadow-sm"
+              className="rounded-2xl bg-[#101114] p-6 shadow-sm"
               style={{
-                border: '1.5px solid rgba(0,0,0,0.06)',
+                border: '1.5px solid #272839',
               }}
             >
-              <SectionLabel icon={<User className="h-4 w-4 text-[#FED609]" />}>
+              <SectionLabel icon={<User className="h-4 w-4 text-[#4E79FF]" />}>
                 Profile Overview
               </SectionLabel>
 
@@ -110,19 +110,19 @@ export function OwnerProfilePage() {
                 <ReadOnlyField label="Login Email" value={owner?.email} />
               </div>
 
-              <div className="mt-5 rounded-xl bg-[#FFFAE2] px-4 py-3 text-xs leading-relaxed text-[#92700A] font-[Manrope,sans-serif]">
+              <div className="mt-5 rounded-xl bg-[#141519] px-4 py-3 text-xs leading-relaxed text-[#4E79FF] font-[Manrope,sans-serif]">
                 Contact support to update your name, company, or login email.
               </div>
             </div>
 
             {/* Section 3: Organization Info */}
             <div
-              className="rounded-2xl bg-white p-6 shadow-sm"
+              className="rounded-2xl bg-[#101114] p-6 shadow-sm"
               style={{
-                border: '1.5px solid rgba(0,0,0,0.06)',
+                border: '1.5px solid #272839',
               }}
             >
-              <SectionLabel icon={<Building2 className="h-4 w-4 text-[#FED609]" />}>
+              <SectionLabel icon={<Building2 className="h-4 w-4 text-[#4E79FF]" />}>
                 Organization Info
               </SectionLabel>
 
@@ -134,15 +134,15 @@ export function OwnerProfilePage() {
 
                 {/* Plan badge */}
                 <div>
-                  <p className="mb-1 text-[10px] uppercase tracking-widest font-bold text-[#6B7280] font-[DM_Sans,sans-serif]">
+                  <p className="mb-1 text-[10px] uppercase tracking-widest font-bold text-[#8D8D96] font-[DM_Sans,sans-serif]">
                     Plan
                   </p>
                   {owner?.organization?.plan_code ? (
-                    <span className="inline-flex items-center rounded-full bg-[#FED609]/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#92700A] font-[DM_Sans,sans-serif]">
+                    <span className="inline-flex items-center rounded-full bg-[#4E79FF]/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#4E79FF] font-[DM_Sans,sans-serif]">
                       {owner.organization.plan_code}
                     </span>
                   ) : (
-                    <span className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#6B7280] font-[DM_Sans,sans-serif]">
+                    <span className="inline-flex items-center rounded-full bg-white/8 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#8D8D96] font-[DM_Sans,sans-serif]">
                       Free
                     </span>
                   )}
@@ -169,16 +169,16 @@ export function OwnerProfilePage() {
 
             {/* Section 2: Support Contact Info */}
             <div
-              className="rounded-2xl bg-white p-6 shadow-sm"
+              className="rounded-2xl bg-[#101114] p-6 shadow-sm"
               style={{
-                border: '1.5px solid rgba(0,0,0,0.06)',
+                border: '1.5px solid #272839',
               }}
             >
-              <SectionLabel icon={<Phone className="h-4 w-4 text-[#FED609]" />}>
+              <SectionLabel icon={<Phone className="h-4 w-4 text-[#4E79FF]" />}>
                 Support Contact Info
               </SectionLabel>
 
-              <p className="mb-5 text-sm leading-relaxed text-[#6B7280] font-[Manrope,sans-serif]">
+              <p className="mb-5 text-sm leading-relaxed text-[#8D8D96] font-[Manrope,sans-serif]">
                 Tenants use these contact details to reach you directly.
               </p>
 
@@ -187,7 +187,7 @@ export function OwnerProfilePage() {
                 <div>
                   <label
                     htmlFor="support-email"
-                    className="mb-1.5 flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-[#6B7280] font-[DM_Sans,sans-serif]"
+                    className="mb-1.5 flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-[#8D8D96] font-[DM_Sans,sans-serif]"
                   >
                     <Mail className="h-3.5 w-3.5" />
                     Support Email
@@ -198,7 +198,7 @@ export function OwnerProfilePage() {
                     value={supportEmail}
                     onChange={(e) => setSupportEmail(e.target.value)}
                     placeholder="support@yourcompany.com"
-                    className="w-full rounded-xl border border-[rgba(0,0,0,0.08)] bg-[#FEFAEF] px-4 py-3 text-sm font-medium text-[#1A1A1A] placeholder-[#6B7280]/60 transition-all focus:border-[#FED609] focus:outline-none focus:ring-2 focus:ring-[#FED609]/40 font-[Manrope,sans-serif]"
+                    className="w-full rounded-xl border border-[#272839] bg-[#06070B] px-4 py-3 text-sm font-medium text-white placeholder-[#6B7280]/60 transition-all focus:border-[#4E79FF] focus:outline-none focus:ring-2 focus:ring-[#4E79FF]/30 font-[Manrope,sans-serif]"
                   />
                 </div>
 
@@ -206,7 +206,7 @@ export function OwnerProfilePage() {
                 <div>
                   <label
                     htmlFor="support-whatsapp"
-                    className="mb-1.5 flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-[#6B7280] font-[DM_Sans,sans-serif]"
+                    className="mb-1.5 flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-[#8D8D96] font-[DM_Sans,sans-serif]"
                   >
                     <Phone className="h-3.5 w-3.5" />
                     Support WhatsApp
@@ -217,7 +217,7 @@ export function OwnerProfilePage() {
                     value={supportWhatsapp}
                     onChange={(e) => setSupportWhatsapp(e.target.value)}
                     placeholder="+1 234 567 8900"
-                    className="w-full rounded-xl border border-[rgba(0,0,0,0.08)] bg-[#FEFAEF] px-4 py-3 text-sm font-medium text-[#1A1A1A] placeholder-[#6B7280]/60 transition-all focus:border-[#FED609] focus:outline-none focus:ring-2 focus:ring-[#FED609]/40 font-[Manrope,sans-serif]"
+                    className="w-full rounded-xl border border-[#272839] bg-[#06070B] px-4 py-3 text-sm font-medium text-white placeholder-[#6B7280]/60 transition-all focus:border-[#4E79FF] focus:outline-none focus:ring-2 focus:ring-[#4E79FF]/30 font-[Manrope,sans-serif]"
                   />
                 </div>
               </div>
@@ -229,7 +229,7 @@ export function OwnerProfilePage() {
                 </div>
               )}
               {success && (
-                <div className="mt-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 font-[Manrope,sans-serif]">
+                <div className="mt-4 rounded-xl border border-[#32C382]/30 bg-[#32C382]/15 px-4 py-3 text-sm text-[#32C382] font-[Manrope,sans-serif]">
                   {success}
                 </div>
               )}
@@ -240,7 +240,7 @@ export function OwnerProfilePage() {
                   type="button"
                   onClick={() => void handleSave()}
                   disabled={saving}
-                  className="flex items-center gap-2 rounded-xl bg-[#FED609] px-8 py-3 font-['Sora'] font-bold text-[#1A1A1A] shadow-md transition-all hover:bg-[#FFD70B] active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="flex items-center gap-2 rounded-xl bg-[#2251E3] px-8 py-3 font-['Sora'] font-bold text-white shadow-md transition-all hover:bg-[#3E68EE] active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   <Save className="h-4 w-4" />
                   {saving ? 'Saving...' : 'Save Changes'}
@@ -249,21 +249,21 @@ export function OwnerProfilePage() {
             </div>
 
             {/* Section 4: Danger Zone */}
-            <div className="rounded-2xl border border-red-200 bg-white p-6 shadow-sm">
-              <SectionLabel icon={<Shield className="h-4 w-4 text-red-500" />}>
+            <div className="rounded-2xl border border-[#F25461]/30 bg-[#101114] p-6 shadow-sm">
+              <SectionLabel icon={<Shield className="h-4 w-4 text-[#F25461]" />}>
                 Danger Zone
               </SectionLabel>
 
-              <p className="mb-4 text-sm leading-relaxed text-[#6B7280] font-[Manrope,sans-serif]">
+              <p className="mb-4 text-sm leading-relaxed text-[#8D8D96] font-[Manrope,sans-serif]">
                 This will permanently delete your account and all associated data. This action
                 cannot be undone.
               </p>
 
-              <p className="mb-4 text-xs text-[#6B7280] font-[Manrope,sans-serif]">
+              <p className="mb-4 text-xs text-[#8D8D96] font-[Manrope,sans-serif]">
                 Contact{' '}
                 <a
                   href="mailto:support@prohives.com"
-                  className="font-semibold text-red-500 underline underline-offset-2 hover:text-red-600"
+                  className="font-semibold text-[#F25461] underline underline-offset-2 hover:text-[#F25461]"
                 >
                   support@prohives.com
                 </a>{' '}
@@ -274,7 +274,7 @@ export function OwnerProfilePage() {
                 type="button"
                 disabled
                 title="Contact support to delete your account"
-                className="cursor-not-allowed rounded-xl border border-red-200 bg-red-50 px-6 py-2.5 text-sm font-bold text-red-400 opacity-60 font-['Sora']"
+                className="cursor-not-allowed rounded-xl border border-[#F25461]/30 bg-[#F25461]/15 px-6 py-2.5 text-sm font-bold text-[#F25461] opacity-60 font-['Sora']"
               >
                 Delete Account
               </button>
@@ -285,3 +285,4 @@ export function OwnerProfilePage() {
     </div>
   )
 }
+

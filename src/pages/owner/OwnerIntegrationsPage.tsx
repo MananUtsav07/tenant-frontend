@@ -43,13 +43,13 @@ function FeatureBullet({ text, dimmed = false }: { text: string; dimmed?: boolea
   return (
     <li className={`flex items-start gap-2 ${dimmed ? 'opacity-40' : ''}`}>
       <span
-        className="mt-0.5 shrink-0 text-xs font-bold text-[#FED609]"
+        className="mt-0.5 shrink-0 text-xs font-bold text-[#4E79FF]"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
       >
         ✓
       </span>
       <span
-        className="text-sm text-[#6B7280]"
+        className="text-sm text-[#8D8D96]"
         style={{ fontFamily: "'Manrope', sans-serif" }}
       >
         {text}
@@ -64,10 +64,10 @@ type BadgeVariant = 'active' | 'inactive' | 'coming_soon' | 'test_mode'
 
 function StatusBadge({ variant, label }: { variant: BadgeVariant; label: string }) {
   const styles: Record<BadgeVariant, string> = {
-    active: 'bg-green-100 text-green-700',
-    inactive: 'bg-gray-100 text-gray-500',
-    coming_soon: 'bg-[#FED609]/20 text-[#92700A]',
-    test_mode: 'bg-orange-100 text-orange-600',
+    active: 'bg-[#32C382]/15 text-[#32C382]',
+    inactive: 'bg-white/8 text-[#8D8D96]',
+    coming_soon: 'bg-[#4E79FF]/15 text-[#4E79FF]',
+    test_mode: 'bg-[#EBCF42]/15 text-[#EBCF42]',
   }
   return (
     <span
@@ -106,7 +106,7 @@ function IntegrationCard({
   footerAction,
 }: IntegrationCardProps) {
   return (
-    <div className="group flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:border-[#FED609]/20 hover:shadow-md">
+    <div className="group flex flex-col rounded-2xl border border-[#272839] bg-[#101114] p-6 shadow-sm transition-all hover:border-[#4E79FF]/20 hover:shadow-md">
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
@@ -115,7 +115,7 @@ function IntegrationCard({
           </div>
           <div>
             <h3
-              className="text-base font-semibold text-[#1A1A1A]"
+              className="text-base font-semibold text-white"
               style={{ fontFamily: "'Sora', sans-serif" }}
             >
               {name}
@@ -132,7 +132,7 @@ function IntegrationCard({
 
       {/* Description */}
       <p
-        className="mt-4 text-sm leading-relaxed text-[#6B7280]"
+        className="mt-4 text-sm leading-relaxed text-[#8D8D96]"
         style={{ fontFamily: "'Manrope', sans-serif" }}
       >
         {description}
@@ -193,14 +193,14 @@ export function OwnerIntegrationsPage() {
   const whatsappFooter = status ? (
     !status.whatsapp.configured ? (
       <button
-        className="rounded-xl border border-[#FED609] bg-white px-4 py-2 text-sm font-semibold text-[#92700A] transition-colors hover:bg-[#FED609]/10"
+        className="rounded-xl border border-[#4E79FF] bg-[#101114] px-4 py-2 text-sm font-semibold text-[#4E79FF] transition-colors hover:bg-[#141519]"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
       >
         Setup Required
       </button>
     ) : status.whatsapp.linked ? (
       <span
-        className="flex items-center gap-1.5 text-sm font-medium text-green-600"
+        className="flex items-center gap-1.5 text-sm font-medium text-[#32C382]"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
       >
         <CheckCircle2 className="h-4 w-4" />
@@ -210,7 +210,7 @@ export function OwnerIntegrationsPage() {
       <button
         type="button"
         onClick={() => navigate(ROUTES.ownerProfile)}
-        className="rounded-xl border border-[#FED609] bg-white px-4 py-2 text-sm font-semibold text-[#92700A] transition-colors hover:bg-[#FED609]/10"
+        className="rounded-xl border border-[#4E79FF] bg-[#101114] px-4 py-2 text-sm font-semibold text-[#4E79FF] transition-colors hover:bg-[#141519]"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
       >
         Connect WhatsApp
@@ -223,14 +223,14 @@ export function OwnerIntegrationsPage() {
   const telegramFooter = status ? (
     !status.telegram.configured ? (
       <button
-        className="rounded-xl border border-[#FED609] bg-white px-4 py-2 text-sm font-semibold text-[#92700A] transition-colors hover:bg-[#FED609]/10"
+        className="rounded-xl border border-[#4E79FF] bg-[#101114] px-4 py-2 text-sm font-semibold text-[#4E79FF] transition-colors hover:bg-[#141519]"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
       >
         Setup Required
       </button>
     ) : status.telegram.linked ? (
       <span
-        className="flex items-center gap-1.5 text-sm font-medium text-green-600"
+        className="flex items-center gap-1.5 text-sm font-medium text-[#32C382]"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
       >
         <CheckCircle2 className="h-4 w-4" />
@@ -241,7 +241,7 @@ export function OwnerIntegrationsPage() {
         type="button"
         onClick={openTelegramConnect}
         disabled={!status.telegram.connect_url}
-        className="rounded-xl border border-[#FED609] bg-white px-4 py-2 text-sm font-semibold text-[#92700A] transition-colors hover:bg-[#FED609]/10 disabled:cursor-not-allowed disabled:opacity-60"
+        className="rounded-xl border border-[#4E79FF] bg-[#101114] px-4 py-2 text-sm font-semibold text-[#4E79FF] transition-colors hover:bg-[#141519] disabled:cursor-not-allowed disabled:opacity-60"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
       >
         Connect Telegram
@@ -253,7 +253,7 @@ export function OwnerIntegrationsPage() {
 
   const emailFooter = (
     <span
-      className="flex items-center gap-1.5 text-sm font-medium text-green-600"
+      className="flex items-center gap-1.5 text-sm font-medium text-[#32C382]"
       style={{ fontFamily: "'DM Sans', sans-serif" }}
     >
       <CheckCircle2 className="h-4 w-4" />
@@ -266,7 +266,7 @@ export function OwnerIntegrationsPage() {
   const instagramFooter = (
     <button
       disabled
-      className="flex cursor-not-allowed items-center gap-1.5 rounded-xl bg-[#FED609]/20 px-4 py-2 text-sm font-semibold text-[#92700A] opacity-80"
+      className="flex cursor-not-allowed items-center gap-1.5 rounded-xl bg-[#4E79FF]/15 px-4 py-2 text-sm font-semibold text-[#4E79FF] opacity-80"
       style={{ fontFamily: "'DM Sans', sans-serif" }}
     >
       <Clock className="h-3.5 w-3.5" />
@@ -277,9 +277,9 @@ export function OwnerIntegrationsPage() {
   // ─── WhatsApp provider line ─────────────────────────────────────────────────
 
   const whatsappProviderLine = status?.whatsapp.provider ? (
-    <span className="text-xs text-[#6B7280]">
+    <span className="text-xs text-[#8D8D96]">
       {status.whatsapp.provider} &middot;{' '}
-      <span className={status.whatsapp.live ? 'text-green-600' : 'text-orange-500'}>
+      <span className={status.whatsapp.live ? 'text-[#32C382]' : 'text-orange-500'}>
         {status.whatsapp.live ? 'Live mode' : 'Test mode'}
       </span>
       {status.whatsapp.linked ? ' · linked to owner' : ' · available to connect'}
@@ -287,7 +287,7 @@ export function OwnerIntegrationsPage() {
   ) : null
 
   const telegramProviderLine = status?.telegram.configured ? (
-    <span className="text-xs text-[#6B7280]">
+    <span className="text-xs text-[#8D8D96]">
       {status.telegram.bot_username ? `@${status.telegram.bot_username}` : 'Telegram bot configured'}
       {status.telegram.linked ? ' · linked to owner' : ' · click connect then press Start'}
     </span>
@@ -296,22 +296,22 @@ export function OwnerIntegrationsPage() {
   // ─── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-[#FEFAEF] p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-[#06070B] p-4 sm:p-6 lg:p-8 text-white">
       {/* Page header */}
       <div className="mb-8">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#FED609]/20">
-            <Zap className="h-5 w-5 text-[#92700A]" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#4E79FF]/15">
+            <Zap className="h-5 w-5 text-[#4E79FF]" />
           </div>
           <div>
             <h1
-              className="text-2xl font-bold text-[#1A1A1A]"
+              className="text-2xl font-bold text-white"
               style={{ fontFamily: "'Sora', sans-serif" }}
             >
               Integrations
             </h1>
             <p
-              className="mt-0.5 text-sm text-[#6B7280]"
+              className="mt-0.5 text-sm text-[#8D8D96]"
               style={{ fontFamily: "'Manrope', sans-serif" }}
             >
               Manage your messaging channels and third-party connections
@@ -335,8 +335,8 @@ export function OwnerIntegrationsPage() {
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
           {/* WhatsApp Business */}
           <IntegrationCard
-            iconBg="bg-[#25D366]/10"
-            icon={<MessageCircle className="h-5 w-5 text-[#25D366]" />}
+            iconBg="bg-[#32C382]/15"
+            icon={<MessageCircle className="h-5 w-5 text-[#32C382]" />}
             name="WhatsApp Business"
             badge={
               <StatusBadge
@@ -356,8 +356,8 @@ export function OwnerIntegrationsPage() {
 
           {/* Telegram */}
           <IntegrationCard
-            iconBg="bg-[#0088CC]/10"
-            icon={<Send className="h-5 w-5 text-[#0088CC]" />}
+            iconBg="bg-[#2251E3]/15"
+            icon={<Send className="h-5 w-5 text-[#2251E3]" />}
             name="Telegram"
             badge={
               <StatusBadge
@@ -377,8 +377,8 @@ export function OwnerIntegrationsPage() {
 
           {/* Instagram DMs */}
           <IntegrationCard
-            iconBg="bg-gradient-to-br from-pink-100 to-purple-100"
-            icon={<Instagram className="h-5 w-5 text-pink-500" />}
+            iconBg="bg-[#141519]"
+            icon={<Instagram className="h-5 w-5 text-[#EBCF42]" />}
             name="Instagram DMs"
             badge={<StatusBadge variant="coming_soon" label="Coming Soon" />}
             description="Respond to tenant inquiries directly from Instagram DMs. AI-powered auto-replies keep communication seamless."
@@ -392,8 +392,8 @@ export function OwnerIntegrationsPage() {
 
           {/* Email */}
           <IntegrationCard
-            iconBg="bg-blue-50"
-            icon={<Mail className="h-5 w-5 text-blue-500" />}
+            iconBg="bg-[#141519]"
+            icon={<Mail className="h-5 w-5 text-[#4E79FF]" />}
             name="Email Notifications"
             badge={<StatusBadge variant="active" label="Active" />}
             description="Automated email notifications for ticket updates, payment confirmations, and lease reminders."
@@ -409,3 +409,4 @@ export function OwnerIntegrationsPage() {
     </div>
   )
 }
+

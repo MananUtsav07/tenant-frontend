@@ -38,8 +38,8 @@ function getNotificationIcon(notification: OwnerNotification) {
 
   if (type.includes('ticket')) {
     return (
-      <div className="w-12 h-12 bg-[#FED609]/15 rounded-full flex items-center justify-center flex-shrink-0">
-        <Bell className="w-5 h-5 text-[#92700A]" />
+      <div className="w-12 h-12 bg-[#2251E3]/15 rounded-full flex items-center justify-center flex-shrink-0">
+        <Bell className="w-5 h-5 text-[#4E79FF]" />
       </div>
     )
   }
@@ -72,8 +72,8 @@ function getNotificationIcon(notification: OwnerNotification) {
     )
   }
   return (
-    <div className="w-12 h-12 bg-[#FED609]/15 rounded-full flex items-center justify-center flex-shrink-0">
-      <FileText className="w-5 h-5 text-[#92700A]" />
+    <div className="w-12 h-12 bg-[#2251E3]/15 rounded-full flex items-center justify-center flex-shrink-0">
+      <FileText className="w-5 h-5 text-[#4E79FF]" />
     </div>
   )
 }
@@ -89,14 +89,14 @@ export function OwnerNotificationsPage() {
   }), [notifications, activeFilter])
 
   return (
-    <div className="p-6 w-full bg-[#FEFAEF] min-h-screen">
+    <div className="p-6 w-full bg-[#06070B] min-h-screen text-white">
       <div className="max-w-5xl mx-auto space-y-6">
 
         {/* Page Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
-            <h2 className="font-['Sora'] font-bold text-3xl text-[#1A1A1A] mb-4">Notifications</h2>
-            <div className="flex p-1 bg-white/50 border border-[#FED609]/20 rounded-lg w-fit">
+            <h2 className="font-['Sora'] font-bold text-3xl text-white mb-4">Notifications</h2>
+            <div className="flex p-1 bg-[#101114]/50 border border-[#272839] rounded-lg w-fit">
               {(['all', 'unread', 'read'] as NotificationFilter[]).map((filter) => (
                 <button
                   key={filter}
@@ -104,8 +104,8 @@ export function OwnerNotificationsPage() {
                   onClick={() => setActiveFilter(filter)}
                   className={
                     activeFilter === filter
-                      ? "px-6 py-1.5 rounded-md text-sm font-['DM_Sans'] font-bold bg-[#FED609] text-[#1A1A1A] shadow-sm capitalize"
-                      : "px-6 py-1.5 rounded-md text-sm font-['DM_Sans'] text-[#6B7280] hover:text-[#1A1A1A] transition-colors capitalize"
+                      ? "px-6 py-1.5 rounded-md text-sm font-['DM_Sans'] font-bold bg-[#2251E3] text-white shadow-sm capitalize"
+                      : "px-6 py-1.5 rounded-md text-sm font-['DM_Sans'] text-[#8D8D96] hover:text-white transition-colors capitalize"
                   }
                 >
                   {filter}
@@ -117,7 +117,7 @@ export function OwnerNotificationsPage() {
             <button
               type="button"
               onClick={() => void markAllRead()}
-              className="text-[#1A1A1A] font-['DM_Sans'] font-bold text-sm flex items-center gap-1.5 hover:text-[#FFD70B] transition-colors whitespace-nowrap pb-2"
+              className="text-white font-['DM_Sans'] font-bold text-sm flex items-center gap-1.5 hover:text-[#4E79FF] transition-colors whitespace-nowrap pb-2"
             >
               <CheckCircle2 className="w-4 h-4" />
               Mark All as Read
@@ -129,11 +129,11 @@ export function OwnerNotificationsPage() {
 
         {/* Notifications List */}
         {loading ? (
-          <div className="bg-white rounded-xl shadow-sm border border-[#FED609]/10 p-6">
+          <div className="bg-[#101114] rounded-xl shadow-sm border border-[#272839] p-6">
             <LoadingState message="Loading notifications..." rows={4} />
           </div>
         ) : filteredNotifications.length === 0 ? (
-          <div className="bg-white rounded-xl shadow-sm border border-[#FED609]/10 p-10">
+          <div className="bg-[#101114] rounded-xl shadow-sm border border-[#272839] p-10">
             <EmptyState
               title="No notifications"
               description="Owner notifications appear here when resident tickets or rent events need your attention."
@@ -141,13 +141,13 @@ export function OwnerNotificationsPage() {
             />
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-sm border border-[#FED609]/10 overflow-hidden w-full">
+          <div className="bg-[#101114] rounded-xl shadow-sm border border-[#272839] overflow-hidden w-full">
             {filteredNotifications.map((notification, index) => (
               <div key={notification.id}>
                 <div
-                  className={`relative flex items-start gap-4 p-6 hover:bg-[#FEFAEF]/50 transition-colors group ${
+                  className={`relative flex items-start gap-4 p-6 hover:bg-[#06070B]/50 transition-colors group ${
                     !notification.is_read
-                      ? 'border-l-4 border-[#FED609]'
+                      ? 'border-l-4 border-[#4E79FF]'
                       : 'border-l-4 border-transparent'
                   }`}
                 >
@@ -156,22 +156,22 @@ export function OwnerNotificationsPage() {
                     <div className="flex justify-between items-start mb-1 gap-3">
                       <h4
                         className={`font-['Manrope'] text-base ${
-                          !notification.is_read ? 'font-bold text-[#1A1A1A]' : 'font-medium text-[#1A1A1A]'
+                          !notification.is_read ? 'font-bold text-white' : 'font-medium text-white'
                         }`}
                       >
                         {notification.title}
                       </h4>
                       <div className="flex items-center gap-2 flex-shrink-0">
-                        <span className="text-xs text-[#6B7280] whitespace-nowrap">
+                        <span className="text-xs text-[#8D8D96] whitespace-nowrap">
                           {formatRelativeTime(notification.created_at)}
                         </span>
                         {!notification.is_read && (
                           <>
-                            <div className="w-2 h-2 bg-[#FED609] rounded-full group-hover:hidden" />
+                            <div className="w-2 h-2 bg-[#2251E3] rounded-full group-hover:hidden" />
                             <button
                               type="button"
                               onClick={() => void markRead(notification.id)}
-                              className="hidden group-hover:block text-xs font-['DM_Sans'] text-[#FED609] font-bold underline whitespace-nowrap"
+                              className="hidden group-hover:block text-xs font-['DM_Sans'] text-[#4E79FF] font-bold underline whitespace-nowrap"
                             >
                               Mark as read
                             </button>
@@ -179,11 +179,11 @@ export function OwnerNotificationsPage() {
                         )}
                       </div>
                     </div>
-                    <p className="text-[#6B7280] text-sm font-['Manrope'] leading-relaxed">{notification.message}</p>
+                    <p className="text-[#8D8D96] text-sm font-['Manrope'] leading-relaxed">{notification.message}</p>
                   </div>
                 </div>
                 {index < filteredNotifications.length - 1 && (
-                  <hr className="border-[#FED609]/5 mx-6" />
+                  <hr className="border-[#272839] mx-6" />
                 )}
               </div>
             ))}
@@ -195,3 +195,5 @@ export function OwnerNotificationsPage() {
     </div>
   )
 }
+
+

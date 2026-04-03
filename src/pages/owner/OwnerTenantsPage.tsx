@@ -84,27 +84,27 @@ function sanitizeRentInput(value: string, currencyMarker: string): string {
 function getPaymentStatusStyle(status: Tenant['payment_status']) {
   switch (status) {
     case 'paid':
-      return { badge: 'bg-green-100 text-green-700 border-green-200', dot: 'bg-green-500' }
+      return { badge: 'bg-[#32C382]/15 text-[#32C382] border-[#32C382]/30', dot: 'bg-[#32C382]' }
     case 'overdue':
-      return { badge: 'bg-red-100 text-red-700 border-red-200', dot: 'bg-red-500' }
+      return { badge: 'bg-red-100 text-red-700 border-[#F25461]/30', dot: 'bg-[#F25461]/150' }
     case 'partial':
-      return { badge: 'bg-yellow-100 text-yellow-700 border-yellow-200', dot: 'bg-yellow-500' }
+      return { badge: 'bg-[#EBCF42]/15 text-[#EBCF42] border-[#EBCF42]/30', dot: 'bg-[#EBCF42]' }
     case 'pending':
     default:
-      return { badge: 'bg-orange-100 text-orange-700 border-orange-200', dot: 'bg-orange-400' }
+      return { badge: 'bg-[#EBCF42]/15 text-[#EBCF42] border-[#EBCF42]/30', dot: 'bg-[#EBCF42]' }
   }
 }
 
 function getTenantStatusStyle(status: Tenant['status']) {
   switch (status) {
     case 'active':
-      return 'bg-green-100 text-green-700 border-green-200'
+      return 'bg-[#32C382]/15 text-[#32C382] border-[#32C382]/30'
     case 'inactive':
-      return 'bg-gray-100 text-gray-600 border-gray-200'
+      return 'bg-white/8 text-[#8D8D96] border-[#272839]'
     case 'terminated':
-      return 'bg-red-100 text-red-700 border-red-200'
+      return 'bg-red-100 text-red-700 border-[#F25461]/30'
     default:
-      return 'bg-gray-100 text-gray-600 border-gray-200'
+      return 'bg-white/8 text-[#8D8D96] border-[#272839]'
   }
 }
 
@@ -135,32 +135,32 @@ function TenantDetailPanel({ tenant, propertyName, currencyCode, onClose, onEdit
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: 32 }}
         transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-        className="bg-white rounded-2xl shadow-lg border border-[#FED609]/15 overflow-hidden sticky top-6"
+        className="bg-[#101114] rounded-2xl shadow-lg border border-[#272839] overflow-hidden sticky top-6"
       >
         {/* Gold accent top */}
-        <div className="h-1 bg-[#FED609] w-full" />
+        <div className="h-1 bg-[#2251E3] w-full" />
 
         {/* Header */}
-        <div className="p-5 border-b border-[#FED609]/10 bg-[#FFFAE2]/50">
+        <div className="p-5 border-b border-[#272839] bg-[#141519]/50">
           <div className="flex justify-between items-start mb-4">
-            <span className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest font-['DM_Sans']">
+            <span className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-widest font-['DM_Sans']">
               Tenant Details
             </span>
             <button
               type="button"
               onClick={onClose}
-              className="w-7 h-7 rounded-full flex items-center justify-center text-[#6B7280] hover:bg-[#FED609]/20 hover:text-[#1A1A1A] transition-colors"
+              className="w-7 h-7 rounded-full flex items-center justify-center text-[#8D8D96] hover:bg-[#4E79FF]/20 hover:text-white transition-colors"
             >
               <X className="h-3.5 w-3.5" />
             </button>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-[#FED609]/20 border-2 border-[#FED609]/30 flex items-center justify-center text-sm font-bold text-[#1A1A1A] font-['Sora'] flex-shrink-0">
+            <div className="w-12 h-12 rounded-full bg-[#4E79FF]/20 border-2 border-[#4E79FF]/30 flex items-center justify-center text-sm font-bold text-white font-['Sora'] flex-shrink-0">
               {initials}
             </div>
             <div className="min-w-0">
-              <h3 className="font-['Sora'] font-bold text-base text-[#1A1A1A] truncate">{tenant.full_name}</h3>
-              <p className="text-xs text-[#6B7280] font-['Manrope'] truncate">{tenant.email ?? 'No email'}</p>
+              <h3 className="font-['Sora'] font-bold text-base text-white truncate">{tenant.full_name}</h3>
+              <p className="text-xs text-[#8D8D96] font-['Manrope'] truncate">{tenant.email ?? 'No email'}</p>
             </div>
           </div>
           {/* Status badges */}
@@ -178,21 +178,21 @@ function TenantDetailPanel({ tenant, propertyName, currencyCode, onClose, onEdit
         <div className="p-5 space-y-4">
           {/* Property / Unit */}
           <div>
-            <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mb-1 font-['DM_Sans']">Property / Unit</p>
-            <p className="text-sm font-semibold text-[#1A1A1A] font-['Manrope']">{propertyName}</p>
+            <p className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-widest mb-1 font-['DM_Sans']">Property / Unit</p>
+            <p className="text-sm font-semibold text-white font-['Manrope']">{propertyName}</p>
           </div>
 
           {/* Rent & Due */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-[#FEFAEF] rounded-xl p-3 border border-[#FED609]/10">
-              <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mb-1 font-['DM_Sans']">Monthly Rent</p>
-              <p className="text-base font-bold text-[#1A1A1A] font-['Sora']">
+            <div className="bg-[#06070B] rounded-xl p-3 border border-[#272839]">
+              <p className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-widest mb-1 font-['DM_Sans']">Monthly Rent</p>
+              <p className="text-base font-bold text-white font-['Sora']">
                 {formatCurrency(tenant.monthly_rent, currencyCode)}
               </p>
             </div>
-            <div className="bg-[#FEFAEF] rounded-xl p-3 border border-[#FED609]/10">
-              <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mb-1 font-['DM_Sans']">Next Due</p>
-              <p className="text-sm font-bold text-[#1A1A1A] font-['Sora']">
+            <div className="bg-[#06070B] rounded-xl p-3 border border-[#272839]">
+              <p className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-widest mb-1 font-['DM_Sans']">Next Due</p>
+              <p className="text-sm font-bold text-white font-['Sora']">
                 {formatDate(getNextDueDate(tenant.payment_due_day).toISOString())}
               </p>
             </div>
@@ -201,32 +201,32 @@ function TenantDetailPanel({ tenant, propertyName, currencyCode, onClose, onEdit
           {/* Lease period */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mb-0.5 font-['DM_Sans']">Lease Start</p>
-              <p className="text-sm text-[#1A1A1A] font-['Manrope']">{formatDate(tenant.lease_start_date) || '—'}</p>
+              <p className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-widest mb-0.5 font-['DM_Sans']">Lease Start</p>
+              <p className="text-sm text-white font-['Manrope']">{formatDate(tenant.lease_start_date) || '—'}</p>
             </div>
             <div>
-              <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mb-0.5 font-['DM_Sans']">Lease End</p>
-              <p className="text-sm text-[#1A1A1A] font-['Manrope']">{formatDate(tenant.lease_end_date) || '—'}</p>
+              <p className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-widest mb-0.5 font-['DM_Sans']">Lease End</p>
+              <p className="text-sm text-white font-['Manrope']">{formatDate(tenant.lease_end_date) || '—'}</p>
             </div>
           </div>
 
           {/* Contact */}
           {tenant.phone ? (
             <div>
-              <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mb-0.5 font-['DM_Sans']">Phone</p>
-              <p className="text-sm text-[#1A1A1A] font-['Manrope']">{tenant.phone}</p>
+              <p className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-widest mb-0.5 font-['DM_Sans']">Phone</p>
+              <p className="text-sm text-white font-['Manrope']">{tenant.phone}</p>
             </div>
           ) : null}
 
           {/* Broker */}
           {tenant.brokers ? (
             <div>
-              <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mb-1 font-['DM_Sans']">Broker</p>
-              <div className="flex items-center gap-2 rounded-xl bg-[#FEFAEF] border border-[#FED609]/10 px-3 py-2">
+              <p className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-widest mb-1 font-['DM_Sans']">Broker</p>
+              <div className="flex items-center gap-2 rounded-xl bg-[#06070B] border border-[#272839] px-3 py-2">
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-[#1A1A1A] font-['Manrope'] truncate">{tenant.brokers.full_name}</p>
+                  <p className="text-sm font-semibold text-white font-['Manrope'] truncate">{tenant.brokers.full_name}</p>
                   {tenant.brokers.agency_name ? (
-                    <p className="text-xs text-[#6B7280] font-['Manrope'] truncate">{tenant.brokers.agency_name}</p>
+                    <p className="text-xs text-[#8D8D96] font-['Manrope'] truncate">{tenant.brokers.agency_name}</p>
                   ) : null}
                 </div>
               </div>
@@ -235,20 +235,20 @@ function TenantDetailPanel({ tenant, propertyName, currencyCode, onClose, onEdit
 
           {/* Access ID */}
           <div>
-            <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest mb-0.5 font-['DM_Sans']">Access ID</p>
-            <p className="text-sm font-mono text-[#1A1A1A] bg-[#FEFAEF] rounded-lg px-3 py-1.5 border border-neutral-100 inline-block">
+            <p className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-widest mb-0.5 font-['DM_Sans']">Access ID</p>
+            <p className="text-sm font-mono text-white bg-[#06070B] rounded-lg px-3 py-1.5 border border-[#272839] inline-block">
               {tenant.tenant_access_id}
             </p>
           </div>
         </div>
 
         {/* Actions */}
-        <div className="p-5 border-t border-[#FED609]/10 space-y-2">
+        <div className="p-5 border-t border-[#272839] space-y-2">
           <div className="flex gap-2">
             <button
               type="button"
               onClick={() => onEdit(tenant)}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#FED609] hover:bg-[#FFD70B] text-[#1A1A1A] font-bold text-xs transition-colors font-['DM_Sans'] shadow-sm"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#4E79FF] hover:bg-[#3E68EE] text-white font-bold text-xs transition-colors font-['DM_Sans'] shadow-sm"
             >
               <Pencil className="h-3.5 w-3.5" />
               Edit
@@ -257,7 +257,7 @@ function TenantDetailPanel({ tenant, propertyName, currencyCode, onClose, onEdit
               to={`/owner/tenants/${tenant.id}`}
               variant="outline"
               size="sm"
-              className="flex-1 justify-center rounded-xl border-neutral-200 text-[#1A1A1A] py-2.5 font-['DM_Sans']"
+              className="flex-1 justify-center rounded-xl border-[#272839] text-white py-2.5 font-['DM_Sans']"
               iconLeft={<Eye className="h-3.5 w-3.5" />}
             >
               View
@@ -266,7 +266,7 @@ function TenantDetailPanel({ tenant, propertyName, currencyCode, onClose, onEdit
               type="button"
               onClick={() => onDelete(tenant)}
               disabled={busy}
-              className="w-9 h-9 flex items-center justify-center rounded-xl bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-colors border border-red-100 disabled:opacity-40"
+              className="w-9 h-9 flex items-center justify-center rounded-xl bg-[#F25461]/15 text-[#F25461] hover:bg-[#F25461]/150 hover:text-white transition-colors border border-[#F25461]/30 disabled:opacity-40"
             >
               <Trash2 className="h-3.5 w-3.5" />
             </button>
@@ -502,12 +502,12 @@ export function OwnerTenantsPage() {
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
+    <div className="p-6 max-w-7xl mx-auto space-y-6 min-h-screen bg-[#06070B] text-white">
       {/* Page Header */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold font-['Sora'] text-[#1A1A1A]">Tenants</h2>
-          <p className="text-[#6B7280] mt-1 font-['Manrope'] text-sm">
+          <h2 className="text-3xl font-bold font-['Sora'] text-white">Tenants</h2>
+          <p className="text-[#8D8D96] mt-1 font-['Manrope'] text-sm">
             Manage your residents and lease agreements across all properties.
           </p>
         </div>
@@ -515,7 +515,7 @@ export function OwnerTenantsPage() {
           {/* Filter by Property */}
           <div className="relative">
             <select
-              className="appearance-none bg-white border border-[#FED609]/15 rounded-xl px-4 py-2.5 pr-9 text-sm font-medium focus:ring-2 focus:ring-[#FED609] focus:border-[#FED609] outline-none cursor-pointer text-[#1A1A1A] font-['DM_Sans'] shadow-sm"
+              className="appearance-none bg-[#101114] border border-[#272839] rounded-xl px-4 py-2.5 pr-9 text-sm font-medium focus:ring-2 focus:ring-[#4E79FF] focus:border-[#4E79FF] outline-none cursor-pointer text-white font-['DM_Sans'] shadow-sm"
               value={filterPropertyId}
               onChange={(e) => setFilterPropertyId(e.target.value)}
             >
@@ -526,7 +526,7 @@ export function OwnerTenantsPage() {
                 </option>
               ))}
             </select>
-            <ChevronRight className="absolute right-3 top-3 w-4 h-4 pointer-events-none text-[#6B7280] rotate-90" />
+            <ChevronRight className="absolute right-3 top-3 w-4 h-4 pointer-events-none text-[#8D8D96] rotate-90" />
           </div>
 
           {/* Add Tenant Button */}
@@ -539,7 +539,7 @@ export function OwnerTenantsPage() {
               setFormError(null)
               setShowCurrencyMenu(false)
             }}
-            className="bg-[#FED609] hover:bg-[#FFD70B] text-[#1A1A1A] font-bold px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-md font-['DM_Sans'] text-sm"
+            className="bg-[#4E79FF] hover:bg-[#3E68EE] text-white font-bold px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-md font-['DM_Sans'] text-sm"
           >
             <UserRoundPlus className="w-4 h-4" />
             Add Tenant
@@ -549,24 +549,24 @@ export function OwnerTenantsPage() {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-white rounded-2xl border border-[#FED609]/10 shadow-sm p-5 hover:border-[#FED609]/30 transition-colors">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B7280] font-['DM_Sans']">Total Tenants</p>
-          <p className="text-3xl font-bold font-['Sora'] text-[#1A1A1A] mt-1.5">{tenants.length}</p>
+        <div className="bg-[#101114] rounded-2xl border border-[#272839] shadow-sm p-5 hover:border-[#4E79FF]/30 transition-colors">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#8D8D96] font-['DM_Sans']">Total Tenants</p>
+          <p className="text-3xl font-bold font-['Sora'] text-white mt-1.5">{tenants.length}</p>
         </div>
-        <div className="bg-white rounded-2xl border border-[#FED609]/10 shadow-sm p-5 hover:border-[#FED609]/30 transition-colors">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B7280] font-['DM_Sans']">Paid</p>
+        <div className="bg-[#101114] rounded-2xl border border-[#272839] shadow-sm p-5 hover:border-[#4E79FF]/30 transition-colors">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#8D8D96] font-['DM_Sans']">Paid</p>
           <p className="text-3xl font-bold font-['Sora'] text-green-600 mt-1.5">
             {tenants.filter((t) => t.payment_status === 'paid').length}
           </p>
         </div>
-        <div className="bg-white rounded-2xl border border-[#FED609]/10 shadow-sm p-5 hover:border-[#FED609]/30 transition-colors">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B7280] font-['DM_Sans']">Pending</p>
+        <div className="bg-[#101114] rounded-2xl border border-[#272839] shadow-sm p-5 hover:border-[#4E79FF]/30 transition-colors">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#8D8D96] font-['DM_Sans']">Pending</p>
           <p className="text-3xl font-bold font-['Sora'] text-orange-500 mt-1.5">
             {tenants.filter((t) => t.payment_status === 'pending').length}
           </p>
         </div>
-        <div className="bg-white rounded-2xl border border-[#FED609]/10 shadow-sm p-5 hover:border-[#FED609]/30 transition-colors">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-[#6B7280] font-['DM_Sans']">Overdue</p>
+        <div className="bg-[#101114] rounded-2xl border border-[#272839] shadow-sm p-5 hover:border-[#4E79FF]/30 transition-colors">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#8D8D96] font-['DM_Sans']">Overdue</p>
           <p className="text-3xl font-bold font-['Sora'] text-red-600 mt-1.5">
             {tenants.filter((t) => t.payment_status === 'overdue').length}
           </p>
@@ -605,11 +605,11 @@ export function OwnerTenantsPage() {
       {!loading && filteredTenants.length > 0 ? (
         <div className={`flex gap-6 ${selectedTenant ? 'items-start' : ''}`}>
           {/* Tenants Table */}
-          <div className="flex-1 min-w-0 bg-white rounded-2xl shadow-sm border border-[#FED609]/10 overflow-hidden">
+          <div className="flex-1 min-w-0 bg-[#101114] rounded-2xl shadow-sm border border-[#272839] overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-[#FED609] text-[#1A1A1A]">
+                  <tr className="bg-[#4E79FF] text-white">
                     <th className="px-5 py-4 font-bold font-['DM_Sans'] text-xs uppercase tracking-wider">Tenant Name</th>
                     <th className="px-5 py-4 font-bold font-['DM_Sans'] text-xs uppercase tracking-wider">Property</th>
                     <th className="px-5 py-4 font-bold font-['DM_Sans'] text-xs uppercase tracking-wider hidden md:table-cell">Unit</th>
@@ -626,29 +626,29 @@ export function OwnerTenantsPage() {
                       <tr
                         key={tenant.id}
                         onClick={() => setSelectedTenant(isSelected ? null : tenant)}
-                        className={`border-b border-[#FED609]/5 cursor-pointer transition-colors ${
+                        className={`border-b border-[#272839] cursor-pointer transition-colors ${
                           isSelected
-                            ? 'bg-[#FFFAE2] border-l-2 border-l-[#FED609]'
+                            ? 'bg-[#141519] border-l-2 border-l-[#4E79FF]'
                             : index % 2 === 0
-                            ? 'bg-[#FEFAEF]/30 hover:bg-[#FFFAE2]/60'
-                            : 'bg-white hover:bg-[#FFFAE2]/60'
+                            ? 'bg-[#06070B]/30 hover:bg-[#141519]/60'
+                            : 'bg-[#101114] hover:bg-[#141519]/60'
                         }`}
                       >
                         <td className="px-5 py-4">
-                          <p className="font-semibold text-[#1A1A1A] truncate max-w-[140px]">{tenant.full_name}</p>
-                          <p className="text-xs text-[#6B7280] truncate">{tenant.email ?? 'No email'}</p>
+                          <p className="font-semibold text-white truncate max-w-[140px]">{tenant.full_name}</p>
+                          <p className="text-xs text-[#8D8D96] truncate">{tenant.email ?? 'No email'}</p>
                           {tenant.brokers ? (
                             <p className="text-[11px] text-[#A08A57] font-medium truncate mt-0.5">
-                              <span className="text-[#9CA3AF] font-semibold">Broker:</span>{' '}
+                              <span className="text-[#8D8D96] font-semibold">Broker:</span>{' '}
                               {tenant.brokers.full_name}{tenant.brokers.agency_name ? ` · ${tenant.brokers.agency_name}` : ''}
                             </p>
                           ) : null}
                         </td>
-                        <td className="px-5 py-4 text-[#6B7280] truncate max-w-[120px]">{getPropertyName(tenant.property_id)}</td>
-                        <td className="px-5 py-4 text-[#6B7280] hidden md:table-cell">
+                        <td className="px-5 py-4 text-[#8D8D96] truncate max-w-[120px]">{getPropertyName(tenant.property_id)}</td>
+                        <td className="px-5 py-4 text-[#8D8D96] hidden md:table-cell">
                           {'—'}
                         </td>
-                        <td className="px-5 py-4 text-[#6B7280] hidden lg:table-cell">{formatDate(tenant.lease_end_date)}</td>
+                        <td className="px-5 py-4 text-[#8D8D96] hidden lg:table-cell">{formatDate(tenant.lease_end_date)}</td>
                         <td className="px-5 py-4">
                           <span
                             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-bold text-[10px] uppercase border ${payStyle.badge}`}
@@ -663,7 +663,7 @@ export function OwnerTenantsPage() {
                               type="button"
                               title="Edit tenant"
                               onClick={() => beginEdit(tenant)}
-                              className="p-1.5 hover:bg-[#FED609]/20 rounded-lg transition-colors text-[#1A1A1A]"
+                              className="p-1.5 hover:bg-[#4E79FF]/20 rounded-lg transition-colors text-white"
                             >
                               <Pencil className="w-3.5 h-3.5" />
                             </button>
@@ -672,7 +672,7 @@ export function OwnerTenantsPage() {
                               title="Delete tenant"
                               onClick={() => requestDelete(tenant)}
                               disabled={busy}
-                              className="p-1.5 hover:bg-red-100 rounded-lg transition-colors text-red-500 disabled:opacity-40"
+                              className="p-1.5 hover:bg-red-100 rounded-lg transition-colors text-[#F25461] disabled:opacity-40"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
@@ -686,26 +686,26 @@ export function OwnerTenantsPage() {
             </div>
 
             {/* Table Footer */}
-            <div className="px-5 py-4 bg-white border-t border-[#FED609]/10 flex justify-between items-center">
-              <span className="text-xs text-[#6B7280] font-['DM_Sans']">
+            <div className="px-5 py-4 bg-[#101114] border-t border-[#272839] flex justify-between items-center">
+              <span className="text-xs text-[#8D8D96] font-['DM_Sans']">
                 Showing {filteredTenants.length} of {tenants.length} tenant{tenants.length !== 1 ? 's' : ''}
               </span>
               <div className="flex gap-1">
                 <button
                   type="button"
-                  className="w-8 h-8 rounded-lg flex items-center justify-center border border-[#FED609]/15 text-[#6B7280] hover:bg-[#FED609] hover:text-[#1A1A1A] transition-colors"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center border border-[#272839] text-[#8D8D96] hover:bg-[#2251E3] hover:text-white transition-colors"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
                 <button
                   type="button"
-                  className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#FED609] text-[#1A1A1A] font-bold text-sm"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#2251E3] text-white font-bold text-sm"
                 >
                   1
                 </button>
                 <button
                   type="button"
-                  className="w-8 h-8 rounded-lg flex items-center justify-center border border-[#FED609]/15 text-[#6B7280] hover:bg-[#FED609] hover:text-[#1A1A1A] transition-colors"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center border border-[#272839] text-[#8D8D96] hover:bg-[#2251E3] hover:text-white transition-colors"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
@@ -732,7 +732,7 @@ export function OwnerTenantsPage() {
 
       {/* Tip */}
       {!loading && properties.length > 0 && tenants.length > 0 ? (
-        <p className="text-xs text-[#6B7280] font-['DM_Sans']">
+        <p className="text-xs text-[#8D8D96] font-['DM_Sans']">
           Tip: click any row to view tenant details. Leave password blank while editing to keep the current password.
         </p>
       ) : null}
@@ -747,7 +747,7 @@ export function OwnerTenantsPage() {
         >
           <form onSubmit={handleCreateTenant} autoComplete="off" className="space-y-4">
             {formError ? (
-              <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+              <div className="rounded-xl border border-[#F25461]/30 bg-[#F25461]/15 px-4 py-3 text-sm text-red-600">
                 {formError}
               </div>
             ) : null}
@@ -772,11 +772,11 @@ export function OwnerTenantsPage() {
 
             <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
               <label className="block space-y-2">
-                <span className="text-sm font-medium text-[#4B5563]">Property</span>
+                <span className="text-sm font-medium text-[#C0C0C5]">Property</span>
                 <select
                   name="tenant_property_id"
                   autoComplete="off"
-                  className="tf-field"
+                  className="tf-field bg-[#101114] text-white border-[#272839]"
                   value={form.property_id}
                   onChange={(event) => setForm((current) => ({ ...current, property_id: event.target.value }))}
                   required
@@ -793,11 +793,11 @@ export function OwnerTenantsPage() {
               </label>
 
               <label className="block space-y-2">
-                <span className="text-sm font-medium text-[#4B5563]">Broker</span>
+                <span className="text-sm font-medium text-[#C0C0C5]">Broker</span>
                 <select
                   name="tenant_broker_id"
                   autoComplete="off"
-                  className="tf-field"
+                  className="tf-field bg-[#101114] text-white border-[#272839]"
                   value={form.broker_id}
                   onChange={(event) => setForm((current) => ({ ...current, broker_id: event.target.value }))}
                 >
@@ -811,14 +811,14 @@ export function OwnerTenantsPage() {
               </label>
 
               <label className="block space-y-2">
-                <span className="text-sm font-medium text-[#4B5563]">
+                <span className="text-sm font-medium text-[#C0C0C5]">
                   Full Name <span className="text-red-400">*</span>
                 </span>
                 <input
                   type="text"
                   name="tenant_full_name"
                   autoComplete="off"
-                  className="tf-field"
+                  className="tf-field bg-[#101114] text-white border-[#272839]"
                   value={form.full_name}
                   onChange={(event) => setForm((current) => ({ ...current, full_name: event.target.value }))}
                   required
@@ -841,21 +841,21 @@ export function OwnerTenantsPage() {
                 onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
               />
               <label className="block space-y-2">
-                <span className="text-sm font-medium text-[#4B5563]">
+                <span className="text-sm font-medium text-[#C0C0C5]">
                   {editingTenantId ? 'Password (leave blank to keep current)' : <>Password <span className="text-red-400">*</span></>}
                 </span>
                 <input
                   type="password"
                   name="tenant_access_password"
                   autoComplete="new-password"
-                  className="tf-field"
+                  className="tf-field bg-[#101114] text-white border-[#272839]"
                   value={form.password}
                   onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
                   required={!editingTenantId}
                 />
               </label>
               <label className="block space-y-2">
-                <span className="text-sm font-medium text-[#4B5563]">
+                <span className="text-sm font-medium text-[#C0C0C5]">
                   Monthly Rent <span className="text-red-400">*</span>
                 </span>
                 <div className="flex items-center gap-2">
@@ -863,17 +863,17 @@ export function OwnerTenantsPage() {
                     <button
                       type="button"
                       onClick={() => setShowCurrencyMenu((current) => !current)}
-                      className={`flex h-[52px] w-full items-center justify-between rounded-xl border bg-white px-3 text-sm font-medium text-[#1A1A1A] outline-none transition-all duration-150 ${
+                      className={`flex h-[52px] w-full items-center justify-between rounded-xl border bg-[#101114] px-3 text-sm font-medium text-white outline-none transition-all duration-150 ${
                         showCurrencyMenu
-                          ? 'border-[#FED609] shadow-[0_0_0_3px_rgba(254,214,9,0.2)]'
-                          : 'border-[rgba(0,0,0,0.12)] hover:border-[rgba(254,214,9,0.5)]'
+                          ? 'border-[#4E79FF] shadow-[0_0_0_3px_rgba(78,121,255,0.2)]'
+                          : 'border-[#272839] hover:border-[#4E79FF]/50'
                       }`}
                     >
                       <span>{selectedRentCurrencyCode}</span>
-                      <ChevronDown className={`h-4 w-4 text-[#6B7280] transition-transform duration-150 ${showCurrencyMenu ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`h-4 w-4 text-[#8D8D96] transition-transform duration-150 ${showCurrencyMenu ? 'rotate-180' : ''}`} />
                     </button>
                     {showCurrencyMenu ? (
-                      <div className="absolute left-0 top-[calc(100%+6px)] z-20 w-[168px] overflow-hidden rounded-xl border border-[#E5E7EB] bg-white shadow-[0_8px_24px_rgba(26,26,26,0.1)]">
+                      <div className="absolute left-0 top-[calc(100%+6px)] z-20 w-[168px] overflow-hidden rounded-xl border border-[#E5E7EB] bg-[#101114] shadow-[0_8px_24px_rgba(26,26,26,0.1)]">
                         {RENT_CURRENCY_OPTIONS.map((option) => {
                           const isSelected = option.code === selectedRentCurrencyCode
                           const currencyName = option.label.replace(/ \(.*\)$/, '')
@@ -891,28 +891,28 @@ export function OwnerTenantsPage() {
                               }}
                               className={`flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm transition-colors ${
                                 isSelected
-                                  ? 'bg-[#FFFBEB] text-[#1A1A1A]'
-                                  : 'text-[#4B5563] hover:bg-[#FEFAEF]'
+                                  ? 'bg-[#141519] text-white'
+                                  : 'text-[#C0C0C5] hover:bg-[#06070B]'
                               }`}
                             >
-                              <span className="font-semibold text-[#1A1A1A]">{option.code}</span>
-                              <span className="truncate text-xs text-[#9CA3AF]">{currencyName}</span>
-                              {isSelected ? <span className="ml-auto shrink-0 text-xs font-bold text-[#FED609]">✓</span> : null}
+                              <span className="font-semibold text-white">{option.code}</span>
+                              <span className="truncate text-xs text-[#8D8D96]">{currencyName}</span>
+                              {isSelected ? <span className="ml-auto shrink-0 text-xs font-bold text-[#4E79FF]">✓</span> : null}
                             </button>
                           )
                         })}
                       </div>
                     ) : null}
                   </div>
-                  <div className="flex h-[52px] min-w-0 flex-1 items-center overflow-hidden rounded-xl border border-[rgba(0,0,0,0.12)] bg-white transition-all duration-150 hover:border-[rgba(254,214,9,0.5)] focus-within:border-[#FED609] focus-within:shadow-[0_0_0_3px_rgba(254,214,9,0.2)]">
-                    <div className="flex h-full min-w-13 items-center justify-center border-r border-[#E5E7EB] bg-[#F9FAFB] px-3 text-sm font-semibold text-[#6B7280]">
+                  <div className="flex h-[52px] min-w-0 flex-1 items-center overflow-hidden rounded-xl border border-[#272839] bg-[#101114] transition-all duration-150 hover:border-[#4E79FF]/50 focus-within:border-[#4E79FF] focus-within:shadow-[0_0_0_3px_rgba(78,121,255,0.2)]">
+                    <div className="flex h-full min-w-13 items-center justify-center border-r border-[#E5E7EB] bg-[#141519] px-3 text-sm font-semibold text-[#8D8D96]">
                       {selectedRentCurrencyMarker}
                     </div>
                     <input
                       type="text"
                       inputMode="decimal"
                       name="tenant_monthly_rent"
-                      className="w-full border-0 bg-transparent px-4 py-3 text-sm text-[#1A1A1A] caret-[#1A1A1A] outline-none focus:outline-none focus-visible:outline-none"
+                      className="w-full border-0 bg-transparent px-4 py-3 text-sm text-white caret-[#1A1A1A] outline-none focus:outline-none focus-visible:outline-none"
                       style={{ outline: 'none' }}
                       value={form.monthly_rent}
                       placeholder="0000"
@@ -928,7 +928,7 @@ export function OwnerTenantsPage() {
                 </div>
               </label>
               <label className="block space-y-2">
-                <span className="text-sm font-medium text-[#4B5563]">
+                <span className="text-sm font-medium text-[#C0C0C5]">
                   Due Date <span className="text-red-400">*</span>
                 </span>
                 <input
@@ -936,7 +936,7 @@ export function OwnerTenantsPage() {
                   name="tenant_due_day"
                   min={1}
                   max={31}
-                  className="tf-field"
+                  className="tf-field bg-[#101114] text-white border-[#272839]"
                   value={form.payment_due_day}
                   onChange={(event) => setForm((current) => ({ ...current, payment_due_day: event.target.value }))}
                   required
@@ -958,10 +958,10 @@ export function OwnerTenantsPage() {
               />
 
               <label className="block space-y-2">
-                <span className="text-sm font-medium text-[#4B5563]">Payment Status</span>
+                <span className="text-sm font-medium text-[#C0C0C5]">Payment Status</span>
                 <select
                   name="tenant_payment_status"
-                  className="tf-field"
+                  className="tf-field bg-[#101114] text-white border-[#272839]"
                   value={form.payment_status}
                   onChange={(event) =>
                     setForm((current) => ({
@@ -979,10 +979,10 @@ export function OwnerTenantsPage() {
               </label>
 
               <label className="block space-y-2">
-                <span className="text-sm font-medium text-[#4B5563]">Tenant Status</span>
+                <span className="text-sm font-medium text-[#C0C0C5]">Tenant Status</span>
                 <select
                   name="tenant_status"
-                  className="tf-field"
+                  className="tf-field bg-[#101114] text-white border-[#272839]"
                   value={form.status}
                   onChange={(event) =>
                     setForm((current) => ({
@@ -1012,7 +1012,7 @@ export function OwnerTenantsPage() {
                 type="button"
                 onClick={resetForm}
                 variant="outline"
-                className="border-[rgba(0,0,0,0.06)] bg-white text-[#4B5563]"
+                className="border-[#272839] bg-[#101114] text-[#C0C0C5] hover:bg-white/4"
               >
                 {editingTenantId ? 'Cancel Edit' : 'Close Form'}
               </Button>
@@ -1029,22 +1029,22 @@ export function OwnerTenantsPage() {
           size="sm"
         >
           <div className="space-y-4 text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-50">
-              <Trash2 className="h-5 w-5 text-red-500" />
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#F25461]/15">
+              <Trash2 className="h-5 w-5 text-[#F25461]" />
             </div>
             {error ? (
-              <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600 text-left">
+              <div className="rounded-xl border border-[#F25461]/30 bg-[#F25461]/15 px-4 py-3 text-sm text-red-600 text-left">
                 {error}
               </div>
             ) : null}
-            <p className="text-sm text-[#4B5563]">
-              <span className="font-semibold text-[#1A1A1A]">{tenantPendingDelete.full_name}</span> will be permanently removed. This action cannot be undone.
+            <p className="text-sm text-[#C0C0C5]">
+              <span className="font-semibold text-white">{tenantPendingDelete.full_name}</span> will be permanently removed. This action cannot be undone.
             </p>
             <div className="flex gap-3">
               <button
                 type="button"
                 onClick={() => setTenantPendingDelete(null)}
-                className="flex-1 rounded-xl border border-neutral-200 px-4 py-2.5 text-sm font-medium text-[#6B7280] transition-colors hover:bg-[#FEFAEF] hover:text-[#1A1A1A]"
+                className="flex-1 rounded-xl border border-[#272839] px-4 py-2.5 text-sm font-medium text-[#8D8D96] transition-colors hover:bg-[#06070B] hover:text-white"
               >
                 Cancel
               </button>
@@ -1052,7 +1052,7 @@ export function OwnerTenantsPage() {
                 type="button"
                 onClick={() => void handleDelete()}
                 disabled={busy}
-                className="flex-1 rounded-xl bg-red-500 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-600 disabled:opacity-60"
+                className="flex-1 rounded-xl bg-[#F25461]/150 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-600 disabled:opacity-60"
               >
                 {busy ? 'Deleting...' : 'Delete Tenant'}
               </button>
@@ -1063,3 +1063,5 @@ export function OwnerTenantsPage() {
     </div>
   )
 }
+
+
