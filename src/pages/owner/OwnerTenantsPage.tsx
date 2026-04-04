@@ -834,11 +834,12 @@ export function OwnerTenantsPage() {
                 required
               />
               <FormInput
-                label="Phone"
+                label="Phone (WhatsApp)"
                 name="tenant_phone"
                 autoComplete="off"
                 value={form.phone}
                 onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
+                hint="Used for WhatsApp rent reminders"
               />
               <label className="block space-y-2">
                 <span className="text-sm font-medium text-[#C0C0C5]">

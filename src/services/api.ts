@@ -279,6 +279,12 @@ export const api = {
       body,
     }),
 
+  ownerWhatsAppSendOtp: (token: string, body: { phone: string }) =>
+    request<{ ok: true }>('/api/owner/whatsapp/send-otp', { method: 'POST', token, body }),
+
+  ownerWhatsAppVerifyOtp: (token: string, body: { phone: string; code: string }) =>
+    request<{ ok: true }>('/api/owner/whatsapp/verify-otp', { method: 'POST', token, body }),
+
   getOwnerIntegrations: (token: string) =>
     request<{
       ok: true
