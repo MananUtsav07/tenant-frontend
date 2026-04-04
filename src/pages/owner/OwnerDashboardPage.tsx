@@ -15,8 +15,6 @@ import {
 } from 'lucide-react'
 
 import { DataTable } from '../../components/common/DataTable'
-import { OwnerOnboardingWizard } from '../../components/owner/OwnerOnboardingWizard'
-import { useOwnerOnboarding } from '../../hooks/useOwnerOnboarding'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
@@ -59,7 +57,6 @@ function getActivityIcon(_flowName: string, status: string) {
 
 export function OwnerDashboardPage() {
   const { token, owner } = useOwnerAuth()
-  const { showWizard, dismissWizard } = useOwnerOnboarding()
   const [summary, setSummary] = useState<OwnerSummary | null>(null)
   const [, setPortfolioOverview] = useState<OwnerPortfolioVisibilityOverview | null>(null)
   const [approvals, setApprovals] = useState<OwnerRentPaymentApproval[]>([])
@@ -221,8 +218,6 @@ export function OwnerDashboardPage() {
 
   return (
     <div className="p-6 w-full bg-[#06070B] min-h-screen text-white">
-      {showWizard && <OwnerOnboardingWizard onComplete={dismissWizard} onSkip={dismissWizard} />}
-
       {/* Greeting */}
       <motion.div
         variants={revealUp}
