@@ -1,4 +1,4 @@
-import { LayoutDashboard, LifeBuoy, MessageSquare, Plug, UserCircle } from 'lucide-react'
+import { LayoutDashboard, MessageSquare, Plug, UserCircle } from 'lucide-react'
 
 import { DashboardLayout } from './DashboardLayout'
 import { useTenantAuth } from '../hooks/useTenantAuth'

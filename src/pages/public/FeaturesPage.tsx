@@ -76,13 +76,6 @@ const featureShowcases = [
   },
 ] as const
 
-const integrations = [
-  { icon: <MessageCircle className="h-7 w-7" />, label: 'WhatsApp' },
-  { icon: <Send className="h-7 w-7" />, label: 'Telegram' },
-  { icon: <BrainCircuit className="h-7 w-7" />, label: 'AI Core' },
-  { icon: <Wallet className="h-7 w-7" />, label: 'Payments' },
-  { icon: <Landmark className="h-7 w-7" />, label: 'Bank Direct' },
-]
 
 const featureItemsForSeo = [
   'AI-Powered Automation',
