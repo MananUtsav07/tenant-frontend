@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { useState, type FormEvent } from 'react'
-import { ArrowRight, BookOpen, CircleHelp, Clock, Mail, MapPin, MessageCircle, Send } from 'lucide-react'
+import { ArrowRight, BookOpen, CircleHelp, Mail, MessageCircle, Send } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { Button } from '../../components/common/Button'
@@ -196,42 +196,6 @@ export function ContactPage() {
               </div>
             </motion.div>
 
-            {/* Office Location & Operating Hours */}
-            <motion.div variants={revealVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-[#272839]">
-              <div>
-                <h4 className="font-bold text-white flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-[#4E79FF]" />
-                  Office Location
-                </h4>
-                <p className="text-[#8D8D96] mt-2">
-                  Prime Tower, Business Bay
-                </p>
-              </div>
-              <div>
-                <h4 className="font-bold text-white flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-[#4E79FF]" />
-                  Operating Hours
-                </h4>
-                <p className="text-[#8D8D96] mt-2">
-                  Mon - Fri: 9am - 6pm<br />Sat: 10am - 2pm
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Map Image */}
-            <motion.div variants={revealVariants} className="relative w-full h-48 rounded-xl overflow-hidden shadow-inner bg-[#141519] group">
-              <img
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 opacity-60 group-hover:opacity-100"
-                alt="Modern city skyline with contemporary skyscrapers"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcqsNdLHfbBMWpJMnYYPjVreaZF2Z7v6STar9oTNMKOQLoBaV78yfgKe9t-9aO4Y0wH-dgTBPDs0aDWx_hHHD8dSIUMqF16PQAqzUVMWAa8Ybj38pQc2V6hNrKahApQWDu2nNp5QtQohgm6iAahPWH6qKjSopKzkwubAJ3PIH5JB1jegU933Ow4-Yu2CX_kgMJQHYAox7enio3Qpk1PvQnEylFKdtNVhwdCPTXItgD-6q1yrthrWIu1N-up3JfiVPL-h6lh4f1rCbC"
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-[#101114]/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg flex items-center gap-2">
-                  <span className="w-3 h-3 bg-[#2251E3] rounded-full animate-pulse" />
-                  <span className="text-xs font-bold text-white uppercase tracking-widest">Our HQ</span>
-                </div>
-              </div>
-            </motion.div>
           </motion.div>
         </div>
       </SectionContainer>

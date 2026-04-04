@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowRight, MessageCircle, Send, ChevronRight } from 'lucide-react'
+import { ArrowRight, ChevronRight } from 'lucide-react'
 
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
@@ -263,41 +263,6 @@ export function BlogPage() {
         </section>
       ) : null}
 
-      {/* Newsletter CTA Section */}
-      <section className="bg-[#101114] border-t border-[#272839] py-20 px-6">
-        <motion.div
-          className="max-w-4xl mx-auto text-center"
-          variants={revealUpMotion}
-          initial="hidden"
-          whileInView="show"
-          viewport={viewportOnce}
-        >
-          <h2 className="font-['Sora'] text-3xl md:text-4xl font-extrabold text-white mb-4">
-            Stay Updated
-          </h2>
-          <p className="font-['Manrope'] text-[#8D8D96] mb-8 max-w-lg mx-auto">
-            Get the latest property management insights delivered to your inbox weekly.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
-            <input
-              className="flex-grow px-6 py-4 rounded-xl border border-[#272839] bg-[#06070B] text-white placeholder-[#8D8D96] focus:border-[#2251E3] focus:ring-2 focus:ring-[rgba(34,81,227,0.2)] outline-none font-['Manrope']"
-              placeholder="Enter your email address"
-              type="email"
-            />
-            <button className="bg-[#2251E3] hover:bg-[#4E79FF] text-white px-8 py-4 rounded-xl font-bold transition-all duration-200 shadow-md">
-              Subscribe
-            </button>
-          </div>
-          <div className="mt-8 flex justify-center space-x-6">
-            <div className="flex items-center text-sm font-semibold text-[#25D366]">
-              <MessageCircle className="mr-1 h-4 w-4" /> WhatsApp Alerts
-            </div>
-            <div className="flex items-center text-sm font-semibold text-[#0088cc]">
-              <Send className="mr-1 h-4 w-4" /> Telegram Channel
-            </div>
-          </div>
-        </motion.div>
-      </section>
     </>
   )
 }

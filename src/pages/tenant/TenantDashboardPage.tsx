@@ -9,19 +9,14 @@ import {
   CircleDollarSign,
   Info,
   MapPin,
-  MessageCircle,
-  Phone,
   Plus,
   RefreshCw,
-  Send,
   Ticket,
   Wrench,
-  Zap,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { Button } from '../../components/common/Button'
-import { ConditionReportTenantPanel } from '../../components/condition-reports/ConditionReportTenantPanel'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
@@ -118,17 +113,17 @@ export function TenantDashboardPage() {
   const orgCurrency = authTenant?.organization?.currency_code
 
   return (
-    <div className="min-h-screen bg-[#FEFAEF] p-6 lg:p-8 space-y-6">
+    <div className="min-h-screen bg-[#06070B] p-6 lg:p-8 space-y-6 text-white">
 
       {/* Welcome Header */}
       <section className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-extrabold text-[#1A1A1A] font-['Sora']">
+          <h2 className="text-3xl font-extrabold text-white font-['Sora']">
             Welcome, {tenantName}
           </h2>
           {property ? (
-            <p className="text-[#6B7280] mt-1 font-medium flex items-center gap-2 font-['Manrope']">
-              <MapPin className="h-5 w-5 text-[#FED609] fill-[#FED609]" />
+            <p className="text-[#8D8D96] mt-1 font-medium flex items-center gap-2 font-['Manrope']">
+              <MapPin className="h-5 w-5 text-[#4E79FF]" />
               {property.property_name}
               {property.unit_number ? ` — Unit ${property.unit_number}` : ''}
             </p>
@@ -142,14 +137,14 @@ export function TenantDashboardPage() {
         <div className="flex gap-3">
           <button
             onClick={() => void loadDashboard()}
-            className="px-5 py-2.5 bg-white border border-[#FFFAE2] rounded-lg shadow-sm font-['DM_Sans'] font-bold text-sm flex items-center gap-2 hover:bg-[#FFFAE2] transition-colors text-[#1A1A1A]"
+            className="px-5 py-2.5 bg-[#101114] border border-[#272839] rounded-lg font-['DM_Sans'] font-bold text-sm flex items-center gap-2 hover:border-[#4E79FF]/40 transition-colors text-white"
           >
-            <RefreshCw className="h-4 w-4 text-[#FED609]" />
+            <RefreshCw className="h-4 w-4 text-[#4E79FF]" />
             Refresh
           </button>
           {summary ? (
-            <button className="px-5 py-2.5 bg-white border border-[#FFFAE2] rounded-lg shadow-sm font-['DM_Sans'] font-bold text-sm flex items-center gap-2 hover:bg-[#FFFAE2] transition-colors text-[#1A1A1A]">
-              <CalendarDays className="h-4 w-4 text-[#FED609]" />
+            <button className="px-5 py-2.5 bg-[#101114] border border-[#272839] rounded-lg font-['DM_Sans'] font-bold text-sm flex items-center gap-2 hover:border-[#4E79FF]/40 transition-colors text-white">
+              <CalendarDays className="h-4 w-4 text-[#4E79FF]" />
               {formatDate(summary.next_due_date)}
             </button>
           ) : null}
@@ -165,42 +160,42 @@ export function TenantDashboardPage() {
       {/* Summary Stat Cards */}
       {!loading && summary ? (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white rounded-2xl shadow-sm border border-[rgba(0,0,0,0.06)] p-5 flex items-center gap-4">
-            <div className="w-11 h-11 rounded-xl bg-[#FED609]/10 flex items-center justify-center flex-shrink-0">
-              <Ticket className="h-5 w-5 text-[#92700A]" />
+          <div className="bg-[#101114] rounded-2xl shadow-sm border border-[#272839] hover:border-[#4E79FF]/30 transition-all p-5 flex items-center gap-4">
+            <div className="w-11 h-11 rounded-xl bg-[#4E79FF]/15 flex items-center justify-center shrink-0">
+              <Ticket className="h-5 w-5 text-[#4E79FF]" />
             </div>
             <div>
-              <p className="text-[10px] text-[#6B7280] font-bold uppercase tracking-wider font-['DM_Sans']">Open Tickets</p>
-              <p className="text-2xl font-extrabold text-[#1A1A1A] font-['Sora']">{summary.open_tickets}</p>
+              <p className="text-[10px] text-[#8D8D96] font-bold uppercase tracking-wider font-['DM_Sans']">Open Tickets</p>
+              <p className="text-2xl font-extrabold text-white font-['Sora']">{summary.open_tickets}</p>
             </div>
           </div>
-          <div className="bg-white rounded-2xl shadow-sm border border-[rgba(0,0,0,0.06)] p-5 flex items-center gap-4">
-            <div className="w-11 h-11 rounded-xl bg-[#FED609]/10 flex items-center justify-center flex-shrink-0">
-              <Bell className="h-5 w-5 text-[#92700A]" />
+          <div className="bg-[#101114] rounded-2xl shadow-sm border border-[#272839] hover:border-[#4E79FF]/30 transition-all p-5 flex items-center gap-4">
+            <div className="w-11 h-11 rounded-xl bg-[#4E79FF]/15 flex items-center justify-center shrink-0">
+              <Bell className="h-5 w-5 text-[#4E79FF]" />
             </div>
             <div>
-              <p className="text-[10px] text-[#6B7280] font-bold uppercase tracking-wider font-['DM_Sans']">Reminders</p>
-              <p className="text-2xl font-extrabold text-[#1A1A1A] font-['Sora']">{summary.pending_reminders}</p>
+              <p className="text-[10px] text-[#8D8D96] font-bold uppercase tracking-wider font-['DM_Sans']">Reminders</p>
+              <p className="text-2xl font-extrabold text-white font-['Sora']">{summary.pending_reminders}</p>
             </div>
           </div>
-          <div className="bg-white rounded-2xl shadow-sm border border-[rgba(0,0,0,0.06)] p-5 flex items-center gap-4">
-            <div className="w-11 h-11 rounded-xl bg-[#FED609]/10 flex items-center justify-center flex-shrink-0">
-              <CircleDollarSign className="h-5 w-5 text-[#92700A]" />
+          <div className="bg-[#101114] rounded-2xl shadow-sm border border-[#272839] hover:border-[#4E79FF]/30 transition-all p-5 flex items-center gap-4">
+            <div className="w-11 h-11 rounded-xl bg-[#4E79FF]/15 flex items-center justify-center shrink-0">
+              <CircleDollarSign className="h-5 w-5 text-[#4E79FF]" />
             </div>
             <div>
-              <p className="text-[10px] text-[#6B7280] font-bold uppercase tracking-wider font-['DM_Sans']">Monthly Rent</p>
-              <p className="text-xl font-extrabold text-[#1A1A1A] font-['Sora'] leading-tight">
+              <p className="text-[10px] text-[#8D8D96] font-bold uppercase tracking-wider font-['DM_Sans']">Monthly Rent</p>
+              <p className="text-xl font-extrabold text-white font-['Sora'] leading-tight">
                 {formatCurrency(summary.monthly_rent, orgCurrency)}
               </p>
             </div>
           </div>
-          <div className="bg-white rounded-2xl shadow-sm border border-[rgba(0,0,0,0.06)] p-5 flex items-center gap-4">
-            <div className="w-11 h-11 rounded-xl bg-[#FED609]/10 flex items-center justify-center flex-shrink-0">
-              <CalendarDays className="h-5 w-5 text-[#92700A]" />
+          <div className="bg-[#101114] rounded-2xl shadow-sm border border-[#272839] hover:border-[#4E79FF]/30 transition-all p-5 flex items-center gap-4">
+            <div className="w-11 h-11 rounded-xl bg-[#4E79FF]/15 flex items-center justify-center shrink-0">
+              <CalendarDays className="h-5 w-5 text-[#4E79FF]" />
             </div>
             <div>
-              <p className="text-[10px] text-[#6B7280] font-bold uppercase tracking-wider font-['DM_Sans']">Next Due</p>
-              <p className="text-base font-extrabold text-[#1A1A1A] font-['Sora']">{formatDate(summary.next_due_date)}</p>
+              <p className="text-[10px] text-[#8D8D96] font-bold uppercase tracking-wider font-['DM_Sans']">Next Due</p>
+              <p className="text-base font-extrabold text-white font-['Sora']">{formatDate(summary.next_due_date)}</p>
             </div>
           </div>
         </div>
@@ -218,95 +213,156 @@ export function TenantDashboardPage() {
       {!loading && (property || tenant || rentPaymentState) ? (
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
+          {/* Left column: Property card + Recent Tickets stacked */}
+          <div className="xl:col-span-2 flex flex-col gap-6">
+
           {/* Property Info Card */}
           {property || tenant ? (
-            <div className="xl:col-span-2 bg-white rounded-xl shadow-sm border-t-4 border-[#FED609] p-8 relative overflow-hidden group">
-              <div className="absolute -right-12 -top-12 w-64 h-64 bg-[#FFFAE2] rounded-full opacity-50 group-hover:scale-110 transition-transform duration-500 pointer-events-none" />
+            <div className="bg-[#101114] rounded-xl shadow-sm border border-[#272839] border-t-4 border-t-[#4E79FF] p-6 relative overflow-hidden group">
+              <div className="absolute -right-12 -top-12 w-64 h-64 bg-[#4E79FF]/5 rounded-full opacity-50 group-hover:scale-110 transition-transform duration-500 pointer-events-none" />
               <div className="relative z-10">
-                <div className="flex justify-between items-start mb-8">
+                <div className="flex justify-between items-start mb-5">
                   <div>
-                    <h3 className="text-2xl font-bold text-[#1A1A1A] font-['Sora'] mb-1 flex items-center gap-2">
-                      <Building2 className="h-6 w-6 text-[#FED609]" />
+                    <h3 className="text-2xl font-bold text-white font-['Sora'] mb-1 flex items-center gap-2">
+                      <Building2 className="h-6 w-6 text-[#4E79FF]" />
                       {property?.property_name ?? 'Your Property'}
                     </h3>
                     {property?.address ? (
-                      <p className="text-[#6B7280] text-base font-['Manrope']">{property.address}</p>
+                      <p className="text-[#8D8D96] text-base font-['Manrope']">{property.address}</p>
                     ) : null}
                   </div>
                   {tenant ? (
-                    <span className="px-4 py-1.5 bg-[#FED609]/10 text-[#1A1A1A] text-xs font-black uppercase tracking-widest rounded-full border border-[#FED609]/20 whitespace-nowrap">
+                    <span className="px-4 py-1.5 bg-[#4E79FF]/15 text-[#4E79FF] text-xs font-black uppercase tracking-widest rounded-full border border-[#4E79FF]/20 whitespace-nowrap">
                       Active Lease
                     </span>
                   ) : null}
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-12 mb-10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-12">
                   {property?.unit_number ? (
                     <div>
-                      <p className="text-xs text-[#6B7280] font-bold uppercase tracking-wider mb-2 font-['DM_Sans']">Unit Number</p>
-                      <p className="font-bold text-[#1A1A1A] text-lg font-['Manrope']">Unit {property.unit_number}</p>
+                      <p className="text-xs text-[#8D8D96] font-bold uppercase tracking-wider mb-2 font-['DM_Sans']">Unit Number</p>
+                      <p className="font-bold text-white text-lg font-['Manrope']">Unit {property.unit_number}</p>
                     </div>
                   ) : null}
                   {tenant?.payment_status ? (
                     <div>
-                      <p className="text-xs text-[#6B7280] font-bold uppercase tracking-wider mb-2 font-['DM_Sans']">Payment Status</p>
+                      <p className="text-xs text-[#8D8D96] font-bold uppercase tracking-wider mb-2 font-['DM_Sans']">Payment Status</p>
                       <StatusBadge status={tenant.payment_status} />
                     </div>
                   ) : null}
                   {tenant?.lease_start_date || tenant?.lease_end_date ? (
                     <div className="sm:col-span-2 md:col-span-1">
-                      <p className="text-xs text-[#6B7280] font-bold uppercase tracking-wider mb-2 font-['DM_Sans']">Lease Period</p>
-                      <div className="flex items-center gap-2 text-[#1A1A1A] font-bold text-lg font-['Manrope']">
+                      <p className="text-xs text-[#8D8D96] font-bold uppercase tracking-wider mb-2 font-['DM_Sans']">Lease Period</p>
+                      <div className="flex items-center gap-2 text-white font-bold text-lg font-['Manrope']">
                         <span>{formatDate(tenant?.lease_start_date)}</span>
-                        <ArrowRight className="h-4 w-4 text-[#FED609]" />
+                        <ArrowRight className="h-4 w-4 text-[#4E79FF]" />
                         <span>{formatDate(tenant?.lease_end_date)}</span>
                       </div>
                     </div>
                   ) : null}
                   {summary?.next_due_date ? (
                     <div>
-                      <p className="text-xs text-[#6B7280] font-bold uppercase tracking-wider mb-2 font-['DM_Sans']">Next Due Date</p>
-                      <p className="font-bold text-[#1A1A1A] text-lg font-['Manrope']">{formatDate(summary.next_due_date)}</p>
+                      <p className="text-xs text-[#8D8D96] font-bold uppercase tracking-wider mb-2 font-['DM_Sans']">Next Due Date</p>
+                      <p className="font-bold text-white text-lg font-['Manrope']">{formatDate(summary.next_due_date)}</p>
                     </div>
                   ) : null}
                 </div>
 
-                <div className="flex flex-wrap gap-4 pt-6 border-t border-[#FEFAEF]">
-                  <button className="flex items-center gap-2 px-6 py-3 bg-[#25D366] text-white rounded-lg font-['DM_Sans'] font-bold text-sm hover:opacity-90 transition-opacity active:scale-95">
-                    <MessageCircle className="h-5 w-5 fill-white" />
-                    WhatsApp Owner
-                  </button>
-                  <button className="flex items-center gap-2 px-6 py-3 bg-[#0088cc] text-white rounded-lg font-['DM_Sans'] font-bold text-sm hover:opacity-90 transition-opacity active:scale-95">
-                    <Send className="h-5 w-5" />
-                    Telegram
-                  </button>
-                  <Link
-                    to={ROUTES.tenantTickets}
-                    className="flex items-center gap-2 px-6 py-3 border border-[#FED609] text-[#1A1A1A] rounded-lg font-['DM_Sans'] font-bold text-sm hover:bg-[#FFFAE2] transition-colors active:scale-95"
-                  >
-                    <Ticket className="h-5 w-5 text-[#FED609]" />
-                    My Tickets
-                  </Link>
-                </div>
               </div>
             </div>
           ) : null}
 
+          {/* Recent Tickets (inside left column) */}
+          <div className="bg-[#101114] rounded-xl shadow-sm p-6 border border-[#272839]">
+            <div className="flex justify-between items-center mb-5">
+              <h3 className="text-xl font-bold text-white font-['Sora']">Recent Tickets</h3>
+              <Link
+                to={ROUTES.tenantTickets}
+                className="text-sm font-['DM_Sans'] font-bold text-[#4E79FF] hover:underline"
+              >
+                View All Tickets
+              </Link>
+            </div>
+
+            {!loading && summary ? (
+              <div className="space-y-3 mb-5">
+                {summary.open_tickets > 0 ? (
+                  <div className="flex items-center justify-between p-4 rounded-lg border border-[#272839] hover:border-[#4E79FF]/30 transition-colors group cursor-pointer">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-[#4E79FF]/15 flex items-center justify-center">
+                        <Wrench className="h-4 w-4 text-[#4E79FF]" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-white group-hover:text-[#4E79FF] transition-colors font-['Manrope']">Open Tickets</p>
+                        <p className="text-xs text-[#8D8D96] font-['Manrope']">{summary.open_tickets} ticket(s) awaiting response</p>
+                      </div>
+                    </div>
+                    <span className="px-3 py-1 bg-[#4E79FF]/15 text-[#4E79FF] text-xs font-bold rounded font-['DM_Sans']">
+                      {summary.open_tickets} Open
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between p-4 rounded-lg border border-[#272839]">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-[#32C382]/15 flex items-center justify-center">
+                        <CheckCircle2 className="h-4 w-4 text-[#32C382]" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-white font-['Manrope']">All Clear</p>
+                        <p className="text-xs text-[#8D8D96] font-['Manrope']">No open tickets at the moment</p>
+                      </div>
+                    </div>
+                    <span className="px-3 py-1 bg-[#32C382]/15 text-[#32C382] text-xs font-bold rounded font-['DM_Sans']">All Good</span>
+                  </div>
+                )}
+                {summary.pending_reminders > 0 ? (
+                  <div className="flex items-center justify-between p-4 rounded-lg border border-[#272839] hover:border-[#4E79FF]/30 transition-colors group cursor-pointer">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-[#EBCF42]/15 flex items-center justify-center">
+                        <Bell className="h-4 w-4 text-[#EBCF42]" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-white group-hover:text-[#4E79FF] transition-colors font-['Manrope']">Pending Reminders</p>
+                        <p className="text-xs text-[#8D8D96] font-['Manrope']">{summary.pending_reminders} reminder(s) pending</p>
+                      </div>
+                    </div>
+                    <span className="px-3 py-1 bg-[#EBCF42]/15 text-[#EBCF42] text-xs font-bold rounded font-['DM_Sans']">
+                      {summary.pending_reminders}
+                    </span>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+
+            {loading ? <LoadingState message="" rows={2} /> : null}
+
+            <Link
+              to={ROUTES.tenantTickets}
+              className="w-full py-3 bg-[#4E79FF] text-white font-['DM_Sans'] font-bold rounded-lg shadow-md hover:bg-[#3E68EE] transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+            >
+              <Plus className="h-5 w-5" />
+              Create New Ticket
+            </Link>
+          </div>
+
+          </div>{/* end left column */}
+
           {/* Rent Payment Card */}
-          <div className={`${property || tenant ? 'xl:col-span-1' : 'xl:col-span-3'} bg-white rounded-xl shadow-sm p-8 flex flex-col`}>
+          <div className={`${property || tenant ? 'xl:col-span-1' : 'xl:col-span-3'} bg-[#101114] rounded-xl shadow-sm p-8 flex flex-col border border-[#272839]`}>
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-xl font-bold text-[#1A1A1A] font-['Sora']">Rent Payment</h3>
+              <h3 className="text-xl font-bold text-white font-['Sora']">Rent Payment</h3>
               {rentPaymentState ? (
                 <span className={`px-3 py-1.5 text-xs font-black rounded-md flex items-center gap-1 uppercase ${
                   rentPaymentState.status === 'approved'
-                    ? 'bg-green-100 text-green-700'
+                    ? 'bg-[#32C382]/15 text-[#32C382]'
                     : rentPaymentState.status === 'awaiting_owner_approval'
-                    ? 'bg-yellow-100 text-yellow-700'
+                    ? 'bg-[#EBCF42]/15 text-[#EBCF42]'
                     : rentPaymentState.status === 'rejected'
-                    ? 'bg-red-100 text-red-700'
+                    ? 'bg-[#F25461]/15 text-[#F25461]'
                     : rentPaymentState.status === 'eligible'
-                    ? 'bg-[#FED609]/10 text-[#92700A]'
-                    : 'bg-gray-100 text-gray-600'
+                    ? 'bg-[#4E79FF]/15 text-[#4E79FF]'
+                    : 'bg-white/8 text-[#8D8D96]'
                 }`}>
                   {rentPaymentState.status === 'approved' ? (
                     <CheckCircle2 className="h-3.5 w-3.5" />
@@ -320,31 +376,31 @@ export function TenantDashboardPage() {
 
             {rentPaymentState?.is_visible ? (
               <>
-                <div className="bg-[#FFFAE2] rounded-xl p-6 mb-8 text-center">
-                  <p className="text-[#6B7280] text-xs font-['DM_Sans'] font-bold mb-1 uppercase tracking-wider">Next Due Amount</p>
-                  <p className="text-5xl font-extrabold text-[#1A1A1A] font-['Sora'] tracking-tight">
+                <div className="bg-[#141519] rounded-xl p-6 mb-8 text-center border border-[#272839]">
+                  <p className="text-[#8D8D96] text-xs font-['DM_Sans'] font-bold mb-1 uppercase tracking-wider">Next Due Amount</p>
+                  <p className="text-5xl font-extrabold text-white font-['Sora'] tracking-tight">
                     {formatCurrency(rentPaymentState.amount_paid, rentPaymentState.currency_code)}
                   </p>
-                  <p className="text-[#6B7280] text-base mt-2 font-['Manrope']">
-                    Due: <span className="text-[#1A1A1A] font-bold">{formatDate(rentPaymentState.due_date)}</span>
+                  <p className="text-[#8D8D96] text-base mt-2 font-['Manrope']">
+                    Due: <span className="text-white font-bold">{formatDate(rentPaymentState.due_date)}</span>
                   </p>
                 </div>
 
                 <div className="flex-1 overflow-hidden">
-                  <p className="text-xs text-[#6B7280] font-bold uppercase tracking-wider mb-4 font-['DM_Sans']">Recent History</p>
+                  <p className="text-xs text-[#8D8D96] font-bold uppercase tracking-wider mb-4 font-['DM_Sans']">Recent History</p>
                   <div className="space-y-4">
-                    <div className="flex justify-between items-center py-2 border-b border-[#FFFAE2]">
-                      <span className="text-base font-medium text-[#1A1A1A] font-['Manrope']">Cycle</span>
-                      <span className="text-sm font-bold text-[#6B7280]">
+                    <div className="flex justify-between items-center py-2 border-b border-[#272839]">
+                      <span className="text-base font-medium text-white font-['Manrope']">Cycle</span>
+                      <span className="text-sm font-bold text-[#8D8D96]">
                         {rentPaymentState.cycle_month}/{rentPaymentState.cycle_year}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center py-2 border-b border-[#FFFAE2]">
-                      <span className="text-base font-medium text-[#1A1A1A] font-['Manrope']">Window Opens</span>
-                      <span className="text-sm font-bold text-[#6B7280]">{formatDate(rentPaymentState.window_starts_at)}</span>
+                    <div className="flex justify-between items-center py-2 border-b border-[#272839]">
+                      <span className="text-base font-medium text-white font-['Manrope']">Window Opens</span>
+                      <span className="text-sm font-bold text-[#8D8D96]">{formatDate(rentPaymentState.window_starts_at)}</span>
                     </div>
                     <div className="flex justify-between items-center py-2">
-                      <span className="text-base font-medium text-[#1A1A1A] font-['Manrope']">Status</span>
+                      <span className="text-base font-medium text-white font-['Manrope']">Status</span>
                       <StatusBadge status={rentPaymentState.status === 'eligible' ? 'pending' : rentPaymentState.status} />
                     </div>
                   </div>
@@ -359,16 +415,16 @@ export function TenantDashboardPage() {
                 ) : null}
 
                 {rentPaymentState.status === 'awaiting_owner_approval' ? (
-                  <div className="mt-6 p-3 bg-yellow-50 rounded-xl border border-yellow-200">
-                    <p className="text-sm font-medium text-yellow-700 font-['Manrope']">Waiting for owner verification.</p>
+                  <div className="mt-6 p-3 bg-[#EBCF42]/10 rounded-xl border border-[#EBCF42]/20">
+                    <p className="text-sm font-medium text-[#EBCF42] font-['Manrope']">Waiting for owner verification.</p>
                   </div>
                 ) : null}
 
                 {rentPaymentState.status === 'rejected' ? (
                   <div className="mt-6 space-y-3">
-                    <p className="text-sm font-medium text-red-600 font-['Manrope']">Owner rejected this confirmation.</p>
+                    <p className="text-sm font-medium text-[#F25461] font-['Manrope']">Owner rejected this confirmation.</p>
                     {rentPaymentState.rejection_reason ? (
-                      <p className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-600 font-['Manrope']">
+                      <p className="rounded-xl border border-[#F25461]/20 bg-[#F25461]/10 px-3 py-2 text-sm text-[#F25461] font-['Manrope']">
                         Reason: {rentPaymentState.rejection_reason}
                       </p>
                     ) : null}
@@ -379,180 +435,31 @@ export function TenantDashboardPage() {
                 ) : null}
 
                 {rentPaymentState.status === 'approved' ? (
-                  <div className="mt-6 p-3 bg-green-50 rounded-xl border border-green-200">
-                    <p className="text-sm font-medium text-green-700 font-['Manrope']">Rent payment confirmed for this cycle.</p>
+                  <div className="mt-6 p-3 bg-[#32C382]/10 rounded-xl border border-[#32C382]/20">
+                    <p className="text-sm font-medium text-[#32C382] font-['Manrope']">Rent payment confirmed for this cycle.</p>
                   </div>
                 ) : null}
 
-                <div className="mt-6 p-4 bg-[#FED609]/10 rounded-lg flex items-start gap-3">
-                  <Info className="h-5 w-5 text-[#FED609] flex-shrink-0 mt-0.5" />
-                  <p className="text-xs leading-normal text-[#1A1A1A] font-medium font-['Manrope']">
+                <div className="mt-6 p-4 bg-[#4E79FF]/10 rounded-lg flex items-start gap-3 border border-[#4E79FF]/20">
+                  <Info className="h-5 w-5 text-[#4E79FF] shrink-0 mt-0.5" />
+                  <p className="text-xs leading-normal text-[#8D8D96] font-medium font-['Manrope']">
                     Mark rent paid from 7 days before due date. Your owner will verify the payment.
                   </p>
                 </div>
               </>
             ) : (
               <div className="flex-1 flex flex-col items-center justify-center text-center py-8">
-                <div className="w-14 h-14 rounded-full bg-[#FFFAE2] flex items-center justify-center mb-3">
-                  <CircleDollarSign className="h-7 w-7 text-[#FED609]" />
+                <div className="w-14 h-14 rounded-full bg-[#4E79FF]/15 flex items-center justify-center mb-3">
+                  <CircleDollarSign className="h-7 w-7 text-[#4E79FF]" />
                 </div>
-                <p className="text-sm font-bold text-[#1A1A1A] mb-1 font-['Sora']">No active rent cycle</p>
-                <p className="text-xs text-[#6B7280] font-['Manrope']">Rent payment window will appear 7 days before your due date.</p>
+                <p className="text-sm font-bold text-white mb-1 font-['Sora']">No active rent cycle</p>
+                <p className="text-xs text-[#8D8D96] font-['Manrope']">Rent payment window will appear 7 days before your due date.</p>
               </div>
             )}
           </div>
         </div>
       ) : null}
 
-      {/* Tickets & Quick Support */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-        {/* Recent Tickets */}
-        <div className="bg-white rounded-xl shadow-sm p-8">
-          <div className="flex justify-between items-center mb-8">
-            <h3 className="text-xl font-bold text-[#1A1A1A] font-['Sora']">Recent Tickets</h3>
-            <Link
-              to={ROUTES.tenantTickets}
-              className="text-sm font-['DM_Sans'] font-bold text-[#FED609] hover:underline flex items-center gap-1"
-            >
-              View All Tickets
-            </Link>
-          </div>
-
-          {!loading && summary ? (
-            <div className="space-y-4 mb-10">
-              {summary.open_tickets > 0 ? (
-                <div className="flex items-center justify-between p-4 rounded-lg border border-[#FEFAEF] hover:border-[#FED609]/30 transition-colors group cursor-pointer">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-[#FED609]/10 flex items-center justify-center">
-                      <Wrench className="h-5 w-5 text-[#92700A]" />
-                    </div>
-                    <div>
-                      <p className="text-base font-bold text-[#1A1A1A] group-hover:text-[#FED609] transition-colors font-['Manrope']">
-                        Open Tickets
-                      </p>
-                      <p className="text-sm text-[#6B7280] font-['Manrope']">{summary.open_tickets} ticket(s) awaiting response</p>
-                    </div>
-                  </div>
-                  <span className="px-3 py-1 bg-[#FED609]/10 text-[#92700A] text-xs font-bold rounded font-['DM_Sans']">
-                    {summary.open_tickets} Open
-                  </span>
-                </div>
-              ) : (
-                <div className="flex items-center justify-between p-4 rounded-lg border border-[#FEFAEF]">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center">
-                      <CheckCircle2 className="h-5 w-5 text-green-500" />
-                    </div>
-                    <div>
-                      <p className="text-base font-bold text-[#1A1A1A] font-['Manrope']">All Clear</p>
-                      <p className="text-sm text-[#6B7280] font-['Manrope']">No open tickets at the moment</p>
-                    </div>
-                  </div>
-                  <span className="px-3 py-1 bg-green-50 text-green-600 text-xs font-bold rounded font-['DM_Sans']">All Good</span>
-                </div>
-              )}
-
-              {summary.pending_reminders > 0 ? (
-                <div className="flex items-center justify-between p-4 rounded-lg border border-[#FEFAEF] hover:border-[#FED609]/30 transition-colors group cursor-pointer">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-yellow-50 flex items-center justify-center">
-                      <Bell className="h-5 w-5 text-yellow-500" />
-                    </div>
-                    <div>
-                      <p className="text-base font-bold text-[#1A1A1A] group-hover:text-[#FED609] transition-colors font-['Manrope']">
-                        Pending Reminders
-                      </p>
-                      <p className="text-sm text-[#6B7280] font-['Manrope']">{summary.pending_reminders} reminder(s) pending</p>
-                    </div>
-                  </div>
-                  <span className="px-3 py-1 bg-yellow-50 text-yellow-600 text-xs font-bold rounded font-['DM_Sans']">
-                    {summary.pending_reminders}
-                  </span>
-                </div>
-              ) : null}
-            </div>
-          ) : null}
-
-          {loading ? <LoadingState message="" rows={2} /> : null}
-
-          <Link
-            to={ROUTES.tenantTickets}
-            className="w-full py-4 bg-[#FED609] text-[#1A1A1A] font-['DM_Sans'] font-bold rounded-lg shadow-md hover:bg-[#FFD70B] transition-all active:scale-[0.98] flex items-center justify-center gap-2"
-          >
-            <Plus className="h-5 w-5" />
-            Create New Ticket
-          </Link>
-        </div>
-
-        {/* Quick Support */}
-        <div className="bg-white rounded-xl shadow-sm p-8 flex flex-col">
-          <h3 className="text-xl font-bold text-[#1A1A1A] font-['Sora'] mb-8">Quick Support</h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
-            <button className="flex items-center justify-center gap-3 p-5 bg-[#25D366]/10 text-[#25D366] rounded-xl font-['DM_Sans'] font-bold hover:bg-[#25D366]/20 transition-colors">
-              <MessageCircle className="h-5 w-5" />
-              Chat on WhatsApp
-            </button>
-            <button className="flex items-center justify-center gap-3 p-5 bg-[#0088cc]/10 text-[#0088cc] rounded-xl font-['DM_Sans'] font-bold hover:bg-[#0088cc]/20 transition-colors">
-              <Send className="h-5 w-5" />
-              Message on Telegram
-            </button>
-          </div>
-
-          <Link
-            to={ROUTES.tenantSupport}
-            className="w-full py-5 border-2 border-[#FED609] border-dashed rounded-xl text-[#1A1A1A] font-['DM_Sans'] font-bold hover:bg-[#FFFAE2] transition-all mb-10 flex items-center justify-center gap-2"
-          >
-            <Phone className="h-5 w-5 text-[#FED609]" />
-            Create Support Ticket
-          </Link>
-
-          <div className="mt-auto p-6 bg-[#FFFAE2] rounded-xl border border-[#FED609]/20">
-            <p className="text-xs text-[#6B7280] font-['DM_Sans'] font-bold uppercase tracking-wider mb-4">Emergency Contact</p>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-[#FED609] flex items-center justify-center">
-                  <Phone className="h-5 w-5 text-[#1A1A1A]" />
-                </div>
-                <div>
-                  <p className="text-base font-bold text-[#1A1A1A] font-['Manrope']">Maintenance Line</p>
-                  <p className="text-sm text-[#6B7280] font-['Manrope']">Available 24/7</p>
-                </div>
-              </div>
-              <p className="text-lg font-black text-[#1A1A1A] font-['Sora']">+971 4 000 0000</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Telegram Connect Banner */}
-      <div className="bg-gradient-to-r from-[#0088cc] to-[#00a2ed] rounded-2xl p-8 text-white shadow-lg overflow-hidden relative group">
-        <div className="absolute -right-10 -bottom-10 opacity-10 group-hover:scale-110 transition-transform duration-700 pointer-events-none">
-          <Send className="h-60 w-60" />
-        </div>
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="flex items-center gap-8">
-            <div className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center flex-shrink-0">
-              <Zap className="h-10 w-10 text-white fill-white" />
-            </div>
-            <div>
-              <h4 className="text-2xl font-bold font-['Sora']">Get instant updates via Telegram</h4>
-              <p className="text-white/80 text-base mt-1 font-['Manrope']">
-                Receive lease renewals, payment receipts, and maintenance alerts instantly.
-              </p>
-            </div>
-          </div>
-          <button className="whitespace-nowrap px-10 py-4 bg-white text-[#0088cc] font-['DM_Sans'] font-extrabold rounded-lg shadow-xl hover:bg-[#FFFAE2] active:scale-95 transition-all">
-            Connect Now
-          </button>
-        </div>
-      </div>
-
-      {/* Condition Report Panel */}
-      {!loading && token ? (
-        <ConditionReportTenantPanel token={token} residentName={tenant?.full_name ?? authTenant?.full_name} />
-      ) : null}
     </div>
   )
 }

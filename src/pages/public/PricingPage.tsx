@@ -345,9 +345,10 @@ export function PricingPage() {
           </p>
           <Link
             to={ROUTES.contact}
-            className="bg-white text-[#2251E3] font-bold py-4 px-10 rounded-xl hover:bg-[rgba(255,255,255,0.9)] transition-all shadow-md flex items-center gap-2"
+            style={{ color: '#2251E3' }}
+            className="bg-white font-bold py-4 px-10 rounded-xl hover:bg-[rgba(255,255,255,0.9)] transition-all shadow-md flex items-center gap-2"
           >
-            <Calendar className="h-5 w-5" />
+            <Calendar className="h-5 w-5" style={{ color: '#2251E3' }} />
             Schedule a Call
           </Link>
         </motion.div>

@@ -160,26 +160,8 @@ export function LandingPage() {
               <img
                 className="w-full h-full object-cover"
                 alt="Modern luxury high-rise apartment building"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwGYvpeM85pwKFXm97S1TAATDSM4__Trygy2ql_yytBQ3PtwsoBr96--gxmJ1tNMfkJalxYzSIoxOG5TitKAI8TkAmCuh-HgVJ38g6tv4XlGNyPXwcGHVh7RvK5Ks-VxmOaevdxY3ls6cvgFdCLs-OYhCJoy5zWvuNQy-FHxiWD6PdkJIyIzAwaSdi3fyEPPzolc5u8TXThfIcwgElPPs8urnbO34Aq7_k4t9aCRyv_klF-0EOqdCSCXpXavAV4-aCl0F__5tH7H6N"
+                src="/heroimage.jpg"
               />
-            </div>
-            <div className="absolute bottom-12 left-8 bg-[#101114] border border-[#272839] rounded-2xl shadow-xl p-4 flex items-center gap-3 z-10">
-              <div className="w-10 h-10 bg-[#2251E3] rounded-xl flex items-center justify-center">
-                <Wallet className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <p className="text-xs text-[#8D8D96] font-['DM_Sans']">Collection Rate</p>
-                <p className="text-xl font-extrabold text-white font-['Sora']">98.5%</p>
-              </div>
-            </div>
-            <div className="absolute top-12 left-8 bg-[#101114] border border-[#272839] rounded-2xl shadow-xl p-4 flex items-center gap-3 z-10">
-              <div className="w-10 h-10 bg-[rgba(34,81,227,0.15)] rounded-xl flex items-center justify-center">
-                <BrainCircuit className="h-5 w-5 text-[#4E79FF]" />
-              </div>
-              <div>
-                <p className="text-xs text-[#8D8D96] font-['DM_Sans']">AI Tickets Resolved</p>
-                <p className="text-lg font-extrabold text-white font-['Sora']">40+ hrs/wk</p>
-              </div>
             </div>
           </motion.div>
         </div>

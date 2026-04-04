@@ -42,7 +42,8 @@ export function CTASection({
         <div className="flex flex-wrap gap-3 lg:justify-end">
           <Link
             to={primaryAction.href}
-            className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold tracking-[0.01em] text-[#2251E3] transition duration-200 ease-out hover:bg-[rgba(255,255,255,0.9)] sm:text-base"
+            style={{ color: '#2251E3' }}
+            className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold tracking-[0.01em] transition duration-200 ease-out hover:bg-[rgba(255,255,255,0.9)] sm:text-base"
           >
             {primaryAction.label}
           </Link>
