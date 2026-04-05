@@ -64,6 +64,8 @@ export function OwnerDashboardPage() {
   const [notifications, setNotifications] = useState<OwnerNotification[]>([])
   const [upcomingItems, setUpcomingItems] = useState<ComplianceUpcomingItem[]>([])
   const [chartBars, setChartBars] = useState<Array<{ label: string; pct: number; opacity: string; tooltip: string }>>([])
+  const [quarterlyBars, setQuarterlyBars] = useState<Array<{ label: string; pct: number; opacity: string; tooltip: string }>>([])
+  const [chartView, setChartView] = useState<'monthly' | 'quarterly'>('monthly')
   const [totalProperties, setTotalProperties] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -151,25 +153,33 @@ export function OwnerDashboardPage() {
           const recentSnapshots = cf.recent_snapshots?.slice(-6) || []
           const maxAmount = Math.max(...recentSnapshots.map(s => s.portfolio_gross_rent || 0), 100000)
 
+          const opacityLevels = ['bg-[#4E79FF]/20', 'bg-[#4E79FF]/40', 'bg-[#4E79FF]/60', 'bg-[#4E79FF]/80', 'bg-[#4E79FF]']
+
           const bars = recentSnapshots.map((snapshot) => {
             const monthIndex = snapshot.report_month - 1
             const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
             const month = monthNames[monthIndex] || 'N/A'
-
-            // Use portfolio gross rent as the amount
             const amount = snapshot.portfolio_gross_rent || 0
-            const tooltip = formatCurrency(amount)
-
-            // Calculate percentage relative to max
             const pct = Math.min(100, (amount / maxAmount) * 100)
-
-            const opacityLevels = ['bg-[#4E79FF]/20', 'bg-[#4E79FF]/40', 'bg-[#4E79FF]/60', 'bg-[#4E79FF]/80', 'bg-[#4E79FF]']
             const opacityIndex = Math.floor((pct / 100) * (opacityLevels.length - 1))
-            const opacity = opacityLevels[opacityIndex]
-
-            return { label: month, pct, opacity, tooltip }
+            return { label: month, pct, opacity: opacityLevels[opacityIndex], tooltip: formatCurrency(amount) }
           })
           setChartBars(bars)
+
+          // Build quarterly bars by summing months into Q1–Q4
+          const allSnapshots = cf.recent_snapshots || []
+          const quarters: Record<string, number> = { Q1: 0, Q2: 0, Q3: 0, Q4: 0 }
+          for (const s of allSnapshots) {
+            const q = s.report_month <= 3 ? 'Q1' : s.report_month <= 6 ? 'Q2' : s.report_month <= 9 ? 'Q3' : 'Q4'
+            quarters[q] = (quarters[q] || 0) + (s.portfolio_gross_rent || 0)
+          }
+          const maxQ = Math.max(...Object.values(quarters), 100000)
+          const qBars = Object.entries(quarters).map(([label, amount]) => {
+            const pct = Math.min(100, (amount / maxQ) * 100)
+            const opacityIndex = Math.floor((pct / 100) * (opacityLevels.length - 1))
+            return { label, pct, opacity: opacityLevels[opacityIndex], tooltip: formatCurrency(amount) }
+          })
+          setQuarterlyBars(qBars)
         }
       } catch (cashFlowError) {
         if (!(cashFlowError instanceof Error && cashFlowError.message.toLowerCase().includes('route not found'))) {
@@ -345,11 +355,25 @@ export function OwnerDashboardPage() {
                 <div className="flex items-center justify-between mb-8">
                   <div>
                     <h2 className="font-['Sora'] text-xl font-bold text-white">Rent Collection</h2>
-                    <p className="text-sm text-[#8D8D96] font-['Manrope']">Monthly collection trends for 2024</p>
+                    <p className="text-sm text-[#8D8D96] font-['Manrope']">
+                      {chartView === 'monthly' ? 'Monthly collection trends' : 'Quarterly collection totals'}
+                    </p>
                   </div>
                   <div className="flex gap-2">
-                    <button type="button" className="px-3 py-1 text-xs font-bold bg-[#4E79FF] text-white rounded-full">Monthly</button>
-                    <button type="button" className="px-3 py-1 text-xs font-bold bg-white/8 hover:bg-white/12 text-[#8D8D96] rounded-full transition-colors border border-[#272839]">Quarterly</button>
+                    <button
+                      type="button"
+                      onClick={() => setChartView('monthly')}
+                      className={`px-3 py-1 text-xs font-bold rounded-full transition-colors ${chartView === 'monthly' ? 'bg-[#4E79FF] text-white' : 'bg-white/8 hover:bg-white/12 text-[#8D8D96] border border-[#272839]'}`}
+                    >
+                      Monthly
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setChartView('quarterly')}
+                      className={`px-3 py-1 text-xs font-bold rounded-full transition-colors ${chartView === 'quarterly' ? 'bg-[#4E79FF] text-white' : 'bg-white/8 hover:bg-white/12 text-[#8D8D96] border border-[#272839]'}`}
+                    >
+                      Quarterly
+                    </button>
                   </div>
                 </div>
                 {/* CSS Bar Chart */}
@@ -362,7 +386,7 @@ export function OwnerDashboardPage() {
                 ) : (
                   <>
                     <div className="flex items-end justify-between h-64 gap-6 px-2">
-                      {chartBars.map((bar) => (
+                      {(chartView === 'monthly' ? chartBars : quarterlyBars).map((bar) => (
                         <div key={bar.label} className="flex flex-col items-center gap-2 flex-1">
                           <div
                             className={`w-full ${bar.opacity} rounded-t-lg relative group`}
@@ -542,12 +566,6 @@ export function OwnerDashboardPage() {
                     </div>
                   )}
                 </div>
-                <button
-                  type="button"
-                  className="w-full mt-6 py-3 border-2 border-dashed border-[#272839] text-[#8D8D96] font-bold text-sm rounded-xl hover:border-[#4E79FF] hover:text-[#4E79FF] transition-all bg-[#101114]"
-                >
-                  + New Reminder
-                </button>
               </motion.div>
 
             </div>

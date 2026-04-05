@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { ArrowLeft, Building2, Mail, Phone } from 'lucide-react'
+import { ArrowLeft, Building2, Calendar, CreditCard, Hash, Home, Mail, Phone, User } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 import { Button } from '../../components/common/Button'
-import { DataTable } from '../../components/common/DataTable'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
@@ -14,6 +14,7 @@ import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
 import type { TenantTicket } from '../../types/api'
 import { formatCurrency, formatDate, formatDateTime } from '../../utils/date'
+import { revealUp, staggerParent, viewportOnce } from '../../utils/motion'
 
 function getNextDueDate(dayOfMonth: number, now = new Date()): Date {
   const currentYear = now.getUTCFullYear()
@@ -63,6 +64,18 @@ type TenantDetailResponse = {
   }>
 }
 
+function InfoField({ label, value, icon }: { label: string; value: React.ReactNode; icon?: React.ReactNode }) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <p className="text-[10px] uppercase tracking-widest font-semibold text-[#8D8D96] font-['DM_Sans']">{label}</p>
+      <div className="flex items-center gap-2 text-sm font-medium text-white font-['Manrope']">
+        {icon ? <span className="text-[#4E79FF] shrink-0">{icon}</span> : null}
+        {value}
+      </div>
+    </div>
+  )
+}
+
 export function OwnerTenantDetailPage() {
   const { id } = useParams<{ id: string }>()
   const { token, owner } = useOwnerAuth()
@@ -71,18 +84,11 @@ export function OwnerTenantDetailPage() {
   const [error, setError] = useState<string | null>(null)
 
   const loadDetail = useCallback(async () => {
-    if (!token || !id) {
-      return
-    }
-
+    if (!token || !id) return
     try {
       setError(null)
       const response = await api.getOwnerTenantDetail(token, id)
-      setDetail({
-        tenant: response.tenant,
-        tickets: response.tickets,
-        reminders: response.reminders,
-      })
+      setDetail({ tenant: response.tenant, tickets: response.tickets, reminders: response.reminders })
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : 'Failed to load tenant details')
     } finally {
@@ -90,133 +96,166 @@ export function OwnerTenantDetailPage() {
     }
   }, [id, token])
 
-  useEffect(() => {
-    void loadDetail()
-  }, [loadDetail])
+  useEffect(() => { void loadDetail() }, [loadDetail])
 
   const tenantContact = useMemo(
-    () => ({
-      email: detail?.tenant.email || '-',
-      phone: detail?.tenant.phone || '-',
-    }),
+    () => ({ email: detail?.tenant.email || '-', phone: detail?.tenant.phone || '-' }),
     [detail],
   )
 
+  const leaseRange = useMemo(() => {
+    if (!detail) return '-'
+    const start = detail.tenant.lease_start_date
+    const end = detail.tenant.lease_end_date
+    if (!start && !end) return '-'
+    return `${formatDate(start)} → ${formatDate(end)}`
+  }, [detail])
+
   return (
-    <section className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-8 p-6 w-full bg-[#06070B] min-h-screen">
+      {/* Header */}
+      <motion.div variants={revealUp} initial="hidden" animate="show" className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-semibold text-[#1A1A1A]">Tenant Detail</h2>
-          <p className="text-sm text-[#6B7280]">Lease, ticket and reminder details for this tenant.</p>
+          <h1 className="font-['Sora'] text-3xl font-extrabold tracking-tight text-white">Tenant Detail</h1>
+          <p className="font-['Manrope'] text-[#8D8D96] font-medium mt-1">
+            Lease, ticket and reminder details for this tenant.
+          </p>
         </div>
         <Button
-            to={ROUTES.ownerTenants}
+          to={ROUTES.ownerTenants}
           variant="outline"
           size="sm"
-          className="border-[rgba(0,0,0,0.06)] bg-white text-[#4B5563]"
           iconLeft={<ArrowLeft className="h-4 w-4" />}
+          className="border-[#272839] bg-[#101114] text-[#8D8D96] hover:text-white hover:border-[#4E79FF]/40"
         >
           Back to tenants
         </Button>
-      </div>
+      </motion.div>
 
       {error ? <ErrorState message={error} /> : null}
       {loading ? <LoadingState message="Loading tenant detail..." rows={5} /> : null}
 
       {!loading && detail ? (
-        <>
-          <div className="rounded-xl border border-[rgba(0,0,0,0.06)] bg-white shadow-sm p-5">
-            <p className="text-lg font-semibold text-[#1A1A1A]">{detail.tenant.full_name}</p>
-            <div className="mt-3 grid gap-3 md:grid-cols-3">
-              <div>
-                <p className="text-xs uppercase text-[#6B7280]">Tenant Access ID</p>
-                <p className="text-sm text-[#1A1A1A]">{detail.tenant.tenant_access_id}</p>
-              </div>
-              <div>
-                <p className="text-xs uppercase text-[#6B7280]">Rent</p>
-                <p className="text-sm text-[#1A1A1A]">
-                  {formatCurrency(detail.tenant.monthly_rent, owner?.organization?.currency_code)}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs uppercase text-[#6B7280]">Payment Status</p>
-                <StatusBadge status={detail.tenant.payment_status} />
-              </div>
-              <div>
-                <p className="text-xs uppercase text-[#6B7280]">Due Date</p>
-                <p className="text-sm text-[#1A1A1A]">{formatDate(getNextDueDate(detail.tenant.payment_due_day).toISOString())}</p>
-              </div>
-              <div>
-                <p className="text-xs uppercase text-[#6B7280]">Lease</p>
-                <p className="text-sm text-[#1A1A1A]">
-                  {formatDate(detail.tenant.lease_start_date)} - {formatDate(detail.tenant.lease_end_date)}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs uppercase text-[#6B7280]">Property</p>
-                <p className="inline-flex items-center gap-2 text-sm text-[#1A1A1A]">
-                  <Building2 className="h-4 w-4 text-[#FED609]" />
-                  {detail.tenant.properties?.property_name || '-'}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs uppercase text-[#6B7280]">Address</p>
-                <p className="text-sm text-[#1A1A1A]">{detail.tenant.properties?.address || '-'}</p>
-              </div>
-              <div>
-                <p className="text-xs uppercase text-[#6B7280]">Email</p>
-                <p className="inline-flex items-center gap-2 text-sm text-[#1A1A1A]">
-                  <Mail className="h-4 w-4 text-[#FED609]" />
-                  {tenantContact.email}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs uppercase text-[#6B7280]">Phone</p>
-                <p className="inline-flex items-center gap-2 text-sm text-[#1A1A1A]">
-                  <Phone className="h-4 w-4 text-[#FED609]" />
-                  {tenantContact.phone}
-                </p>
-              </div>
-              <div className="rounded-lg border border-[rgba(83,88,100,0.34)] bg-white/[0.025] px-4 py-3">
-                <p className="text-xs uppercase tracking-[0.16em] text-[var(--ph-text-muted)]">Unit</p>
-                <p className="mt-2 text-sm font-medium text-[var(--ph-text)]">{detail.tenant.properties?.unit_number || '-'}</p>
-              </div>
-            </div>
-          </div>
+        <motion.div variants={staggerParent} initial="hidden" animate="show" className="space-y-8">
 
-          <div>
-            <h3 className="mb-3 text-lg font-semibold text-[#1A1A1A]">Support Tickets</h3>
-            {detail.tickets.length === 0 ? (
-              <EmptyState
-                title="No tickets"
-                description="Tenant has not raised any support tickets yet."
+          {/* Tenant Info Card */}
+          <motion.div
+            variants={revealUp}
+            whileInView="show"
+            viewport={viewportOnce}
+            className="bg-[#101114] rounded-xl border border-[#272839] p-8"
+          >
+            {/* Name + status row */}
+            <div className="flex items-start justify-between gap-4 mb-8">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-full bg-[#4E79FF]/15 flex items-center justify-center text-[#4E79FF] shrink-0">
+                  <User className="w-7 h-7" />
+                </div>
+                <div>
+                  <h2 className="font-['Sora'] text-2xl font-bold text-white">{detail.tenant.full_name}</h2>
+                  <p className="text-sm text-[#8D8D96] font-['Manrope'] mt-0.5">{detail.tenant.tenant_access_id}</p>
+                </div>
+              </div>
+              <StatusBadge status={detail.tenant.payment_status} />
+            </div>
+
+            {/* Fields grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <InfoField
+                label="Monthly Rent"
+                icon={<CreditCard className="w-4 h-4" />}
+                value={formatCurrency(detail.tenant.monthly_rent, owner?.organization?.currency_code)}
               />
+              <InfoField
+                label="Next Due Date"
+                icon={<Calendar className="w-4 h-4" />}
+                value={formatDate(getNextDueDate(detail.tenant.payment_due_day).toISOString())}
+              />
+              <InfoField
+                label="Lease Period"
+                icon={<Calendar className="w-4 h-4" />}
+                value={leaseRange}
+              />
+              <InfoField
+                label="Property"
+                icon={<Building2 className="w-4 h-4" />}
+                value={detail.tenant.properties?.property_name || '-'}
+              />
+              <InfoField
+                label="Unit"
+                icon={<Hash className="w-4 h-4" />}
+                value={detail.tenant.properties?.unit_number || '-'}
+              />
+              <InfoField
+                label="Address"
+                icon={<Home className="w-4 h-4" />}
+                value={detail.tenant.properties?.address || '-'}
+              />
+              <InfoField
+                label="Email"
+                icon={<Mail className="w-4 h-4" />}
+                value={tenantContact.email}
+              />
+              <InfoField
+                label="Phone"
+                icon={<Phone className="w-4 h-4" />}
+                value={tenantContact.phone}
+              />
+            </div>
+          </motion.div>
+
+          {/* Support Tickets */}
+          <motion.div variants={revealUp} whileInView="show" viewport={viewportOnce}>
+            <h3 className="font-['Sora'] text-xl font-bold text-white mb-4">Support Tickets</h3>
+            {detail.tickets.length === 0 ? (
+              <EmptyState title="No tickets" description="Tenant has not raised any support tickets yet." />
             ) : (
               <TicketTable tickets={detail.tickets} />
             )}
-          </div>
+          </motion.div>
 
-          <div>
-            <h3 className="mb-3 text-lg font-semibold text-[#1A1A1A]">Rent Reminders</h3>
+          {/* Rent Reminders */}
+          <motion.div variants={revealUp} whileInView="show" viewport={viewportOnce}>
+            <h3 className="font-['Sora'] text-xl font-bold text-white mb-4">Rent Reminders</h3>
             {detail.reminders.length === 0 ? (
               <EmptyState title="No reminders" description="Run reminder processing from owner dashboard." />
             ) : (
-              <DataTable headers={['Type', 'Scheduled For', 'Status', 'Sent At']}>
-                {detail.reminders.map((reminder) => (
-                  <tr key={reminder.id}>
-                    <td className="px-4 py-3 text-[#1A1A1A]">{reminder.reminder_type.replaceAll('_', ' ')}</td>
-                    <td className="px-4 py-3 text-[#4B5563]">{formatDateTime(reminder.scheduled_for)}</td>
-                    <td className="px-4 py-3">
-                      <StatusBadge status={reminder.status} />
-                    </td>
-                    <td className="px-4 py-3 text-[#6B7280]">{formatDateTime(reminder.sent_at)}</td>
-                  </tr>
-                ))}
-              </DataTable>
+              <div className="bg-[#101114] rounded-xl border border-[#272839] overflow-hidden">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-[#272839]">
+                      {['Type', 'Scheduled For', 'Status', 'Sent At'].map((h) => (
+                        <th key={h} className="px-5 py-3.5 text-left text-[10px] uppercase tracking-widest font-semibold text-[#8D8D96] font-['DM_Sans']">
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#272839]">
+                    {detail.reminders.map((reminder) => (
+                      <tr key={reminder.id} className="hover:bg-[#141519] transition-colors">
+                        <td className="px-5 py-4 font-medium text-white font-['Manrope'] capitalize">
+                          {reminder.reminder_type.replaceAll('_', ' ')}
+                        </td>
+                        <td className="px-5 py-4 text-[#8D8D96] font-['Manrope']">
+                          {formatDateTime(reminder.scheduled_for)}
+                        </td>
+                        <td className="px-5 py-4">
+                          <StatusBadge status={reminder.status} />
+                        </td>
+                        <td className="px-5 py-4 text-[#8D8D96] font-['Manrope']">
+                          {reminder.sent_at ? formatDateTime(reminder.sent_at) : '-'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
-          </div>
-        </>
+          </motion.div>
+
+        </motion.div>
       ) : null}
-    </section>
+    </div>
   )
 }

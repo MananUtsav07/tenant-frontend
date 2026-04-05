@@ -21,8 +21,8 @@ export function TicketTable({
     <DataTable headers={headers}>
       {tickets.map((ticket) => (
         <tr key={ticket.id}>
-          <td className="px-4 py-3 font-medium text-[#1A1A1A]">{ticket.subject}</td>
-          <td className="max-w-lg px-4 py-3 text-[#4B5563]">{ticket.message}</td>
+          <td className="px-4 py-3 font-medium text-white">{ticket.subject}</td>
+          <td className="max-w-lg px-4 py-3 text-[#C0C0C5]">{ticket.message}</td>
           <td className="px-4 py-3">
             <StatusBadge status={ticket.status} />
           </td>

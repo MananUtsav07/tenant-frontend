@@ -40,7 +40,7 @@ function isLinkButton(props: ButtonProps): props is ButtonAsLink {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    'border border-[#2251E3] bg-[#2251E3] text-white shadow-[0_2px_8px_rgba(34,81,227,0.35)] hover:bg-[#4E79FF] hover:border-[#4E79FF] hover:shadow-[0_4px_16px_rgba(34,81,227,0.4)] active:translate-y-px',
+    'border border-[#4E79FF] bg-[#4E79FF] text-white shadow-[0_2px_8px_rgba(78,121,255,0.35)] hover:bg-[#3E68EE] hover:border-[#3E68EE] hover:shadow-[0_4px_16px_rgba(78,121,255,0.4)] active:translate-y-px',
   secondary:
     'border border-[#272839] bg-[#101114] text-white shadow-[0_1px_3px_rgba(0,0,0,0.3)] hover:border-[rgba(34,81,227,0.5)] hover:shadow-[0_2px_8px_rgba(0,0,0,0.4)]',
   outline:

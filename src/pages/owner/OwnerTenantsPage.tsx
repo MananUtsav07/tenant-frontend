@@ -539,7 +539,7 @@ export function OwnerTenantsPage() {
               setFormError(null)
               setShowCurrencyMenu(false)
             }}
-            className="bg-[#4E79FF] hover:bg-[#3E68EE] text-white font-bold px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-md font-['DM_Sans'] text-sm"
+                        className="bg-[#4E79FF] hover:bg-[#3E68EE] text-white font-bold px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-md font-['DM_Sans'] text-sm"
           >
             <UserRoundPlus className="w-4 h-4" />
             Add Tenant
