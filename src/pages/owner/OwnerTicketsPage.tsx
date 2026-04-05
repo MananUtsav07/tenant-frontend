@@ -230,27 +230,27 @@ export function OwnerTicketsPage() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#06070B', color: '#FFFFFF' }}>
       {/* Header */}
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
-        <div>
-          <h1 className="font-bold text-3xl tracking-tight" style={{ fontFamily: 'Sora, sans-serif', color: '#FFFFFF' }}>
-            Support Tickets
-          </h1>
-          <p className="mt-1 text-sm" style={{ color: '#8D8D96', fontFamily: 'Manrope, sans-serif' }}>
-            Manage and track property maintenance and tenant inquiries.
-          </p>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: '#8D8D96' }} />
-            <input
-              type="text"
-              placeholder="Search tickets..."
-              value={searchQuery}
-              onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1) }}
-              className="pl-10 pr-4 py-2.5 bg-[#101114] border rounded-xl outline-none w-64 text-sm focus:ring-2"
-              style={{ borderColor: 'rgba(78,121,255,0.2)', fontFamily: 'Manrope, sans-serif' }}
-            />
+      <header className="flex flex-col gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <h1 className="font-bold text-2xl sm:text-3xl tracking-tight" style={{ fontFamily: 'Sora, sans-serif', color: '#FFFFFF' }}>
+              Support Tickets
+            </h1>
+            <p className="mt-1 text-sm" style={{ color: '#8D8D96', fontFamily: 'Manrope, sans-serif' }}>
+              Manage and track property maintenance and tenant inquiries.
+            </p>
           </div>
+        </div>
+        <div className="relative w-full">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: '#8D8D96' }} />
+          <input
+            type="text"
+            placeholder="Search tickets..."
+            value={searchQuery}
+            onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1) }}
+            className="pl-10 pr-4 py-2.5 bg-[#101114] border rounded-xl outline-none w-full text-sm focus:ring-2"
+            style={{ borderColor: 'rgba(78,121,255,0.2)', fontFamily: 'Manrope, sans-serif' }}
+          />
         </div>
       </header>
 
@@ -270,7 +270,7 @@ export function OwnerTicketsPage() {
       {!loading && tickets.length > 0 ? (
         <>
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-8 sm:mb-10">
             <div className="bg-[#101114] p-6 rounded-xl shadow-sm border group hover:border-[rgba(78,121,255,0.3)] transition-all" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
               <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: '#8D8D96', fontFamily: 'DM Sans, sans-serif' }}>Total Tickets</p>
               <div className="flex items-end justify-between">
@@ -321,8 +321,64 @@ export function OwnerTicketsPage() {
             })}
           </div>
 
-          {/* Tickets Table */}
-          <div className="bg-[#101114] rounded-xl shadow-sm overflow-hidden" style={{ border: '1px solid rgba(78,121,255,0.12)' }}>
+          {/* Mobile ticket cards */}
+          <div className="md:hidden space-y-3">
+            {pagedTickets.length === 0 ? (
+              <p className="text-center text-sm py-8 text-[#8D8D96]">No tickets match your current filters.</p>
+            ) : null}
+            {pagedTickets.map((ticket) => (
+              <div key={ticket.id} className="rounded-xl bg-[#101114] border border-[#272839] p-4 space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="font-bold text-white font-['Sora'] truncate">{ticket.subject}</p>
+                    <p className="text-xs text-[#8D8D96] mt-0.5 font-['DM_Sans']">#{ticket.id.slice(0, 8).toUpperCase()}</p>
+                    <p className="text-xs text-[#8D8D96] mt-0.5">{formatDateTime(ticket.created_at)}</p>
+                  </div>
+                  <span className={`px-2.5 py-1 rounded-full text-xs font-bold shrink-0 ${getStatusBadgeClasses(ticket.status)}`}>
+                    {getStatusLabel(ticket.status)}
+                  </span>
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                  <button
+                    type="button"
+                    onClick={() => openModal('reply', ticket.id)}
+                    className="flex items-center gap-1 rounded-lg border border-[#4E79FF]/30 px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#4E79FF]/10 transition-colors"
+                  >
+                    <MessageSquare className="h-3.5 w-3.5" /> Reply
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => openModal('status', ticket.id)}
+                    className="flex items-center gap-1 rounded-lg border border-[#272839] bg-[#141519] px-3 py-1.5 text-xs font-semibold text-[#8D8D96] hover:text-white transition-colors"
+                  >
+                    <RefreshCw className="h-3.5 w-3.5" /> Status
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => openModal('view', ticket.id)}
+                    className="flex items-center gap-1 rounded-lg bg-[#2251E3] px-3 py-1.5 text-xs font-semibold text-white transition-colors"
+                  >
+                    <Clock className="h-3.5 w-3.5" /> History
+                  </button>
+                </div>
+              </div>
+            ))}
+            {/* Mobile pagination */}
+            <div className="flex items-center justify-between pt-2">
+              <p className="text-xs text-[#8D8D96]">Showing {pagedTickets.length} of {filteredTickets.length} tickets</p>
+              <div className="flex gap-1">
+                <button onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} disabled={safePage === 1} className="w-8 h-8 flex items-center justify-center rounded-lg border border-[#272839] text-[#8D8D96] disabled:opacity-40">
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                <button onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))} disabled={safePage === totalPages} className="w-8 h-8 flex items-center justify-center rounded-lg border border-[#272839] text-[#8D8D96] disabled:opacity-40">
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop Tickets Table */}
+          <div className="hidden md:block bg-[#101114] rounded-xl shadow-sm overflow-hidden" style={{ border: '1px solid rgba(78,121,255,0.12)' }}>
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b" style={{ backgroundColor: '#141519', borderColor: 'rgba(78,121,255,0.2)' }}>

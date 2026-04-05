@@ -352,14 +352,14 @@ export function OwnerDashboardPage() {
                 viewport={viewportOnce}
                 className="bg-[#101114] p-8 rounded-xl shadow-sm border border-[#272839]"
               >
-                <div className="flex items-center justify-between mb-8">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-8">
                   <div>
                     <h2 className="font-['Sora'] text-xl font-bold text-white">Rent Collection</h2>
                     <p className="text-sm text-[#8D8D96] font-['Manrope']">
                       {chartView === 'monthly' ? 'Monthly collection trends' : 'Quarterly collection totals'}
                     </p>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 shrink-0">
                     <button
                       type="button"
                       onClick={() => setChartView('monthly')}

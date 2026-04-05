@@ -112,12 +112,12 @@ export function OwnerTenantDetailPage() {
   }, [detail])
 
   return (
-    <div className="space-y-8 p-6 w-full bg-[#06070B] min-h-screen">
+    <div className="space-y-6 p-4 sm:p-6 w-full bg-[#06070B] min-h-screen">
       {/* Header */}
-      <motion.div variants={revealUp} initial="hidden" animate="show" className="flex items-center justify-between">
+      <motion.div variants={revealUp} initial="hidden" animate="show" className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="font-['Sora'] text-3xl font-extrabold tracking-tight text-white">Tenant Detail</h1>
-          <p className="font-['Manrope'] text-[#8D8D96] font-medium mt-1">
+          <h1 className="font-['Sora'] text-2xl sm:text-3xl font-extrabold tracking-tight text-white">Tenant Detail</h1>
+          <p className="font-['Manrope'] text-[#8D8D96] font-medium mt-1 text-sm">
             Lease, ticket and reminder details for this tenant.
           </p>
         </div>
@@ -126,7 +126,7 @@ export function OwnerTenantDetailPage() {
           variant="outline"
           size="sm"
           iconLeft={<ArrowLeft className="h-4 w-4" />}
-          className="border-[#272839] bg-[#101114] text-[#8D8D96] hover:text-white hover:border-[#4E79FF]/40"
+          className="border-[#272839] bg-[#101114] text-[#8D8D96] hover:text-white hover:border-[#4E79FF]/40 self-start sm:self-auto"
         >
           Back to tenants
         </Button>
@@ -143,24 +143,24 @@ export function OwnerTenantDetailPage() {
             variants={revealUp}
             whileInView="show"
             viewport={viewportOnce}
-            className="bg-[#101114] rounded-xl border border-[#272839] p-8"
+            className="bg-[#101114] rounded-xl border border-[#272839] p-4 sm:p-8"
           >
             {/* Name + status row */}
-            <div className="flex items-start justify-between gap-4 mb-8">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full bg-[#4E79FF]/15 flex items-center justify-center text-[#4E79FF] shrink-0">
-                  <User className="w-7 h-7" />
+            <div className="flex items-start justify-between gap-3 mb-6 sm:mb-8">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-[#4E79FF]/15 flex items-center justify-center text-[#4E79FF] shrink-0">
+                  <User className="w-5 h-5 sm:w-7 sm:h-7" />
                 </div>
-                <div>
-                  <h2 className="font-['Sora'] text-2xl font-bold text-white">{detail.tenant.full_name}</h2>
-                  <p className="text-sm text-[#8D8D96] font-['Manrope'] mt-0.5">{detail.tenant.tenant_access_id}</p>
+                <div className="min-w-0">
+                  <h2 className="font-['Sora'] text-lg sm:text-2xl font-bold text-white truncate">{detail.tenant.full_name}</h2>
+                  <p className="text-xs sm:text-sm text-[#8D8D96] font-['Manrope'] mt-0.5">{detail.tenant.tenant_access_id}</p>
                 </div>
               </div>
               <StatusBadge status={detail.tenant.payment_status} />
             </div>
 
             {/* Fields grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               <InfoField
                 label="Monthly Rent"
                 icon={<CreditCard className="w-4 h-4" />}
@@ -191,11 +191,13 @@ export function OwnerTenantDetailPage() {
                 icon={<Home className="w-4 h-4" />}
                 value={detail.tenant.properties?.address || '-'}
               />
-              <InfoField
-                label="Email"
-                icon={<Mail className="w-4 h-4" />}
-                value={tenantContact.email}
-              />
+              <div className="col-span-2 sm:col-span-1">
+                <InfoField
+                  label="Email"
+                  icon={<Mail className="w-4 h-4" />}
+                  value={<span className="break-all">{tenantContact.email}</span>}
+                />
+              </div>
               <InfoField
                 label="Phone"
                 icon={<Phone className="w-4 h-4" />}
@@ -220,7 +222,7 @@ export function OwnerTenantDetailPage() {
             {detail.reminders.length === 0 ? (
               <EmptyState title="No reminders" description="Run reminder processing from owner dashboard." />
             ) : (
-              <div className="bg-[#101114] rounded-xl border border-[#272839] overflow-hidden">
+              <div className="bg-[#101114] rounded-xl border border-[#272839] overflow-hidden overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-[#272839]">

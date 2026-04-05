@@ -234,51 +234,56 @@ function PropertyCard({ property, onEdit, onDelete }: PropertyCardProps) {
   return (
     <motion.div
       variants={revealUp}
-      className={`flex h-full flex-col rounded-[28px] border border-[#272839] bg-[#101114] p-6 shadow-[0_16px_45px_rgba(26,26,26,0.08)] ${borderClass}`}
+      className={`flex flex-col rounded-2xl border border-[#272839] bg-[#101114] p-5 shadow-[0_16px_45px_rgba(26,26,26,0.08)] ${borderClass}`}
     >
-      <div className="flex h-full flex-col">
-        <div>
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div className="min-w-0">
-              <h3 className="font-['Sora'] text-2xl font-bold leading-tight text-white">
-                {property.property_name}
-              </h3>
-              <p className="mt-3 flex items-center gap-2 font-['Manrope'] text-sm text-[#8D8D96]">
-                <MapPin className="h-4 w-4 flex-shrink-0 text-[#A08A57]" />
-                <span className="truncate">{property.address}</span>
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => onEdit(property)}
-                className="group flex items-center gap-1.5 rounded-lg border border-[#272839] bg-[#141519] px-3 py-2 text-[#8D8D96] transition-all hover:border-[#4E79FF]/50 hover:bg-[#4E79FF]/10 hover:text-[#4E79FF] active:scale-95"
-                title="Edit property"
-              >
-                <Pencil className="h-3.5 w-3.5 transition-transform group-hover:scale-110" />
-                <span className="text-xs font-semibold font-['DM_Sans']">Edit</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => onDelete(property)}
-                className="group flex items-center gap-1.5 rounded-lg border border-[#272839] bg-[#141519] px-3 py-2 text-[#8D8D96] transition-all hover:border-[#F25461]/40 hover:bg-[#F25461]/10 hover:text-[#F25461] active:scale-95"
-                title="Delete property"
-              >
-                <Trash2 className="h-3.5 w-3.5 transition-transform group-hover:scale-110" />
-                <span className="text-xs font-semibold font-['DM_Sans']">Delete</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="mt-5 flex flex-wrap items-center gap-3">
-            {property.unit_number ? (
-              <span className={`rounded-full px-4 py-2 text-[11px] font-bold uppercase tracking-[0.16em] ${unitBadgeClass}`}>
-                {property.unit_number}
-              </span>
-            ) : null}
-          </div>
+      {/* Top row: name + action buttons */}
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <h3 className="font-['Sora'] text-lg font-bold leading-tight text-white truncate">
+            {property.property_name}
+          </h3>
+          <p className="mt-1.5 flex items-center gap-1.5 font-['Manrope'] text-sm text-[#8D8D96]">
+            <MapPin className="h-3.5 w-3.5 shrink-0 text-[#A08A57]" />
+            <span className="truncate">{property.address}</span>
+          </p>
+        </div>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <button
+            type="button"
+            onClick={() => onEdit(property)}
+            className="group flex items-center gap-1 rounded-lg border border-[#272839] bg-[#141519] px-2.5 py-1.5 text-[#8D8D96] transition-all hover:border-[#4E79FF]/50 hover:bg-[#4E79FF]/10 hover:text-[#4E79FF] active:scale-95"
+            title="Edit property"
+          >
+            <Pencil className="h-3.5 w-3.5" />
+            <span className="text-xs font-semibold font-['DM_Sans']">Edit</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => onDelete(property)}
+            className="group flex items-center gap-1 rounded-lg border border-[#272839] bg-[#141519] px-2.5 py-1.5 text-[#8D8D96] transition-all hover:border-[#F25461]/40 hover:bg-[#F25461]/10 hover:text-[#F25461] active:scale-95"
+            title="Delete property"
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+            <span className="text-xs font-semibold font-['DM_Sans']">Delete</span>
+          </button>
         </div>
       </div>
+
+      {/* Bottom row: unit badge + occupancy status */}
+      {(property.unit_number || property.occupancy_status) && (
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          {property.unit_number ? (
+            <span className={`rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] ${unitBadgeClass}`}>
+              {property.unit_number}
+            </span>
+          ) : null}
+          {property.occupancy_status ? (
+            <span className="rounded-full bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-[#8D8D96]">
+              {property.occupancy_status.replace(/_/g, ' ')}
+            </span>
+          ) : null}
+        </div>
+      )}
     </motion.div>
   )
 }
@@ -440,7 +445,7 @@ export function OwnerPropertiesPage() {
             variants={revealUp}
             initial="hidden"
             animate="show"
-            className="flex items-center justify-between"
+            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
           >
             <div>
               <h2 className="font-['Sora'] font-bold text-3xl text-white tracking-tight">Properties</h2>
@@ -454,9 +459,9 @@ export function OwnerPropertiesPage() {
                 resetForm()
                 setShowForm(true)
               }}
-              className="bg-[#4E79FF] hover:bg-[#3E68EE] text-white font-bold py-3 px-6 rounded-lg flex items-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95 font-['DM_Sans']"
+              className="bg-[#4E79FF] hover:bg-[#3E68EE] text-white font-bold py-2.5 px-5 rounded-lg flex items-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95 font-['DM_Sans'] text-sm w-full sm:w-auto justify-center shrink-0"
             >
-              <PlusCircle className="h-5 w-5" />
+              <PlusCircle className="h-4 w-4" />
               Add Property
             </button>
           </motion.div>

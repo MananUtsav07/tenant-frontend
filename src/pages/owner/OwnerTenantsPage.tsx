@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Building2,
   ChevronDown,
@@ -279,6 +280,7 @@ function TenantDetailPanel({ tenant, propertyName, currencyCode, onClose, onEdit
 
 export function OwnerTenantsPage() {
   const { token, owner } = useOwnerAuth()
+  const navigate = useNavigate()
   const [tenants, setTenants] = useState<Tenant[]>([])
   const [properties, setProperties] = useState<Property[]>([])
   const [brokers, setBrokers] = useState<Broker[]>([])
@@ -603,7 +605,70 @@ export function OwnerTenantsPage() {
 
       {/* Table + Detail Panel layout */}
       {!loading && filteredTenants.length > 0 ? (
-        <div className={`flex gap-6 ${selectedTenant ? 'items-start' : ''}`}>
+        <>
+          {/* Mobile cards */}
+          <div className="md:hidden space-y-3">
+            {filteredTenants.map((tenant) => {
+              const payStyle = getPaymentStatusStyle(tenant.payment_status)
+              return (
+                <div
+                  key={tenant.id}
+                  className="rounded-xl bg-[#101114] border border-[#272839] p-4 space-y-3"
+                >
+                  {/* Name + payment badge */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="font-bold text-white font-['Sora'] truncate">{tenant.full_name}</p>
+                      <p className="text-xs text-[#8D8D96] truncate mt-0.5">{tenant.email ?? 'No email'}</p>
+                      {tenant.brokers ? (
+                        <p className="text-[11px] text-[#A08A57] mt-0.5 truncate">
+                          Broker: {tenant.brokers.full_name}
+                        </p>
+                      ) : null}
+                    </div>
+                    <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-bold text-[10px] uppercase border shrink-0 ${payStyle.badge}`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${payStyle.dot}`} />
+                      {tenant.payment_status}
+                    </span>
+                  </div>
+
+                  {/* Property + lease */}
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-[#8D8D96]">
+                    <span>🏠 {getPropertyName(tenant.property_id)}</span>
+                    {tenant.lease_end_date && <span>📅 Ends {formatDate(tenant.lease_end_date)}</span>}
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => navigate(ROUTES.ownerTenantDetail.replace(':id', tenant.id))}
+                      className="flex items-center gap-1 rounded-lg border border-[#4E79FF]/40 bg-[#4E79FF]/10 px-3 py-1.5 text-xs font-semibold text-[#4E79FF] hover:bg-[#4E79FF]/20 transition-colors"
+                    >
+                      <Eye className="h-3.5 w-3.5" /> View
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => beginEdit(tenant)}
+                      className="flex items-center gap-1 rounded-lg border border-[#272839] bg-[#141519] px-3 py-1.5 text-xs font-semibold text-[#8D8D96] hover:border-[#4E79FF]/50 hover:text-[#4E79FF] transition-colors"
+                    >
+                      <Pencil className="h-3.5 w-3.5" /> Edit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => requestDelete(tenant)}
+                      className="flex items-center gap-1 rounded-lg border border-[#272839] bg-[#141519] px-3 py-1.5 text-xs font-semibold text-[#8D8D96] hover:border-[#F25461]/40 hover:text-[#F25461] transition-colors"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" /> Delete
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Desktop table */}
+          <div className={`hidden md:flex gap-6 ${selectedTenant ? 'items-start' : ''}`}>
           {/* Tenants Table */}
           <div className="flex-1 min-w-0 bg-[#101114] rounded-2xl shadow-sm border border-[#272839] overflow-hidden">
             <div className="overflow-x-auto">
@@ -728,6 +793,7 @@ export function OwnerTenantsPage() {
             </div>
           ) : null}
         </div>
+        </>
       ) : null}
 
       {/* Tip */}

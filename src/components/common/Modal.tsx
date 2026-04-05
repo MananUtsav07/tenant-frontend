@@ -46,7 +46,7 @@ export function Modal({ isOpen, onClose, title, size = 'md', children, className
   const content = (
     <AnimatePresence>
       {isOpen ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           {/* Backdrop */}
           <motion.div
             className="fixed inset-0 bg-black/60"
@@ -61,6 +61,7 @@ export function Modal({ isOpen, onClose, title, size = 'md', children, className
           <motion.div
             className={clsx(
               'relative w-full rounded-xl border border-[rgba(83,88,100,0.18)] bg-[var(--ph-surface)] shadow-xl',
+              'flex flex-col max-h-[90vh]',
               sizeClasses[size],
               className,
             )}
@@ -70,7 +71,7 @@ export function Modal({ isOpen, onClose, title, size = 'md', children, className
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-[rgba(83,88,100,0.18)] px-6 py-4">
+            <div className="flex shrink-0 items-center justify-between border-b border-[rgba(83,88,100,0.18)] px-6 py-4">
               <h2 className="text-base font-semibold text-[var(--ph-text)]">{title}</h2>
               <button
                 type="button"
@@ -82,7 +83,7 @@ export function Modal({ isOpen, onClose, title, size = 'md', children, className
             </div>
 
             {/* Body */}
-            <div className="px-6 py-5">{children}</div>
+            <div className="overflow-y-auto px-6 py-5">{children}</div>
           </motion.div>
         </div>
       ) : null}

@@ -234,59 +234,115 @@ export function OwnerBrokersPage() {
       ) : null}
 
       {!loading && brokers.length > 0 ? (
-        <DataTable headers={['Broker', 'Contact', 'Agency', 'Status', 'Created', 'Actions']}>
-          {brokers.map((broker) => {
-            const assignedTenants = tenants.filter((t) => t.broker_id === broker.id)
-            return (
-            <tr key={broker.id} className="border-t border-[#272839]">
-              <td className="px-4 py-3">
-                <p className="font-medium text-white">{broker.full_name}</p>
-                <p className="text-xs text-[#8D8D96]">{broker.email}</p>
-                {assignedTenants.length > 0 ? (
-                  <div className="mt-1.5">
-                    <p className="text-[9px] font-bold uppercase tracking-widest text-[#9CA3AF] mb-1">Assigned Tenants</p>
-                    <div className="flex flex-wrap gap-1">
-                      {assignedTenants.map((t) => (
-                        <span
-                          key={t.id}
-                          className="inline-flex items-center gap-1 rounded-full bg-[#141519] border border-[#4E79FF]/30 px-2 py-0.5 text-[10px] font-semibold text-[#4E79FF]"
-                        >
-                          <span className="h-1.5 w-1.5 rounded-full bg-[#4E79FF] shrink-0" />
-                          {t.full_name}
-                        </span>
-                      ))}
+        <>
+          {/* Mobile cards */}
+          <div className="md:hidden space-y-3">
+            {brokers.map((broker) => {
+              const assignedTenants = tenants.filter((t) => t.broker_id === broker.id)
+              return (
+                <div key={broker.id} className="rounded-xl bg-[#101114] border border-[#272839] p-4 space-y-3">
+                  {/* Name + actions */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="font-bold text-white font-['Sora'] truncate">{broker.full_name}</p>
+                      <p className="text-xs text-[#8D8D96] truncate mt-0.5">{broker.email}</p>
+                    </div>
+                    <div className="flex gap-1.5 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => handleEdit(broker)}
+                        className="flex items-center gap-1 rounded-lg border border-[#272839] bg-[#141519] px-2.5 py-1.5 text-xs font-semibold text-[#8D8D96] hover:border-[#4E79FF]/50 hover:text-[#4E79FF] transition-colors"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setBrokerPendingDelete(broker)}
+                        className="flex items-center gap-1 rounded-lg border border-[#272839] bg-[#141519] px-2.5 py-1.5 text-xs font-semibold text-[#8D8D96] hover:border-[#F25461]/40 hover:text-[#F25461] transition-colors"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                        Delete
+                      </button>
                     </div>
                   </div>
-                ) : (
-                  <p className="mt-1 text-[10px] text-[#9CA3AF]">No tenants assigned</p>
-                )}
-              </td>
-              <td className="px-4 py-3 text-[#C0C0C5]">{broker.phone || '-'}</td>
-              <td className="px-4 py-3 text-[#C0C0C5]">{broker.agency_name || '-'}</td>
-              <td className="px-4 py-3 text-[#C0C0C5]">{broker.is_active ? 'Active' : 'Inactive'}</td>
-              <td className="px-4 py-3 text-[#C0C0C5]">{formatDateTime(broker.created_at)}</td>
-              <td className="px-4 py-3">
-                <div className="flex items-center gap-1">
-                  <button
-                    type="button"
-                    onClick={() => handleEdit(broker)}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg text-[#8D8D96] transition-colors hover:bg-white/4 hover:text-white"
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setBrokerPendingDelete(broker)}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg text-[#F25461] transition-colors hover:bg-[#F25461]/15 hover:text-[#F25461]"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
+
+                  {/* Details row */}
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-[#8D8D96]">
+                    {broker.phone && <span>📞 {broker.phone}</span>}
+                    {broker.agency_name && <span>🏢 {broker.agency_name}</span>}
+                    <span className={`font-semibold ${broker.is_active ? 'text-[#32C382]' : 'text-[#F25461]'}`}>
+                      {broker.is_active ? 'Active' : 'Inactive'}
+                    </span>
+                  </div>
+
+                  {/* Assigned tenants */}
+                  {assignedTenants.length > 0 ? (
+                    <div>
+                      <p className="text-[9px] font-bold uppercase tracking-widest text-[#8D8D96] mb-1.5">Assigned Tenants</p>
+                      <div className="flex flex-wrap gap-1">
+                        {assignedTenants.map((t) => (
+                          <span key={t.id} className="inline-flex items-center gap-1 rounded-full bg-[#141519] border border-[#4E79FF]/30 px-2 py-0.5 text-[10px] font-semibold text-[#4E79FF]">
+                            <span className="h-1.5 w-1.5 rounded-full bg-[#4E79FF] shrink-0" />
+                            {t.full_name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-[10px] text-[#8D8D96]">No tenants assigned</p>
+                  )}
                 </div>
-              </td>
-            </tr>
-            )
-          })}
-        </DataTable>
+              )
+            })}
+          </div>
+
+          {/* Desktop table */}
+          <div className="hidden md:block">
+            <DataTable headers={['Broker', 'Contact', 'Agency', 'Status', 'Created', 'Actions']}>
+              {brokers.map((broker) => {
+                const assignedTenants = tenants.filter((t) => t.broker_id === broker.id)
+                return (
+                  <tr key={broker.id} className="border-t border-[#272839]">
+                    <td className="px-4 py-3">
+                      <p className="font-medium text-white">{broker.full_name}</p>
+                      <p className="text-xs text-[#8D8D96]">{broker.email}</p>
+                      {assignedTenants.length > 0 ? (
+                        <div className="mt-1.5">
+                          <p className="text-[9px] font-bold uppercase tracking-widest text-[#9CA3AF] mb-1">Assigned Tenants</p>
+                          <div className="flex flex-wrap gap-1">
+                            {assignedTenants.map((t) => (
+                              <span key={t.id} className="inline-flex items-center gap-1 rounded-full bg-[#141519] border border-[#4E79FF]/30 px-2 py-0.5 text-[10px] font-semibold text-[#4E79FF]">
+                                <span className="h-1.5 w-1.5 rounded-full bg-[#4E79FF] shrink-0" />
+                                {t.full_name}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="mt-1 text-[10px] text-[#9CA3AF]">No tenants assigned</p>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-[#C0C0C5]">{broker.phone || '-'}</td>
+                    <td className="px-4 py-3 text-[#C0C0C5]">{broker.agency_name || '-'}</td>
+                    <td className="px-4 py-3 text-[#C0C0C5]">{broker.is_active ? 'Active' : 'Inactive'}</td>
+                    <td className="px-4 py-3 text-[#C0C0C5]">{formatDateTime(broker.created_at)}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-1">
+                        <button type="button" onClick={() => handleEdit(broker)} className="flex h-8 w-8 items-center justify-center rounded-lg text-[#8D8D96] transition-colors hover:bg-white/4 hover:text-white">
+                          <Pencil className="h-4 w-4" />
+                        </button>
+                        <button type="button" onClick={() => setBrokerPendingDelete(broker)} className="flex h-8 w-8 items-center justify-center rounded-lg text-[#F25461] transition-colors hover:bg-[#F25461]/15">
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
+            </DataTable>
+          </div>
+        </>
       ) : null}
 
       {brokerPendingDelete ? (
