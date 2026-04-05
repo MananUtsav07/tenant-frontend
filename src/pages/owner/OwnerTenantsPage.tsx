@@ -1004,7 +1004,7 @@ export function OwnerTenantsPage() {
               <Button
                 type="submit"
                 disabled={busy || properties.length === 0}
-                variant="secondary"
+                variant="primary"
                 iconLeft={editingTenantId ? <Pencil className="h-4 w-4" /> : <UserRoundPlus className="h-4 w-4" />}
               >
                 {editingTenantId ? 'Save Tenant' : 'Create Tenant'}

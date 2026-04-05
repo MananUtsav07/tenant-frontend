@@ -38,8 +38,6 @@ export function OwnerProfilePage() {
   const { owner, token } = useOwnerAuth()
 
   const [isEditing, setIsEditing] = useState(false)
-  const [fullName, setFullName] = useState(owner?.full_name ?? '')
-  const [companyName, setCompanyName] = useState(owner?.company_name ?? '')
   const [supportEmail, setSupportEmail] = useState(owner?.support_email ?? '')
   const [supportWhatsapp, setSupportWhatsapp] = useState(owner?.support_whatsapp ?? '')
   const [saving, setSaving] = useState(false)
@@ -48,6 +46,7 @@ export function OwnerProfilePage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [deleteConfirmText, setDeleteConfirmText] = useState('')
   const [deleteBusy, setDeleteBusy] = useState(false)
+  const [deleteSuccess, setDeleteSuccess] = useState<string | null>(null)
 
   const handleSave = async () => {
     if (!token) return
@@ -56,12 +55,10 @@ export function OwnerProfilePage() {
     setSuccess(null)
     try {
       await api.patchOwnerMe(token, {
-        full_name: fullName.trim() || null,
-        company_name: companyName.trim() || null,
         support_email: supportEmail.trim() || null,
         support_whatsapp: supportWhatsapp.trim() || null,
       })
-      setSuccess('Profile updated successfully.')
+      setSuccess('Contact info updated successfully.')
       setIsEditing(false)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to save')
@@ -71,8 +68,6 @@ export function OwnerProfilePage() {
   }
 
   const handleCancel = () => {
-    setFullName(owner?.full_name ?? '')
-    setCompanyName(owner?.company_name ?? '')
     setSupportEmail(owner?.support_email ?? '')
     setSupportWhatsapp(owner?.support_whatsapp ?? '')
     setIsEditing(false)
@@ -93,7 +88,7 @@ export function OwnerProfilePage() {
         email: owner?.email || '',
         message: `I would like to request permanent deletion of my Prophives account. I understand this action cannot be undone and all associated data will be removed.`
       })
-      setSuccess('Deletion request sent to support. Please check your email for confirmation.')
+      setDeleteSuccess('Deletion request sent to support. Please check your email for confirmation.')
       setShowDeleteModal(false)
       setDeleteConfirmText('')
     } catch (e) {
@@ -143,94 +138,17 @@ export function OwnerProfilePage() {
                 border: '1.5px solid #272839',
               }}
             >
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-[#4E79FF]" />
-                  <h3 className="font-['Sora'] text-base font-bold text-white">Profile Overview</h3>
-                </div>
-                {!isEditing && (
-                  <button
-                    type="button"
-                    onClick={() => setIsEditing(true)}
-                    className="flex items-center gap-1.5 rounded-lg border border-[#272839] bg-[#141519] px-3 py-1.5 text-xs font-semibold text-[#8D8D96] transition-all hover:border-[#4E79FF]/40 hover:bg-[#4E79FF]/10 hover:text-[#4E79FF] font-['DM_Sans']"
-                  >
-                    <Pencil className="h-3.5 w-3.5" />
-                    Edit
-                  </button>
-                )}
+              <div className="flex items-center gap-2 mb-4">
+                <User className="h-4 w-4 text-[#4E79FF]" />
+                <h3 className="font-['Sora'] text-base font-bold text-white">Profile Overview</h3>
               </div>
 
               <div className="space-y-5">
-                {isEditing ? (
-                  <>
-                    {/* Full Name - Editable */}
-                    <div>
-                      <label
-                        htmlFor="full-name"
-                        className="mb-1.5 block text-[10px] uppercase tracking-widest font-bold text-[#8D8D96] font-[DM_Sans,sans-serif]"
-                      >
-                        Full Name
-                      </label>
-                      <input
-                        id="full-name"
-                        type="text"
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        placeholder="Your full name"
-                        className="w-full rounded-xl border border-[#272839] bg-[#06070B] px-4 py-3 text-sm font-medium text-white placeholder-[#6B7280]/60 transition-all focus:border-[#4E79FF] focus:outline-none focus:ring-2 focus:ring-[#4E79FF]/30 font-[Manrope,sans-serif]"
-                      />
-                    </div>
-
-                    {/* Company Name - Editable */}
-                    <div>
-                      <label
-                        htmlFor="company-name"
-                        className="mb-1.5 block text-[10px] uppercase tracking-widest font-bold text-[#8D8D96] font-[DM_Sans,sans-serif]"
-                      >
-                        Company Name
-                      </label>
-                      <input
-                        id="company-name"
-                        type="text"
-                        value={companyName}
-                        onChange={(e) => setCompanyName(e.target.value)}
-                        placeholder="Your company name"
-                        className="w-full rounded-xl border border-[#272839] bg-[#06070B] px-4 py-3 text-sm font-medium text-white placeholder-[#6B7280]/60 transition-all focus:border-[#4E79FF] focus:outline-none focus:ring-2 focus:ring-[#4E79FF]/30 font-[Manrope,sans-serif]"
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <ReadOnlyField label="Full Name" value={owner?.full_name} />
-                    <ReadOnlyField label="Company Name" value={owner?.company_name} />
-                  </>
-                )}
-
-                {/* Login Email (Always Read-only) */}
+                <ReadOnlyField label="Full Name" value={owner?.full_name} />
+                <ReadOnlyField label="Company Name" value={owner?.company_name} />
                 <ReadOnlyField label="Login Email" value={owner?.email} />
               </div>
 
-              {isEditing && (
-                <div className="mt-6 flex gap-3">
-                  <button
-                    type="button"
-                    onClick={() => void handleSave()}
-                    disabled={saving}
-                    className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-[#4E79FF] px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-[#3E68EE] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed font-['DM_Sans']"
-                  >
-                    <Save className="h-4 w-4" />
-                    {saving ? 'Saving...' : 'Save Changes'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleCancel}
-                    disabled={saving}
-                    className="flex-1 rounded-xl border border-[#272839] bg-[#141519] px-4 py-2.5 text-sm font-semibold text-[#8D8D96] transition-colors hover:border-[#4E79FF]/30 hover:text-white disabled:opacity-50 font-['DM_Sans']"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              )}
             </div>
 
             {/* Section 3: Organization Info */}
@@ -292,9 +210,22 @@ export function OwnerProfilePage() {
                 border: '1.5px solid #272839',
               }}
             >
-              <SectionLabel icon={<Phone className="h-4 w-4 text-[#4E79FF]" />}>
-                Support Contact Info
-              </SectionLabel>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Phone className="h-4 w-4 text-[#4E79FF]" />
+                  <h3 className="font-['Sora'] text-base font-bold text-white">Support Contact Info</h3>
+                </div>
+                {!isEditing && (
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(true)}
+                    className="flex items-center gap-1.5 rounded-lg border border-[#272839] bg-[#141519] px-3 py-1.5 text-xs font-semibold text-[#8D8D96] transition-all hover:border-[#4E79FF]/40 hover:bg-[#4E79FF]/10 hover:text-[#4E79FF] font-['DM_Sans']"
+                  >
+                    <Pencil className="h-3.5 w-3.5" />
+                    Edit
+                  </button>
+                )}
+              </div>
 
               <p className="mb-5 text-sm leading-relaxed text-[#8D8D96] font-[Manrope,sans-serif]">
                 Tenants use these contact details to reach you directly.
@@ -342,7 +273,6 @@ export function OwnerProfilePage() {
                 </div>
               </div>
 
-              {/* Feedback messages */}
               {error && (
                 <div className="mt-4">
                   <ErrorState message={error} />
@@ -354,10 +284,25 @@ export function OwnerProfilePage() {
                 </div>
               )}
 
-              {/* Show Save/Cancel buttons when editing - note: they're on Profile Overview section above */}
-              {!isEditing && (
-                <div className="mt-4 text-xs text-[#8D8D96] font-[Manrope,sans-serif]">
-                  Click "Edit" in Profile Overview to modify your contact information.
+              {isEditing && (
+                <div className="mt-6 flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => void handleSave()}
+                    disabled={saving}
+                    className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-[#4E79FF] px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-[#3E68EE] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed font-['DM_Sans']"
+                  >
+                    <Save className="h-4 w-4" />
+                    {saving ? 'Saving...' : 'Save Changes'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCancel}
+                    disabled={saving}
+                    className="flex-1 rounded-xl border border-[#272839] bg-[#141519] px-4 py-2.5 text-sm font-semibold text-[#8D8D96] transition-colors hover:border-[#4E79FF]/30 hover:text-white disabled:opacity-50 font-['DM_Sans']"
+                  >
+                    Cancel
+                  </button>
                 </div>
               )}
             </div>
@@ -373,14 +318,20 @@ export function OwnerProfilePage() {
                 cannot be undone.
               </p>
 
-              <button
-                type="button"
-                onClick={() => setShowDeleteModal(true)}
-                className="flex items-center gap-2 rounded-xl border border-[#F25461]/40 bg-[#F25461]/10 px-6 py-2.5 text-sm font-bold text-[#F25461] transition-all hover:border-[#F25461]/60 hover:bg-[#F25461]/15 active:scale-95 font-['Sora']"
-              >
-                <Trash2 className="h-4 w-4" />
-                Delete Account
-              </button>
+              {deleteSuccess ? (
+                <div className="rounded-xl border border-[#32C382]/30 bg-[#32C382]/15 px-4 py-3 text-sm text-[#32C382] font-[Manrope,sans-serif]">
+                  {deleteSuccess}
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowDeleteModal(true)}
+                  className="flex items-center gap-2 rounded-xl border border-[#F25461]/40 bg-[#F25461]/10 px-6 py-2.5 text-sm font-bold text-[#F25461] transition-all hover:border-[#F25461]/60 hover:bg-[#F25461]/15 active:scale-95 font-['Sora']"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Delete Account
+                </button>
+              )}
             </div>
           </div>
         </div>
