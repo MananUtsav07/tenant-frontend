@@ -1,5 +1,5 @@
-import { lazy, Suspense, type ComponentType } from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { lazy, Suspense, useEffect, type ComponentType } from 'react'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 
 import { ErrorBoundary } from '../components/common/ErrorBoundary'
 import { usePageAnalytics } from '../hooks/usePageAnalytics'
@@ -91,6 +91,14 @@ const AdminContactMessagesPage = lazyNamedPage(
   'AdminContactMessagesPage',
 )
 const AdminBlogPage = lazyNamedPage(() => import('../pages/admin/AdminBlogPage'), 'AdminBlogPage')
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
 
 function AppRoutes() {
   const { admin, loading: adminLoading } = useAdminAuth()
@@ -196,6 +204,7 @@ export function App() {
           </div>
         }
       >
+        <ScrollToTop />
         <AppRoutes />
       </Suspense>
     </ErrorBoundary>
