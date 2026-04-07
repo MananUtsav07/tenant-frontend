@@ -11,7 +11,6 @@ import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react
 
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
-import { MaintenanceWorkflowTenantPanel } from '../../components/tickets/MaintenanceWorkflowTenantPanel'
 import { TicketReplyComposer } from '../../components/tickets/TicketReplyComposer'
 import { TicketThreadTimeline } from '../../components/tickets/TicketThreadTimeline'
 import { useTenantAuth } from '../../hooks/useTenantAuth'
@@ -351,16 +350,6 @@ export function TenantTicketsPage() {
             </div>
           </div>
 
-          {/* Maintenance workflow */}
-          {token ? (
-            <MaintenanceWorkflowTenantPanel
-              token={token}
-              ticketId={thread.ticket.id}
-              onWorkflowChanged={async () => {
-                await Promise.all([loadTickets(), loadThread(thread.ticket.id)])
-              }}
-            />
-          ) : null}
 
           {/* Reply or Closed notice */}
           {canReply ? (
