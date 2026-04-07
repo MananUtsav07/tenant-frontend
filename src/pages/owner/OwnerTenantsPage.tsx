@@ -388,13 +388,8 @@ export function OwnerTenantsPage() {
       return
     }
 
-    if (form.monthly_rent.trim().length === 0) {
-      setFormError('Monthly rent is required')
-      return
-    }
-
-    if (Number.isNaN(monthlyRent) || monthlyRent < 0) {
-      setFormError('Monthly rent must be a valid non-negative number')
+    if (form.monthly_rent.trim().length === 0 || Number.isNaN(monthlyRent) || monthlyRent < 1) {
+      setFormError('Monthly rent is required and must be greater than 0')
       return
     }
 
