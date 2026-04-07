@@ -1,4 +1,5 @@
-import { Bell, Briefcase, Building2, LayoutDashboard, LifeBuoy, Plug, UserCircle, Users } from 'lucide-react'
+import { Bell, Briefcase, Building2, LayoutDashboard, LifeBuoy, MailWarning, Plug, UserCircle, Users } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 import { OwnerNotificationBell } from '../components/owner/OwnerNotificationBell'
 import { OwnerNotificationsProvider } from '../hooks/OwnerNotificationsProvider'
@@ -29,6 +30,22 @@ function OwnerLayoutContent() {
     { to: ROUTES.ownerProfile, label: 'Profile', icon: <UserCircle className="h-4 w-4" /> },
   ]
 
+  const emailVerifiedBanner =
+    owner && owner.email_verified === false ? (
+      <div className="flex items-center gap-3 px-4 py-2.5 bg-[#1A1500] border-b border-[#3A3000] text-sm">
+        <MailWarning className="h-4 w-4 shrink-0 text-[#FED609]" />
+        <span className="text-[#C8B878] flex-1">
+          Please verify your email address to receive rent alerts and notifications.
+        </span>
+        <Link
+          to={ROUTES.ownerProfile}
+          className="shrink-0 text-xs font-semibold text-[#FED609] hover:underline"
+        >
+          Resend email
+        </Link>
+      </div>
+    ) : undefined
+
   return (
     <DashboardLayout
       title="Dashboard"
@@ -37,6 +54,7 @@ function OwnerLayoutContent() {
       identitySecondary={owner?.email || undefined}
       navItems={ownerLinks}
       onLogout={logout}
+      topBanner={emailVerifiedBanner}
       headerActions={
         <div className="flex items-center gap-3">
           <div className="hidden rounded-full border border-[rgba(83,88,100,0.36)] bg-white/[0.03] px-3 py-1 text-xs text-[var(--ph-text-muted)] sm:block">

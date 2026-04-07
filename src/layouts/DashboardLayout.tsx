@@ -19,6 +19,7 @@ type DashboardLayoutProps = {
   onLogout: () => void
   showTopNavbar?: boolean
   headerActions?: ReactNode
+  topBanner?: ReactNode
 }
 
 export function DashboardLayout({
@@ -26,6 +27,7 @@ export function DashboardLayout({
   identitySecondary,
   navItems,
   onLogout,
+  topBanner,
 }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const location = useLocation()
@@ -146,6 +148,7 @@ export function DashboardLayout({
 
         {/* Main Content */}
         <main className="min-w-0 overflow-hidden">
+          {topBanner}
           <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10">
             <div className="mx-auto w-full max-w-[1200px] py-6 lg:py-8">
               <Outlet />

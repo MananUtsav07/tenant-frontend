@@ -31,6 +31,8 @@ const BlogPage = lazyNamedPage(() => import('../pages/public/BlogPage'), 'BlogPa
 const BlogPostPage = lazyNamedPage(() => import('../pages/public/BlogPostPage'), 'BlogPostPage')
 const PrivacyPolicyPage = lazyNamedPage(() => import('../pages/public/PrivacyPolicyPage'), 'PrivacyPolicyPage')
 const TermsOfServicePage = lazyNamedPage(() => import('../pages/public/TermsOfServicePage'), 'TermsOfServicePage')
+const RefundPolicyPage = lazyNamedPage(() => import('../pages/public/RefundPolicyPage'), 'RefundPolicyPage')
+const VerifyEmailPage = lazyNamedPage(() => import('../pages/public/VerifyEmailPage'), 'VerifyEmailPage')
 
 const DocsHomePage = lazyNamedPage(() => import('../pages/docs/DocsHomePage'), 'DocsHomePage')
 const DocsGettingStartedPage = lazyNamedPage(() => import('../pages/docs/DocsGettingStartedPage'), 'DocsGettingStartedPage')
@@ -115,6 +117,8 @@ function AppRoutes() {
         <Route path={ROUTES.blogPost} element={<BlogPostPage />} />
         <Route path={ROUTES.privacyPolicy} element={<PrivacyPolicyPage />} />
         <Route path={ROUTES.termsOfService} element={<TermsOfServicePage />} />
+        <Route path={ROUTES.refundPolicy} element={<RefundPolicyPage />} />
+        <Route path={ROUTES.verifyEmail} element={<VerifyEmailPage />} />
         <Route path={ROUTES.docs} element={<DocsHomePage />} />
         <Route path={ROUTES.docsGettingStarted} element={<DocsGettingStartedPage />} />
         <Route path={ROUTES.docsTenantLogin} element={<DocsTenantLoginPage />} />
