@@ -20,7 +20,6 @@ import { formatDate, formatDateTime } from '../../utils/date'
 
 type StatusFilter = 'all' | 'open' | 'in_progress' | 'resolved' | 'closed'
 type SortOption = 'newest' | 'oldest'
-type Priority = 'low' | 'medium' | 'high'
 
 function statusBadge(status: TenantTicket['status']) {
   switch (status) {
@@ -71,7 +70,6 @@ export function TenantTicketsPage() {
   const [showModal, setShowModal] = useState(false)
   const [subject, setSubject] = useState('')
   const [message, setMessage] = useState('')
-  const [priority, setPriority] = useState<Priority>('low')
   const [busy, setBusy] = useState(false)
   const [createError, setCreateError] = useState<string | null>(null)
 
@@ -130,7 +128,7 @@ export function TenantTicketsPage() {
       setBusy(true)
       setCreateError(null)
       const response = await api.createTenantTicket(token, { subject, message })
-      setSubject(''); setMessage(''); setPriority('low'); setShowModal(false)
+      setSubject(''); setMessage(''); setShowModal(false)
       await loadTickets()
       setSelectedTicketId(response.ticket.id)
     } catch (submitError) {
@@ -161,7 +159,7 @@ export function TenantTicketsPage() {
 
   useEffect(() => {
     if (thread) chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [thread])
+  }, [thread?.messages?.length, thread?.ticket.id])
 
   const ticketMeta = useMemo(() => {
     if (!thread) return null
@@ -455,26 +453,6 @@ export function TenantTicketsPage() {
                   required
                   className="w-full rounded-xl border border-[#272839] bg-[#06070B] px-4 py-3 text-sm text-white placeholder-[#8D8D96] outline-none focus:ring-2 focus:ring-[#4E79FF] font-['Manrope']"
                 />
-              </div>
-
-              <div className="space-y-3">
-                <label className="block text-sm font-['DM_Sans'] font-bold text-white">Priority Level</label>
-                <div className="grid grid-cols-3 gap-3">
-                  {(['low', 'medium', 'high'] as Priority[]).map((p) => (
-                    <button
-                      key={p}
-                      type="button"
-                      onClick={() => setPriority(p)}
-                      className={`flex items-center justify-center rounded-xl py-2.5 text-sm font-medium capitalize transition-all font-['DM_Sans'] ${
-                        priority === p
-                          ? 'border-2 border-[#4E79FF] bg-[#4E79FF]/10 text-white font-bold'
-                          : 'border-2 border-[#272839] bg-[#06070B] text-[#8D8D96] hover:border-[#4E79FF]/40'
-                      }`}
-                    >
-                      {p}
-                    </button>
-                  ))}
-                </div>
               </div>
 
               <div className="space-y-2">

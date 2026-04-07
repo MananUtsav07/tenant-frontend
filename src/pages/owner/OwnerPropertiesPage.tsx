@@ -197,7 +197,12 @@ function DeleteConfirmModal({ propertyName, busy, onConfirm, onCancel }: DeleteC
           <Trash2 className="h-5 w-5 text-[#F25461]" />
         </div>
         <p className="text-sm text-[#C0C0C5]">
-          <span className="font-semibold text-white">{propertyName}</span> will be permanently removed. This action cannot be undone.
+          Are you sure you want to delete{' '}
+          <span className="font-semibold text-white">{propertyName}</span>?
+          This action cannot be undone.
+        </p>
+        <p className="text-xs text-amber-400 bg-amber-400/10 border border-amber-400/20 rounded-lg px-3 py-2">
+          This will fail if tenants are still assigned to this property. Terminate or reassign them first.
         </p>
         <div className="flex gap-3">
           <button
@@ -211,9 +216,9 @@ function DeleteConfirmModal({ propertyName, busy, onConfirm, onCancel }: DeleteC
             type="button"
             onClick={onConfirm}
             disabled={busy}
-            className="flex-1 rounded-xl bg-[#F25461]/150 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-600 disabled:opacity-60"
+            className="flex-1 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-700 disabled:opacity-60"
           >
-            {busy ? 'Deleting...' : 'Delete Property'}
+            {busy ? 'Deleting…' : 'Delete Property'}
           </button>
         </div>
       </div>
@@ -422,7 +427,6 @@ export function OwnerPropertiesPage() {
       await loadProperties()
     } catch (deleteError) {
       setError(deleteError instanceof Error ? deleteError.message : 'Failed to delete property')
-      setDeletingProperty(null)
     } finally {
       setBusy(false)
     }
