@@ -596,7 +596,7 @@ export function OwnerTicketsPage() {
         ) : threadError ? (
           <ErrorState message={threadError} />
         ) : thread ? (
-          <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+          <div className="flex flex-col gap-3 max-h-[60vh] overflow-y-auto pr-1">
             {thread.messages.length === 0 ? (
               <p className="text-center text-sm py-8" style={{ color: '#8D8D96' }}>No messages yet.</p>
             ) : null}
@@ -604,9 +604,9 @@ export function OwnerTicketsPage() {
               const isOwner = message.sender_role === 'owner'
               const isTenant = message.sender_role === 'tenant'
               return (
-                <div key={message.id} className={`flex flex-col gap-1 ${isOwner ? 'items-end' : 'items-start'}`}>
-                  <div className="flex items-center gap-2 px-1">
-                    <span className="text-[11px] font-semibold" style={{ color: '#FFFFFF' }}>
+                <div key={message.id} className={`flex flex-col gap-1.5 ${isOwner ? 'items-end' : 'items-start'}`}>
+                  <div className={`flex items-center gap-2 px-1 ${isOwner ? 'flex-row-reverse' : 'flex-row'}`}>
+                    <span className="text-[11px] font-bold" style={{ color: '#FFFFFF' }}>
                       {message.sender_display_name}
                     </span>
                     <span
@@ -615,8 +615,8 @@ export function OwnerTicketsPage() {
                         isOwner
                           ? { backgroundColor: 'rgba(78,121,255,0.2)', color: '#4E79FF' }
                           : isTenant
-                          ? { backgroundColor: 'rgba(59,130,246,0.1)', color: '#2563EB' }
-                          : { backgroundColor: 'rgba(0,0,0,0.06)', color: '#8D8D96' }
+                          ? { backgroundColor: 'rgba(50,195,130,0.15)', color: '#32C382' }
+                          : { backgroundColor: 'rgba(141,141,150,0.15)', color: '#8D8D96' }
                       }
                     >
                       {isOwner ? 'Owner' : isTenant ? 'Tenant' : 'System'}
@@ -626,11 +626,11 @@ export function OwnerTicketsPage() {
                     </span>
                   </div>
                   <div
-                    className="max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap"
+                    className="max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap font-['Manrope']"
                     style={
                       isOwner
                         ? { backgroundColor: '#4E79FF', color: '#FFFFFF', borderBottomRightRadius: '4px' }
-                        : { backgroundColor: '#F3F4F6', color: '#FFFFFF', borderBottomLeftRadius: '4px' }
+                        : { backgroundColor: '#1C1E27', color: '#E5E7EB', border: '1px solid #272839', borderBottomLeftRadius: '4px' }
                     }
                   >
                     {message.message}

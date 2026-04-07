@@ -2,20 +2,20 @@ import {
   CalendarDays,
   ChevronRight,
   Filter,
+  MessageSquare,
   Plus,
   Search,
+  Send,
   TicketX,
   X,
 } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
-import { TicketReplyComposer } from '../../components/tickets/TicketReplyComposer'
-import { TicketThreadTimeline } from '../../components/tickets/TicketThreadTimeline'
 import { useTenantAuth } from '../../hooks/useTenantAuth'
 import { api } from '../../services/api'
-import type { SupportTicketThread, TenantTicket } from '../../types/api'
+import type { SupportTicketMessage, SupportTicketThread, TenantTicket } from '../../types/api'
 import { formatDate, formatDateTime } from '../../utils/date'
 
 type StatusFilter = 'all' | 'open' | 'in_progress' | 'resolved' | 'closed'
@@ -157,6 +157,11 @@ export function TenantTicketsPage() {
   }
 
   const canReply = thread?.ticket.status !== 'closed'
+  const chatEndRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (thread) chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [thread])
 
   const ticketMeta = useMemo(() => {
     if (!thread) return null
@@ -316,59 +321,98 @@ export function TenantTicketsPage() {
       {threadLoading ? <LoadingState message="Loading ticket thread..." rows={4} /> : null}
 
       {!threadLoading && thread ? (
-        <div className="space-y-4">
-          {/* Thread header */}
-          <div className="rounded-2xl bg-[#101114] border border-[#272839] p-6 sm:p-7">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-[#4E79FF]/70 font-['DM_Sans']">Selected Ticket</p>
-                <h3 className="mt-3 font-['Sora'] text-2xl font-semibold text-white">{thread.ticket.subject}</h3>
-                <p className="mt-2 text-sm text-[#8D8D96] font-['Manrope']">Opened: {ticketMeta?.openedAt}</p>
+        <div className="rounded-2xl bg-[#101114] border border-[#272839] overflow-hidden">
+          {/* Chat header */}
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#272839] px-6 py-4">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-[#4E79FF]/15 flex items-center justify-center shrink-0">
+                <MessageSquare className="h-4 w-4 text-[#4E79FF]" />
               </div>
-              <span className="mt-1">
-                {thread.ticket.status === 'open' ? (
-                  <span className="rounded-full border border-[#4E79FF]/30 bg-[#4E79FF]/15 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#4E79FF]">Open</span>
-                ) : thread.ticket.status === 'in_progress' ? (
-                  <span className="rounded-full border border-[#EBCF42]/30 bg-[#EBCF42]/15 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#EBCF42]">In Progress</span>
-                ) : thread.ticket.status === 'resolved' ? (
-                  <span className="rounded-full border border-[#32C382]/30 bg-[#32C382]/15 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#32C382]">Resolved</span>
-                ) : (
-                  <span className="rounded-full border border-[#272839] bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#8D8D96]">Closed</span>
-                )}
-              </span>
+              <div>
+                <p className="font-bold text-white font-['Sora'] leading-tight">{thread.ticket.subject}</p>
+                <p className="text-xs text-[#8D8D96] font-['Manrope']">Opened {ticketMeta?.openedAt}</p>
+              </div>
             </div>
+            {thread.ticket.status === 'open' ? (
+              <span className="rounded-full border border-[#4E79FF]/30 bg-[#4E79FF]/15 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#4E79FF]">Open</span>
+            ) : thread.ticket.status === 'in_progress' ? (
+              <span className="rounded-full border border-[#EBCF42]/30 bg-[#EBCF42]/15 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#EBCF42]">In Progress</span>
+            ) : thread.ticket.status === 'resolved' ? (
+              <span className="rounded-full border border-[#32C382]/30 bg-[#32C382]/15 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#32C382]">Resolved</span>
+            ) : (
+              <span className="rounded-full border border-[#272839] bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#8D8D96]">Closed</span>
+            )}
           </div>
 
-          {/* Conversation */}
-          <div className="rounded-2xl bg-[#101114] border border-[#272839] p-6 sm:p-7">
-            <h3 className="font-['Sora'] text-xl font-semibold text-white">Conversation</h3>
-            <p className="mt-1 text-sm text-[#8D8D96] font-['Manrope']">
-              The original ticket, owner replies, and closing notes all appear here in order.
-            </p>
-            <div className="mt-4">
-              <TicketThreadTimeline messages={thread.messages} />
-            </div>
+          {/* Messages */}
+          <div className="flex flex-col gap-4 px-6 py-5 max-h-[480px] overflow-y-auto">
+            {thread.messages.length === 0 ? (
+              <p className="text-center text-sm text-[#8D8D96] py-8 font-['Manrope']">No messages yet.</p>
+            ) : null}
+            {thread.messages.map((msg: SupportTicketMessage) => {
+              const isTenant = msg.sender_role === 'tenant'
+              const isOwner = msg.sender_role === 'owner'
+              return (
+                <div key={msg.id} className={`flex flex-col gap-1 ${isTenant ? 'items-end' : 'items-start'}`}>
+                  <div className={`flex items-center gap-2 px-1 ${isTenant ? 'flex-row-reverse' : 'flex-row'}`}>
+                    <span className="text-[11px] font-bold text-white font-['DM_Sans']">{msg.sender_display_name}</span>
+                    <span
+                      className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                      style={
+                        isTenant
+                          ? { backgroundColor: 'rgba(78,121,255,0.15)', color: '#4E79FF' }
+                          : isOwner
+                          ? { backgroundColor: 'rgba(240,163,35,0.15)', color: '#f0a323' }
+                          : { backgroundColor: 'rgba(141,141,150,0.15)', color: '#8D8D96' }
+                      }
+                    >
+                      {isTenant ? 'You' : isOwner ? 'Owner' : 'System'}
+                    </span>
+                    <span className="text-[10px] text-[#8D8D96] font-['Manrope']">{formatDateTime(msg.created_at)}</span>
+                  </div>
+                  <div
+                    className="max-w-[78%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap font-['Manrope']"
+                    style={
+                      isTenant
+                        ? { backgroundColor: '#4E79FF', color: '#fff', borderBottomRightRadius: '4px' }
+                        : { backgroundColor: '#1C1E27', color: '#E5E7EB', border: '1px solid #272839', borderBottomLeftRadius: '4px' }
+                    }
+                  >
+                    {msg.message}
+                  </div>
+                </div>
+              )
+            })}
+            <div ref={chatEndRef} />
           </div>
 
-
-          {/* Reply or Closed notice */}
+          {/* Reply input */}
           {canReply ? (
-            <TicketReplyComposer
-              title="Reply to this ticket"
-              description="Your reply is added to the permanent support history and sent to the property team."
-              value={replyMessage}
-              onChange={setReplyMessage}
+            <form
               onSubmit={handleReplySubmit}
-              busy={replyBusy}
-              submitLabel="Send reply"
-              placeholder="Add any update, clarification, or follow-up detail."
-            />
+              className="flex items-end gap-3 border-t border-[#272839] px-5 py-4"
+            >
+              <textarea
+                value={replyMessage}
+                onChange={(e) => setReplyMessage(e.target.value)}
+                placeholder="Type a reply..."
+                rows={1}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void handleReplySubmit(e as unknown as FormEvent<HTMLFormElement>) }
+                }}
+                className="flex-1 resize-none rounded-xl border border-[#272839] bg-[#06070B] px-4 py-3 text-sm text-white placeholder-[#8D8D96] outline-none focus:ring-2 focus:ring-[#4E79FF] font-['Manrope']"
+              />
+              <button
+                type="submit"
+                disabled={replyBusy || replyMessage.trim().length === 0}
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#4E79FF] text-white shadow-lg shadow-[#4E79FF]/20 transition-all hover:bg-[#3E68EE] active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                <Send className="h-4 w-4" />
+              </button>
+            </form>
           ) : (
-            <div className="rounded-2xl border border-[#272839] bg-[#101114] p-6">
-              <h3 className="font-['Sora'] text-lg font-semibold text-white">Ticket closed</h3>
-              <p className="mt-2 text-sm text-[#8D8D96] font-['Manrope']">
-                This ticket is closed. Review the thread above for the final owner response or closing note.
-              </p>
+            <div className="border-t border-[#272839] px-6 py-4">
+              <p className="text-sm text-[#8D8D96] font-['Manrope'] text-center">This ticket is closed and no longer accepts replies.</p>
             </div>
           )}
         </div>
