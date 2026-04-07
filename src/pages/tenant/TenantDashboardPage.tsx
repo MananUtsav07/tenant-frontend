@@ -8,10 +8,13 @@ import {
   CheckCircle2,
   CircleDollarSign,
   Info,
+  Mail,
   MapPin,
+  Phone,
   Plus,
   RefreshCw,
   Ticket,
+  UserRound,
   Wrench,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -268,6 +271,39 @@ export function TenantDashboardPage() {
                     </div>
                   ) : null}
                 </div>
+
+                {/* Assigned Broker */}
+                {tenant?.brokers ? (
+                  <div className="mt-5 pt-5 border-t border-[#272839]">
+                    <p className="text-xs text-[#8D8D96] font-bold uppercase tracking-wider mb-3 font-['DM_Sans']">Assigned Broker</p>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 rounded-xl bg-[#141519] border border-[#272839]">
+                      <div className="w-10 h-10 rounded-full bg-[#4E79FF]/15 flex items-center justify-center shrink-0">
+                        <UserRound className="h-5 w-5 text-[#4E79FF]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-white font-['Manrope'] truncate">{tenant.brokers.full_name}</p>
+                        {tenant.brokers.agency_name ? (
+                          <p className="text-xs text-[#8D8D96] font-['Manrope'] truncate">{tenant.brokers.agency_name}</p>
+                        ) : null}
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {tenant.brokers.phone ? (
+                          <span className="flex items-center gap-1.5 px-3 py-1.5 bg-[#4E79FF]/15 text-[#4E79FF] text-xs font-bold rounded-lg font-['DM_Sans']">
+                            <Phone className="h-3.5 w-3.5" />
+                            {tenant.brokers.phone}
+                          </span>
+                        ) : null}
+                        <a
+                          href={`mailto:${tenant.brokers.email}`}
+                          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#4E79FF]/15 text-[#4E79FF] text-xs font-bold rounded-lg hover:bg-[#4E79FF]/25 transition-colors font-['DM_Sans']"
+                        >
+                          <Mail className="h-3.5 w-3.5" />
+                          {tenant.brokers.email}
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
 
               </div>
             </div>
