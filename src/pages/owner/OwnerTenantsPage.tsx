@@ -388,13 +388,8 @@ export function OwnerTenantsPage() {
       return
     }
 
-    if (form.monthly_rent.trim().length === 0) {
-      setFormError('Monthly rent is required')
-      return
-    }
-
-    if (Number.isNaN(monthlyRent) || monthlyRent < 0) {
-      setFormError('Monthly rent must be a valid non-negative number')
+    if (form.monthly_rent.trim().length === 0 || Number.isNaN(monthlyRent) || monthlyRent < 1) {
+      setFormError('Monthly rent is required and must be greater than 0')
       return
     }
 
@@ -485,8 +480,8 @@ export function OwnerTenantsPage() {
       email: tenant.email ?? '',
       phone: tenant.phone ?? '',
       password: '',
-      lease_start_date: tenant.lease_start_date ?? '',
-      lease_end_date: tenant.lease_end_date ?? '',
+      lease_start_date: tenant.lease_start_date ? tenant.lease_start_date.slice(0, 10) : '',
+      lease_end_date: tenant.lease_end_date ? tenant.lease_end_date.slice(0, 10) : '',
       monthly_rent: String(tenant.monthly_rent),
       payment_due_day: String(tenant.payment_due_day),
       payment_status: tenant.payment_status,

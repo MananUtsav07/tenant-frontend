@@ -113,7 +113,7 @@ export function TenantDashboardPage() {
   }
 
   const tenantName = tenant?.full_name ?? authTenant?.full_name ?? 'Resident'
-  const orgCurrency = authTenant?.organization?.currency_code
+  const orgCurrency = authTenant?.organization?.currency_code ?? rentPaymentState?.currency_code ?? 'AED'
 
   return (
     <div className="min-h-screen bg-[#06070B] p-6 lg:p-8 space-y-6 text-white">
@@ -488,8 +488,15 @@ export function TenantDashboardPage() {
                 <div className="w-14 h-14 rounded-full bg-[#4E79FF]/15 flex items-center justify-center mb-3">
                   <CircleDollarSign className="h-7 w-7 text-[#4E79FF]" />
                 </div>
-                <p className="text-sm font-bold text-white mb-1 font-['Sora']">No active rent cycle</p>
-                <p className="text-xs text-[#8D8D96] font-['Manrope']">Rent payment window will appear 7 days before your due date.</p>
+                <p className="text-sm font-bold text-white mb-1 font-['Sora']">Payment window not open yet</p>
+                {rentPaymentState?.window_starts_at ? (
+                  <p className="text-xs text-[#8D8D96] font-['Manrope']">
+                    Opens on <span className="text-white font-semibold">{formatDate(rentPaymentState.window_starts_at)}</span>
+                    {' '}— due <span className="text-white font-semibold">{formatDate(rentPaymentState.due_date)}</span>
+                  </p>
+                ) : (
+                  <p className="text-xs text-[#8D8D96] font-['Manrope']">Rent payment window will appear 7 days before your due date.</p>
+                )}
               </div>
             )}
           </div>

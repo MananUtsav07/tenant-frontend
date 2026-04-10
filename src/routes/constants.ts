@@ -51,4 +51,6 @@ export const ROUTES = {
   tenantProfile: '/tenant/profile',
   privacyPolicy: '/privacy-policy',
   termsOfService: '/terms-of-service',
+  refundPolicy: '/refund-policy',
+  verifyEmail: '/verify-email',
 } as const

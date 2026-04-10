@@ -201,6 +201,9 @@ export const api = {
   ownerResetPassword: (body: { token: string; password: string }) =>
     request<ApiMessageResponse>('/api/auth/owner/reset-password', { method: 'POST', body }),
 
+  ownerVerifyEmail: (token: string) =>
+    request<{ ok: true; message: string }>(`/api/auth/owner/verify-email?token=${encodeURIComponent(token)}`),
+
   ownerMe: (token: string) => request<{ ok: true; owner: Owner }>('/api/auth/owner/me', { token }),
   patchOwnerMe: (
     token: string,

@@ -16,6 +16,7 @@ export type Owner = {
   company_name: string | null
   support_email: string | null
   support_whatsapp: string | null
+  email_verified?: boolean
   organization?: Organization | null
   created_at: string
 }
