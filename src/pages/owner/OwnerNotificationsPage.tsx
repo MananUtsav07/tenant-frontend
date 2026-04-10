@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   AlertCircle,
   Bell,
@@ -79,8 +79,12 @@ function getNotificationIcon(notification: OwnerNotification) {
 }
 
 export function OwnerNotificationsPage() {
-  const { notifications, unreadCount, loading, error, markRead, markAllRead } = useOwnerNotifications()
+  const { notifications, unreadCount, loading, error, markRead, markAllRead, refresh } = useOwnerNotifications()
   const [activeFilter, setActiveFilter] = useState<NotificationFilter>('all')
+
+  useEffect(() => {
+    void refresh({ silent: true })
+  }, [refresh])
 
   const filteredNotifications = useMemo(() => notifications.filter((n) => {
     if (activeFilter === 'unread') return !n.is_read
