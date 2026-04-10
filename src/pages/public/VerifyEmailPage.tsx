@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { CheckCircle, XCircle, Loader } from 'lucide-react'
+import { CheckCircle, XCircle, Loader2 } from 'lucide-react'
 
 import { api } from '../../services/api'
 import { ROUTES } from '../../routes/constants'
@@ -20,7 +20,7 @@ export function VerifyEmailPage() {
     const token = searchParams.get('token') ?? ''
     if (!token) {
       setState('error')
-      setMessage('No verification token found in the link. Please check your email and try again.')
+      setMessage('No verification token found. Please check your email and try again.')
       return
     }
 
@@ -37,48 +37,41 @@ export function VerifyEmailPage() {
   }, [searchParams])
 
   return (
-    <div className="min-h-screen bg-[#0C0900] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#06070B] flex items-center justify-center px-4 font-['Manrope'] text-white antialiased">
       <div className="w-full max-w-md">
+
         {/* Logo */}
-        <div className="flex items-center justify-center gap-2 mb-10">
-          <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-[#0C0900] font-black text-base"
-            style={{ backgroundColor: '#FED609', fontFamily: 'Georgia, serif' }}
-          >
-            P
-          </div>
-          <span className="text-lg font-bold tracking-wide" style={{ color: '#FED609', fontFamily: 'Georgia, serif' }}>
-            Prophives
-          </span>
+        <div className="flex items-center justify-center gap-2.5 mb-10">
+          <span className="font-['Sora'] text-2xl font-black tracking-tighter text-white">Prophives</span>
         </div>
 
         {/* Card */}
-        <div className="rounded-2xl border border-[#2A2200] bg-[#131000] p-8 text-center">
+        <div className="rounded-2xl border border-[#272839] bg-[#101114] p-8 text-center shadow-xl">
+
           {state === 'verifying' && (
             <>
               <div className="flex justify-center mb-5">
-                <Loader className="w-12 h-12 text-[#FED609] animate-spin" />
+                <Loader2 className="w-10 h-10 text-[#2251E3] animate-spin" />
               </div>
-              <h1 className="text-xl font-bold text-[#FEFAEF] mb-2" style={{ fontFamily: 'Georgia, serif' }}>
+              <h1 className="text-xl font-bold text-white mb-2 font-['Sora']">
                 Verifying your email
               </h1>
-              <p className="text-sm text-[#8A7840]">Please wait a moment…</p>
+              <p className="text-sm text-[#8D8D96]">Please wait a moment…</p>
             </>
           )}
 
           {state === 'success' && (
             <>
               <div className="flex justify-center mb-5">
-                <CheckCircle className="w-12 h-12 text-[#4AD888]" />
+                <CheckCircle className="w-12 h-12 text-[#32C382]" />
               </div>
-              <h1 className="text-xl font-bold text-[#FEFAEF] mb-2" style={{ fontFamily: 'Georgia, serif' }}>
+              <h1 className="text-xl font-bold text-white mb-2 font-['Sora']">
                 Email verified
               </h1>
-              <p className="text-sm text-[#C8B878] mb-8">{message}</p>
+              <p className="text-sm text-[#8D8D96] mb-8 leading-relaxed">{message}</p>
               <Link
                 to={ROUTES.ownerLogin}
-                className="inline-block w-full rounded-full py-3 text-sm font-bold text-[#0C0900] transition-opacity hover:opacity-90"
-                style={{ backgroundColor: '#FED609' }}
+                className="block w-full py-3 rounded-lg bg-[#2251E3] text-white text-sm font-bold font-['DM_Sans'] tracking-wide hover:bg-[#4E79FF] transition-colors"
               >
                 Go to owner login
               </Link>
@@ -88,28 +81,30 @@ export function VerifyEmailPage() {
           {state === 'error' && (
             <>
               <div className="flex justify-center mb-5">
-                <XCircle className="w-12 h-12 text-[#F25461]" />
+                <XCircle className="w-12 h-12 text-red-500" />
               </div>
-              <h1 className="text-xl font-bold text-[#FEFAEF] mb-2" style={{ fontFamily: 'Georgia, serif' }}>
+              <h1 className="text-xl font-bold text-white mb-2 font-['Sora']">
                 Verification failed
               </h1>
-              <p className="text-sm text-[#C8B878] mb-8">{message}</p>
+              <p className="text-sm text-[#8D8D96] mb-8 leading-relaxed">{message}</p>
               <Link
                 to={ROUTES.ownerLogin}
-                className="inline-block w-full rounded-full py-3 text-sm font-bold border border-[#3A3000] text-[#D4A800] transition-colors hover:border-[#FED609] hover:text-[#FED609]"
+                className="block w-full py-3 rounded-lg border border-[#272839] text-[#8D8D96] text-sm font-bold font-['DM_Sans'] hover:border-[#2251E3] hover:text-white transition-colors"
               >
                 Back to login
               </Link>
             </>
           )}
+
         </div>
 
-        <p className="mt-6 text-center text-xs text-[#4A3C00]">
+        <p className="mt-6 text-center text-xs text-[#8D8D96]">
           Need help?{' '}
-          <a href="mailto:support@prophives.com" className="text-[#D4A800] hover:underline">
+          <a href="mailto:support@prophives.com" className="text-[#4E79FF] hover:underline">
             support@prophives.com
           </a>
         </p>
+
       </div>
     </div>
   )
