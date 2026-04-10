@@ -468,7 +468,7 @@ export function OwnerTenantDetailPage() {
           <motion.div variants={revealUp} whileInView="show" viewport={viewportOnce}>
             <h3 className="mb-4 font-['Sora'] text-xl font-bold text-white">Rent Reminders</h3>
             {detail.reminders.length === 0 ? (
-              <EmptyState title="No reminders" description="Run reminder processing from owner dashboard." />
+              <EmptyState title="No reminders" description="Reminders will appear here once the next payment cycle begins." />
             ) : (
               <div className="overflow-hidden overflow-x-auto rounded-xl border border-[#272839] bg-[#101114]">
                 <table className="w-full text-sm">
