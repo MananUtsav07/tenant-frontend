@@ -62,6 +62,24 @@ export type Tenant = {
   created_at: string
 }
 
+export type TenantDocument = {
+  id: string
+  organization_id: string
+  owner_id: string
+  tenant_id: string
+  document_name: string
+  document_type: 'lease_agreement' | 'identification' | 'payment_proof' | 'kyc' | 'notice' | 'other'
+  file_name: string
+  storage_path: string | null
+  public_url: string | null
+  access_url: string | null
+  mime_type: string | null
+  file_size_bytes: number | null
+  notes: string | null
+  created_at: string
+  updated_at: string
+}
+
 export type Broker = {
   id: string
   organization_id: string

@@ -42,6 +42,7 @@ import type {
   SupportTicketThread,
   TenantMaintenanceWorkflowOverview,
   Tenant,
+  TenantDocument,
   TenantAuthPayload,
   TenantOwnerContact,
   TenantSummary,
@@ -419,6 +420,78 @@ export const api = {
         status: string
       }>
     }>(`/api/owners/tenants/${tenantId}`, { token }),
+
+  getOwnerTenantDocuments: (token: string, tenantId: string) =>
+    request<{ ok: true; documents: TenantDocument[] }>(`/api/owners/tenants/${tenantId}/documents`, { token }),
+
+  createOwnerTenantDocumentUploadUrl: (
+    token: string,
+    tenantId: string,
+    body: {
+      file_name: string
+      mime_type?: string | null
+    },
+  ) =>
+    request<{
+      ok: true
+      upload: {
+        upload_url: string
+        storage_path: string
+        public_url: string | null
+        headers: Record<string, string>
+      }
+    }>(`/api/owners/tenants/${tenantId}/documents/upload-url`, {
+      method: 'POST',
+      token,
+      body,
+    }),
+
+  createOwnerTenantDocument: (
+    token: string,
+    tenantId: string,
+    body: {
+      document_name: string
+      document_type: TenantDocument['document_type']
+      file_name: string
+      storage_path?: string | null
+      public_url?: string | null
+      mime_type?: string | null
+      file_size_bytes?: number | null
+      notes?: string | null
+    },
+  ) =>
+    request<{ ok: true; document: TenantDocument }>(`/api/owners/tenants/${tenantId}/documents`, {
+      method: 'POST',
+      token,
+      body,
+    }),
+
+  updateOwnerTenantDocument: (
+    token: string,
+    tenantId: string,
+    documentId: string,
+    body: Partial<{
+      document_name: string
+      document_type: TenantDocument['document_type']
+      file_name: string
+      storage_path: string | null
+      public_url: string | null
+      mime_type: string | null
+      file_size_bytes: number | null
+      notes: string | null
+    }>,
+  ) =>
+    request<{ ok: true; document: TenantDocument }>(`/api/owners/tenants/${tenantId}/documents/${documentId}`, {
+      method: 'PATCH',
+      token,
+      body,
+    }),
+
+  deleteOwnerTenantDocument: (token: string, tenantId: string, documentId: string) =>
+    request<{ ok: true }>(`/api/owners/tenants/${tenantId}/documents/${documentId}`, {
+      method: 'DELETE',
+      token,
+    }),
 
   getOwnerTenantConditionReports: (token: string, tenantId: string) =>
     request<{ ok: true; condition_reports: import('../types/api').OwnerConditionReportOverview }>(
