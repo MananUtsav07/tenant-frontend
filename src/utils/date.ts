@@ -35,8 +35,8 @@ function normalizeCurrencyCode(currencyCode: string | null | undefined): string 
   return normalized
 }
 
-export function formatCurrency(value: number | null | undefined, currencyCode?: string | null): string {
-  const amount = typeof value === 'number' ? value : 0
+export function formatCurrency(value: number | string | null | undefined, currencyCode?: string | null): string {
+  const amount = value != null ? Number(value) : 0
   const normalizedCurrencyCode = normalizeCurrencyCode(currencyCode)
 
   try {

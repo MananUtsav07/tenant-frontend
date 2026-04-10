@@ -81,6 +81,8 @@ export type TenantDocument = {
   updated_at: string
 }
 
+export type TenantDocumentWithTenant = TenantDocument & { tenant_name: string | null }
+
 export type Broker = {
   id: string
   organization_id: string

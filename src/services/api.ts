@@ -43,6 +43,7 @@ import type {
   TenantMaintenanceWorkflowOverview,
   Tenant,
   TenantDocument,
+  TenantDocumentWithTenant,
   TenantAuthPayload,
   TenantOwnerContact,
   TenantSummary,
@@ -426,6 +427,9 @@ export const api = {
         status: string
       }>
     }>(`/api/owners/tenants/${tenantId}`, { token }),
+
+  getOwnerAllDocuments: (token: string) =>
+    request<{ ok: true; documents: TenantDocumentWithTenant[] }>('/api/owners/documents', { token }),
 
   getOwnerTenantDocuments: (token: string, tenantId: string) =>
     request<{ ok: true; documents: TenantDocument[] }>(`/api/owners/tenants/${tenantId}/documents`, { token }),

@@ -1,4 +1,4 @@
-import { Bell, Briefcase, Building2, LayoutDashboard, LifeBuoy, MailWarning, Plug, UserCircle, Users } from 'lucide-react'
+import { Bell, Briefcase, Building2, FileText, LayoutDashboard, LifeBuoy, MailWarning, Plug, UserCircle, Users } from 'lucide-react'
 import { useState } from 'react'
 
 import { OwnerNotificationBell } from '../components/owner/OwnerNotificationBell'
@@ -35,6 +35,7 @@ function OwnerLayoutContent() {
     { to: ROUTES.ownerProperties, label: 'Properties', icon: <Building2 className="h-4 w-4" /> },
     { to: ROUTES.ownerBrokers, label: 'Brokers', icon: <Briefcase className="h-4 w-4" /> },
     { to: ROUTES.ownerTenants, label: 'Tenants', icon: <Users className="h-4 w-4" /> },
+    { to: ROUTES.ownerDocuments, label: 'Documents', icon: <FileText className="h-4 w-4" /> },
     { to: ROUTES.ownerTickets, label: 'Tickets', icon: <LifeBuoy className="h-4 w-4" /> },
     // { to: ROUTES.ownerMaintenance, label: 'Maintenance', icon: <Hammer className="h-4 w-4" /> },
     { to: ROUTES.ownerNotifications, label: 'Notifications', icon: <Bell className="h-4 w-4" />, badge: unreadCount > 0 ? { count: unreadCount, color: 'red' as const, tooltip: `${unreadCount} notification${unreadCount !== 1 ? 's' : ''} unread` } : undefined },

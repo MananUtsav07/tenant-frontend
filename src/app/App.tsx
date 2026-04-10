@@ -59,6 +59,7 @@ const OwnerPropertiesPage = lazyNamedPage(() => import('../pages/owner/OwnerProp
 const OwnerBrokersPage = lazyNamedPage(() => import('../pages/owner/OwnerBrokersPage'), 'OwnerBrokersPage')
 const OwnerMaintenancePage = lazyNamedPage(() => import('../pages/owner/OwnerMaintenancePage'), 'OwnerMaintenancePage')
 const OwnerTenantsPage = lazyNamedPage(() => import('../pages/owner/OwnerTenantsPage'), 'OwnerTenantsPage')
+const OwnerDocumentsPage = lazyNamedPage(() => import('../pages/owner/OwnerDocumentsPage'), 'OwnerDocumentsPage')
 const OwnerTenantDetailPage = lazyNamedPage(() => import('../pages/owner/OwnerTenantDetailPage'), 'OwnerTenantDetailPage')
 const OwnerTicketsPage = lazyNamedPage(() => import('../pages/owner/OwnerTicketsPage'), 'OwnerTicketsPage')
 const OwnerNotificationsPage = lazyNamedPage(() => import('../pages/owner/OwnerNotificationsPage'), 'OwnerNotificationsPage')
@@ -153,6 +154,7 @@ function AppRoutes() {
           <Route path={ROUTES.ownerProperties} element={<OwnerPropertiesPage />} />
           <Route path={ROUTES.ownerBrokers} element={<OwnerBrokersPage />} />
           <Route path={ROUTES.ownerTenants} element={<OwnerTenantsPage />} />
+          <Route path={ROUTES.ownerDocuments} element={<OwnerDocumentsPage />} />
           <Route path={ROUTES.ownerTenantDetail} element={<OwnerTenantDetailPage />} />
           <Route path={ROUTES.ownerTickets} element={<OwnerTicketsPage />} />
           <Route path={ROUTES.ownerMaintenance} element={<OwnerMaintenancePage />} />

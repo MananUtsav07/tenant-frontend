@@ -3,8 +3,6 @@ import {
   useEffect,
   useMemo,
   useState,
-  type ChangeEvent,
-  type FormEvent,
 } from 'react'
 import {
   CheckCircle,
@@ -35,7 +33,7 @@ const ownerTicketStatuses: TenantTicket['status'][] = ['open', 'in_progress', 'r
 const TICKETS_PER_PAGE = 8
 
 type FilterStatus = 'all' | TenantTicket['status']
-type ModalType = 'reply' | 'status' | 'view' | null
+type ModalType = 'reply' | 'view' | null
 
 function getStatusBadgeClasses(status: TenantTicket['status']): string {
   switch (status) {
@@ -79,9 +77,7 @@ export function OwnerTicketsPage() {
   const [replyMessage, setReplyMessage] = useState('')
   const [replyBusy, setReplyBusy] = useState(false)
 
-  const [statusValue, setStatusValue] = useState<TenantTicket['status']>('open')
-  const [closingMessage, setClosingMessage] = useState('')
-  const [statusBusy, setStatusBusy] = useState(false)
+  const [busyStatusIds, setBusyStatusIds] = useState<Set<string>>(new Set())
 
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all')
@@ -112,8 +108,6 @@ export function OwnerTicketsPage() {
         setThreadError(null)
         const response = await api.getOwnerTicketDetail(token, ticketId)
         setThread(response.thread)
-        setStatusValue(response.thread.ticket.status)
-        setClosingMessage('')
       } catch (loadError) {
         setThreadError(loadError instanceof Error ? loadError.message : 'Failed to load ticket')
       } finally {
@@ -141,7 +135,7 @@ export function OwnerTicketsPage() {
     setActiveTicketId(null)
   }
 
-  const handleReplySubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleReplySubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (!token || !thread || replyMessage.trim().length === 0) return
     try {
@@ -158,28 +152,18 @@ export function OwnerTicketsPage() {
     }
   }
 
-  const handleStatusSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    if (!token || !thread) return
+  const handleInlineStatusChange = useCallback(async (ticketId: string, newStatus: TenantTicket['status']) => {
+    if (!token) return
+    setBusyStatusIds((prev) => new Set(prev).add(ticketId))
     try {
-      setStatusBusy(true)
-      setThreadError(null)
-      await api.updateOwnerTicket(token, thread.ticket.id, {
-        status: statusValue,
-        closing_message:
-          statusValue === 'closed' && closingMessage.trim().length > 0
-            ? closingMessage.trim()
-            : undefined,
-      })
-      setClosingMessage('')
-      await Promise.all([loadTickets(), loadThread(thread.ticket.id)])
-      closeModal()
-    } catch (statusError) {
-      setThreadError(statusError instanceof Error ? statusError.message : 'Failed to update status')
+      await api.updateOwnerTicket(token, ticketId, { status: newStatus })
+      setTickets((prev) => prev.map((t) => t.id === ticketId ? { ...t, status: newStatus } : t))
+    } catch {
+      // silently ignore — list will stay unchanged
     } finally {
-      setStatusBusy(false)
+      setBusyStatusIds((prev) => { const next = new Set(prev); next.delete(ticketId); return next })
     }
-  }
+  }, [token])
 
  
   // const ticketSummary = useMemo(() => {
@@ -346,13 +330,14 @@ export function OwnerTicketsPage() {
                   >
                     <MessageSquare className="h-3.5 w-3.5" /> Reply
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => openModal('status', ticket.id)}
-                    className="flex items-center gap-1 rounded-lg border border-[#272839] bg-[#141519] px-3 py-1.5 text-xs font-semibold text-[#8D8D96] hover:text-white transition-colors"
+                  <select
+                    value={ticket.status}
+                    disabled={busyStatusIds.has(ticket.id)}
+                    onChange={(e) => void handleInlineStatusChange(ticket.id, e.target.value as TenantTicket['status'])}
+                    className="rounded-lg border border-[#272839] bg-[#141519] px-2 py-1.5 text-xs font-semibold text-[#8D8D96] outline-none disabled:opacity-50"
                   >
-                    <RefreshCw className="h-3.5 w-3.5" /> Status
-                  </button>
+                    {ownerTicketStatuses.map((s) => <option key={s} value={s}>{getStatusLabel(s)}</option>)}
+                  </select>
                   <button
                     type="button"
                     onClick={() => openModal('view', ticket.id)}
@@ -421,13 +406,17 @@ export function OwnerTicketsPage() {
                         <div className="text-xs" style={{ color: '#8D8D96' }}>{formatDateTime(ticket.created_at)}</div>
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${getStatusBadgeClasses(ticket.status)}`}>
-                          {getStatusLabel(ticket.status)}
-                        </span>
+                        <select
+                          value={ticket.status}
+                          disabled={busyStatusIds.has(ticket.id)}
+                          onChange={(e) => void handleInlineStatusChange(ticket.id, e.target.value as TenantTicket['status'])}
+                          className="rounded-lg border border-[#272839] bg-[#141519] px-2.5 py-1.5 text-xs font-semibold text-white outline-none disabled:opacity-50 cursor-pointer"
+                        >
+                          {ownerTicketStatuses.map((s) => <option key={s} value={s}>{getStatusLabel(s)}</option>)}
+                        </select>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center justify-center gap-2">
-                          {/* Reply */}
                           <button
                             type="button"
                             onClick={() => openModal('reply', ticket.id)}
@@ -438,18 +427,6 @@ export function OwnerTicketsPage() {
                             <MessageSquare className="h-3.5 w-3.5" />
                             Reply
                           </button>
-                          {/* Change Status */}
-                          <button
-                            type="button"
-                            onClick={() => openModal('status', ticket.id)}
-                            className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors hover:bg-[#141519]"
-                            style={{ color: '#FFFFFF', border: '1px solid rgba(78,121,255,0.3)' }}
-                            title="Change status"
-                          >
-                            <RefreshCw className="h-3.5 w-3.5" />
-                            Status
-                          </button>
-                          {/* View History */}
                           <button
                             type="button"
                             onClick={() => openModal('view', ticket.id)}
@@ -535,60 +512,6 @@ export function OwnerTicketsPage() {
         ) : null}
       </Modal>
 
-      {/* Status Modal */}
-      <Modal isOpen={modalType === 'status'} onClose={closeModal} title="Update Ticket Status" size="sm">
-        {threadLoading ? (
-          <LoadingState message="Loading ticket..." rows={2} />
-        ) : threadError ? (
-          <ErrorState message={threadError} />
-        ) : thread ? (
-          <div className="space-y-4">
-            <div className="rounded-lg px-3 py-2 text-xs font-medium" style={{ backgroundColor: 'rgba(78,121,255,0.12)', color: '#4E79FF' }}>
-              #{thread.ticket.id.slice(0, 8).toUpperCase()} — {thread.ticket.subject}
-            </div>
-            <form onSubmit={(e) => void handleStatusSubmit(e)} className="space-y-3">
-              <select
-                value={statusValue}
-                onChange={(e: ChangeEvent<HTMLSelectElement>) => setStatusValue(e.target.value as TenantTicket['status'])}
-                className="w-full border rounded-xl py-2.5 px-3 text-sm outline-none font-medium"
-                style={{ backgroundColor: '#101114', borderColor: '#272839', color: '#FFFFFF' }}
-              >
-                {ownerTicketStatuses.map((s) => (
-                  <option key={s} value={s}>{getStatusLabel(s)}</option>
-                ))}
-              </select>
-              {statusValue === 'closed' ? (
-                <textarea
-                  value={closingMessage}
-                  onChange={(e) => setClosingMessage(e.target.value)}
-                  placeholder="Optional closing note visible to the tenant."
-                  className="w-full border rounded-xl py-2.5 px-3 text-sm outline-none h-20 resize-none"
-                  style={{ backgroundColor: '#101114', borderColor: '#272839', color: '#FFFFFF' }}
-                />
-              ) : null}
-              <div className="flex gap-3 pt-1">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="flex-1 rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-[#06070B]"
-                  style={{ borderColor: 'rgba(255,255,255,0.10)', color: '#8D8D96' }}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={statusBusy}
-                  className="flex-1 rounded-xl py-2.5 text-sm font-bold transition-colors disabled:opacity-60"
-                  style={{ backgroundColor: '#2251E3', color: '#FFFFFF' }}
-                >
-                  {statusBusy ? 'Saving...' : 'Update Status'}
-                </button>
-              </div>
-            </form>
-          </div>
-        ) : null}
-      </Modal>
-
       {/* View History Modal */}
       <Modal isOpen={modalType === 'view'} onClose={closeModal} title={thread ? `#${thread.ticket.id.slice(0, 8).toUpperCase()} — ${thread.ticket.subject}` : 'Ticket History'} size="md">
         {threadLoading ? (
@@ -597,10 +520,10 @@ export function OwnerTicketsPage() {
           <ErrorState message={threadError} />
         ) : thread ? (
           <div className="flex flex-col gap-3 max-h-[60vh] overflow-y-auto pr-1">
-            {thread.messages.length === 0 ? (
+            {thread.messages.filter((m) => m.sender_role !== 'system').length === 0 ? (
               <p className="text-center text-sm py-8" style={{ color: '#8D8D96' }}>No messages yet.</p>
             ) : null}
-            {thread.messages.map((message) => {
+            {thread.messages.filter((m) => m.sender_role !== 'system').map((message) => {
               const isOwner = message.sender_role === 'owner'
               const isTenant = message.sender_role === 'tenant'
               return (
