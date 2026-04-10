@@ -39,6 +39,8 @@ export function OwnerNotificationsProvider({ children }: { children: ReactNode }
 
   useEffect(() => {
     void refresh()
+    const interval = setInterval(() => void refresh({ silent: true }), 30_000)
+    return () => clearInterval(interval)
   }, [refresh])
 
   const markRead = useCallback(
