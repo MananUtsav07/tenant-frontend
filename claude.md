@@ -153,6 +153,17 @@ npm run preview    # Preview production build
 npm run lint       # Run ESLint
 ```
 
+## Deployment
+- **Hosting**: AWS Lightsail (`65.2.108.154`) — served by Nginx from `/var/www/prophives`
+- **Domain**: `https://prophives.com` + `https://www.prophives.com` (SSL via Let's Encrypt)
+- **CI/CD**: GitHub Actions on push to `main` (`.github/workflows/deploy.yml`)
+  - `npm ci` → `npm run build` (with `VITE_API_BASE_URL` injected) → SCP `dist/` → Nginx reload
+- **Secrets required** in GitHub repo: `LIGHTSAIL_HOST`, `LIGHTSAIL_SSH_KEY`, `VITE_API_BASE_URL`
+- **Production API URL**: `https://prophives.com/api` (set as `VITE_API_BASE_URL` GitHub secret)
+
+## Related Backend
+Backend at `c:\Users\asus\Desktop\tenant-backend` — Node.js/Express + Prisma ORM, running on same Lightsail instance on port 3001. See its `CLAUDE.md` for full details.
+
 ## WhatsApp Integration
 
 ### Owner-side configuration
