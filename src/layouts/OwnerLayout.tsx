@@ -1,5 +1,5 @@
 import { Bell, Briefcase, Building2, LayoutDashboard, LifeBuoy, MailWarning, Plug, UserCircle, Users } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
 
 import { OwnerNotificationBell } from '../components/owner/OwnerNotificationBell'
 import { OwnerNotificationsProvider } from '../hooks/OwnerNotificationsProvider'
@@ -8,13 +8,27 @@ import { OwnerApprovalsProvider } from '../hooks/OwnerApprovalsProvider'
 import { useOwnerApprovals } from '../hooks/useOwnerApprovals'
 import { DashboardLayout } from './DashboardLayout'
 import { useOwnerAuth } from '../hooks/useOwnerAuth'
+import { api } from '../services/api'
 import { ROUTES } from '../routes/constants'
 
 function OwnerLayoutContent() {
-  const { owner, logout } = useOwnerAuth()
+  const { owner, token, logout } = useOwnerAuth()
   const organizationName = owner?.organization?.name || owner?.company_name || owner?.full_name || 'Organization'
   const { unreadCount } = useOwnerNotifications()
   const { pendingCount } = useOwnerApprovals()
+  const [resendState, setResendState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+
+  const handleResend = async () => {
+    if (!token || resendState === 'sending' || resendState === 'sent') return
+    setResendState('sending')
+    try {
+      await api.ownerResendVerification(token)
+      setResendState('sent')
+    } catch {
+      setResendState('error')
+      setTimeout(() => setResendState('idle'), 3000)
+    }
+  }
 
   const ownerLinks = [
     { to: ROUTES.ownerDashboard, label: 'Dashboard', icon: <LayoutDashboard className="h-4 w-4" />, badge: pendingCount > 0 ? { count: pendingCount, color: 'red' as const, tooltip: `${pendingCount} approval${pendingCount !== 1 ? 's' : ''} pending` } : undefined },
@@ -35,14 +49,18 @@ function OwnerLayoutContent() {
       <div className="flex items-center gap-3 px-4 py-2.5 bg-[#1A1500] border-b border-[#3A3000] text-sm">
         <MailWarning className="h-4 w-4 shrink-0 text-[#FED609]" />
         <span className="text-[#C8B878] flex-1">
-          Please verify your email address to receive rent alerts and notifications.
+          {resendState === 'sent'
+            ? 'Verification email sent — check your inbox.'
+            : 'Please verify your email address to receive rent alerts and notifications.'}
         </span>
-        <Link
-          to={ROUTES.ownerProfile}
-          className="shrink-0 text-xs font-semibold text-[#FED609] hover:underline"
+        <button
+          type="button"
+          onClick={handleResend}
+          disabled={resendState === 'sending' || resendState === 'sent'}
+          className="shrink-0 text-xs font-semibold text-[#FED609] hover:underline disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
-          Resend email
-        </Link>
+          {resendState === 'sending' ? 'Sending…' : resendState === 'sent' ? 'Sent' : resendState === 'error' ? 'Failed — try again' : 'Resend email'}
+        </button>
       </div>
     ) : undefined
 

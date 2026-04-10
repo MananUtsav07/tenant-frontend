@@ -204,6 +204,9 @@ export const api = {
   ownerVerifyEmail: (token: string) =>
     request<{ ok: true; message: string }>(`/api/auth/owner/verify-email?token=${encodeURIComponent(token)}`),
 
+  ownerResendVerification: (token: string) =>
+    request<{ ok: true; message: string }>('/api/auth/owner/resend-verification', { method: 'POST', token }),
+
   ownerMe: (token: string) => request<{ ok: true; owner: Owner }>('/api/auth/owner/me', { token }),
   patchOwnerMe: (
     token: string,
