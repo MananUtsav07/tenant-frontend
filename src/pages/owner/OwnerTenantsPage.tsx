@@ -10,9 +10,7 @@ import {
   Trash2,
   UserRoundPlus,
   Users,
-  X,
 } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
 
 import { Button } from '../../components/common/Button'
 import { EmptyState } from '../../components/common/EmptyState'
@@ -24,25 +22,24 @@ import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
 import type { Broker, Property, Tenant } from '../../types/api'
-import { formatCurrency, formatDate, getCurrencyMarker } from '../../utils/date'
+import { formatDate, getCurrencyMarker } from '../../utils/date'
 
-function getNextDueDate(dayOfMonth: number, now = new Date()): Date {
-  const currentYear = now.getUTCFullYear()
-  const currentMonth = now.getUTCMonth()
-  const daysInCurrentMonth = new Date(Date.UTC(currentYear, currentMonth + 1, 0)).getUTCDate()
-  const safeDayCurrentMonth = Math.max(1, Math.min(dayOfMonth, daysInCurrentMonth))
-  const currentCandidate = new Date(Date.UTC(currentYear, currentMonth, safeDayCurrentMonth, 9, 0, 0, 0))
+/** Convert YYYY-MM-DD → DD/MM/YYYY for display in text inputs */
+function isoToDDMMYYYY(iso: string): string {
+  if (!iso) return ''
+  const parts = iso.split('-')
+  if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`
+  return iso
+}
 
-  if (currentCandidate >= now) {
-    return currentCandidate
+/** Convert DD/MM/YYYY → YYYY-MM-DD for API submission. Returns '' if not a complete valid date. */
+function ddmmyyyyToISO(display: string): string {
+  if (!display) return ''
+  const parts = display.split('/')
+  if (parts.length === 3 && parts[2].length === 4) {
+    return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`
   }
-
-  const nextMonthDate = new Date(Date.UTC(currentYear, currentMonth + 1, 1, 9, 0, 0, 0))
-  const nextYear = nextMonthDate.getUTCFullYear()
-  const nextMonth = nextMonthDate.getUTCMonth()
-  const daysInNextMonth = new Date(Date.UTC(nextYear, nextMonth + 1, 0)).getUTCDate()
-  const safeDayNextMonth = Math.max(1, Math.min(dayOfMonth, daysInNextMonth))
-  return new Date(Date.UTC(nextYear, nextMonth, safeDayNextMonth, 9, 0, 0, 0))
+  return ''
 }
 
 const RENT_CURRENCY_OPTIONS = [
@@ -96,187 +93,6 @@ function getPaymentStatusStyle(status: Tenant['payment_status']) {
   }
 }
 
-function getTenantStatusStyle(status: Tenant['status']) {
-  switch (status) {
-    case 'active':
-      return 'bg-[#32C382]/15 text-[#32C382] border-[#32C382]/30'
-    case 'inactive':
-      return 'bg-white/8 text-[#8D8D96] border-[#272839]'
-    case 'terminated':
-      return 'bg-red-100 text-red-700 border-[#F25461]/30'
-    default:
-      return 'bg-white/8 text-[#8D8D96] border-[#272839]'
-  }
-}
-
-// Tenant Detail Side Panel
-type TenantDetailPanelProps = {
-  tenant: Tenant
-  propertyName: string
-  currencyCode: string
-  onClose: () => void
-  onEdit: (tenant: Tenant) => void
-  onDelete: (tenant: Tenant) => void
-  busy: boolean
-}
-
-function TenantDetailPanel({ tenant, propertyName, currencyCode, onClose, onEdit, onDelete, busy }: TenantDetailPanelProps) {
-  const payStyle = getPaymentStatusStyle(tenant.payment_status)
-  const initials = tenant.full_name
-    .split(' ')
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase()
-
-  return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0, x: 32 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: 32 }}
-        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-        className="bg-[#101114] rounded-2xl shadow-lg border border-[#272839] overflow-hidden sticky top-6"
-      >
-        {/* Gold accent top */}
-        <div className="h-1 bg-[#2251E3] w-full" />
-
-        {/* Header */}
-        <div className="p-5 border-b border-[#272839] bg-[#141519]/50">
-          <div className="flex justify-between items-start mb-4">
-            <span className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-widest font-['DM_Sans']">
-              Tenant Details
-            </span>
-            <button
-              type="button"
-              onClick={onClose}
-              className="w-7 h-7 rounded-full flex items-center justify-center text-[#8D8D96] hover:bg-[#4E79FF]/20 hover:text-white transition-colors"
-            >
-              <X className="h-3.5 w-3.5" />
-            </button>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-[#4E79FF]/20 border-2 border-[#4E79FF]/30 flex items-center justify-center text-sm font-bold text-white font-['Sora'] flex-shrink-0">
-              {initials}
-            </div>
-            <div className="min-w-0">
-              <h3 className="font-['Sora'] font-bold text-base text-white truncate">{tenant.full_name}</h3>
-              <p className="text-xs text-[#8D8D96] font-['Manrope'] truncate">{tenant.email ?? 'No email'}</p>
-            </div>
-          </div>
-          {/* Status badges */}
-          <div className="flex flex-wrap gap-2 mt-3">
-            <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase border ${payStyle.badge}`}>
-              {tenant.payment_status}
-            </span>
-            <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase border ${getTenantStatusStyle(tenant.status)}`}>
-              {tenant.status}
-            </span>
-          </div>
-        </div>
-
-        {/* Details */}
-        <div className="p-5 space-y-4">
-          {/* Property / Unit */}
-          <div>
-            <p className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-widest mb-1 font-['DM_Sans']">Property / Unit</p>
-            <p className="text-sm font-semibold text-white font-['Manrope']">{propertyName}</p>
-          </div>
-
-          {/* Rent & Due */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-[#06070B] rounded-xl p-3 border border-[#272839]">
-              <p className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-widest mb-1 font-['DM_Sans']">Monthly Rent</p>
-              <p className="text-base font-bold text-white font-['Sora']">
-                {formatCurrency(tenant.monthly_rent, currencyCode)}
-              </p>
-            </div>
-            <div className="bg-[#06070B] rounded-xl p-3 border border-[#272839]">
-              <p className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-widest mb-1 font-['DM_Sans']">Next Due</p>
-              <p className="text-sm font-bold text-white font-['Sora']">
-                {formatDate(getNextDueDate(tenant.payment_due_day).toISOString())}
-              </p>
-            </div>
-          </div>
-
-          {/* Lease period */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <p className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-widest mb-0.5 font-['DM_Sans']">Lease Start</p>
-              <p className="text-sm text-white font-['Manrope']">{formatDate(tenant.lease_start_date) || '—'}</p>
-            </div>
-            <div>
-              <p className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-widest mb-0.5 font-['DM_Sans']">Lease End</p>
-              <p className="text-sm text-white font-['Manrope']">{formatDate(tenant.lease_end_date) || '—'}</p>
-            </div>
-          </div>
-
-          {/* Contact */}
-          {tenant.phone ? (
-            <div>
-              <p className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-widest mb-0.5 font-['DM_Sans']">Phone</p>
-              <p className="text-sm text-white font-['Manrope']">{tenant.phone}</p>
-            </div>
-          ) : null}
-
-          {/* Broker */}
-          {tenant.brokers ? (
-            <div>
-              <p className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-widest mb-1 font-['DM_Sans']">Broker</p>
-              <div className="flex items-center gap-2 rounded-xl bg-[#06070B] border border-[#272839] px-3 py-2">
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-white font-['Manrope'] truncate">{tenant.brokers.full_name}</p>
-                  {tenant.brokers.agency_name ? (
-                    <p className="text-xs text-[#8D8D96] font-['Manrope'] truncate">{tenant.brokers.agency_name}</p>
-                  ) : null}
-                </div>
-              </div>
-            </div>
-          ) : null}
-
-          {/* Access ID */}
-          <div>
-            <p className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-widest mb-0.5 font-['DM_Sans']">Access ID</p>
-            <p className="text-sm font-mono text-white bg-[#06070B] rounded-lg px-3 py-1.5 border border-[#272839] inline-block">
-              {tenant.tenant_access_id}
-            </p>
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div className="p-5 border-t border-[#272839] space-y-2">
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => onEdit(tenant)}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#4E79FF] hover:bg-[#3E68EE] text-white font-bold text-xs transition-colors font-['DM_Sans'] shadow-sm"
-            >
-              <Pencil className="h-3.5 w-3.5" />
-              Edit
-            </button>
-            <Button
-              to={`/owner/tenants/${tenant.id}`}
-              variant="outline"
-              size="sm"
-              className="flex-1 justify-center rounded-xl border-[#272839] text-white py-2.5 font-['DM_Sans']"
-              iconLeft={<Eye className="h-3.5 w-3.5" />}
-            >
-              View
-            </Button>
-            <button
-              type="button"
-              onClick={() => onDelete(tenant)}
-              disabled={busy}
-              className="w-9 h-9 flex items-center justify-center rounded-xl bg-[#F25461]/15 text-[#F25461] hover:bg-[#F25461]/150 hover:text-white transition-colors border border-[#F25461]/30 disabled:opacity-40"
-            >
-              <Trash2 className="h-3.5 w-3.5" />
-            </button>
-          </div>
-        </div>
-      </motion.div>
-    </AnimatePresence>
-  )
-}
 
 export function OwnerTenantsPage() {
   const { token, owner } = useOwnerAuth()
@@ -292,8 +108,8 @@ export function OwnerTenantsPage() {
   const [showTenantForm, setShowTenantForm] = useState(false)
   const [form, setForm] = useState(() => buildEmptyTenantForm('', owner?.organization?.currency_code ?? 'INR'))
   const [filterPropertyId, setFilterPropertyId] = useState('')
-  const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null)
   const [tenantPendingDelete, setTenantPendingDelete] = useState<Tenant | null>(null)
+  const [showOccupiedWarning, setShowOccupiedWarning] = useState(false)
   const [showCurrencyMenu, setShowCurrencyMenu] = useState(false)
   const currencyMenuRef = useRef<HTMLDivElement | null>(null)
   const ownerCurrencyCode = owner?.organization?.currency_code ?? 'INR'
@@ -355,6 +171,61 @@ export function OwnerTenantsPage() {
     setShowCurrencyMenu(false)
   }
 
+  const doSaveTenant = async () => {
+    if (!token) return
+
+    const trimmedFullName = form.full_name.trim()
+    const trimmedEmail = form.email.trim()
+    const trimmedPhone = form.phone.trim()
+    const trimmedPassword = form.password.trim()
+    const monthlyRent = Number(form.monthly_rent)
+    const dueDay = Number(form.payment_due_day)
+
+    try {
+      setBusy(true)
+      setError(null)
+      setFormError(null)
+
+      if (editingTenantId) {
+        await api.updateOwnerTenant(token, editingTenantId, {
+          property_id: form.property_id,
+          broker_id: form.broker_id || null,
+          full_name: trimmedFullName,
+          email: trimmedEmail || null,
+          phone: trimmedPhone || null,
+          lease_start_date: ddmmyyyyToISO(form.lease_start_date) || null,
+          lease_end_date: ddmmyyyyToISO(form.lease_end_date) || null,
+          monthly_rent: monthlyRent,
+          payment_due_day: dueDay,
+          payment_status: form.payment_status,
+          status: form.status,
+        })
+      } else {
+        await api.createOwnerTenant(token, {
+          property_id: form.property_id,
+          broker_id: form.broker_id || undefined,
+          full_name: trimmedFullName,
+          email: trimmedEmail || undefined,
+          phone: trimmedPhone || undefined,
+          password: trimmedPassword,
+          lease_start_date: ddmmyyyyToISO(form.lease_start_date) || undefined,
+          lease_end_date: ddmmyyyyToISO(form.lease_end_date) || undefined,
+          monthly_rent: monthlyRent,
+          payment_due_day: dueDay,
+          payment_status: form.payment_status,
+          status: form.status,
+        })
+      }
+
+      resetForm()
+      await loadData()
+    } catch (createError) {
+      setFormError(createError instanceof Error ? createError.message : 'Failed to save tenant')
+    } finally {
+      setBusy(false)
+    }
+  }
+
   const handleCreateTenant = async (event: FormEvent) => {
     event.preventDefault()
     if (!token) {
@@ -363,7 +234,6 @@ export function OwnerTenantsPage() {
 
     const trimmedFullName = form.full_name.trim()
     const trimmedEmail = form.email.trim()
-    const trimmedPhone = form.phone.trim()
     const trimmedPassword = form.password.trim()
     const monthlyRent = Number(form.monthly_rent)
     const dueDay = Number(form.payment_due_day)
@@ -398,50 +268,16 @@ export function OwnerTenantsPage() {
       return
     }
 
-    try {
-      setBusy(true)
-      setError(null)
-      setFormError(null)
-
-      if (editingTenantId) {
-        await api.updateOwnerTenant(token, editingTenantId, {
-          property_id: form.property_id,
-          broker_id: form.broker_id || null,
-          full_name: trimmedFullName,
-          email: trimmedEmail || null,
-          phone: trimmedPhone || null,
-          lease_start_date: form.lease_start_date || null,
-          lease_end_date: form.lease_end_date || null,
-          monthly_rent: monthlyRent,
-          payment_due_day: dueDay,
-          payment_status: form.payment_status,
-          status: form.status,
-          ...(trimmedPassword ? { password: trimmedPassword } : {}),
-        })
-      } else {
-        await api.createOwnerTenant(token, {
-          property_id: form.property_id,
-          broker_id: form.broker_id || undefined,
-          full_name: trimmedFullName,
-          email: trimmedEmail || undefined,
-          phone: trimmedPhone || undefined,
-          password: trimmedPassword,
-          lease_start_date: form.lease_start_date || undefined,
-          lease_end_date: form.lease_end_date || undefined,
-          monthly_rent: monthlyRent,
-          payment_due_day: dueDay,
-          payment_status: form.payment_status,
-          status: form.status,
-        })
+    // Warn if adding a new tenant to an already occupied property
+    if (!editingTenantId) {
+      const selectedProperty = properties.find((p) => p.id === form.property_id)
+      if (selectedProperty?.occupancy_status === 'occupied') {
+        setShowOccupiedWarning(true)
+        return
       }
-
-      resetForm()
-      await loadData()
-    } catch (createError) {
-      setFormError(createError instanceof Error ? createError.message : 'Failed to create tenant')
-    } finally {
-      setBusy(false)
     }
+
+    await doSaveTenant()
   }
 
   const requestDelete = (tenant: Tenant) => {
@@ -458,7 +294,6 @@ export function OwnerTenantsPage() {
       setBusy(true)
       setError(null)
       await api.deleteOwnerTenant(token, tenantPendingDelete.id)
-      if (selectedTenant?.id === tenantPendingDelete.id) setSelectedTenant(null)
       setTenantPendingDelete(null)
       await loadData()
     } catch (deleteError) {
@@ -480,8 +315,8 @@ export function OwnerTenantsPage() {
       email: tenant.email ?? '',
       phone: tenant.phone ?? '',
       password: '',
-      lease_start_date: tenant.lease_start_date ? tenant.lease_start_date.slice(0, 10) : '',
-      lease_end_date: tenant.lease_end_date ? tenant.lease_end_date.slice(0, 10) : '',
+      lease_start_date: isoToDDMMYYYY(tenant.lease_start_date ? tenant.lease_start_date.slice(0, 10) : ''),
+      lease_end_date: isoToDDMMYYYY(tenant.lease_end_date ? tenant.lease_end_date.slice(0, 10) : ''),
       monthly_rent: String(tenant.monthly_rent),
       payment_due_day: String(tenant.payment_due_day),
       payment_status: tenant.payment_status,
@@ -663,9 +498,7 @@ export function OwnerTenantsPage() {
           </div>
 
           {/* Desktop table */}
-          <div className={`hidden md:flex gap-6 ${selectedTenant ? 'items-start' : ''}`}>
-          {/* Tenants Table */}
-          <div className="flex-1 min-w-0 bg-[#101114] rounded-2xl shadow-sm border border-[#272839] overflow-hidden">
+          <div className="hidden md:block bg-[#101114] rounded-2xl shadow-sm border border-[#272839] overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
@@ -681,15 +514,11 @@ export function OwnerTenantsPage() {
                 <tbody className="text-sm font-['Manrope']">
                   {filteredTenants.map((tenant, index) => {
                     const payStyle = getPaymentStatusStyle(tenant.payment_status)
-                    const isSelected = selectedTenant?.id === tenant.id
                     return (
                       <tr
                         key={tenant.id}
-                        onClick={() => setSelectedTenant(isSelected ? null : tenant)}
-                        className={`border-b border-[#272839] cursor-pointer transition-colors ${
-                          isSelected
-                            ? 'bg-[#141519] border-l-2 border-l-[#4E79FF]'
-                            : index % 2 === 0
+                        className={`border-b border-[#272839] transition-colors ${
+                          index % 2 === 0
                             ? 'bg-[#06070B]/30 hover:bg-[#141519]/60'
                             : 'bg-[#101114] hover:bg-[#141519]/60'
                         }`}
@@ -705,20 +534,24 @@ export function OwnerTenantsPage() {
                           ) : null}
                         </td>
                         <td className="px-5 py-4 text-[#8D8D96] truncate max-w-[120px]">{getPropertyName(tenant.property_id)}</td>
-                        <td className="px-5 py-4 text-[#8D8D96] hidden md:table-cell">
-                          {'—'}
-                        </td>
+                        <td className="px-5 py-4 text-[#8D8D96] hidden md:table-cell">{'—'}</td>
                         <td className="px-5 py-4 text-[#8D8D96] hidden lg:table-cell">{formatDate(tenant.lease_end_date)}</td>
                         <td className="px-5 py-4">
-                          <span
-                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-bold text-[10px] uppercase border ${payStyle.badge}`}
-                          >
+                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-bold text-[10px] uppercase border ${payStyle.badge}`}>
                             <span className={`w-1.5 h-1.5 rounded-full ${payStyle.dot}`} />
                             {tenant.payment_status}
                           </span>
                         </td>
                         <td className="px-5 py-4">
-                          <div className="flex justify-end gap-1" onClick={(e) => e.stopPropagation()}>
+                          <div className="flex justify-end gap-1">
+                            <button
+                              type="button"
+                              title="View tenant"
+                              onClick={() => navigate(ROUTES.ownerTenantDetail.replace(':id', tenant.id))}
+                              className="p-1.5 hover:bg-[#4E79FF]/20 rounded-lg transition-colors text-[#4E79FF]"
+                            >
+                              <Eye className="w-3.5 h-3.5" />
+                            </button>
                             <button
                               type="button"
                               title="Edit tenant"
@@ -772,31 +605,9 @@ export function OwnerTenantsPage() {
               </div>
             </div>
           </div>
-
-          {/* Tenant Detail Panel */}
-          {selectedTenant ? (
-            <div className="w-80 shrink-0">
-              <TenantDetailPanel
-                tenant={selectedTenant}
-                propertyName={getPropertyName(selectedTenant.property_id)}
-                currencyCode={ownerCurrencyCode}
-                onClose={() => setSelectedTenant(null)}
-                onEdit={beginEdit}
-                onDelete={requestDelete}
-                busy={busy}
-              />
-            </div>
-          ) : null}
-        </div>
         </>
       ) : null}
 
-      {/* Tip */}
-      {!loading && properties.length > 0 && tenants.length > 0 ? (
-        <p className="text-xs text-[#8D8D96] font-['DM_Sans']">
-          Tip: click any row to view tenant details. Leave password blank while editing to keep the current password.
-        </p>
-      ) : null}
 
       {/* Tenant Form Modal */}
       {showTenantForm ? (
@@ -902,20 +713,22 @@ export function OwnerTenantsPage() {
                 onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
                 hint="Used for WhatsApp rent reminders"
               />
-              <label className="block space-y-2">
-                <span className="text-sm font-medium text-[#C0C0C5]">
-                  {editingTenantId ? 'Password (leave blank to keep current)' : <>Password <span className="text-red-400">*</span></>}
-                </span>
-                <input
-                  type="password"
-                  name="tenant_access_password"
-                  autoComplete="new-password"
-                  className="tf-field bg-[#101114] text-white border-[#272839]"
-                  value={form.password}
-                  onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
-                  required={!editingTenantId}
-                />
-              </label>
+              {!editingTenantId ? (
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-[#C0C0C5]">
+                    Password <span className="text-red-400">*</span>
+                  </span>
+                  <input
+                    type="password"
+                    name="tenant_access_password"
+                    autoComplete="new-password"
+                    className="tf-field bg-[#101114] text-white border-[#272839]"
+                    value={form.password}
+                    onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
+                    required
+                  />
+                </label>
+              ) : null}
               <label className="block space-y-2">
                 <span className="text-sm font-medium text-[#C0C0C5]">
                   Monthly Rent <span className="text-red-400">*</span>
@@ -1006,15 +819,17 @@ export function OwnerTenantsPage() {
               </label>
               <FormInput
                 label="Lease Start"
-                type="date"
+                type="text"
                 name="tenant_lease_start"
+                placeholder="DD/MM/YYYY"
                 value={form.lease_start_date}
                 onChange={(event) => setForm((current) => ({ ...current, lease_start_date: event.target.value }))}
               />
               <FormInput
                 label="Lease End"
-                type="date"
+                type="text"
                 name="tenant_lease_end"
+                placeholder="DD/MM/YYYY"
                 value={form.lease_end_date}
                 onChange={(event) => setForm((current) => ({ ...current, lease_end_date: event.target.value }))}
               />
@@ -1040,25 +855,6 @@ export function OwnerTenantsPage() {
                 </select>
               </label>
 
-              <label className="block space-y-2">
-                <span className="text-sm font-medium text-[#C0C0C5]">Tenant Status</span>
-                <select
-                  name="tenant_status"
-                  className="tf-field bg-[#101114] text-white border-[#272839]"
-                  value={form.status}
-                  onChange={(event) =>
-                    setForm((current) => ({
-                      ...current,
-                      status: event.target.value as Tenant['status'],
-                    }))
-                  }
-                  required
-                >
-                  <option value="active">active</option>
-                  <option value="inactive">inactive</option>
-                  <option value="terminated">terminated</option>
-                </select>
-              </label>
             </div>
 
             <div className="mt-4 flex flex-wrap gap-2">
@@ -1080,6 +876,44 @@ export function OwnerTenantsPage() {
               </Button>
             </div>
           </form>
+        </Modal>
+      ) : null}
+
+      {showOccupiedWarning ? (
+        <Modal
+          isOpen
+          onClose={() => setShowOccupiedWarning(false)}
+          title="Property Already Occupied"
+          size="sm"
+        >
+          <div className="space-y-4 text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-amber-400/15">
+              <Building2 className="h-5 w-5 text-amber-400" />
+            </div>
+            <p className="text-sm text-[#C0C0C5]">
+              The selected property already has an <span className="font-semibold text-white">active tenant</span>. Are you sure you want to add another tenant to this property?
+            </p>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setShowOccupiedWarning(false)}
+                className="flex-1 rounded-xl border border-[#272839] px-4 py-2.5 text-sm font-medium text-[#8D8D96] transition-colors hover:bg-[#06070B] hover:text-white"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowOccupiedWarning(false)
+                  void doSaveTenant()
+                }}
+                disabled={busy}
+                className="flex-1 rounded-xl bg-amber-500 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-amber-600 disabled:opacity-60"
+              >
+                Add Anyway
+              </button>
+            </div>
+          </div>
         </Modal>
       ) : null}
 

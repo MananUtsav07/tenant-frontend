@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react'
-import { ExternalLink, FileText, Pencil, Search, Trash2, Upload, X } from 'lucide-react'
+import { Eye, FileText, Pencil, Search, Trash2, Upload, X } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 import { Button } from '../../components/common/Button'
@@ -340,15 +340,15 @@ export function OwnerDocumentsPage() {
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
                           {doc.access_url && (
-                            <a
-                              href={doc.access_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#272839] bg-[#181920] text-[#8D8D96] transition hover:border-[#4E79FF]/40 hover:text-[#4E79FF]"
-                              title="View file"
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              iconLeft={<Eye className="h-4 w-4" />}
+                              onClick={() => window.open(doc.access_url ?? undefined, '_blank', 'noopener,noreferrer')}
                             >
-                              <ExternalLink className="h-3.5 w-3.5" />
-                            </a>
+                              View
+                            </Button>
                           )}
                           <button
                             type="button"

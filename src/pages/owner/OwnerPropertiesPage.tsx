@@ -38,10 +38,10 @@ function getStatusConfig(status: Property['occupancy_status']) {
       }
     default:
       return {
-        label: 'Active',
-        badgeClass: 'bg-[#32C382]/15 text-[#32C382]',
-        borderClass: 'border-l-4 border-[#32C382]',
-        unitBadgeClass: 'bg-[#141519] text-[#4E79FF] border border-[#4E79FF]/25',
+        label: 'Vacant',
+        badgeClass: 'bg-white/8 text-[#8D8D96]',
+        borderClass: 'border-l-4 border-[#272839]',
+        unitBadgeClass: 'bg-white/8 text-[#8D8D96] border border-[#272839]',
       }
   }
 }
