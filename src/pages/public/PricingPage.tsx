@@ -10,11 +10,12 @@ import { revealUp, staggerParent, useMotionVariants, viewportOnce } from '../../
 const comparisonFeatures = [
   { name: 'Properties', starter: '5', professional: '25', enterprise: 'Unlimited' },
   { name: 'Tenants', starter: '10', professional: '50', enterprise: 'Unlimited' },
-  { name: 'AI Automation', starter: false, professional: true, enterprise: true },
-  { name: 'WhatsApp Integration', starter: false, professional: true, enterprise: true },
-  { name: 'Telegram Bot', starter: false, professional: true, enterprise: true },
+  { name: 'Email Notifications', starter: true, professional: true, enterprise: true },
+  { name: 'Telegram Bot', starter: true, professional: true, enterprise: true },
   { name: 'Payment Tracking', starter: true, professional: true, enterprise: true },
   { name: 'Smart Reminders', starter: true, professional: true, enterprise: true },
+  { name: 'AI Automation', starter: false, professional: true, enterprise: true },
+  { name: 'WhatsApp Integration', starter: false, professional: true, enterprise: true },
   { name: 'Priority Support', starter: false, professional: false, enterprise: true },
   { name: 'Custom Integrations', starter: false, professional: false, enterprise: true },
 ]
@@ -123,13 +124,21 @@ export function PricingPage() {
                 <CheckCircle className="h-[18px] w-[18px] shrink-0 text-[#32C382]" />
                 <span>Up to 10 tenants</span>
               </li>
-              <li className="flex items-center gap-3 text-sm text-[#8D8D96]">
-                <Minus className="h-[18px] w-[18px] shrink-0 text-[#8D8D96]/30" />
-                <span>Basic ticket system</span>
+              <li className="flex items-center gap-3 text-sm text-white">
+                <CheckCircle className="h-[18px] w-[18px] shrink-0 text-[#32C382]" />
+                <span>All email notifications</span>
+              </li>
+              <li className="flex items-center gap-3 text-sm text-white">
+                <Send className="h-[18px] w-[18px] shrink-0 text-[#0088cc]" />
+                <span>Telegram bot access</span>
               </li>
               <li className="flex items-center gap-3 text-sm text-white">
                 <CheckCircle className="h-[18px] w-[18px] shrink-0 text-[#32C382]" />
-                <span>Email notifications</span>
+                <span>Payment tracking</span>
+              </li>
+              <li className="flex items-center gap-3 text-sm text-[#8D8D96]">
+                <Minus className="h-[18px] w-[18px] shrink-0 text-[#8D8D96]/30" />
+                <span>WhatsApp integration</span>
               </li>
             </ul>
             <Link
@@ -186,8 +195,9 @@ export function PricingPage() {
               to={ROUTES.ownerLogin}
               className="w-full py-4 bg-[#2251E3] text-white font-bold rounded-lg hover:bg-[#4E79FF] transition-all shadow-lg shadow-[#2251E3]/30 text-center block"
             >
-              Start Free Trial
+              Start Free Trial — Then Go Pro
             </Link>
+            <p className="text-center text-[#8D8D96] text-xs mt-2">14 days free · No card required</p>
           </motion.div>
 
           {/* Enterprise Plan */}

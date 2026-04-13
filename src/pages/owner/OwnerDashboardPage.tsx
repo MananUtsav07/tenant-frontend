@@ -8,6 +8,8 @@ import {
   CheckCheck,
   ChevronRight,
   Clock3,
+  CreditCard,
+  Crown,
   TrendingUp,
   Users,
   Wallet,
@@ -22,7 +24,7 @@ import { StatusBadge } from '../../components/common/StatusBadge'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
-import type { ComplianceUpcomingItem, OwnerNotification, OwnerPortfolioVisibilityOverview, OwnerRentPaymentApproval, OwnerSummary, AutomationRun } from '../../types/api'
+import type { BillingState, ComplianceUpcomingItem, OwnerNotification, OwnerPortfolioVisibilityOverview, OwnerRentPaymentApproval, OwnerSummary, AutomationRun } from '../../types/api'
 import { formatCurrency, formatDate, formatDateTime } from '../../utils/date'
 import { revealUp, staggerParent, viewportOnce } from '../../utils/motion'
 
@@ -71,6 +73,7 @@ export function OwnerDashboardPage() {
   const [error, setError] = useState<string | null>(null)
   const [reviewingApprovalId, setReviewingApprovalId] = useState<string | null>(null)
   const [rejectionNotes, setRejectionNotes] = useState<Record<string, string>>({})
+  const [billing, setBilling] = useState<BillingState | null>(null)
 
   const loadDashboard = useCallback(async () => {
     if (!token) {
@@ -196,6 +199,11 @@ export function OwnerDashboardPage() {
   useEffect(() => {
     void loadDashboard()
   }, [loadDashboard])
+
+  useEffect(() => {
+    if (!token) return
+    api.getBillingState(token).then(res => setBilling(res.billing)).catch(() => {})
+  }, [token])
 
   const handleReviewApproval = async (approvalId: string, action: 'approve' | 'reject') => {
     if (!token) {
@@ -337,6 +345,51 @@ export function OwnerDashboardPage() {
               <div className="font-['Sora'] text-3xl font-extrabold text-white">{summary.awaiting_approvals}</div>
             </motion.div>
           </motion.div>
+
+          {/* Billing / Plan Status Card */}
+          {billing && (
+            <motion.div variants={revealUp} initial="hidden" animate="show" className="mb-8">
+              <div className={`flex items-center justify-between px-5 py-4 rounded-xl border ${
+                billing.status === 'active'
+                  ? 'bg-[#0d1f12] border-[#32C382]/30'
+                  : billing.isTrialExpired
+                  ? 'bg-[#1f0d0d] border-[#F25461]/30'
+                  : 'bg-[#1a1500] border-[#EBCF42]/30'
+              }`}>
+                <div className="flex items-center gap-3">
+                  <div className={`p-2 rounded-lg ${billing.status === 'active' ? 'bg-[#32C382]/15' : 'bg-[#EBCF42]/15'}`}>
+                    {billing.status === 'active'
+                      ? <Crown className="h-5 w-5 text-[#32C382]" />
+                      : <CreditCard className="h-5 w-5 text-[#EBCF42]" />}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-white font-['DM_Sans']">
+                      {billing.status === 'active'
+                        ? `${billing.planCode === 'professional' ? 'Professional' : 'Starter'} Plan — Active`
+                        : billing.isTrialExpired
+                        ? 'Free Trial Expired'
+                        : `Free Trial — ${billing.daysLeftInTrial} day${billing.daysLeftInTrial !== 1 ? 's' : ''} remaining`}
+                    </p>
+                    <p className="text-xs text-[#8D8D96]">
+                      {billing.status === 'active'
+                        ? `Renews ${billing.currentPeriodEnd ? new Date(billing.currentPeriodEnd).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}`
+                        : billing.isTrialExpired
+                        ? 'Choose a plan to restore full access'
+                        : `Trial ends ${billing.trialEndsAt ? new Date(billing.trialEndsAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : '—'}`}
+                    </p>
+                  </div>
+                </div>
+                {billing.status !== 'active' && (
+                  <Link
+                    to={ROUTES.ownerBilling}
+                    className="text-xs font-bold px-4 py-2 rounded-lg bg-[#2251E3] text-white hover:bg-[#4E79FF] transition-all shrink-0"
+                  >
+                    {billing.isTrialExpired ? 'Choose Plan' : 'View Plans'}
+                  </Link>
+                )}
+              </div>
+            </motion.div>
+          )}
 
           {/* Main Dashboard Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">

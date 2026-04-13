@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Mail, Send, MessageCircle, Instagram, CheckCircle2, Clock, Zap } from 'lucide-react'
+import { Mail, Send, MessageCircle, Instagram, CheckCircle2, Clock, Zap, Lock } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { LoadingState } from '../../components/common/LoadingState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { api } from '../../services/api'
+import { ROUTES } from '../../routes/constants'
+import type { BillingState } from '../../types/api'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -155,9 +158,14 @@ function IntegrationCard({
 export function OwnerIntegrationsPage() {
   const { token } = useOwnerAuth()
   const [status, setStatus] = useState<IntegrationsStatus | null>(null)
+  const [billing, setBilling] = useState<BillingState | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [waConnecting, setWaConnecting] = useState(false)
+
+  const isProfessional = billing?.status === 'active' && billing.planCode === 'professional'
+  const isOnTrial = billing?.status === 'trialing' && !billing.isTrialExpired
+  const canUseWhatsApp = isProfessional || isOnTrial
 
   const fetchIntegrations = useCallback(async () => {
     if (!token) return
@@ -182,6 +190,11 @@ export function OwnerIntegrationsPage() {
     void fetchIntegrations()
   }, [fetchIntegrations])
 
+  useEffect(() => {
+    if (!token) return
+    api.getBillingState(token).then(res => setBilling(res.billing)).catch(() => {})
+  }, [token])
+
   const openTelegramConnect = useCallback(() => {
     if (!status?.telegram.connect_url) return
     window.open(status.telegram.connect_url, '_blank', 'noopener,noreferrer')
@@ -202,7 +215,16 @@ export function OwnerIntegrationsPage() {
 
   // ─── WhatsApp footer action ─────────────────────────────────────────────────
 
-  const whatsappFooter = status ? (
+  const whatsappFooter = !canUseWhatsApp ? (
+    <Link
+      to={ROUTES.ownerBilling}
+      className="flex items-center gap-1.5 rounded-xl border border-[#EBCF42]/40 bg-[#1a1500] px-4 py-2 text-sm font-semibold text-[#EBCF42] transition-colors hover:bg-[#1a1500]/80"
+      style={{ fontFamily: "'DM Sans', sans-serif" }}
+    >
+      <Lock className="h-3.5 w-3.5" />
+      Professional Plan Required
+    </Link>
+  ) : status ? (
     !status.whatsapp.configured ? (
       <button
         className="rounded-xl border border-[#4E79FF] bg-[#101114] px-4 py-2 text-sm font-semibold text-[#4E79FF] transition-colors hover:bg-[#141519]"
