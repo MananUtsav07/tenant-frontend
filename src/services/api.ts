@@ -53,6 +53,8 @@ import type {
   TelegramOnboardingState,
   PublicOperationsSnapshot,
   AdminScreeningOverview,
+  BillingState,
+  RazorpayOrder,
 } from '../types/api'
 
 const rawApiBaseUrl = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim() ?? ''
@@ -1100,6 +1102,20 @@ export const api = {
 
   getBlogPostBySlug: (slug: string) =>
     request<{ ok: true; post: BlogPost }>(`/api/blog/${encodeURIComponent(slug)}`),
+
+  // Billing
+  getBillingState: (token: string) =>
+    request<{ ok: true; billing: BillingState }>('/api/billing/state', { token }),
+
+  initiateSubscription: (token: string, plan_code: 'starter' | 'professional') =>
+    request<{ ok: true; order: RazorpayOrder }>('/api/billing/initiate', { method: 'POST', token, body: { plan_code } }),
+
+  confirmSubscription: (token: string, body: {
+    plan_code: 'starter' | 'professional'
+    razorpay_order_id: string
+    razorpay_payment_id: string
+    razorpay_signature: string
+  }) => request<{ ok: true; billing: BillingState }>('/api/billing/confirm', { method: 'POST', token, body }),
 }
 
 export { API_BASE_URL }

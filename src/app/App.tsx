@@ -71,6 +71,7 @@ const OwnerAutomationActivityPage = lazyNamedPage(
 const OwnerAiSettingsPage = lazyNamedPage(() => import('../pages/owner/OwnerAiSettingsPage'), 'OwnerAiSettingsPage')
 const OwnerIntegrationsPage = lazyNamedPage(() => import('../pages/owner/OwnerIntegrationsPage'), 'OwnerIntegrationsPage')
 const OwnerProfilePage = lazyNamedPage(() => import('../pages/owner/OwnerProfilePage'), 'OwnerProfilePage')
+const OwnerBillingPage = lazyNamedPage(() => import('../pages/owner/OwnerBillingPage'), 'OwnerBillingPage')
 
 const TenantDashboardPage = lazyNamedPage(() => import('../pages/tenant/TenantDashboardPage'), 'TenantDashboardPage')
 const TenantTicketsPage = lazyNamedPage(() => import('../pages/tenant/TenantTicketsPage'), 'TenantTicketsPage')
@@ -164,6 +165,7 @@ function AppRoutes() {
           <Route path={ROUTES.ownerAiSettings} element={<OwnerAiSettingsPage />} />
           <Route path={ROUTES.ownerIntegrations} element={<OwnerIntegrationsPage />} />
           <Route path={ROUTES.ownerProfile} element={<OwnerProfilePage />} />
+          <Route path={ROUTES.ownerBilling} element={<OwnerBillingPage />} />
           <Route path="/owner/applicants" element={<Navigate to={ROUTES.ownerDashboard} replace />} />
         </Route>
       </Route>

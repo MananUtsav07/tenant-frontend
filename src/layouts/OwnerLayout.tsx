@@ -1,5 +1,6 @@
-import { Bell, Briefcase, Building2, FileText, LayoutDashboard, LifeBuoy, MailWarning, Plug, UserCircle, Users } from 'lucide-react'
-import { useState } from 'react'
+import { Bell, Briefcase, Building2, FileText, LayoutDashboard, LifeBuoy, MailWarning, Plug, UserCircle, Users, AlertTriangle, CreditCard } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import { OwnerNotificationBell } from '../components/owner/OwnerNotificationBell'
 import { OwnerNotificationsProvider } from '../hooks/OwnerNotificationsProvider'
@@ -10,6 +11,7 @@ import { DashboardLayout } from './DashboardLayout'
 import { useOwnerAuth } from '../hooks/useOwnerAuth'
 import { api } from '../services/api'
 import { ROUTES } from '../routes/constants'
+import type { BillingState } from '../types/api'
 
 function OwnerLayoutContent() {
   const { owner, token, logout } = useOwnerAuth()
@@ -17,6 +19,23 @@ function OwnerLayoutContent() {
   const { unreadCount } = useOwnerNotifications()
   const { pendingCount } = useOwnerApprovals()
   const [resendState, setResendState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const [billing, setBilling] = useState<BillingState | null>(null)
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  useEffect(() => {
+    if (!token) return
+    api.getBillingState(token)
+      .then(res => setBilling(res.billing))
+      .catch(() => {})
+  }, [token])
+
+  // Hard lock: redirect to billing if trial expired and not already on billing page
+  useEffect(() => {
+    if (billing?.isTrialExpired && location.pathname !== ROUTES.ownerBilling) {
+      navigate(ROUTES.ownerBilling, { replace: true })
+    }
+  }, [billing, location.pathname, navigate])
 
   const handleResend = async () => {
     if (!token || resendState === 'sending' || resendState === 'sent') return
@@ -45,6 +64,24 @@ function OwnerLayoutContent() {
     { to: ROUTES.ownerProfile, label: 'Profile', icon: <UserCircle className="h-4 w-4" /> },
   ]
 
+  const trialBanner = billing?.status === 'trialing' && !billing.isTrialExpired && billing.daysLeftInTrial !== null && billing.daysLeftInTrial <= 5 ? (
+    <div className="flex items-center gap-3 px-4 py-2.5 bg-amber-950/60 border-b border-amber-800/40 text-sm">
+      <AlertTriangle className="h-4 w-4 shrink-0 text-amber-400" />
+      <span className="text-amber-200 flex-1">
+        Your free trial ends in <span className="font-bold">{billing.daysLeftInTrial} day{billing.daysLeftInTrial !== 1 ? 's' : ''}</span>.
+        Choose a plan to keep your data and access.
+      </span>
+      <button
+        type="button"
+        onClick={() => navigate(ROUTES.ownerBilling)}
+        className="shrink-0 flex items-center gap-1 text-xs font-bold text-amber-300 hover:text-amber-100 transition-colors cursor-pointer"
+      >
+        <CreditCard className="h-3.5 w-3.5" />
+        Choose Plan
+      </button>
+    </div>
+  ) : undefined
+
   const emailVerifiedBanner =
     owner && owner.email_verified === false ? (
       <div className="flex items-center gap-3 px-4 py-2.5 bg-[#1A1500] border-b border-[#3A3000] text-sm">
@@ -65,6 +102,8 @@ function OwnerLayoutContent() {
       </div>
     ) : undefined
 
+  const topBanner = trialBanner ?? emailVerifiedBanner
+
   return (
     <DashboardLayout
       title="Dashboard"
@@ -73,7 +112,7 @@ function OwnerLayoutContent() {
       identitySecondary={owner?.email || undefined}
       navItems={ownerLinks}
       onLogout={logout}
-      topBanner={emailVerifiedBanner}
+      topBanner={topBanner}
       headerActions={
         <div className="flex items-center gap-3">
           <div className="hidden rounded-full border border-[rgba(83,88,100,0.36)] bg-white/[0.03] px-3 py-1 text-xs text-[var(--ph-text-muted)] sm:block">

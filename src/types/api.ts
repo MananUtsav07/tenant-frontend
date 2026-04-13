@@ -1564,3 +1564,22 @@ export type BlogListResponse = {
   posts: BlogPost[]
   pagination: PaginationMeta
 }
+
+export type BillingState = {
+  status: 'trialing' | 'active' | 'past_due' | 'cancelled' | 'inactive'
+  planCode: string | null
+  trialEndsAt: string | null
+  currentPeriodEnd: string | null
+  daysLeftInTrial: number | null
+  isTrialExpired: boolean
+  isActive: boolean
+  canAccess: boolean
+}
+
+export type RazorpayOrder = {
+  orderId: string
+  amount: number
+  currency: string
+  keyId: string
+  planLabel: string
+}

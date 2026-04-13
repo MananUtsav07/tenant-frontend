@@ -28,7 +28,7 @@ const faqs = [
   {
     question: 'Is there a free trial?',
     answer:
-      'Absolutely! We offer a 14-day free trial on our Professional plan so you can experience the power of AI automation and WhatsApp integration first-hand.',
+      'Yes! We offer a 14-day free trial with no credit card required. You get full access to all features. After 14 days, choose a Starter or Professional plan to continue.',
   },
   {
     question: "What's included in AI automation?",
@@ -133,10 +133,10 @@ export function PricingPage() {
               </li>
             </ul>
             <Link
-              to={ROUTES.contact}
+              to={ROUTES.ownerLogin}
               className="w-full py-4 border-2 border-[#2251E3] text-[#4E79FF] font-bold rounded-lg hover:bg-[rgba(34,81,227,0.1)] transition-all text-center block"
             >
-              Get Started
+              Start Free Trial
             </Link>
           </motion.div>
 
@@ -183,7 +183,7 @@ export function PricingPage() {
               </li>
             </ul>
             <Link
-              to={ROUTES.contact}
+              to={ROUTES.ownerLogin}
               className="w-full py-4 bg-[#2251E3] text-white font-bold rounded-lg hover:bg-[#4E79FF] transition-all shadow-lg shadow-[#2251E3]/30 text-center block"
             >
               Start Free Trial

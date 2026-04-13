@@ -45,6 +45,7 @@ export const ROUTES = {
   ownerAiSettings: '/owner/ai-settings',
   ownerIntegrations: '/owner/integrations',
   ownerProfile: '/owner/profile',
+  ownerBilling: '/owner/billing',
   tenantDashboard: '/tenant/dashboard',
   tenantTickets: '/tenant/tickets',
   tenantSupport: '/tenant/support',
