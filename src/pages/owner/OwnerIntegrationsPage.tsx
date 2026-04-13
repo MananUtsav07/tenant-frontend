@@ -190,6 +190,15 @@ export function OwnerIntegrationsPage() {
     void fetchIntegrations()
   }, [fetchIntegrations])
 
+  // Refetch when the user comes back to this tab (e.g. after connecting on Telegram)
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') void fetchIntegrations()
+    }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
+  }, [fetchIntegrations])
+
   useEffect(() => {
     if (!token) return
     api.getBillingState(token).then(res => setBilling(res.billing)).catch(() => {})
@@ -264,13 +273,24 @@ export function OwnerIntegrationsPage() {
         Setup Required
       </button>
     ) : status.telegram.linked ? (
-      <span
-        className="flex items-center gap-1.5 text-sm font-medium text-[#32C382]"
-        style={{ fontFamily: "'DM Sans', sans-serif" }}
-      >
-        <CheckCircle2 className="h-4 w-4" />
-        Connected
-      </span>
+      <div className="flex items-center gap-3">
+        <span
+          className="flex items-center gap-1.5 text-sm font-medium text-[#32C382]"
+          style={{ fontFamily: "'DM Sans', sans-serif" }}
+        >
+          <CheckCircle2 className="h-4 w-4" />
+          Connected
+        </span>
+        <button
+          type="button"
+          onClick={openTelegramConnect}
+          disabled={!status.telegram.connect_url}
+          className="rounded-xl border border-[#8D8D96]/40 bg-[#101114] px-3 py-1.5 text-xs font-semibold text-[#8D8D96] transition-colors hover:border-[#4E79FF]/40 hover:text-[#4E79FF] disabled:cursor-not-allowed disabled:opacity-40"
+          style={{ fontFamily: "'DM Sans', sans-serif" }}
+        >
+          Reconnect
+        </button>
+      </div>
     ) : (
       <button
         type="button"
