@@ -1318,6 +1318,14 @@ export type OwnerAuthPayload = {
   owner: Owner
 }
 
+export type OwnerDeletionReason =
+  | 'not_satisfied'
+  | 'missing_features'
+  | 'too_expensive'
+  | 'switching_platform'
+  | 'temporary_use_only'
+  | 'other'
+
 export type ApiSuccess<T> = T & { ok: true }
 
 export type ApiMessageResponse = {

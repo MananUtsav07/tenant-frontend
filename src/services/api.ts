@@ -27,6 +27,7 @@ import type {
   ContactMessageReceipt,
   Owner,
   OwnerAutomationActivityResponse,
+  OwnerDeletionReason,
   OwnerMaintenanceWorkflowOverview,
   OwnerCashFlowOverview,
   OwnerPortfolioVisibilityOverview,
@@ -221,6 +222,13 @@ export const api = {
       support_whatsapp: string | null
     }>,
   ) => request<{ ok: true; owner: Owner }>('/api/auth/owner/me', { method: 'PATCH', token, body }),
+  deleteOwnerMe: (
+    token: string,
+    body: {
+      confirmation_text: string
+      reasons: OwnerDeletionReason[]
+    },
+  ) => request<ApiMessageResponse>('/api/auth/owner/me', { method: 'DELETE', token, body }),
 
   tenantLogin: (body: { tenant_access_id: string; password: string; email?: string }) =>
     request<TenantAuthPayload & { ok: true }>('/api/auth/tenant/login', { method: 'POST', body }),
