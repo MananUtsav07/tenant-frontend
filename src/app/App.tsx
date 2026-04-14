@@ -63,6 +63,7 @@ const OwnerDocumentsPage = lazyNamedPage(() => import('../pages/owner/OwnerDocum
 const OwnerTenantDetailPage = lazyNamedPage(() => import('../pages/owner/OwnerTenantDetailPage'), 'OwnerTenantDetailPage')
 const OwnerTicketsPage = lazyNamedPage(() => import('../pages/owner/OwnerTicketsPage'), 'OwnerTicketsPage')
 const OwnerNotificationsPage = lazyNamedPage(() => import('../pages/owner/OwnerNotificationsPage'), 'OwnerNotificationsPage')
+const OwnerAnalyticsPage = lazyNamedPage(() => import('../pages/owner/OwnerAnalyticsPage'), 'OwnerAnalyticsPage')
 const OwnerAutomationPage = lazyNamedPage(() => import('../pages/owner/OwnerAutomationPage'), 'OwnerAutomationPage')
 const OwnerAutomationActivityPage = lazyNamedPage(
   () => import('../pages/owner/OwnerAutomationActivityPage'),
@@ -161,6 +162,7 @@ function AppRoutes() {
           <Route path={ROUTES.ownerTickets} element={<OwnerTicketsPage />} />
           <Route path={ROUTES.ownerMaintenance} element={<OwnerMaintenancePage />} />
           <Route path={ROUTES.ownerNotifications} element={<OwnerNotificationsPage />} />
+          <Route path={ROUTES.ownerAnalytics} element={<OwnerAnalyticsPage />} />
           <Route path={ROUTES.ownerAutomation} element={<OwnerAutomationPage />} />
           <Route path={ROUTES.ownerAutomationActivity} element={<OwnerAutomationActivityPage />} />
           <Route path={ROUTES.ownerAiSettings} element={<OwnerAiSettingsPage />} />

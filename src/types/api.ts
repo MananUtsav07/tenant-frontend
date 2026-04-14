@@ -1233,6 +1233,25 @@ export type OwnerRentPaymentApproval = {
   } | null
 }
 
+export type RentLedgerEntry = {
+  id: string
+  owner_id: string
+  tenant_id: string
+  property_id: string
+  cycle_year: number
+  cycle_month: number
+  due_date: string
+  amount_due: number
+  amount_paid: number
+  paid_date: string | null
+  status: string
+  created_at: string
+  tenant_name: string | null
+  tenant_access_id: string | null
+  property_name: string | null
+  unit_number: string | null
+}
+
 export type TenantOwnerContact = {
   id: string
   organization_id?: string

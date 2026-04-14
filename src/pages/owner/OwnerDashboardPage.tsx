@@ -24,7 +24,7 @@ import { StatusBadge } from '../../components/common/StatusBadge'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
-import type { BillingState, ComplianceUpcomingItem, OwnerNotification, OwnerPortfolioVisibilityOverview, OwnerRentPaymentApproval, OwnerSummary, AutomationRun } from '../../types/api'
+import type { BillingState, OwnerNotification, OwnerPortfolioVisibilityOverview, OwnerRentPaymentApproval, OwnerSummary, AutomationRun } from '../../types/api'
 import { formatCurrency, formatDate, formatDateTime } from '../../utils/date'
 import { revealUp, staggerParent, viewportOnce } from '../../utils/motion'
 
@@ -64,9 +64,14 @@ export function OwnerDashboardPage() {
   const [approvals, setApprovals] = useState<OwnerRentPaymentApproval[]>([])
   const [recentActivity, setRecentActivity] = useState<AutomationRun[]>([])
   const [notifications, setNotifications] = useState<OwnerNotification[]>([])
-  const [upcomingItems, setUpcomingItems] = useState<ComplianceUpcomingItem[]>([])
-  const [chartBars, setChartBars] = useState<Array<{ label: string; pct: number; opacity: string; tooltip: string }>>([])
-  const [quarterlyBars, setQuarterlyBars] = useState<Array<{ label: string; pct: number; opacity: string; tooltip: string }>>([])
+  const [chartBars] = useState<Array<{ label: string; pct: number; opacity: string; tooltipTitle: string; tooltipLines?: string[] }>>([])
+  const [quarterlyBars] = useState<Array<{ label: string; pct: number; opacity: string; tooltipTitle: string; tooltipLines?: string[] }>>([])
+  const [rentStats, setRentStats] = useState<{ totalDue: number; totalPaid: number; pending: number; tenantCount: number }>({
+    totalDue: 0,
+    totalPaid: 0,
+    pending: 0,
+    tenantCount: 0,
+  })
   const [chartView, setChartView] = useState<'monthly' | 'quarterly'>('monthly')
   const [totalProperties, setTotalProperties] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -137,56 +142,32 @@ export function OwnerDashboardPage() {
         }
       }
 
-      // Fetch compliance upcoming items for reminders
+      // Fetch rent ledger for chart (direct — always reflects approved payments)
       try {
-        const complianceResponse = await api.getOwnerAutomationCompliance(token)
-        setUpcomingItems(complianceResponse.compliance?.upcoming_items || [])
-      } catch (complianceError) {
-        if (!(complianceError instanceof Error && complianceError.message.toLowerCase().includes('route not found'))) {
-          console.error('Failed to load compliance data:', complianceError)
-        }
-      }
+        const ledgerResponse = await api.getOwnerRentLedger(token)
+        const entries = ledgerResponse.entries ?? []
 
-      // Fetch cash flow data for chart
-      try {
-        const cashFlowResponse = await api.getOwnerAutomationCashFlow(token)
-        if (cashFlowResponse.ok && cashFlowResponse.cash_flow) {
-          const cf = cashFlowResponse.cash_flow
-          // Build chart bars from recent snapshots (last 6 months)
-          const recentSnapshots = cf.recent_snapshots?.slice(-6) || []
-          const maxAmount = Math.max(...recentSnapshots.map(s => s.portfolio_gross_rent || 0), 100000)
-
-          const opacityLevels = ['bg-[#4E79FF]/20', 'bg-[#4E79FF]/40', 'bg-[#4E79FF]/60', 'bg-[#4E79FF]/80', 'bg-[#4E79FF]']
-
-          const bars = recentSnapshots.map((snapshot) => {
-            const monthIndex = snapshot.report_month - 1
-            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-            const month = monthNames[monthIndex] || 'N/A'
-            const amount = snapshot.portfolio_gross_rent || 0
-            const pct = Math.min(100, (amount / maxAmount) * 100)
-            const opacityIndex = Math.floor((pct / 100) * (opacityLevels.length - 1))
-            return { label: month, pct, opacity: opacityLevels[opacityIndex], tooltip: formatCurrency(amount) }
-          })
-          setChartBars(bars)
-
-          // Build quarterly bars by summing months into Q1–Q4
-          const allSnapshots = cf.recent_snapshots || []
-          const quarters: Record<string, number> = { Q1: 0, Q2: 0, Q3: 0, Q4: 0 }
-          for (const s of allSnapshots) {
-            const q = s.report_month <= 3 ? 'Q1' : s.report_month <= 6 ? 'Q2' : s.report_month <= 9 ? 'Q3' : 'Q4'
-            quarters[q] = (quarters[q] || 0) + (s.portfolio_gross_rent || 0)
-          }
-          const maxQ = Math.max(...Object.values(quarters), 100000)
-          const qBars = Object.entries(quarters).map(([label, amount]) => {
-            const pct = Math.min(100, (amount / maxQ) * 100)
-            const opacityIndex = Math.floor((pct / 100) * (opacityLevels.length - 1))
-            return { label, pct, opacity: opacityLevels[opacityIndex], tooltip: formatCurrency(amount) }
-          })
-          setQuarterlyBars(qBars)
-        }
-      } catch (cashFlowError) {
-        if (!(cashFlowError instanceof Error && cashFlowError.message.toLowerCase().includes('route not found'))) {
-          console.error('Failed to load cash flow data:', cashFlowError)
+        // Monthly analytics (current month)
+        const now = new Date()
+        const currentYear = now.getFullYear()
+        const currentMonth = now.getMonth() + 1
+        const currentEntries = entries.filter(entry => entry.cycle_year === currentYear && entry.cycle_month === currentMonth)
+        const totals = currentEntries.reduce((acc, entry) => {
+          acc.totalDue += entry.amount_due
+          acc.totalPaid += entry.amount_paid
+          if (entry.tenant_id) acc.tenantIds.add(entry.tenant_id)
+          return acc
+        }, { totalDue: 0, totalPaid: 0, tenantIds: new Set<string>() })
+        const pending = Math.max(0, totals.totalDue - totals.totalPaid)
+        setRentStats({
+          totalDue: totals.totalDue,
+          totalPaid: totals.totalPaid,
+          pending,
+          tenantCount: totals.tenantIds.size,
+        })
+      } catch (ledgerError) {
+        if (!(ledgerError instanceof Error && ledgerError.message.toLowerCase().includes('route not found'))) {
+          console.error('Failed to load rent ledger:', ledgerError)
         }
       }
     } catch (loadError) {
@@ -233,6 +214,9 @@ export function OwnerDashboardPage() {
   }
 
   const ownerName = owner?.full_name || owner?.company_name || 'Owner'
+  const rentProgress = rentStats.totalDue > 0 ? Math.round((rentStats.totalPaid / rentStats.totalDue) * 100) : 0
+  const rentProgressClamped = Math.min(100, Math.max(0, rentProgress))
+  const showChartInLeft = false
 
   return (
     <div className="p-6 w-full bg-[#06070B] min-h-screen text-white">
@@ -394,12 +378,12 @@ export function OwnerDashboardPage() {
           )}
 
           {/* Main Dashboard Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
 
-            {/* Left Column: Rent Collection chart + Recent Activity */}
-            <div className="lg:col-span-8 space-y-8">
+            {/* Left Column: Recent Activity */}
+            <div className="lg:col-span-8 space-y-8 h-full">
+              {showChartInLeft ? (
 
-              {/* Rent Collection Chart */}
               <motion.div
                 variants={revealUp}
                 initial="hidden"
@@ -439,51 +423,51 @@ export function OwnerDashboardPage() {
                     <p className="text-xs mt-1">Chart will populate once rent payments are recorded</p>
                   </div>
                 ) : (
-                  <>
-                    <div className="flex items-end justify-between h-64 gap-6 px-2">
-                      {(chartView === 'monthly' ? chartBars : quarterlyBars).map((bar) => (
-                        <div key={bar.label} className="flex flex-col items-center gap-2 flex-1">
+                  <div className="flex items-end justify-between gap-4 px-2">
+                    {(chartView === 'monthly' ? chartBars : quarterlyBars).map((bar) => (
+                      <div key={bar.label} className="flex flex-col items-center gap-2 flex-1">
+                        {/* Fixed-height bar container — percentage height works reliably here */}
+                        <div className="relative w-full" style={{ height: '200px' }}>
                           <div
-                            className={`w-full ${bar.opacity} rounded-t-lg relative group`}
-                            style={{ height: `${bar.pct}%` }}
+                            className={`absolute bottom-0 left-0 right-0 ${bar.opacity} rounded-t-lg group transition-all duration-500`}
+                            style={{ height: `${Math.max(bar.pct, 4)}%` }}
                           >
-                            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#06070B] border border-[#272839] text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                              {bar.tooltip}
+                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#06070B] border border-[#272839] text-white text-[10px] py-2 px-3 rounded opacity-0 group-hover:opacity-100 transition-opacity z-10 max-w-[180px]">
+                              {(() => {
+                                const [titleLabel, ...titleRest] = bar.tooltipTitle.split(': ')
+                                const titleValue = titleRest.join(': ')
+                                return (
+                                  <div className="leading-4">
+                                    <div className="text-[#C0C0C5]">{titleLabel}</div>
+                                    {titleValue ? <div className="font-semibold text-white">{titleValue}</div> : null}
+                                  </div>
+                                )
+                              })()}
+                              {bar.tooltipLines?.length ? (
+                                <div className="mt-2 space-y-1 leading-4">
+                                  {bar.tooltipLines.map((line) => {
+                                    const [name, ...rest] = line.split(': ')
+                                    const amount = rest.join(': ')
+                                    return (
+                                      <div key={line} className="break-words">
+                                        <div className="text-[#8D8D96]">{name}</div>
+                                        <div className="font-semibold text-white">{amount || line}</div>
+                                      </div>
+                                    )
+                                  })}
+                                </div>
+                              ) : null}
                             </div>
                           </div>
-                          <span className="text-[10px] font-bold text-[#8D8D96] uppercase">{bar.label}</span>
                         </div>
-                      ))}
-                    </div>
-
-                    {/* Portfolio metrics row below chart */}
-                    <div className="mt-6 grid grid-cols-2 gap-4 pt-4 border-t border-[#272839]">
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#141519]">
-                          <Bell className="h-4 w-4 text-[#4E79FF]" />
-                        </div>
-                        <div>
-                          <p className="text-xs font-bold text-white">Reminders Pending</p>
-                          <p className="text-lg font-['Sora'] font-bold text-white">{summary.reminders_pending}</p>
-                        </div>
+                        <span className="text-[10px] font-bold text-[#8D8D96] uppercase">{bar.label}</span>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${summary.overdue_rent > 0 ? 'bg-[#F25461]/15' : 'bg-[#32C382]/15'}`}>
-                          <TrendingUp className={`h-4 w-4 ${summary.overdue_rent > 0 ? 'text-[#F25461]' : 'text-[#32C382]'}`} />
-                        </div>
-                        <div>
-                          <p className="text-xs font-bold text-white">
-                            {summary.overdue_rent > 0 ? 'Overdue Rent' : 'Collections Stable'}
-                          </p>
-                          <p className="text-lg font-['Sora'] font-bold text-white">
-                            {summary.overdue_rent > 0 ? summary.overdue_rent : '✓'}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </>
+                    ))}
+                  </div>
                 )}
               </motion.div>
+              ) : null}
+
 
               {/* Recent Activity */}
               <motion.div
@@ -491,7 +475,7 @@ export function OwnerDashboardPage() {
                 initial="hidden"
                 whileInView="show"
                 viewport={viewportOnce}
-                className="bg-[#101114] rounded-xl shadow-sm overflow-hidden border border-[#272839]"
+                className="bg-[#101114] rounded-xl shadow-sm overflow-hidden border border-[#272839] h-full flex flex-col"
               >
                 <div className="p-6 border-b border-[#272839] flex items-center justify-between">
                   <h2 className="font-['Sora'] text-xl font-bold text-white">Recent Activity</h2>
@@ -573,56 +557,56 @@ export function OwnerDashboardPage() {
               </motion.div>
             </div>
 
-            {/* Right Column: Quick Actions + Upcoming Reminders + AI Insights */}
-            <div className="lg:col-span-4 space-y-8">
-
-              {/* Upcoming Reminders */}
+            {/* Right Column: Payment Overview */}
+            <div className="lg:col-span-4 space-y-8 h-full">
               <motion.div
                 variants={revealUp}
                 initial="hidden"
                 whileInView="show"
                 viewport={viewportOnce}
-                className="bg-[#101114] p-6 rounded-xl shadow-sm border border-[#272839]"
+                className="bg-[#101114] p-6 rounded-xl shadow-sm border border-[#272839] h-full"
               >
-                <h2 className="font-['Sora'] text-lg font-bold text-white mb-4">Upcoming Reminders</h2>
-                <div className="space-y-3">
-                  {upcomingItems.length > 0 ? (
-                    upcomingItems.slice(0, 4).map((item) => {
-                      const date = new Date(item.relevant_date)
-                      const month = date.toLocaleString('default', { month: 'short' }).toUpperCase()
-                      const day = date.getDate().toString()
-                      const isUrgent = item.days_remaining <= 30
-                      const propertyLabel = item.unit_number
-                        ? `${item.property_name} #${item.unit_number}`
-                        : item.property_name
-                      return (
-                        <div
-                          key={item.legal_date_id}
-                          className={`flex items-center gap-4 p-3 rounded-lg transition-colors ${isUrgent ? 'bg-[#141519] border-l-4 border-[#4E79FF]' : 'hover:bg-white/4'}`}
-                        >
-                          <div className="text-center shrink-0 w-12">
-                            <div className="text-[10px] uppercase font-bold text-[#8D8D96]">{month}</div>
-                            <div className="font-['Sora'] text-lg font-black text-white">{day}</div>
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-bold text-white truncate">{item.trigger_label}</p>
-                            <p className="text-[11px] text-[#8D8D96] truncate">{propertyLabel}</p>
-                          </div>
-                          <span className={`text-[10px] font-bold shrink-0 px-2 py-0.5 rounded-full ${isUrgent ? 'bg-[#EBCF42]/15 text-[#EBCF42]' : 'bg-white/8 text-[#8D8D96]'}`}>
-                            {item.days_remaining}d
-                          </span>
-                        </div>
-                      )
-                    })
-                  ) : (
-                    <div className="p-4 text-center text-[#8D8D96] text-sm font-['Manrope']">
-                      <p>No upcoming reminders</p>
-                      <p className="text-[11px] mt-1">You're all caught up!</p>
+                <div className="flex items-start justify-between gap-4 mb-6">
+                  <div>
+                    <h3 className="font-['Sora'] text-lg font-bold text-white">Payment Overview</h3>
+                    <p className="text-xs text-[#8D8D96]">Current month</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[10px] uppercase tracking-widest text-[#8D8D96]">Pending</p>
+                    <p className="text-lg font-bold text-[#F25461]">
+                      {formatCurrency(rentStats.pending, owner?.organization?.currency_code)}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-6">
+                  <div
+                    className="relative h-24 w-24 rounded-full"
+                    style={{
+                      background: `conic-gradient(#4E79FF ${rentProgressClamped}%, #1F2430 0)`,
+                    }}
+                  >
+                    <div className="absolute inset-2 rounded-full bg-[#101114] flex items-center justify-center text-xs font-bold text-white">
+                      {rentProgressClamped}%
                     </div>
-                  )}
+                  </div>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-[10px] uppercase tracking-widest text-[#8D8D96]">Received</p>
+                      <p className="text-base font-bold text-white">
+                        {formatCurrency(rentStats.totalPaid, owner?.organization?.currency_code)}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase tracking-widest text-[#8D8D96]">Total Due</p>
+                      <p className="text-base font-bold text-white">
+                        {formatCurrency(rentStats.totalDue, owner?.organization?.currency_code)}
+                      </p>
+                    </div>
+                    <p className="text-xs text-[#8D8D96]">{rentStats.tenantCount} tenants</p>
+                  </div>
                 </div>
               </motion.div>
-
             </div>
           </div>
         </>

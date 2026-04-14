@@ -5,11 +5,13 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  CheckCircle2,
   Eye,
   Pencil,
   Trash2,
   UserRoundPlus,
   Users,
+  Wallet,
 } from 'lucide-react'
 
 import { Button } from '../../components/common/Button'
@@ -21,8 +23,8 @@ import { Modal } from '../../components/common/Modal'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
-import type { Broker, Property, Tenant } from '../../types/api'
-import { formatDate, getCurrencyMarker } from '../../utils/date'
+import type { Broker, Property, RentLedgerEntry, Tenant } from '../../types/api'
+import { formatCurrency, formatDate, getCurrencyMarker } from '../../utils/date'
 
 /** Convert YYYY-MM-DD → DD/MM/YYYY for display in text inputs */
 function isoToDDMMYYYY(iso: string): string {
@@ -115,6 +117,9 @@ export function OwnerTenantsPage() {
   const ownerCurrencyCode = owner?.organization?.currency_code ?? 'INR'
   const selectedRentCurrencyCode = form.currency_code || ownerCurrencyCode
   const selectedRentCurrencyMarker = getCurrencyMarker(selectedRentCurrencyCode)
+  const [rentLedger, setRentLedger] = useState<RentLedgerEntry[]>([])
+  const [ledgerLoading, setLedgerLoading] = useState(true)
+  const [ledgerTenantFilter, setLedgerTenantFilter] = useState('')
 
   const loadData = useCallback(async () => {
     if (!token) {
@@ -141,6 +146,15 @@ export function OwnerTenantsPage() {
   useEffect(() => {
     void loadData()
   }, [loadData])
+
+  useEffect(() => {
+    if (!token) return
+    setLedgerLoading(true)
+    api.getOwnerRentLedger(token)
+      .then(res => setRentLedger(res.entries ?? []))
+      .catch(() => setRentLedger([]))
+      .finally(() => setLedgerLoading(false))
+  }, [token])
 
   useEffect(() => {
     if (properties.length > 0 && !form.property_id) {
@@ -956,6 +970,144 @@ export function OwnerTenantsPage() {
           </div>
         </Modal>
       ) : null}
+
+      {/* ── Rent Received History ── */}
+      <div className="mt-10">
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#32C382]/15">
+              <Wallet className="h-5 w-5 text-[#32C382]" />
+            </div>
+            <div>
+              <h2 className="font-['Sora'] text-xl font-bold text-white">Rent Received</h2>
+              <p className="text-xs text-[#8D8D96] font-['Manrope']">All approved rent payments across your tenants</p>
+            </div>
+          </div>
+          {/* Tenant filter */}
+          {tenants.length > 0 && (
+            <select
+              value={ledgerTenantFilter}
+              onChange={e => setLedgerTenantFilter(e.target.value)}
+              className="rounded-xl border border-[#272839] bg-[#101114] px-3 py-2 text-sm text-white outline-none focus:border-[#4E79FF] transition-colors"
+            >
+              <option value="">All Tenants</option>
+              {tenants.map(t => (
+                <option key={t.id} value={t.id}>{t.full_name}</option>
+              ))}
+            </select>
+          )}
+        </div>
+
+        {ledgerLoading ? (
+          <div className="rounded-xl border border-[#272839] bg-[#101114] p-8 text-center text-sm text-[#8D8D96]">
+            Loading payment history...
+          </div>
+        ) : rentLedger.filter(e => !ledgerTenantFilter || e.tenant_id === ledgerTenantFilter).length === 0 ? (
+          <div className="rounded-xl border border-[#272839] bg-[#101114] p-10 flex flex-col items-center gap-3 text-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#272839]">
+              <Wallet className="h-6 w-6 text-[#8D8D96]" />
+            </div>
+            <p className="text-sm font-semibold text-[#8D8D96]">No rent payments recorded yet</p>
+            <p className="text-xs text-[#4D4D58]">Payments will appear here once tenants confirm and you approve them.</p>
+          </div>
+        ) : (
+          <>
+            {/* Desktop table */}
+            <div className="hidden md:block rounded-xl border border-[#272839] bg-[#101114] overflow-hidden">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-[#272839] text-left">
+                    <th className="px-5 py-3.5 text-[10px] font-bold uppercase tracking-widest text-[#8D8D96]">Tenant</th>
+                    <th className="px-5 py-3.5 text-[10px] font-bold uppercase tracking-widest text-[#8D8D96]">Property</th>
+                    <th className="px-5 py-3.5 text-[10px] font-bold uppercase tracking-widest text-[#8D8D96]">Period</th>
+                    <th className="px-5 py-3.5 text-[10px] font-bold uppercase tracking-widest text-[#8D8D96]">Amount</th>
+                    <th className="px-5 py-3.5 text-[10px] font-bold uppercase tracking-widest text-[#8D8D96]">Received On</th>
+                    <th className="px-5 py-3.5 text-[10px] font-bold uppercase tracking-widest text-[#8D8D96]">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#1A1C26]">
+                  {rentLedger
+                    .filter(e => !ledgerTenantFilter || e.tenant_id === ledgerTenantFilter)
+                    .map(entry => {
+                      const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+                      const periodLabel = `${monthNames[(entry.cycle_month - 1)] ?? ''} ${entry.cycle_year}`
+                      const receivedOn = entry.paid_date ? formatDate(entry.paid_date.slice(0, 10)) : '—'
+                      const propertyLabel = entry.property_name
+                        ? `${entry.property_name}${entry.unit_number ? ` · ${entry.unit_number}` : ''}`
+                        : '—'
+                      return (
+                        <tr key={entry.id} className="hover:bg-[#141519] transition-colors">
+                          <td className="px-5 py-4">
+                            <p className="font-semibold text-white">{entry.tenant_name ?? '—'}</p>
+                            {entry.tenant_access_id && (
+                              <p className="text-[11px] text-[#8D8D96] mt-0.5">{entry.tenant_access_id}</p>
+                            )}
+                          </td>
+                          <td className="px-5 py-4 text-[#C0C0C5]">{propertyLabel}</td>
+                          <td className="px-5 py-4 text-white font-medium">{periodLabel}</td>
+                          <td className="px-5 py-4">
+                            <span className="font-bold text-[#32C382]">{formatCurrency(entry.amount_paid)}</span>
+                          </td>
+                          <td className="px-5 py-4 text-[#8D8D96]">{receivedOn}</td>
+                          <td className="px-5 py-4">
+                            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#32C382]/30 bg-[#32C382]/10 px-2.5 py-1 text-[10px] font-bold uppercase text-[#32C382]">
+                              <CheckCircle2 className="h-3 w-3" /> Paid
+                            </span>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile cards */}
+            <div className="md:hidden space-y-3">
+              {rentLedger
+                .filter(e => !ledgerTenantFilter || e.tenant_id === ledgerTenantFilter)
+                .map(entry => {
+                  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+                  const periodLabel = `${monthNames[(entry.cycle_month - 1)] ?? ''} ${entry.cycle_year}`
+                  const receivedOn = entry.paid_date ? formatDate(entry.paid_date.slice(0, 10)) : '—'
+                  const propertyLabel = entry.property_name
+                    ? `${entry.property_name}${entry.unit_number ? ` · ${entry.unit_number}` : ''}`
+                    : '—'
+                  return (
+                    <div key={entry.id} className="rounded-xl border border-[#272839] bg-[#101114] p-4 space-y-2">
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <p className="font-bold text-white font-['Sora']">{entry.tenant_name ?? '—'}</p>
+                          <p className="text-xs text-[#8D8D96]">{propertyLabel}</p>
+                        </div>
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-[#32C382]/30 bg-[#32C382]/10 px-2.5 py-1 text-[10px] font-bold uppercase text-[#32C382] shrink-0">
+                          <CheckCircle2 className="h-3 w-3" /> Paid
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-[#8D8D96]">{periodLabel} · {receivedOn}</span>
+                        <span className="font-bold text-[#32C382]">{formatCurrency(entry.amount_paid)}</span>
+                      </div>
+                    </div>
+                  )
+                })}
+            </div>
+
+            {/* Summary totals */}
+            {(() => {
+              const filtered = rentLedger.filter(e => !ledgerTenantFilter || e.tenant_id === ledgerTenantFilter)
+              const total = filtered.reduce((sum, e) => sum + e.amount_paid, 0)
+              return filtered.length > 1 ? (
+                <div className="mt-4 flex justify-end">
+                  <div className="rounded-xl border border-[#272839] bg-[#101114] px-5 py-3 text-sm">
+                    <span className="text-[#8D8D96]">{filtered.length} payment{filtered.length !== 1 ? 's' : ''} · Total collected: </span>
+                    <span className="font-bold text-[#32C382]">{formatCurrency(total)}</span>
+                  </div>
+                </div>
+              ) : null
+            })()}
+          </>
+        )}
+      </div>
     </div>
   )
 }

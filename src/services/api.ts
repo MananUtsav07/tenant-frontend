@@ -35,6 +35,7 @@ import type {
   OwnerAiSettingsResponse,
   OwnerNotification,
   OwnerRentPaymentApproval,
+  RentLedgerEntry,
   OwnerNotificationPreferences,
   OwnerTelegramDeliveryLog,
   OwnerSummary,
@@ -256,6 +257,12 @@ export const api = {
 
   getOwnerRentPaymentApprovals: (token: string) =>
     request<{ ok: true; approvals: OwnerRentPaymentApproval[] }>('/api/owners/rent-payment-approvals', { token }),
+
+  getOwnerRentLedger: (token: string, tenantId?: string) =>
+    request<{ ok: true; entries: RentLedgerEntry[] }>(
+      `/api/owners/rent-ledger${tenantId ? `?tenant_id=${encodeURIComponent(tenantId)}` : ''}`,
+      { token },
+    ),
 
   reviewOwnerRentPaymentApproval: (
     token: string,

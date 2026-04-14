@@ -40,6 +40,7 @@ export const ROUTES = {
   ownerTickets: '/owner/tickets',
   ownerMaintenance: '/owner/maintenance',
   ownerNotifications: '/owner/notifications',
+  ownerAnalytics: '/owner/analytics',
   ownerAutomation: '/owner/automation',
   ownerAutomationActivity: '/owner/automation/activity',
   ownerAiSettings: '/owner/ai-settings',
