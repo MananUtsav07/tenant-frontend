@@ -227,6 +227,44 @@ export function OwnerAnalyticsPage() {
 
   const bars = chartView === 'monthly' ? analytics.monthlyBars : analytics.quarterlyBars
   const currencyCode = owner?.organization?.currency_code
+  const summaryCards = [
+    {
+      title: 'Collection Rate',
+      value: `${analytics.collectionRate}%`,
+      hint: `${formatCurrency(analytics.totalPaid, currencyCode)} received`,
+      tooltip:
+        'Shows how much rent has been collected compared to the total rent due across your portfolio.',
+      icon: <TrendingUp className="h-5 w-5" />,
+      tone: 'text-[#4E79FF] bg-[#4E79FF]/15',
+    },
+    {
+      title: 'Total Received',
+      value: formatCurrency(analytics.totalPaid, currencyCode),
+      hint: `Out of ${formatCurrency(analytics.totalDue, currencyCode)}`,
+      tooltip:
+        'This is the total rent amount successfully received from tenants for the selected analytics data.',
+      icon: <Wallet className="h-5 w-5" />,
+      tone: 'text-[#32C382] bg-[#32C382]/15',
+    },
+    {
+      title: 'Pending This Month',
+      value: formatCurrency(analytics.pendingAmount, currencyCode),
+      hint: analytics.topPendingTenants.length > 0 ? `${analytics.topPendingTenants.length} tenants pending` : 'No current pending amount',
+      tooltip:
+        'This month pending amount is the unpaid balance still expected from tenants in the current billing cycle.',
+      icon: <ArrowUpRight className="h-5 w-5" />,
+      tone: 'text-[#EBCF42] bg-[#EBCF42]/15',
+    },
+    {
+      title: 'Overdue Rent',
+      value: formatCurrency(analytics.overdueAmount, currencyCode),
+      hint: analytics.overdueAmount > 0 ? 'Needs follow-up' : 'No overdue balance',
+      tooltip:
+        'Overdue rent includes balances that have crossed their due date and now need follow-up from the owner.',
+      icon: <AlertTriangle className="h-5 w-5" />,
+      tone: 'text-[#F25461] bg-[#F25461]/15',
+    },
+  ]
 
   return (
     <div className="p-6 w-full bg-[#06070B] min-h-screen text-white">
@@ -253,52 +291,26 @@ export function OwnerAnalyticsPage() {
             animate="show"
             className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6"
           >
-            {[
-              {
-                title: 'Collection Rate',
-                value: `${analytics.collectionRate}%`,
-                hint: `${formatCurrency(analytics.totalPaid, currencyCode)} received`,
-                icon: <TrendingUp className="h-5 w-5" />,
-                tone: 'text-[#4E79FF] bg-[#4E79FF]/15',
-              },
-              {
-                title: 'Total Received',
-                value: formatCurrency(analytics.totalPaid, currencyCode),
-                hint: `Out of ${formatCurrency(analytics.totalDue, currencyCode)}`,
-                icon: <Wallet className="h-5 w-5" />,
-                tone: 'text-[#32C382] bg-[#32C382]/15',
-              },
-              {
-                title: 'Pending This Month',
-                value: formatCurrency(analytics.pendingAmount, currencyCode),
-                hint: analytics.topPendingTenants.length > 0 ? `${analytics.topPendingTenants.length} tenants pending` : 'No current pending amount',
-                icon: <ArrowUpRight className="h-5 w-5" />,
-                tone: 'text-[#EBCF42] bg-[#EBCF42]/15',
-              },
-              {
-                title: 'Overdue Rent',
-                value: formatCurrency(analytics.overdueAmount, currencyCode),
-                hint: analytics.overdueAmount > 0 ? 'Needs follow-up' : 'No overdue balance',
-                icon: <AlertTriangle className="h-5 w-5" />,
-                tone: 'text-[#F25461] bg-[#F25461]/15',
-              },
-            ].map((card) => (
+            {summaryCards.map((card) => (
               <motion.div
                 key={card.title}
                 variants={revealUp}
                 whileInView="show"
                 viewport={viewportOnce}
-                className="bg-[#101114] border border-[#272839] rounded-xl p-6"
+                className="group relative bg-[#101114] border border-[#272839] rounded-xl p-6"
               >
                 <div className="flex items-center justify-between mb-5">
                   <div className={`flex h-11 w-11 items-center justify-center rounded-full ${card.tone}`}>
                     {card.icon}
                   </div>
-                  <span className="text-[10px] uppercase tracking-widest text-[#8D8D96]">Important</span>
                 </div>
                 <p className="text-[11px] uppercase tracking-widest text-[#8D8D96]">{card.title}</p>
                 <p className="mt-2 font-['Sora'] text-3xl font-extrabold text-white">{card.value}</p>
                 <p className="mt-2 text-sm text-[#8D8D96]">{card.hint}</p>
+
+                <div className="pointer-events-none absolute left-6 right-6 top-[calc(100%-10px)] z-20 rounded-xl border border-[#272839] bg-[#06070B] px-3 py-2 text-xs leading-relaxed text-[#C9CBD4] opacity-0 shadow-[0_18px_40px_rgba(0,0,0,0.45)] transition-all duration-200 group-hover:translate-y-2 group-hover:opacity-100">
+                  {card.tooltip}
+                </div>
               </motion.div>
             ))}
           </motion.div>
