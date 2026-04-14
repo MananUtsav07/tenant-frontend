@@ -15,6 +15,7 @@ type DashboardLayoutProps = {
   subtitle?: string
   identityPrimary: string
   identitySecondary?: string
+  identityBadge?: ReactNode
   navItems: DashboardNavItem[]
   onLogout: () => void
   showTopNavbar?: boolean
@@ -25,6 +26,7 @@ type DashboardLayoutProps = {
 export function DashboardLayout({
   identityPrimary,
   identitySecondary,
+  identityBadge,
   navItems,
   onLogout,
   topBanner,
@@ -54,6 +56,7 @@ export function DashboardLayout({
       <div className="mt-5 rounded-xl bg-[#141519] border border-[#272839] p-3.5">
         <p className="text-sm font-semibold text-white">{identityPrimary}</p>
         {identitySecondary ? <p className="mt-0.5 text-xs text-[#8D8D96]">{identitySecondary}</p> : null}
+        {identityBadge ? <div className="mt-2">{identityBadge}</div> : null}
       </div>
 
       {/* Navigation */}

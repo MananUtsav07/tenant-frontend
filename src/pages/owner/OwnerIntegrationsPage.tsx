@@ -164,8 +164,7 @@ export function OwnerIntegrationsPage() {
   const [waConnecting, setWaConnecting] = useState(false)
 
   const isProfessional = billing?.status === 'active' && billing.planCode === 'professional'
-  const isOnTrial = billing?.status === 'trialing' && !billing.isTrialExpired
-  const canUseWhatsApp = isProfessional || isOnTrial
+  const canUseWhatsApp = isProfessional
 
   const fetchIntegrations = useCallback(async () => {
     if (!token) return

@@ -1,75 +1,139 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { CheckCircle, Minus, Zap, MessageCircle, Send, Wallet, Infinity, Settings, ShieldCheck, ChevronDown, Calendar } from 'lucide-react'
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import {
+  CheckCircle,
+  Minus,
+  Zap,
+  MessageCircle,
+  Send,
+  Wallet,
+  Infinity,
+  Settings,
+  ShieldCheck,
+  ChevronDown,
+  Calendar,
+} from "lucide-react";
 
-import { usePageSeo } from '../../hooks/usePageSeo'
-import { ROUTES } from '../../routes/constants'
-import { revealUp, staggerParent, useMotionVariants, viewportOnce } from '../../utils/motion'
+import { usePageSeo } from "../../hooks/usePageSeo";
+import { ROUTES } from "../../routes/constants";
+import {
+  revealUp,
+  staggerParent,
+  useMotionVariants,
+  viewportOnce,
+} from "../../utils/motion";
 
 const comparisonFeatures = [
-  { name: 'Properties', starter: '5', professional: '25', enterprise: 'Unlimited' },
-  { name: 'Tenants', starter: '10', professional: '50', enterprise: 'Unlimited' },
-  { name: 'Email Notifications', starter: true, professional: true, enterprise: true },
-  { name: 'Telegram Bot', starter: true, professional: true, enterprise: true },
-  { name: 'Payment Tracking', starter: true, professional: true, enterprise: true },
-  { name: 'Smart Reminders', starter: true, professional: true, enterprise: true },
-  { name: 'AI Automation', starter: false, professional: true, enterprise: true },
-  { name: 'WhatsApp Integration', starter: false, professional: true, enterprise: true },
-  { name: 'Priority Support', starter: false, professional: false, enterprise: true },
-  { name: 'Custom Integrations', starter: false, professional: false, enterprise: true },
-]
+  {
+    name: "Properties",
+    starter: "5",
+    professional: "25",
+    enterprise: "Unlimited",
+  },
+  {
+    name: "Tenants",
+    starter: "10",
+    professional: "50",
+    enterprise: "Unlimited",
+  },
+  {
+    name: "Email Notifications",
+    starter: true,
+    professional: true,
+    enterprise: true,
+  },
+  { name: "Telegram Bot", starter: true, professional: true, enterprise: true },
+  {
+    name: "Payment Tracking",
+    starter: true,
+    professional: true,
+    enterprise: true,
+  },
+  {
+    name: "Smart Reminders",
+    starter: true,
+    professional: true,
+    enterprise: true,
+  },
+  {
+    name: "AI Automation",
+    starter: false,
+    professional: true,
+    enterprise: true,
+  },
+  {
+    name: "WhatsApp Integration",
+    starter: false,
+    professional: true,
+    enterprise: true,
+  },
+  {
+    name: "Priority Support",
+    starter: false,
+    professional: false,
+    enterprise: true,
+  },
+  {
+    name: "Custom Integrations",
+    starter: false,
+    professional: false,
+    enterprise: true,
+  },
+];
 
 const faqs = [
   {
-    question: 'Can I change plans later?',
+    question: "Can I change plans later?",
     answer:
-      'Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle, with pro-rated adjustments applied automatically to your account.',
+      "Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle, with pro-rated adjustments applied automatically to your account.",
   },
   {
-    question: 'Is there a free trial?',
+    question: "Is there a free trial?",
     answer:
-      'Yes! We offer a 14-day free trial with no credit card required. You get full access to all features. After 14 days, choose a Starter or Professional plan to continue.',
+      "Yes! We offer a 14-day free trial on the Starter plan with no credit card required. You get full access to Starter plan features during the trial. To use Professional features like WhatsApp integration and AI automation, you need to subscribe to the Professional plan directly.",
   },
   {
     question: "What's included in AI automation?",
     answer:
-      'Our AI handles automated tenant screening, maintenance request categorization, rent payment predictions, and intelligent response drafts for common tenant inquiries.',
+      "Our AI handles automated tenant screening, maintenance request categorization, rent payment predictions, and intelligent response drafts for common tenant inquiries.",
   },
   {
-    question: 'How does the WhatsApp integration work?',
+    question: "How does the WhatsApp integration work?",
     answer:
-      'Prophives connects to your official WhatsApp Business API, allowing you to send automated rent reminders, maintenance updates, and collect documents directly through chat.',
+      "Prophives connects to your official WhatsApp Business API, allowing you to send automated rent reminders, maintenance updates, and collect documents directly through chat.",
   },
-]
+];
 
 function ComparisonCell({ value }: { value: boolean | string }) {
-  if (typeof value === 'string') {
-    return <span className="font-bold text-white">{value}</span>
+  if (typeof value === "string") {
+    return <span className="font-bold text-white">{value}</span>;
   }
   if (value) {
-    return <CheckCircle className="mx-auto h-5 w-5 text-[#32C382]" />
+    return <CheckCircle className="mx-auto h-5 w-5 text-[#32C382]" />;
   }
-  return <Minus className="mx-auto h-5 w-5 text-[#8D8D96]/30" />
+  return <Minus className="mx-auto h-5 w-5 text-[#8D8D96]/30" />;
 }
 
 export function PricingPage() {
   usePageSeo({
-    title: 'Pricing',
-    description: 'Explore Prophives pricing for Starter, Professional, and Enterprise property management plans.',
+    title: "Pricing",
+    description:
+      "Explore Prophives pricing for Starter, Professional, and Enterprise property management plans.",
     canonicalPath: ROUTES.pricing,
     structuredData: {
-      '@context': 'https://schema.org',
-      '@type': 'PriceSpecification',
-      name: 'Prophives Pricing',
-      description: 'Starter, Professional, and Enterprise pricing options for AI-powered property management.',
+      "@context": "https://schema.org",
+      "@type": "PriceSpecification",
+      name: "Prophives Pricing",
+      description:
+        "Starter, Professional, and Enterprise pricing options for AI-powered property management.",
     },
-  })
+  });
 
-  const revealVariants = useMotionVariants(revealUp)
-  const staggerVariants = useMotionVariants(staggerParent)
+  const revealVariants = useMotionVariants(revealUp);
+  const staggerVariants = useMotionVariants(staggerParent);
 
-  const [openFaq, setOpenFaq] = useState<number>(0)
+  const [openFaq, setOpenFaq] = useState<number>(0);
 
   return (
     <>
@@ -88,7 +152,8 @@ export function PricingPage() {
             Simple, Transparent Pricing
           </h1>
           <p className="text-[#8D8D96] text-lg max-w-2xl mx-auto font-['Manrope']">
-            Choose the plan that fits your portfolio size. No hidden fees, just pure AI-driven property management efficiency.
+            Choose the plan that fits your portfolio size. No hidden fees, just
+            pure AI-driven property management efficiency.
           </p>
         </motion.div>
       </section>
@@ -108,8 +173,12 @@ export function PricingPage() {
             className="bg-[#101114] p-8 rounded-xl shadow-sm border border-[#272839] hover:border-[rgba(34,81,227,0.4)] transition-all flex flex-col"
           >
             <div className="mb-8">
-              <h3 className="text-xl font-bold mb-2 font-['Sora'] text-white">Starter</h3>
-              <p className="text-[#8D8D96] text-sm">Perfect for individual landlords just starting their journey.</p>
+              <h3 className="text-xl font-bold mb-2 font-['Sora'] text-white">
+                Starter
+              </h3>
+              <p className="text-[#8D8D96] text-sm">
+                Perfect for individual landlords just starting their journey.
+              </p>
             </div>
             <div className="mb-8">
               <span className="text-4xl font-extrabold text-white">$29</span>
@@ -158,8 +227,12 @@ export function PricingPage() {
               Most Popular
             </div>
             <div className="mb-8">
-              <h3 className="text-xl font-bold mb-2 font-['Sora'] text-white">Professional</h3>
-              <p className="text-[#8D8D96] text-sm">The full suite for serious property managers.</p>
+              <h3 className="text-xl font-bold mb-2 font-['Sora'] text-white">
+                Professional
+              </h3>
+              <p className="text-[#8D8D96] text-sm">
+                The full suite for serious property managers.
+              </p>
             </div>
             <div className="mb-8 text-[#4E79FF]">
               <span className="text-4xl font-extrabold">$99</span>
@@ -195,9 +268,11 @@ export function PricingPage() {
               to={ROUTES.ownerLogin}
               className="w-full py-4 bg-[#2251E3] text-white font-bold rounded-lg hover:bg-[#4E79FF] transition-all shadow-lg shadow-[#2251E3]/30 text-center block"
             >
-              Start Free Trial — Then Go Pro
+              Login &amp; Subscribe
             </Link>
-            <p className="text-center text-[#8D8D96] text-xs mt-2">14 days free · No card required</p>
+            <p className="text-center text-[#8D8D96] text-xs mt-2">
+              Payment required · Cancel anytime
+            </p>
           </motion.div>
 
           {/* Enterprise Plan */}
@@ -206,8 +281,12 @@ export function PricingPage() {
             className="bg-[#101114] p-8 rounded-xl shadow-sm border border-[#272839] hover:border-[rgba(34,81,227,0.4)] transition-all flex flex-col"
           >
             <div className="mb-8">
-              <h3 className="text-xl font-bold mb-2 font-['Sora'] text-white">Enterprise</h3>
-              <p className="text-[#8D8D96] text-sm">Bespoke solutions for large-scale portfolios and agencies.</p>
+              <h3 className="text-xl font-bold mb-2 font-['Sora'] text-white">
+                Enterprise
+              </h3>
+              <p className="text-[#8D8D96] text-sm">
+                Bespoke solutions for large-scale portfolios and agencies.
+              </p>
             </div>
             <div className="mb-8">
               <span className="text-4xl font-extrabold text-white">Custom</span>
@@ -262,16 +341,29 @@ export function PricingPage() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-[#141519] border-b border-[#272839]">
-                  <th className="p-6 font-bold text-sm uppercase tracking-wider text-[#8D8D96] font-['DM_Sans']">Feature</th>
-                  <th className="p-6 font-bold text-sm uppercase tracking-wider text-center font-['DM_Sans'] text-white">Starter</th>
-                  <th className="p-6 font-bold text-sm uppercase tracking-wider text-center text-[#4E79FF] font-['DM_Sans']">Professional</th>
-                  <th className="p-6 font-bold text-sm uppercase tracking-wider text-center font-['DM_Sans'] text-white">Enterprise</th>
+                  <th className="p-6 font-bold text-sm uppercase tracking-wider text-[#8D8D96] font-['DM_Sans']">
+                    Feature
+                  </th>
+                  <th className="p-6 font-bold text-sm uppercase tracking-wider text-center font-['DM_Sans'] text-white">
+                    Starter
+                  </th>
+                  <th className="p-6 font-bold text-sm uppercase tracking-wider text-center text-[#4E79FF] font-['DM_Sans']">
+                    Professional
+                  </th>
+                  <th className="p-6 font-bold text-sm uppercase tracking-wider text-center font-['DM_Sans'] text-white">
+                    Enterprise
+                  </th>
                 </tr>
               </thead>
               <tbody className="text-sm">
                 {comparisonFeatures.map((feature, index) => (
-                  <tr key={feature.name} className={`border-b border-[#272839] ${index % 2 === 0 ? 'bg-[#141519]' : 'bg-[#101114]'}`}>
-                    <td className="p-6 font-medium text-white">{feature.name}</td>
+                  <tr
+                    key={feature.name}
+                    className={`border-b border-[#272839] ${index % 2 === 0 ? "bg-[#141519]" : "bg-[#101114]"}`}
+                  >
+                    <td className="p-6 font-medium text-white">
+                      {feature.name}
+                    </td>
                     <td className="p-6 text-center">
                       <ComparisonCell value={feature.starter} />
                     </td>
@@ -320,14 +412,14 @@ export function PricingPage() {
                 <span>{faq.question}</span>
                 <ChevronDown
                   className={`h-5 w-5 shrink-0 text-[#8D8D96] transition-transform duration-200 ${
-                    openFaq === index ? 'rotate-180' : ''
+                    openFaq === index ? "rotate-180" : ""
                   }`}
                 />
               </button>
               {openFaq === index && (
                 <motion.p
                   initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
+                  animate={{ opacity: 1, height: "auto" }}
                   className="mt-4 text-[#8D8D96] text-sm leading-relaxed"
                 >
                   {faq.answer}
@@ -351,18 +443,19 @@ export function PricingPage() {
             Not sure which plan? Talk to our team
           </h2>
           <p className="text-white/70 text-lg mb-8 max-w-xl">
-            Our specialists are ready to help you find the perfect configuration for your unique property portfolio.
+            Our specialists are ready to help you find the perfect configuration
+            for your unique property portfolio.
           </p>
           <Link
             to={ROUTES.contact}
-            style={{ color: '#2251E3' }}
+            style={{ color: "#2251E3" }}
             className="bg-white font-bold py-4 px-10 rounded-xl hover:bg-[rgba(255,255,255,0.9)] transition-all shadow-md flex items-center gap-2"
           >
-            <Calendar className="h-5 w-5" style={{ color: '#2251E3' }} />
+            <Calendar className="h-5 w-5" style={{ color: "#2251E3" }} />
             Schedule a Call
           </Link>
         </motion.div>
       </section>
     </>
-  )
+  );
 }

@@ -2,18 +2,22 @@ import {
   AlertTriangle,
   BrainCircuit,
   CalendarDays,
+  Crown,
   FileText,
   Info,
+  Lock,
   Save,
   Sparkles,
 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { api } from '../../services/api'
-import type { OwnerAiSettings } from '../../types/api'
+import { ROUTES } from '../../routes/constants'
+import type { BillingState, OwnerAiSettings } from '../../types/api'
 
 // ─── Gold toggle switch ───────────────────────────────────────────────────────
 
@@ -100,19 +104,26 @@ export function OwnerAiSettingsPage() {
   const { token } = useOwnerAuth()
   const [settings, setSettings] = useState<OwnerAiSettings | null>(null)
   const [aiConfigured, setAiConfigured] = useState(false)
+  const [billing, setBilling] = useState<BillingState | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
+
+  const isProfessional = billing?.status === 'active' && billing.planCode === 'professional'
 
   const loadSettings = useCallback(async () => {
     if (!token) return
     try {
       setLoading(true)
       setError(null)
-      const response = await api.getOwnerAiSettings(token)
-      setSettings(response.settings)
-      setAiConfigured(response.ai_configured)
+      const [settingsRes, billingRes] = await Promise.all([
+        api.getOwnerAiSettings(token),
+        api.getBillingState(token),
+      ])
+      setSettings(settingsRes.settings)
+      setAiConfigured(settingsRes.ai_configured)
+      setBilling(billingRes.billing)
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : 'Failed to load AI settings')
     } finally {
@@ -162,7 +173,7 @@ export function OwnerAiSettingsPage() {
     }
   }
 
-  const isDisabled = !aiConfigured
+  const isDisabled = !aiConfigured || !isProfessional
 
   return (
     <div className="min-h-screen bg-[#FEFAEF]">
@@ -184,8 +195,33 @@ export function OwnerAiSettingsPage() {
           </div>
         </header>
 
+        {/* ── Professional plan gate ── */}
+        {!loading && !isProfessional && (
+          <div className="mb-8 flex items-start gap-4 rounded-2xl border border-[#2251E3]/30 bg-[rgba(34,81,227,0.06)] p-5 shadow-sm">
+            <div className="shrink-0 rounded-xl bg-[#2251E3]/10 p-2.5">
+              <Lock className="h-5 w-5 text-[#2251E3]" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <Crown className="h-4 w-4 text-[#4E79FF]" />
+                <h4 className="font-['Sora'] font-bold text-[#1A1A1A] text-sm">Professional Plan Required</h4>
+              </div>
+              <p className="text-sm text-[#6B7280] font-[Manrope,sans-serif]">
+                AI automation features are available on the Professional plan. Upgrade to enable ticket classification, smart reminders, and AI-powered summaries.
+              </p>
+            </div>
+            <Link
+              to={ROUTES.ownerBilling}
+              className="shrink-0 flex items-center gap-1.5 bg-[#2251E3] text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-[#4E79FF] transition-colors"
+            >
+              <Crown className="h-3.5 w-3.5" />
+              Upgrade
+            </Link>
+          </div>
+        )}
+
         {/* ── Not-configured warning ── */}
-        {!loading && !aiConfigured && (
+        {!loading && !aiConfigured && isProfessional && (
           <div className="mb-8 flex items-start gap-2 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 shadow-sm">
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
             <span>OpenAI is not configured yet. AI features cannot be enabled.</span>

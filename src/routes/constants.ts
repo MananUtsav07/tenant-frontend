@@ -46,6 +46,7 @@ export const ROUTES = {
   ownerIntegrations: '/owner/integrations',
   ownerProfile: '/owner/profile',
   ownerBilling: '/owner/billing',
+  ownerContact: '/owner/contact',
   tenantDashboard: '/tenant/dashboard',
   tenantTickets: '/tenant/tickets',
   tenantSupport: '/tenant/support',

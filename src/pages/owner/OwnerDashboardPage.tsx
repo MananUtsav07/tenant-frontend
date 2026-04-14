@@ -368,7 +368,9 @@ export function OwnerDashboardPage() {
                         ? `${billing.planCode === 'professional' ? 'Professional' : 'Starter'} Plan — Active`
                         : billing.isTrialExpired
                         ? 'Free Trial Expired'
-                        : `Free Trial — ${billing.daysLeftInTrial} day${billing.daysLeftInTrial !== 1 ? 's' : ''} remaining`}
+                        : billing.daysLeftInTrial !== null
+                        ? `Free Trial — ${billing.daysLeftInTrial} day${billing.daysLeftInTrial !== 1 ? 's' : ''} remaining`
+                        : 'Free Trial — Active'}
                     </p>
                     <p className="text-xs text-[#8D8D96]">
                       {billing.status === 'active'

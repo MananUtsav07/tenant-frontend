@@ -1,4 +1,4 @@
-import { Bell, Briefcase, Building2, FileText, LayoutDashboard, LifeBuoy, MailWarning, Plug, UserCircle, Users, AlertTriangle, CreditCard } from 'lucide-react'
+import { Bell, Briefcase, Building2, Crown, FileText, Headphones, LayoutDashboard, LifeBuoy, MailWarning, Plug, UserCircle, Users, AlertTriangle, CreditCard, Clock } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
@@ -45,7 +45,7 @@ function OwnerLayoutContent() {
       setResendState('sent')
     } catch {
       setResendState('error')
-      setTimeout(() => setResendState('idle'), 3000)
+      setTimeout(() => setResendState('idle'), 8000)
     }
   }
 
@@ -62,7 +62,40 @@ function OwnerLayoutContent() {
     // { to: ROUTES.ownerAiSettings, label: 'AI Settings', icon: <Sparkles className="h-4 w-4" /> },
     { to: ROUTES.ownerIntegrations, label: 'Integrations', icon: <Plug className="h-4 w-4" /> },
     { to: ROUTES.ownerProfile, label: 'Profile', icon: <UserCircle className="h-4 w-4" /> },
+    { to: ROUTES.ownerBilling, label: 'Billing & Plan', icon: <CreditCard className="h-4 w-4" /> },
+    { to: ROUTES.ownerContact, label: 'Contact Support', icon: <Headphones className="h-4 w-4" /> },
   ]
+
+  const planBadge = billing ? (() => {
+    if (billing.status === 'trialing' && !billing.isTrialExpired) {
+      return (
+        <div className="flex items-center gap-1.5 rounded-md bg-amber-950/60 border border-amber-800/40 px-2 py-1">
+          <Clock className="h-3 w-3 text-amber-400 shrink-0" />
+          <span className="text-[10px] font-semibold text-amber-300 leading-none">
+            {billing.daysLeftInTrial !== null
+              ? `Trial · ${billing.daysLeftInTrial} day${billing.daysLeftInTrial !== 1 ? 's' : ''} left`
+              : 'Free Trial Active'}
+          </span>
+        </div>
+      )
+    }
+    if (billing.status === 'active' && billing.planCode === 'professional') {
+      return (
+        <div className="flex items-center gap-1.5 rounded-md bg-[rgba(34,81,227,0.15)] border border-[#2251E3]/30 px-2 py-1">
+          <Crown className="h-3 w-3 text-[#4E79FF] shrink-0" />
+          <span className="text-[10px] font-semibold text-[#4E79FF] leading-none">Professional</span>
+        </div>
+      )
+    }
+    if (billing.status === 'active' && billing.planCode === 'starter') {
+      return (
+        <div className="flex items-center gap-1.5 rounded-md bg-white/5 border border-white/10 px-2 py-1">
+          <span className="text-[10px] font-semibold text-[#8D8D96] leading-none">Starter Plan</span>
+        </div>
+      )
+    }
+    return null
+  })() : null
 
   const trialBanner = billing?.status === 'trialing' && !billing.isTrialExpired && billing.daysLeftInTrial !== null && billing.daysLeftInTrial <= 5 ? (
     <div className="flex items-center gap-3 px-4 py-2.5 bg-amber-950/60 border-b border-amber-800/40 text-sm">
@@ -84,21 +117,35 @@ function OwnerLayoutContent() {
 
   const emailVerifiedBanner =
     owner && owner.email_verified === false ? (
-      <div className="flex items-center gap-3 px-4 py-2.5 bg-[#1A1500] border-b border-[#3A3000] text-sm">
-        <MailWarning className="h-4 w-4 shrink-0 text-[#FED609]" />
-        <span className="text-[#C8B878] flex-1">
+      <div className={`flex items-center gap-3 px-4 py-2.5 border-b text-sm transition-colors ${
+        resendState === 'error'
+          ? 'bg-red-950/60 border-red-800/40'
+          : resendState === 'sent'
+          ? 'bg-green-950/60 border-green-800/40'
+          : 'bg-[#1A1500] border-[#3A3000]'
+      }`}>
+        <MailWarning className={`h-4 w-4 shrink-0 ${resendState === 'error' ? 'text-red-400' : resendState === 'sent' ? 'text-green-400' : 'text-[#FED609]'}`} />
+        <span className={`flex-1 ${resendState === 'error' ? 'text-red-300' : resendState === 'sent' ? 'text-green-300' : 'text-[#C8B878]'}`}>
           {resendState === 'sent'
-            ? 'Verification email sent — check your inbox.'
+            ? 'Verification email sent — check your inbox (and spam folder).'
+            : resendState === 'error'
+            ? 'Failed to send email. Check your internet connection or try again later.'
             : 'Please verify your email address to receive rent alerts and notifications.'}
         </span>
-        <button
-          type="button"
-          onClick={handleResend}
-          disabled={resendState === 'sending' || resendState === 'sent'}
-          className="shrink-0 text-xs font-semibold text-[#FED609] hover:underline disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-        >
-          {resendState === 'sending' ? 'Sending…' : resendState === 'sent' ? 'Sent' : resendState === 'error' ? 'Failed — try again' : 'Resend email'}
-        </button>
+        {resendState !== 'sent' && (
+          <button
+            type="button"
+            onClick={handleResend}
+            disabled={resendState === 'sending'}
+            className={`shrink-0 text-xs font-bold px-3 py-1 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${
+              resendState === 'error'
+                ? 'bg-red-600 text-white hover:bg-red-500'
+                : 'bg-[#FED609] text-[#1A1A1A] hover:bg-[#FFD70B]'
+            }`}
+          >
+            {resendState === 'sending' ? 'Sending…' : resendState === 'error' ? 'Retry' : 'Resend email'}
+          </button>
+        )}
       </div>
     ) : undefined
 
@@ -110,6 +157,7 @@ function OwnerLayoutContent() {
       subtitle="Manage your properties, tenants, and automation"
       identityPrimary={organizationName}
       identitySecondary={owner?.email || undefined}
+      identityBadge={planBadge}
       navItems={ownerLinks}
       onLogout={logout}
       topBanner={topBanner}
