@@ -82,11 +82,6 @@ const TenantIntegrationsPage = lazyNamedPage(() => import('../pages/tenant/Tenan
 const TenantProfilePage = lazyNamedPage(() => import('../pages/tenant/TenantProfilePage'), 'TenantProfilePage')
 
 const AdminDashboardPage = lazyNamedPage(() => import('../pages/admin/AdminDashboardPage'), 'AdminDashboardPage')
-const AdminOrganizationsPage = lazyNamedPage(() => import('../pages/admin/AdminOrganizationsPage'), 'AdminOrganizationsPage')
-const AdminOrganizationDetailPage = lazyNamedPage(
-  () => import('../pages/admin/AdminOrganizationDetailPage'),
-  'AdminOrganizationDetailPage',
-)
 const AdminOwnersPage = lazyNamedPage(() => import('../pages/admin/AdminOwnersPage'), 'AdminOwnersPage')
 const AdminTenantsPage = lazyNamedPage(() => import('../pages/admin/AdminTenantsPage'), 'AdminTenantsPage')
 const AdminPropertiesPage = lazyNamedPage(() => import('../pages/admin/AdminPropertiesPage'), 'AdminPropertiesPage')
@@ -187,8 +182,6 @@ function AppRoutes() {
       <Route element={<AdminProtectedRoute />}>
         <Route element={<AdminLayout />}>
           <Route path={ROUTES.adminDashboard} element={<AdminDashboardPage />} />
-          <Route path={ROUTES.adminOrganizations} element={<AdminOrganizationsPage />} />
-          <Route path={ROUTES.adminOrganizationDetail} element={<AdminOrganizationDetailPage />} />
           <Route path={ROUTES.adminOwners} element={<AdminOwnersPage />} />
           <Route path={ROUTES.adminTenants} element={<AdminTenantsPage />} />
           <Route path={ROUTES.adminProperties} element={<AdminPropertiesPage />} />

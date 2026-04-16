@@ -11,7 +11,6 @@ import { OrganizationBadge } from '../../components/common/OrganizationBadge'
 import { SummaryCard } from '../../components/common/SummaryCard'
 import { StatusBadge } from '../../components/common/StatusBadge'
 import { useAdminAuth } from '../../hooks/useAdminAuth'
-import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
 import type { AdminOrganizationDetail } from '../../types/api'
 import { formatDateTime } from '../../utils/date'
@@ -56,8 +55,8 @@ export function AdminOrganizationDetailPage() {
               Operational view across users, properties, tickets, and subscriptions without the old bright admin-card treatment.
             </p>
           </div>
-          <Button to={ROUTES.adminOrganizations} variant="outline" size="sm">
-            Back to organizations
+          <Button to="/admin/dashboard" variant="outline" size="sm">
+            Back to dashboard
           </Button>
         </div>
       </div>

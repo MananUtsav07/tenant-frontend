@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 
 import { AdminPagination } from '../../components/admin/AdminPagination'
 import { AdminListToolbar } from '../../components/admin/AdminListToolbar'
@@ -7,12 +6,10 @@ import { DataTable } from '../../components/common/DataTable'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
-import { OrganizationBadge } from '../../components/common/OrganizationBadge'
 import { StatusBadge } from '../../components/common/StatusBadge'
 import { useAdminAuth } from '../../hooks/useAdminAuth'
-import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
-import type { AdminOrganizationRow, AdminTenantRow, PaginationMeta } from '../../types/api'
+import type { AdminTenantRow, PaginationMeta } from '../../types/api'
 import { formatCurrency, formatDateTime } from '../../utils/date'
 
 export function AdminTenantsPage() {
@@ -27,8 +24,6 @@ export function AdminTenantsPage() {
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState('created_at')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
-  const [organizationId, setOrganizationId] = useState('')
-  const [organizationOptions, setOrganizationOptions] = useState<AdminOrganizationRow[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -41,25 +36,15 @@ export function AdminTenantsPage() {
       try {
         setLoading(true)
         setError(null)
-        const [response, organizationsResponse] = await Promise.all([
-          api.getAdminTenants(token, {
-            page: pagination.page,
-            page_size: pagination.page_size,
-            search,
-            sort_by: sortBy,
-            sort_order: sortOrder,
-            organization_id: organizationId || undefined,
-          }),
-          api.getAdminOrganizations(token, {
-            page: 1,
-            page_size: 100,
-            sort_by: 'name',
-            sort_order: 'asc',
-          }),
-        ])
+        const response = await api.getAdminTenants(token, {
+          page: pagination.page,
+          page_size: pagination.page_size,
+          search,
+          sort_by: sortBy,
+          sort_order: sortOrder,
+        })
         setItems(response.items)
         setPagination(response.pagination)
-        setOrganizationOptions(organizationsResponse.items)
       } catch (loadError) {
         setError(loadError instanceof Error ? loadError.message : 'Failed to load tenants')
       } finally {
@@ -68,7 +53,7 @@ export function AdminTenantsPage() {
     }
 
     void load()
-  }, [token, pagination.page, pagination.page_size, search, sortBy, sortOrder, organizationId])
+  }, [token, pagination.page, pagination.page_size, search, sortBy, sortOrder])
 
   return (
     <section className="space-y-4">
@@ -93,15 +78,6 @@ export function AdminTenantsPage() {
           setSortOrder(value)
           setPagination((current) => ({ ...current, page: 1 }))
         }}
-        organizationId={organizationId}
-        onOrganizationIdChange={(value) => {
-          setOrganizationId(value)
-          setPagination((current) => ({ ...current, page: 1 }))
-        }}
-        organizationOptions={organizationOptions.map((organization) => ({
-          value: organization.id,
-          label: organization.name,
-        }))}
         sortOptions={[
           { value: 'created_at', label: 'Created' },
           { value: 'full_name', label: 'Name' },
@@ -119,20 +95,12 @@ export function AdminTenantsPage() {
 
       {!loading && items.length > 0 ? (
         <>
-          <DataTable headers={['Tenant', 'Organization', 'Access ID', 'Property', 'Rent', 'Status', 'Created']}>
+          <DataTable headers={['Tenant', 'Access ID', 'Property', 'Rent', 'Status', 'Created']}>
             {items.map((tenant) => (
               <tr key={tenant.id}>
                 <td className="px-4 py-3">
                   <p className="font-medium text-[var(--ph-text)]">{tenant.full_name}</p>
                   <p className="text-xs text-[var(--ph-text-muted)]">{tenant.email || tenant.owners?.email || 'No email'}</p>
-                </td>
-                <td className="px-4 py-3 text-slate-600">
-                  <Link
-                    to={ROUTES.adminOrganizationDetail.replace(':id', tenant.organization_id)}
-                    className="inline-flex hover:opacity-90"
-                  >
-                    <OrganizationBadge name={tenant.organizations?.name} slug={tenant.organizations?.slug} />
-                  </Link>
                 </td>
                 <td className="px-4 py-3 text-slate-700">{tenant.tenant_access_id}</td>
                 <td className="px-4 py-3 text-slate-600">
@@ -164,6 +132,3 @@ export function AdminTenantsPage() {
     </section>
   )
 }
-
-
-

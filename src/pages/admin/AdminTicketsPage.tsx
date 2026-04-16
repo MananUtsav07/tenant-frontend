@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from 'react'
-import { Link } from 'react-router-dom'
 
 import { AdminPagination } from '../../components/admin/AdminPagination'
 import { AdminListToolbar } from '../../components/admin/AdminListToolbar'
@@ -10,15 +9,13 @@ import { ErrorState } from '../../components/common/ErrorState'
 import { FormTextarea } from '../../components/common/FormInput'
 import { FormSelect } from '../../components/common/FormSelect'
 import { LoadingState } from '../../components/common/LoadingState'
-import { OrganizationBadge } from '../../components/common/OrganizationBadge'
 import { StatusBadge } from '../../components/common/StatusBadge'
 import { dashboardFormPanelClassName } from '../../components/common/formTheme'
 import { TicketReplyComposer } from '../../components/tickets/TicketReplyComposer'
 import { TicketThreadTimeline } from '../../components/tickets/TicketThreadTimeline'
 import { useAdminAuth } from '../../hooks/useAdminAuth'
-import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
-import type { AdminOrganizationRow, AdminTicketRow, PaginationMeta, SupportTicketThread, TenantTicket } from '../../types/api'
+import type { AdminTicketRow, PaginationMeta, SupportTicketThread, TenantTicket } from '../../types/api'
 import { formatDateTime } from '../../utils/date'
 
 const adminTicketStatuses: TenantTicket['status'][] = ['open', 'in_progress', 'resolved', 'closed']
@@ -35,8 +32,6 @@ export function AdminTicketsPage() {
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState('created_at')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
-  const [organizationId, setOrganizationId] = useState('')
-  const [organizationOptions, setOrganizationOptions] = useState<AdminOrganizationRow[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null)
@@ -58,25 +53,15 @@ export function AdminTicketsPage() {
       try {
         setLoading(true)
         setError(null)
-        const [response, organizationsResponse] = await Promise.all([
-          api.getAdminTickets(token, {
-            page: pagination.page,
-            page_size: pagination.page_size,
-            search,
-            sort_by: sortBy,
-            sort_order: sortOrder,
-            organization_id: organizationId || undefined,
-          }),
-          api.getAdminOrganizations(token, {
-            page: 1,
-            page_size: 100,
-            sort_by: 'name',
-            sort_order: 'asc',
-          }),
-        ])
+        const response = await api.getAdminTickets(token, {
+          page: pagination.page,
+          page_size: pagination.page_size,
+          search,
+          sort_by: sortBy,
+          sort_order: sortOrder,
+        })
         setItems(response.items)
         setPagination(response.pagination)
-        setOrganizationOptions(organizationsResponse.items)
       } catch (loadError) {
         setError(loadError instanceof Error ? loadError.message : 'Failed to load tickets')
       } finally {
@@ -85,7 +70,7 @@ export function AdminTicketsPage() {
     }
 
     void load()
-  }, [token, pagination.page, pagination.page_size, search, sortBy, sortOrder, organizationId])
+  }, [token, pagination.page, pagination.page_size, search, sortBy, sortOrder])
 
   useEffect(() => {
     if (items.length === 0) {
@@ -133,7 +118,6 @@ export function AdminTicketsPage() {
       search,
       sort_by: sortBy,
       sort_order: sortOrder,
-      organization_id: organizationId || undefined,
     })
     setItems(response.items)
     setPagination(response.pagination)
@@ -228,15 +212,6 @@ export function AdminTicketsPage() {
           setSortOrder(value)
           setPagination((current) => ({ ...current, page: 1 }))
         }}
-        organizationId={organizationId}
-        onOrganizationIdChange={(value) => {
-          setOrganizationId(value)
-          setPagination((current) => ({ ...current, page: 1 }))
-        }}
-        organizationOptions={organizationOptions.map((organization) => ({
-          value: organization.id,
-          label: organization.name,
-        }))}
         sortOptions={[
           { value: 'created_at', label: 'Created' },
           { value: 'status', label: 'Status' },
@@ -253,20 +228,12 @@ export function AdminTicketsPage() {
 
       {!loading && items.length > 0 ? (
         <>
-          <DataTable headers={['Subject', 'Organization', 'Tenant', 'Owner', 'Status', 'Created', 'Actions']}>
+          <DataTable headers={['Subject', 'Tenant', 'Owner', 'Status', 'Created', 'Actions']}>
             {items.map((ticket) => (
               <tr key={ticket.id}>
                 <td className="px-4 py-3">
                   <p className="font-medium text-[var(--ph-text)]">{ticket.subject}</p>
                   <p className="text-xs text-[var(--ph-text-muted)]">{ticket.message}</p>
-                </td>
-                <td className="px-4 py-3 text-slate-600">
-                  <Link
-                    to={ROUTES.adminOrganizationDetail.replace(':id', ticket.organization_id)}
-                    className="inline-flex hover:opacity-90"
-                  >
-                    <OrganizationBadge name={ticket.organizations?.name} slug={ticket.organizations?.slug} />
-                  </Link>
                 </td>
                 <td className="px-4 py-3 text-slate-600">{ticket.tenants?.full_name || '-'}</td>
                 <td className="px-4 py-3 text-slate-600">{ticket.owners?.email || '-'}</td>

@@ -49,7 +49,7 @@ export function AdminDashboardPage() {
             <p className="ph-page-eyebrow">Admin Observatory</p>
             <h2 className="ph-page-heading">Platform overview</h2>
             <p className="ph-page-description max-w-2xl text-sm">
-              Monitor organizations, adoption, contact flow, analytics activity, and system health from one secure observatory.
+              Monitor owner adoption, contact flow, analytics activity, and system health from one secure observatory.
             </p>
           </div>
           {health ? (
@@ -66,7 +66,6 @@ export function AdminDashboardPage() {
       {!loading && summary ? (
         <>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            <SummaryCard label="Organizations" value={summary.total_organizations} icon={<Building2 className="h-4 w-4" />} />
             <SummaryCard label="Total Owners" value={summary.total_owners} icon={<Users className="h-4 w-4" />} />
             <SummaryCard label="Total Residents" value={summary.total_tenants} icon={<Users className="h-4 w-4" />} />
             <SummaryCard label="Total Properties" value={summary.total_properties} icon={<Building2 className="h-4 w-4" />} />

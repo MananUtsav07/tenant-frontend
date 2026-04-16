@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { CreditCard, X } from 'lucide-react'
 
 import { AdminPagination } from '../../components/admin/AdminPagination'
@@ -10,7 +9,6 @@ import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
 import { OrganizationBadge } from '../../components/common/OrganizationBadge'
 import { useAdminAuth } from '../../hooks/useAdminAuth'
-import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
 import type { AdminOrganizationRow, AdminPlan, PaginationMeta } from '../../types/api'
 import { formatDateTime } from '../../utils/date'
@@ -221,9 +219,7 @@ export function AdminOrganizationsPage() {
             {items.map((organization) => (
               <tr key={organization.id}>
                 <td className="px-4 py-3">
-                  <Link to={ROUTES.adminOrganizationDetail.replace(':id', organization.id)} className="inline-flex hover:opacity-90">
-                    <OrganizationBadge name={organization.name} slug={organization.slug} />
-                  </Link>
+                  <OrganizationBadge name={organization.name} slug={organization.slug} />
                   <p className="mt-1 text-xs text-[var(--ph-text-muted)]">{organization.slug}</p>
                 </td>
                 <td className="px-4 py-3">

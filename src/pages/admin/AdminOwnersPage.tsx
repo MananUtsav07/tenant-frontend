@@ -9,7 +9,7 @@ import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
 import { useAdminAuth } from '../../hooks/useAdminAuth'
 import { api } from '../../services/api'
-import type { AdminOwnerRow, AdminOrganizationRow, AdminPlan, PaginationMeta } from '../../types/api'
+import type { AdminOwnerRow, AdminPlan, PaginationMeta } from '../../types/api'
 import { formatDateTime } from '../../utils/date'
 
 const PLAN_COLORS: Record<string, string> = {
@@ -135,9 +135,7 @@ export function AdminOwnersPage() {
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState('created_at')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
-  const [organizationId, setOrganizationId] = useState('')
   const [planCode, setPlanCode] = useState('')
-  const [organizationOptions, setOrganizationOptions] = useState<AdminOrganizationRow[]>([])
   const [plans, setPlans] = useState<AdminPlan[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -150,22 +148,19 @@ export function AdminOwnersPage() {
       try {
         setError(null)
         setLoading(true)
-        const [response, organizationsResponse, plansResponse] = await Promise.all([
+        const [response, plansResponse] = await Promise.all([
           api.getAdminOwners(token, {
             page: pagination.page,
             page_size: pagination.page_size,
             search,
             sort_by: sortBy,
             sort_order: sortOrder,
-            organization_id: organizationId || undefined,
             plan_code: planCode || undefined,
           }),
-          api.getAdminOrganizations(token, { page: 1, page_size: 100, sort_by: 'name', sort_order: 'asc' }),
           api.getAdminPlans(token),
         ])
         setItems(response.items)
         setPagination(response.pagination)
-        setOrganizationOptions(organizationsResponse.items)
         setPlans(plansResponse.plans)
       } catch (loadError) {
         setError(loadError instanceof Error ? loadError.message : 'Failed to load owners')
@@ -175,7 +170,7 @@ export function AdminOwnersPage() {
     }
 
     void load()
-  }, [token, pagination.page, pagination.page_size, search, sortBy, sortOrder, organizationId, planCode])
+  }, [token, pagination.page, pagination.page_size, search, sortBy, sortOrder, planCode])
 
   const handlePlanSaved = (organizationId: string, newPlanCode: string) => {
     setItems((prev) =>
@@ -210,15 +205,6 @@ export function AdminOwnersPage() {
           setSortOrder(value)
           setPagination((current) => ({ ...current, page: 1 }))
         }}
-        organizationId={organizationId}
-        onOrganizationIdChange={(value) => {
-          setOrganizationId(value)
-          setPagination((current) => ({ ...current, page: 1 }))
-        }}
-        organizationOptions={organizationOptions.map((organization) => ({
-          value: organization.id,
-          label: organization.name,
-        }))}
         sortOptions={[
           { value: 'created_at', label: 'Created' },
           { value: 'email', label: 'Email' },

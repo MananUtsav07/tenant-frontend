@@ -1,5 +1,5 @@
 import { AlertTriangle, Clock3, Layers3, RefreshCw, Search, Workflow, Zap } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { AutomationFailurePanel } from '../../components/automation/AutomationFailurePanel'
 import { AutomationRunTimeline } from '../../components/automation/AutomationRunTimeline'
@@ -19,7 +19,6 @@ import type {
   AdminAutomationHealth,
   AdminCashFlowOverview,
   AdminConditionReportOverview,
-  AdminOrganizationRow,
   AdminPortfolioVisibilityOverview,
   AdminScreeningOverview,
   AdminVacancyOverview,
@@ -31,7 +30,6 @@ import type {
 import { formatCurrency, formatDateTime } from '../../utils/date'
 
 type AutomationFilters = {
-  organization_id: string
   flow_name: string
   status: '' | AutomationRun['status']
 }
@@ -74,7 +72,6 @@ function getJobStatus(job: AutomationJob) {
 export function AdminAutomationsPage() {
   const { token } = useAdminAuth()
   const [filters, setFilters] = useState<AutomationFilters>({
-    organization_id: '',
     flow_name: '',
     status: '',
   })
@@ -88,7 +85,6 @@ export function AdminAutomationsPage() {
   const [vacancy, setVacancy] = useState<AdminVacancyOverview | null>(null)
   const [screening, setScreening] = useState<AdminScreeningOverview | null>(null)
   const [conditionReports, setConditionReports] = useState<AdminConditionReportOverview | null>(null)
-  const [organizations, setOrganizations] = useState<AdminOrganizationRow[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -101,51 +97,40 @@ export function AdminAutomationsPage() {
       setLoading(true)
       setError(null)
 
-      const query = {
-        organization_id: filters.organization_id || undefined,
-      }
-
-      const [healthResponse, organizationResponse, jobsResponse, runsResponse, errorsResponse, complianceResponse, cashFlowResponse, portfolioResponse, vacancyResponse, screeningResponse, conditionResponse] =
+      const [healthResponse, jobsResponse, runsResponse, errorsResponse, complianceResponse, cashFlowResponse, portfolioResponse, vacancyResponse, screeningResponse, conditionResponse] =
         await Promise.all([
           api.getAdminAutomationHealth(token),
-          api.getAdminOrganizations(token, { page: 1, page_size: 100, search: '' }),
           api.getAdminAutomationJobs(token, {
             page: 1,
             page_size: 12,
-            organization_id: filters.organization_id || undefined,
             job_type: filters.flow_name || undefined,
           }),
           api.getAdminAutomationRuns(token, {
             page: 1,
             page_size: 18,
-            organization_id: filters.organization_id || undefined,
             flow_name: filters.flow_name || undefined,
             status: filters.status || undefined,
           }),
           api.getAdminAutomationErrors(token, {
             page: 1,
             page_size: 10,
-            organization_id: filters.organization_id || undefined,
             flow_name: filters.flow_name || undefined,
           }),
-          api.getAdminAutomationCompliance(token, query),
-          api.getAdminAutomationCashFlow(token, query),
-          api.getAdminAutomationPortfolioVisibility(token, query),
-          api.getAdminAutomationVacancyCampaigns(token, query),
+          api.getAdminAutomationCompliance(token, {}),
+          api.getAdminAutomationCashFlow(token, {}),
+          api.getAdminAutomationPortfolioVisibility(token, {}),
+          api.getAdminAutomationVacancyCampaigns(token, {}),
           api.getAdminAutomationScreening(token, {
-            organization_id: filters.organization_id || undefined,
             page: 1,
             page_size: 8,
           }),
           api.getAdminAutomationConditionReports(token, {
-            organization_id: filters.organization_id || undefined,
             page: 1,
             page_size: 8,
           }),
         ])
 
       setHealth(healthResponse.health)
-      setOrganizations(organizationResponse.items)
       setJobs(jobsResponse.items)
       setRuns(runsResponse.items)
       setErrors(errorsResponse.items)
@@ -160,22 +145,13 @@ export function AdminAutomationsPage() {
     } finally {
       setLoading(false)
     }
-  }, [filters.flow_name, filters.organization_id, filters.status, token])
+  }, [filters.flow_name, filters.status, token])
 
   useEffect(() => {
     void loadPage()
   }, [loadPage])
 
   const healthTone = getHealthBadgeStatus(health)
-  const filteredOrganizationLabel = useMemo(() => {
-    if (!filters.organization_id) {
-      return 'All organizations'
-    }
-
-    return (
-      organizations.find((organization) => organization.id === filters.organization_id)?.name ?? filters.organization_id
-    )
-  }, [filters.organization_id, organizations])
 
   return (
     <section className="space-y-6">
@@ -206,25 +182,7 @@ export function AdminAutomationsPage() {
           </p>
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-[1.1fr_1fr_0.9fr_auto]">
-          <FormSelect
-            label="Organization"
-            value={filters.organization_id}
-            onChange={(event) =>
-              setFilters((current) => ({
-                ...current,
-                organization_id: event.target.value,
-              }))
-            }
-          >
-            <option value="">All organizations</option>
-            {organizations.map((organization) => (
-              <option key={organization.id} value={organization.id}>
-                {organization.name}
-              </option>
-            ))}
-          </FormSelect>
-
+        <div className="grid gap-4 lg:grid-cols-[1fr_1fr_auto]">
           <FormInput
             label="Flow search"
             value={filters.flow_name}
@@ -262,7 +220,6 @@ export function AdminAutomationsPage() {
               variant="outline"
               onClick={() =>
                 setFilters({
-                  organization_id: '',
                   flow_name: '',
                   status: '',
                 })
@@ -273,10 +230,11 @@ export function AdminAutomationsPage() {
           </div>
         </div>
 
-        <div className={dashboardInfoPanelClassName}>
-          Inspecting <span className="font-semibold text-[var(--ph-text)]">{filteredOrganizationLabel}</span>
-          {filters.flow_name ? ` with flow filter "${filters.flow_name}"` : ''}.
-        </div>
+        {filters.flow_name ? (
+          <div className={dashboardInfoPanelClassName}>
+            Filtering by flow: <span className="font-semibold text-[var(--ph-text)]">{filters.flow_name}</span>.
+          </div>
+        ) : null}
       </article>
 
       {error ? <ErrorState message={error} /> : null}

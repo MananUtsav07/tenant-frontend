@@ -22,8 +22,6 @@ export const ROUTES = {
   ownerLoginLegacy: '/owner/login',
   tenantLoginLegacy: '/tenant/login',
   adminDashboard: '/admin/dashboard',
-  adminOrganizations: '/admin/organizations',
-  adminOrganizationDetail: '/admin/organizations/:id',
   adminOwners: '/admin/owners',
   adminTenants: '/admin/tenants',
   adminProperties: '/admin/properties',
