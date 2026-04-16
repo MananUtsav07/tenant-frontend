@@ -377,11 +377,11 @@ export function OwnerBillingPage() {
                     <>
                       <div className="flex items-end gap-1 mb-2">
                         <span className="text-3xl font-extrabold font-['Sora']" style={{ color: '#32C382' }}>
-                          ${(beyondCount * 1.5).toFixed(2)}
+                          ${(25 + Math.max(0, beyondCount - 21) * 1.5).toFixed(2)}
                         </span>
                         <span className="text-[#8D8D96] text-sm mb-0.5">/mo</span>
                       </div>
-                      <p className="text-[11px] text-[#8D8D96] mb-2">$1.50 × {beyondCount} properties</p>
+                      <p className="text-[11px] text-[#8D8D96] mb-2">$25 base · +$1.50 per property above 21</p>
                       <div className="flex items-center gap-2">
                         <button
                           type="button"
@@ -455,7 +455,7 @@ export function OwnerBillingPage() {
                     {isPaying
                       ? <><Loader2 className="h-4 w-4 animate-spin" />Opening payment…</>
                       : plan.code === 'beyond'
-                      ? <><CreditCard className="h-4 w-4" />Subscribe — ${(beyondCount * 1.5).toFixed(2)}/mo</>
+                      ? <><CreditCard className="h-4 w-4" />Subscribe — ${(25 + Math.max(0, beyondCount - 21) * 1.5).toFixed(2)}/mo</>
                       : <><CreditCard className="h-4 w-4" />Subscribe — ${plan.price}/mo</>
                     }
                   </button>

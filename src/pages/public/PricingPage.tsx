@@ -11,6 +11,7 @@ import {
   Home,
   MessageCircle,
   Minus,
+  Plus,
   Send,
   Sparkles,
   Users,
@@ -115,11 +116,12 @@ const plans = [
     id: "beyond",
     name: "Beyond",
     range: "21+ Properties",
-    pricePerProperty: 1.50,
+    basePrice: 25,          // $25 for 21 properties
+    extraPerProperty: 1.50, // +$1.50 per property above 21
     trialDays: null,
     description: "Enterprise-grade management for large portfolios — scales with every property you add.",
     popular: false,
-    cta: "Contact Sales",
+    cta: "Get Started",
     color: "#32C382",
     features: [
       "Unlimited properties",
@@ -176,7 +178,7 @@ const faqs = [
   {
     question: "How does the Beyond plan pricing work?",
     answer:
-      "The Beyond plan is billed at $1.50 per property per month. For example, 30 properties = $45/month. Annual billing gives you 20% off. Contact our team for volume deals on 50+ properties.",
+      "The Beyond plan starts at $25/month for 21 properties, then adds $1.50 for every additional property. For example, 30 properties = $25 + (9 × $1.50) = $38.50/month. Annual billing gives you 20% off.",
   },
   {
     question: "How does WhatsApp integration work?",
@@ -205,20 +207,22 @@ function ComparisonCell({ value }: { value: boolean | string }) {
   return <Minus className="mx-auto h-5 w-5 text-[#272839]" />;
 }
 
-function PlanPrice({ plan, billing }: { plan: Plan; billing: BillingCycle }) {
-  if ("pricePerProperty" in plan) {
-    const rate = billing === "annual"
-      ? plan.pricePerProperty * (1 - ANNUAL_DISCOUNT)
-      : plan.pricePerProperty;
+function PlanPrice({ plan, billing, beyondCount }: { plan: Plan; billing: BillingCycle; beyondCount?: number }) {
+  if ("basePrice" in plan) {
+    const count = beyondCount ?? 21
+    const raw = plan.basePrice + Math.max(0, count - 21) * plan.extraPerProperty
+    const price = billing === "annual" ? raw * (1 - ANNUAL_DISCOUNT) : raw
     return (
       <div>
         <div className="flex items-end gap-1">
-          <span className="text-4xl font-extrabold text-white">${rate.toFixed(2)}</span>
-          <span className="text-[#8D8D96] mb-1 text-sm">/property/mo</span>
+          <span className="text-4xl font-extrabold text-white">${price.toFixed(2)}</span>
+          <span className="text-[#8D8D96] mb-1 text-sm">/mo</span>
         </div>
-        <p className="text-xs text-[#8D8D96] mt-1">min. 21 properties</p>
+        <p className="text-xs text-[#8D8D96] mt-1">
+          $25 base · +$1.50 per property above 21
+        </p>
       </div>
-    );
+    )
   }
 
   const monthly = "monthlyPrice" in plan ? plan.monthlyPrice : 0;
@@ -262,12 +266,9 @@ export function PricingPage() {
 
   const [billing, setBilling] = useState<BillingCycle>("monthly");
   const [openFaq, setOpenFaq] = useState<number>(0);
+  const [beyondCount, setBeyondCount] = useState(21);
 
-  const handlePlanCta = (plan: Plan) => {
-    if (plan.id === "beyond") {
-      navigate(ROUTES.contact);
-      return;
-    }
+  const handlePlanCta = () => {
     if (token) {
       navigate(ROUTES.ownerBilling);
     } else {
@@ -383,7 +384,28 @@ export function PricingPage() {
 
                 {/* Price */}
                 <div className="mb-6 pb-6 border-b border-[#272839]">
-                  <PlanPrice plan={plan} billing={billing} />
+                  <PlanPrice plan={plan} billing={billing} beyondCount={beyondCount} />
+                  {/* Beyond property counter */}
+                  {plan.id === "beyond" && (
+                    <div className="flex items-center gap-2 mt-3">
+                      <button
+                        type="button"
+                        onClick={() => setBeyondCount((c) => Math.max(21, c - 1))}
+                        className="w-7 h-7 rounded-lg border border-[#272839] flex items-center justify-center text-[#8D8D96] hover:border-[#32C382]/50 hover:text-[#32C382] transition-colors"
+                      >
+                        <Minus className="h-3 w-3" />
+                      </button>
+                      <span className="text-sm font-bold text-white font-['DM_Sans'] min-w-[2rem] text-center">{beyondCount}</span>
+                      <button
+                        type="button"
+                        onClick={() => setBeyondCount((c) => c + 1)}
+                        className="w-7 h-7 rounded-lg border border-[#272839] flex items-center justify-center text-[#8D8D96] hover:border-[#32C382]/50 hover:text-[#32C382] transition-colors"
+                      >
+                        <Plus className="h-3 w-3" />
+                      </button>
+                      <span className="text-xs text-[#8D8D96]">properties</span>
+                    </div>
+                  )}
                   {"trialDays" in plan && plan.trialDays ? (
                     <p className="mt-2 text-xs font-bold" style={{ color: '#4E79FF' }}>
                       {plan.trialDays}-day free trial · No credit card required
@@ -417,7 +439,7 @@ export function PricingPage() {
                 {/* CTA */}
                 <button
                   type="button"
-                  onClick={() => handlePlanCta(plan)}
+                  onClick={handlePlanCta}
                   className={`mt-6 w-full py-3.5 rounded-xl font-bold text-center text-sm transition-all font-['DM_Sans'] ${
                     plan.popular
                       ? "bg-[#2251E3] text-white hover:bg-[#4E79FF] shadow-lg shadow-[#2251E3]/30"
