@@ -1,13 +1,19 @@
 import {
   AlertTriangle,
+  ArrowRight,
+  Bell,
   BrainCircuit,
   CalendarDays,
+  CheckCircle,
   Crown,
-  FileText,
-  Info,
   Lock,
+  MessageCircle,
   Save,
+  Send,
   Sparkles,
+  TicketCheck,
+  TrendingUp,
+  Zap,
 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -19,21 +25,9 @@ import { api } from '../../services/api'
 import { ROUTES } from '../../routes/constants'
 import type { BillingState, OwnerAiSettings } from '../../types/api'
 
-// ─── Gold toggle switch ───────────────────────────────────────────────────────
+// ─── Gold toggle ──────────────────────────────────────────────────────────────
 
-type GoldToggleProps = {
-  checked: boolean
-  onToggle: () => void
-  disabled?: boolean
-  size?: 'sm' | 'lg'
-}
-
-function GoldToggle({ checked, onToggle, disabled = false, size = 'sm' }: GoldToggleProps) {
-  const track = size === 'lg' ? 'w-14 h-8' : 'w-11 h-6'
-  const thumb = size === 'lg' ? 'h-6 w-6' : 'h-5 w-5'
-  const thumbOn = size === 'lg' ? 'translate-x-7' : 'translate-x-[22px]'
-  const thumbOff = size === 'lg' ? 'translate-x-1' : 'translate-x-[2px]'
-
+function GoldToggle({ checked, onToggle, disabled = false }: { checked: boolean; onToggle: () => void; disabled?: boolean }) {
   return (
     <button
       type="button"
@@ -41,59 +35,128 @@ function GoldToggle({ checked, onToggle, disabled = false, size = 'sm' }: GoldTo
       aria-checked={checked}
       onClick={onToggle}
       disabled={disabled}
-      className={`relative inline-flex shrink-0 items-center rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FED609]/60 focus-visible:ring-offset-2 ${track} ${
-        checked ? 'bg-[#FED609]' : 'bg-gray-200'
-      } ${disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
+      className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus-visible:outline-none ${
+        checked ? 'bg-[#FED609]' : 'bg-[#2A2A35]'
+      } ${disabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'}`}
     >
-      <span
-        className={`inline-block transform rounded-full bg-white shadow transition-transform duration-200 ${thumb} ${
-          checked ? thumbOn : thumbOff
-        }`}
-      />
+      <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${checked ? 'translate-x-[22px]' : 'translate-x-[2px]'}`} />
     </button>
+  )
+}
+
+// ─── Plan tier helpers ────────────────────────────────────────────────────────
+
+type PlanTier = 'all' | 'standard' | 'plus'
+
+const TIER_LABELS: Record<PlanTier, string> = {
+  all: 'All Plans',
+  standard: 'Standard+',
+  plus: 'Plus+',
+}
+
+const TIER_COLORS: Record<PlanTier, string> = {
+  all: 'bg-[#32C382]/15 text-[#32C382] border-[#32C382]/30',
+  standard: 'bg-[#4E79FF]/15 text-[#4E79FF] border-[#4E79FF]/30',
+  plus: 'bg-[#EBCF42]/15 text-[#EBCF42] border-[#EBCF42]/30',
+}
+
+function PlanBadge({ tier }: { tier: PlanTier }) {
+  return (
+    <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${TIER_COLORS[tier]}`}>
+      {TIER_LABELS[tier]}
+    </span>
   )
 }
 
 // ─── Feature card ─────────────────────────────────────────────────────────────
 
-type FeatureCardProps = {
+type AiFeatureCardProps = {
   icon: React.ReactNode
+  iconColor: string
   title: string
   description: string
-  checked: boolean
-  onToggle: () => void
-  disabled?: boolean
+  tier: PlanTier
+  locked: boolean
+  active: boolean
+  // if configurable via toggle
+  toggle?: { checked: boolean; onToggle: () => void }
+  // where to use it
+  linkTo?: string
+  linkLabel?: string
 }
 
-function FeatureCard({ icon, title, description, checked, onToggle, disabled }: FeatureCardProps) {
+function AiFeatureCard({ icon, iconColor, title, description, tier, locked, active, toggle, linkTo, linkLabel }: AiFeatureCardProps) {
   return (
-    <div className="group rounded-2xl border border-[rgba(0,0,0,0.06)] bg-white p-6 shadow-sm transition-all hover:border-[#FED609]/30 hover:shadow-md">
-      <div className="mb-4 flex items-start justify-between">
-        <div className="rounded-xl bg-[#FEFAEF] p-3 transition-colors group-hover:bg-[#FFFAE2]">
-          {icon}
+    <div className={`relative rounded-2xl border p-5 flex flex-col gap-4 transition-all ${
+      locked
+        ? 'border-[#272839] bg-[#0d0e12] opacity-75'
+        : active
+        ? 'border-[rgba(83,88,100,0.5)] bg-[#101114]'
+        : 'border-[#272839] bg-[#101114]'
+    }`}>
+      {locked && (
+        <div className="absolute inset-0 rounded-2xl flex items-center justify-center bg-[#06070B]/40 z-10">
+          <div className="flex flex-col items-center gap-2 text-center px-4">
+            <Lock className="h-5 w-5 text-[#8D8D96]" />
+            <p className="text-xs font-bold text-[#8D8D96] font-['DM_Sans']">
+              Requires {TIER_LABELS[tier]}
+            </p>
+            <Link
+              to={ROUTES.ownerBilling}
+              onClick={(e) => e.stopPropagation()}
+              className="mt-1 inline-flex items-center gap-1 rounded-lg bg-[#2251E3] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#4E79FF] transition-colors"
+            >
+              <Crown className="h-3 w-3" />
+              Upgrade
+            </Link>
+          </div>
         </div>
-        <GoldToggle checked={checked} onToggle={onToggle} disabled={disabled} />
-      </div>
-      <h5 className="mb-2 font-['Sora'] text-base font-bold text-[#1A1A1A]">{title}</h5>
-      <p className="text-sm leading-relaxed text-[#6B7280] font-[Manrope,sans-serif]">{description}</p>
-    </div>
-  )
-}
+      )}
 
-// ─── Analytics progress row ───────────────────────────────────────────────────
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: `${iconColor}18` }}>
+            <div style={{ color: iconColor }}>{icon}</div>
+          </div>
+          <div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <p className="text-sm font-bold text-white font-['Sora']">{title}</p>
+              <PlanBadge tier={tier} />
+            </div>
+            {!locked && (
+              <div className="mt-0.5 flex items-center gap-1">
+                {active ? (
+                  <>
+                    <div className="h-1.5 w-1.5 rounded-full bg-[#32C382]" />
+                    <p className="text-[10px] font-bold text-[#32C382] uppercase tracking-wider">Active</p>
+                  </>
+                ) : (
+                  <>
+                    <div className="h-1.5 w-1.5 rounded-full bg-[#8D8D96]" />
+                    <p className="text-[10px] font-bold text-[#8D8D96] uppercase tracking-wider">Available</p>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+        {toggle && !locked && (
+          <GoldToggle checked={toggle.checked} onToggle={toggle.onToggle} />
+        )}
+      </div>
 
-function AnalyticsRow({ label, value, pct }: { label: string; value: string; pct: number }) {
-  return (
-    <div>
-      <div className="mb-2 flex items-end justify-between">
-        <span className="text-sm font-medium text-[#6B7280] font-[DM_Sans,sans-serif]">
-          {label}
-        </span>
-        <span className="text-sm font-bold text-[#1A1A1A]">{value}</span>
-      </div>
-      <div className="h-2 w-full overflow-hidden rounded-full bg-white">
-        <div className="h-2 rounded-full bg-[#FED609]" style={{ width: `${pct}%` }} />
-      </div>
+      <p className="text-xs leading-relaxed text-[#8D8D96] font-['Manrope']">{description}</p>
+
+      {linkTo && !locked && (
+        <Link
+          to={linkTo}
+          className="mt-auto inline-flex items-center gap-1.5 text-xs font-bold transition-colors"
+          style={{ color: iconColor }}
+        >
+          {linkLabel ?? 'Open feature'}
+          <ArrowRight className="h-3 w-3" />
+        </Link>
+      )}
     </div>
   )
 }
@@ -110,7 +173,9 @@ export function OwnerAiSettingsPage() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
 
-  const isProfessional = billing?.status === 'active' && (billing.planCode === 'standard' || billing.planCode === 'plus' || billing.planCode === 'beyond')
+  const planCode = billing?.status === 'active' ? (billing.planCode ?? 'trial') : (billing?.status === 'trialing' ? 'trial' : 'trial')
+  const hasStandard = planCode === 'standard' || planCode === 'plus' || planCode === 'beyond'
+  const hasPlus = planCode === 'plus' || planCode === 'beyond'
 
   const loadSettings = useCallback(async () => {
     if (!token) return
@@ -131,22 +196,11 @@ export function OwnerAiSettingsPage() {
     }
   }, [token])
 
-  useEffect(() => {
-    void loadSettings()
-  }, [loadSettings])
+  useEffect(() => { void loadSettings() }, [loadSettings])
 
-  const toggleField = (
-    field: keyof Pick<
-      OwnerAiSettings,
-      | 'automation_enabled'
-      | 'ticket_classification_enabled'
-      | 'reminder_generation_enabled'
-      | 'ticket_summarization_enabled'
-    >,
-  ) => {
+  const toggleField = (field: keyof Pick<OwnerAiSettings, 'automation_enabled' | 'ticket_classification_enabled' | 'reminder_generation_enabled' | 'ticket_summarization_enabled'>) => {
     setSettings((current) => {
       if (!current) return current
-      if (!aiConfigured && !current[field]) return current
       return { ...current, [field]: !current[field] }
     })
   }
@@ -165,223 +219,254 @@ export function OwnerAiSettingsPage() {
       })
       setSettings(response.settings)
       setAiConfigured(response.ai_configured)
-      setSuccess('AI settings saved. Changes take effect immediately for all enabled workflows.')
+      setSuccess('Settings saved.')
     } catch (saveError) {
-      setError(saveError instanceof Error ? saveError.message : 'Failed to save AI settings')
+      setError(saveError instanceof Error ? saveError.message : 'Failed to save')
     } finally {
       setSaving(false)
     }
   }
 
-  const isDisabled = !aiConfigured || !isProfessional
-
   return (
-    <div className="min-h-screen bg-[#FEFAEF]">
-      <div className="p-6 lg:p-8 max-w-6xl mx-auto">
+    <div className="min-h-screen bg-[#06070B] text-white">
+      <div className="mx-auto max-w-5xl p-6 lg:p-8">
 
-        {/* ── Page Header ── */}
-        <header className="mb-8 flex items-center justify-between">
-          <div>
-            <p className="text-[10px] uppercase tracking-widest font-bold text-[#92700A] font-[DM_Sans,sans-serif] mb-1">
-              Owner Portal
-            </p>
-            <div className="flex items-center gap-2 mb-1">
-              <Sparkles className="h-7 w-7 fill-[#FED609] text-[#FED609]" />
-              <h2 className="font-['Sora'] text-3xl font-extrabold tracking-tight text-[#1A1A1A]">
-                AI Settings
-              </h2>
-            </div>
-            <p className="font-medium text-[#6B7280] font-[Manrope,sans-serif]">Configure your AI automation preferences.</p>
+        {/* Header */}
+        <header className="mb-8">
+          <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-[#4E79FF] font-['DM_Sans']">Owner Portal</p>
+          <div className="flex items-center gap-2 mb-1">
+            <BrainCircuit className="h-7 w-7 text-[#FED609]" />
+            <h2 className="font-['Sora'] text-3xl font-extrabold tracking-tight text-white">AI Features</h2>
           </div>
+          <p className="text-[#8D8D96] font-['Manrope']">All AI-powered features — what's active on your account and what's available to unlock.</p>
         </header>
 
-        {/* ── Standard plan gate ── */}
-        {!loading && !isProfessional && (
-          <div className="mb-8 flex items-start gap-4 rounded-2xl border border-[#2251E3]/30 bg-[rgba(34,81,227,0.06)] p-5 shadow-sm">
-            <div className="shrink-0 rounded-xl bg-[#2251E3]/10 p-2.5">
-              <Lock className="h-5 w-5 text-[#2251E3]" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1">
-                <Crown className="h-4 w-4 text-[#4E79FF]" />
-                <h4 className="font-['Sora'] font-bold text-[#1A1A1A] text-sm">Standard Plan Required</h4>
+        {/* Plan status bar */}
+        {!loading && billing && (
+          <div className={`mb-8 flex items-center justify-between rounded-xl border px-5 py-4 ${
+            hasPlus ? 'border-[#EBCF42]/30 bg-[#1a1500]' :
+            hasStandard ? 'border-[#4E79FF]/30 bg-[#0c1230]' :
+            'border-[#272839] bg-[#101114]'
+          }`}>
+            <div className="flex items-center gap-3">
+              <div className={`p-2 rounded-lg ${hasPlus ? 'bg-[#EBCF42]/15' : hasStandard ? 'bg-[#4E79FF]/15' : 'bg-white/8'}`}>
+                {hasPlus ? <Crown className="h-5 w-5 text-[#EBCF42]" /> : hasStandard ? <Sparkles className="h-5 w-5 text-[#4E79FF]" /> : <Lock className="h-5 w-5 text-[#8D8D96]" />}
               </div>
-              <p className="text-sm text-[#6B7280] font-[Manrope,sans-serif]">
-                AI automation features are available on the Standard plan and above. Upgrade to enable ticket classification, smart reminders, and AI-powered summaries.
-              </p>
+              <div>
+                <p className="text-sm font-bold text-white font-['DM_Sans']">
+                  {billing.status === 'active'
+                    ? `${billing.planDisplayName} Plan — ${hasPlus ? '7 of 7 AI features unlocked' : hasStandard ? '5 of 7 AI features unlocked' : '1 of 7 AI features unlocked'}`
+                    : `Free Trial — ${billing.isTrialExpired ? 'Expired' : `${billing.daysLeftInTrial ?? 0} days left`} — 1 of 7 AI features unlocked`}
+                </p>
+                <p className="text-xs text-[#8D8D96]">
+                  {hasPlus ? 'Full AI suite active' : hasStandard ? 'Upgrade to Plus for advanced AI features' : 'Upgrade to Standard to unlock AI features'}
+                </p>
+              </div>
             </div>
-            <Link
-              to={ROUTES.ownerBilling}
-              className="shrink-0 flex items-center gap-1.5 bg-[#2251E3] text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-[#4E79FF] transition-colors"
-            >
-              <Crown className="h-3.5 w-3.5" />
-              Upgrade
-            </Link>
+            {!hasPlus && (
+              <Link
+                to={ROUTES.ownerBilling}
+                className="shrink-0 flex items-center gap-1.5 rounded-lg bg-[#2251E3] px-4 py-2 text-xs font-bold text-white hover:bg-[#4E79FF] transition-colors"
+              >
+                <Crown className="h-3.5 w-3.5" />
+                Upgrade Plan
+              </Link>
+            )}
           </div>
         )}
 
-        {/* ── Not-configured warning ── */}
-        {!loading && !aiConfigured && isProfessional && (
-          <div className="mb-8 flex items-start gap-2 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 shadow-sm">
+        {/* Warnings */}
+        {!loading && !aiConfigured && hasStandard && (
+          <div className="mb-6 flex items-start gap-2 rounded-xl border border-red-800/50 bg-red-950/40 px-4 py-3 text-sm text-red-300">
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
-            <span>OpenAI is not configured yet. AI features cannot be enabled.</span>
+            <span>OpenAI is not configured on the server. AI features are unavailable until the backend is set up.</span>
           </div>
         )}
-
-        {/* ── Error / Loading ── */}
-        {error && (
-          <div className="mb-8">
-            <ErrorState message={error} />
-          </div>
-        )}
-        {loading && (
-          <div className="mb-8">
-            <LoadingState message="Loading AI settings..." rows={4} />
-          </div>
-        )}
+        {error && <div className="mb-6"><ErrorState message={error} /></div>}
+        {loading && <LoadingState message="Loading AI features..." rows={4} />}
 
         {!loading && settings && (
           <>
-            {/* ── AI Overview Card ── */}
-            <section className="mb-8">
-              <div
-                className="flex items-center justify-between rounded-2xl bg-white p-8 shadow-sm"
-                style={{
-                  background: 'linear-gradient(white, white) padding-box, linear-gradient(to right, #FED609, #FFD70B) border-box',
-                  border: '2px solid transparent',
-                }}
-              >
-                <div className="flex items-center gap-6">
-                  <div className="rounded-2xl bg-[#FEFAEF] p-4">
-                    <BrainCircuit className="h-10 w-10 text-[#FED609]" />
-                  </div>
-                  <div>
-                    <div className="mb-1 flex items-center gap-3">
-                      <h3 className="font-['Sora'] text-xl font-bold text-[#1A1A1A]">AI Automation</h3>
-                      {settings.automation_enabled ? (
-                        <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-green-700">
-                          Active
-                        </span>
-                      ) : (
-                        <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-gray-500">
-                          Inactive
-                        </span>
-                      )}
-                    </div>
-                    <p className="max-w-xl text-[#6B7280] font-[Manrope,sans-serif]">
-                      Enable AI-powered features to automate your property management workflow, reducing
-                      manual tasks and increasing efficiency.
-                    </p>
-                  </div>
+            {/* Master toggle */}
+            <div className="mb-6 flex items-center justify-between rounded-2xl border border-[rgba(254,214,9,0.25)] bg-[rgba(254,214,9,0.05)] px-5 py-4">
+              <div className="flex items-center gap-3">
+                <Zap className="h-5 w-5 text-[#FED609]" />
+                <div>
+                  <p className="text-sm font-bold text-white font-['DM_Sans']">AI Automation Master Switch</p>
+                  <p className="text-xs text-[#8D8D96]">Globally enable or disable all AI automation workflows</p>
                 </div>
-                <GoldToggle
-                  checked={settings.automation_enabled}
-                  onToggle={() => toggleField('automation_enabled')}
-                  disabled={isDisabled}
-                  size="lg"
+              </div>
+              <GoldToggle
+                checked={settings.automation_enabled}
+                onToggle={() => toggleField('automation_enabled')}
+                disabled={!hasStandard || !aiConfigured}
+              />
+            </div>
+
+            {/* Feature grid */}
+            <div className="mb-8 space-y-4">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#8D8D96] font-['DM_Sans']">All AI Features</p>
+
+              <div className="grid gap-4 md:grid-cols-2">
+
+                {/* 1. Auto-flag urgent tickets */}
+                <AiFeatureCard
+                  icon={<AlertTriangle className="h-5 w-5" />}
+                  iconColor="#F25461"
+                  title="Auto-Flag Urgent Tickets"
+                  description="Tickets matching urgent keywords (leak, flood, fire, emergency) or high-confidence maintenance AI categories are automatically flagged with a red URGENT badge and sorted to the top."
+                  tier="all"
+                  locked={false}
+                  active={true}
+                  linkTo={ROUTES.ownerTickets}
+                  linkLabel="Open Tickets"
                 />
+
+                {/* 2. Ticket Classification */}
+                <AiFeatureCard
+                  icon={<Sparkles className="h-5 w-5" />}
+                  iconColor="#FED609"
+                  title="Ticket Classification"
+                  description="Automatically categorise incoming support tickets by type and priority using AI. Results feed the urgent-flag system and future analytics."
+                  tier="standard"
+                  locked={!hasStandard}
+                  active={settings.ticket_classification_enabled}
+                  toggle={hasStandard ? { checked: settings.ticket_classification_enabled, onToggle: () => toggleField('ticket_classification_enabled') } : undefined}
+                  linkTo={ROUTES.ownerTickets}
+                  linkLabel="Open Tickets"
+                />
+
+                {/* 3. Smart Payment Reminders */}
+                <AiFeatureCard
+                  icon={<CalendarDays className="h-5 w-5" />}
+                  iconColor="#4E79FF"
+                  title="Smart Payment Reminders"
+                  description="AI drafts friendly, personalised payment reminder messages sent automatically to tenants via their connected WhatsApp or Telegram channel."
+                  tier="standard"
+                  locked={!hasStandard}
+                  active={settings.reminder_generation_enabled}
+                  toggle={hasStandard ? { checked: settings.reminder_generation_enabled, onToggle: () => toggleField('reminder_generation_enabled') } : undefined}
+                  linkTo={ROUTES.ownerNotifications}
+                  linkLabel="Notifications"
+                />
+
+                {/* 4. Broadcast Message Generator */}
+                <AiFeatureCard
+                  icon={<Bell className="h-5 w-5" />}
+                  iconColor="#25D366"
+                  title="Broadcast Message Generator"
+                  description="Write a topic (e.g. 'water outage on 3rd floor tomorrow 9am') and AI generates a polished broadcast message you can send via WhatsApp, Telegram, or Email."
+                  tier="standard"
+                  locked={!hasStandard}
+                  active={hasStandard}
+                  linkTo={ROUTES.ownerNotifications}
+                  linkLabel="Compose Broadcast"
+                />
+
+                {/* 5. WhatsApp / Telegram Composer */}
+                <AiFeatureCard
+                  icon={<MessageCircle className="h-5 w-5" />}
+                  iconColor="#25D366"
+                  title="WhatsApp & Telegram Composer"
+                  description="Select any tenant, describe your intent, and AI drafts a personalised WhatsApp or Telegram message. A deep-link opens the chat pre-filled and ready to send."
+                  tier="standard"
+                  locked={!hasStandard}
+                  active={hasStandard}
+                  linkTo={ROUTES.ownerTenants}
+                  linkLabel="Open Tenants"
+                />
+
+                {/* 6. AI Reply Draft */}
+                <AiFeatureCard
+                  icon={<TicketCheck className="h-5 w-5" />}
+                  iconColor="#EBCF42"
+                  title="AI Reply Draft in Tickets"
+                  description="Click '✦ Draft with AI' inside any ticket reply modal. AI reads the full conversation thread and drafts a contextual reply you can edit before sending."
+                  tier="plus"
+                  locked={!hasPlus}
+                  active={hasPlus}
+                  toggle={hasPlus ? { checked: settings.ticket_summarization_enabled, onToggle: () => toggleField('ticket_summarization_enabled') } : undefined}
+                  linkTo={ROUTES.ownerTickets}
+                  linkLabel="Open Tickets"
+                />
+
+                {/* 7. Lease Renewal Risk Digest */}
+                <AiFeatureCard
+                  icon={<TrendingUp className="h-5 w-5" />}
+                  iconColor="#F97316"
+                  title="Lease Renewal Risk Digest"
+                  description="Generates an AI summary of tenants with leases expiring within 60 days and overdue payments. Highlights renewal risks and recommends next actions. Available on Dashboard."
+                  tier="plus"
+                  locked={!hasPlus}
+                  active={hasPlus}
+                  linkTo={ROUTES.ownerDashboard}
+                  linkLabel="Open Dashboard"
+                />
+
               </div>
-            </section>
+            </div>
 
-            {/* ── Main grid ── */}
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-              {/* Left column — feature toggles + model selection */}
-              <div className="space-y-6 lg:col-span-2">
-                <h4 className="text-xs font-bold uppercase tracking-widest text-[#6B7280] font-[DM_Sans,sans-serif]">
-                  Automation Features
-                </h4>
-
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  {/* Ticket Classification */}
-                  <FeatureCard
-                    icon={<Sparkles className="h-6 w-6 text-[#FED609]" />}
-                    title="Ticket Classification"
-                    description="Automatically classify incoming support tickets by priority and category using natural language processing."
-                    checked={settings.ticket_classification_enabled}
-                    onToggle={() => toggleField('ticket_classification_enabled')}
-                    disabled={isDisabled}
-                  />
-
-                  {/* Smart Reminders */}
-                  <FeatureCard
-                    icon={<CalendarDays className="h-6 w-6 text-[#FED609]" />}
-                    title="Smart Reminders"
-                    description="AI generates friendly payment reminders sent automatically to tenants via their connected messaging channels."
-                    checked={settings.reminder_generation_enabled}
-                    onToggle={() => toggleField('reminder_generation_enabled')}
-                    disabled={isDisabled}
-                  />
-
-                  {/* Ticket Summarization */}
-                  <FeatureCard
-                    icon={<FileText className="h-6 w-6 text-[#FED609]" />}
-                    title="Ticket Summarization"
-                    description="Get AI-generated summaries of lengthy ticket threads for a quick overview of tenant issues and history."
-                    checked={settings.ticket_summarization_enabled}
-                    onToggle={() => toggleField('ticket_summarization_enabled')}
-                    disabled={isDisabled}
-                  />
-
-                </div>
-
-              </div>
-
-              {/* Right column — analytics */}
-              <div className="space-y-6">
-                <div className="sticky top-8 rounded-2xl bg-[#FFFAE2] p-8 shadow-sm">
-                  <div className="mb-8 flex items-center justify-between">
-                    <h4 className="font-['Sora'] text-lg font-bold text-[#1A1A1A]">AI Analytics</h4>
-                    <span className="rounded-full border border-[#FED609]/20 bg-white px-3 py-1 text-xs font-bold text-[#6B7280] font-[DM_Sans,sans-serif]">
-                      This Month
-                    </span>
+            {/* Integration status */}
+            <div className="mb-8 rounded-2xl border border-[#272839] bg-[#101114] p-6">
+              <p className="mb-4 text-xs font-bold uppercase tracking-widest text-[#8D8D96] font-['DM_Sans']">Connected Channels</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="flex items-center gap-3 rounded-xl border border-[#272839] bg-white/[0.025] px-4 py-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#25D366]/15">
+                    <MessageCircle className="h-4 w-4 text-[#25D366]" />
                   </div>
-
-                  <div className="space-y-8">
-                    <AnalyticsRow label="Tickets Classified" value="1,248" pct={85} />
-                    <AnalyticsRow label="Reminders Generated" value="432" pct={62} />
-                    <AnalyticsRow label="Summaries Created" value="89" pct={45} />
-                  </div>
-
-                  {/* Efficiency boost note */}
-                  <div className="mt-10 rounded-2xl border border-white bg-white/60 p-6">
-                    <div className="mb-4 flex items-center gap-3">
-                      <Info className="h-5 w-5 text-[#FED609]" />
-                      <p className="text-sm font-bold text-[#1A1A1A] font-[Sora,sans-serif]">Efficiency Boost</p>
-                    </div>
-                    <p className="text-xs leading-relaxed text-[#6B7280] font-[Manrope,sans-serif]">
-                      Your team saved approximately{' '}
-                      <span className="font-bold text-[#1A1A1A]">42 hours</span> this month using
-                      automated ticket classification.
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold text-white">WhatsApp</p>
+                    <p className="text-xs text-[#8D8D96] truncate">
+                      Manage in{' '}
+                      <Link to={ROUTES.ownerIntegrations} className="text-[#25D366] hover:underline">Integrations</Link>
                     </p>
                   </div>
+                  {hasStandard
+                    ? <CheckCircle className="h-4 w-4 text-[#32C382] shrink-0 ml-auto" />
+                    : <Lock className="h-4 w-4 text-[#8D8D96] shrink-0 ml-auto" />}
+                </div>
+                <div className="flex items-center gap-3 rounded-xl border border-[#272839] bg-white/[0.025] px-4 py-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#0088CC]/15">
+                    <Send className="h-4 w-4 text-[#0088CC]" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold text-white">Telegram</p>
+                    <p className="text-xs text-[#8D8D96] truncate">
+                      Manage in{' '}
+                      <Link to={ROUTES.ownerIntegrations} className="text-[#0088CC] hover:underline">Integrations</Link>
+                    </p>
+                  </div>
+                  {hasStandard
+                    ? <CheckCircle className="h-4 w-4 text-[#32C382] shrink-0 ml-auto" />
+                    : <Lock className="h-4 w-4 text-[#8D8D96] shrink-0 ml-auto" />}
                 </div>
               </div>
             </div>
 
-            {/* ── Success message ── */}
+            {/* Success */}
             {success && (
-              <div className="mt-6 rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 shadow-sm">
+              <div className="mb-6 rounded-xl border border-[#32C382]/30 bg-[#32C382]/10 px-4 py-3 text-sm text-[#32C382]">
                 {success}
               </div>
             )}
 
-            {/* ── Footer actions ── */}
-            <footer className="mt-10 flex justify-end gap-4 border-t border-[rgba(0,0,0,0.06)] pt-8">
+            {/* Save footer */}
+            <footer className="flex justify-end gap-3 border-t border-[#272839] pt-6">
               <button
                 type="button"
                 onClick={() => void loadSettings()}
-                className="px-6 py-3 font-bold text-[#6B7280] transition-colors hover:text-[#1A1A1A] font-[DM_Sans,sans-serif]"
+                className="px-5 py-2.5 text-sm font-bold text-[#8D8D96] hover:text-white transition-colors font-['DM_Sans']"
               >
-                Discard Changes
+                Discard
               </button>
               <button
                 type="button"
                 onClick={() => void saveSettings()}
-                disabled={saving}
-                className="flex items-center gap-2 rounded-xl bg-[#FED609] px-10 py-3 font-['Sora'] font-bold text-[#1A1A1A] shadow-md transition-all hover:bg-[#FFD70B] active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+                disabled={saving || !hasStandard}
+                className="flex items-center gap-2 rounded-xl bg-[#FED609] px-8 py-2.5 text-sm font-bold text-[#1A1A1A] hover:bg-[#FFD70B] transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed font-['DM_Sans']"
               >
-                <Save className="h-5 w-5" />
-                {saving ? 'Saving...' : 'Save Settings'}
+                <Save className="h-4 w-4" />
+                {saving ? 'Saving…' : 'Save Settings'}
               </button>
             </footer>
           </>

@@ -415,16 +415,23 @@ export function OwnerDashboardPage() {
                     </p>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => void handleGenerateDigest()}
-                  disabled={digestLoading || dashboardTenants.length === 0}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-colors disabled:opacity-50"
-                  style={{ backgroundColor: 'rgba(235,207,66,0.12)', color: '#EBCF42', border: '1px solid rgba(235,207,66,0.3)' }}
-                >
-                  <Sparkles className="w-4 h-4" />
-                  {digestLoading ? 'Generating…' : 'Generate AI Summary'}
-                </button>
+                <div className="flex flex-col items-end gap-1">
+                  <button
+                    type="button"
+                    onClick={() => void handleGenerateDigest()}
+                    disabled={digestLoading || dashboardTenants.length === 0}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    style={{ backgroundColor: 'rgba(235,207,66,0.12)', color: '#EBCF42', border: '1px solid rgba(235,207,66,0.3)' }}
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    {digestLoading ? 'Generating…' : 'Generate AI Summary'}
+                  </button>
+                  {dashboardTenants.length === 0 && (
+                    <p className="text-[10px] font-['Manrope']" style={{ color: '#8D8D96' }}>
+                      Add tenants to enable
+                    </p>
+                  )}
+                </div>
               </div>
               {leaseDigest ? (
                 <div className="rounded-lg px-4 py-3 text-sm font-['Manrope'] leading-relaxed whitespace-pre-wrap" style={{ backgroundColor: 'rgba(235,207,66,0.06)', color: '#E5E7EB', border: '1px solid rgba(235,207,66,0.15)' }}>
