@@ -192,9 +192,13 @@ export function OwnerBrokersPage() {
             />
             <FormInput
               label="Phone"
+              type="tel"
               name="broker_phone"
               value={form.phone}
               onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
+              inputMode="tel"
+              maxLength={20}
+              placeholder="+971XXXXXXXXX"
             />
             <FormInput
               label="Agency"

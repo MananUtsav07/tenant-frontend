@@ -7,12 +7,15 @@ import {
   CalendarDays,
   CheckCircle2,
   CircleDollarSign,
+  ExternalLink,
   Info,
   Mail,
   MapPin,
+  MessageCircle,
   Phone,
   Plus,
   RefreshCw,
+  Send,
   Ticket,
   UserRound,
   Wrench,
@@ -32,7 +35,9 @@ import type {
   Property,
   Tenant,
   TenantLeaseRenewalIntentState,
+  TelegramOnboardingState,
   TenantRentPaymentState,
+  TenantOwnerContact,
   TenantSummary,
 } from '../../types/api'
 import { formatCurrency, formatDate } from '../../utils/date'
@@ -44,6 +49,8 @@ export function TenantDashboardPage() {
   const [tenant, setTenant] = useState<Tenant | null>(null)
   const [rentPaymentState, setRentPaymentState] = useState<TenantRentPaymentState | null>(null)
   const [, setLeaseRenewalIntentState] = useState<TenantLeaseRenewalIntentState | null>(null)
+  const [ownerContact, setOwnerContact] = useState<TenantOwnerContact | null>(null)
+  const [telegramOnboarding, setTelegramOnboarding] = useState<TelegramOnboardingState | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [markingPaid, setMarkingPaid] = useState(false)
@@ -62,6 +69,23 @@ export function TenantDashboardPage() {
       setSummary(summaryResponse.summary)
       setProperty(propertyResponse.property)
       setTenant(propertyResponse.tenant)
+
+      const [ownerContactResponse, telegramResponse] = await Promise.allSettled([
+        api.getTenantOwnerContact(token),
+        api.getTenantTelegramOnboarding(token),
+      ])
+
+      if (ownerContactResponse.status === 'fulfilled') {
+        setOwnerContact(ownerContactResponse.value.owner)
+      } else {
+        setOwnerContact(null)
+      }
+
+      if (telegramResponse.status === 'fulfilled') {
+        setTelegramOnboarding(telegramResponse.value.onboarding)
+      } else {
+        setTelegramOnboarding(null)
+      }
 
       try {
         const rentPaymentResponse = await api.getTenantRentPaymentState(token)
@@ -114,6 +138,10 @@ export function TenantDashboardPage() {
 
   const tenantName = tenant?.full_name ?? authTenant?.full_name ?? 'Resident'
   const orgCurrency = authTenant?.organization?.currency_code ?? rentPaymentState?.currency_code ?? 'AED'
+  const whatsappHref = ownerContact?.support_whatsapp
+    ? `https://wa.me/${ownerContact.support_whatsapp.replace(/\D/g, '')}`
+    : null
+  const telegramHref = telegramOnboarding?.connect_url ?? null
 
   return (
     <div className="min-h-screen bg-[#06070B] p-6 lg:p-8 space-y-6 text-white">
@@ -210,6 +238,106 @@ export function TenantDashboardPage() {
           description="Your summary cards will appear once your account details are ready."
           icon={<CalendarDays className="h-5 w-5" />}
         />
+      ) : null}
+
+      {!loading ? (
+        <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {whatsappHref ? (
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group rounded-2xl border border-[#25D366]/25 bg-[#101114] p-5 transition-colors hover:border-[#25D366]/50"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex min-w-0 items-center gap-3">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#25D366]/15">
+                    <MessageCircle className="h-5 w-5 text-[#25D366]" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold text-white font-['Sora']">WhatsApp</p>
+                    <p className="mt-1 truncate text-xs text-[#8D8D96] font-['Manrope']">
+                      {ownerContact?.support_whatsapp}
+                    </p>
+                  </div>
+                </div>
+                <ExternalLink className="h-4 w-4 shrink-0 text-[#25D366] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </div>
+              <p className="mt-4 text-sm text-[#8D8D96] font-['Manrope']">
+                Message your owner quickly for support and urgent updates.
+              </p>
+            </a>
+          ) : (
+            <Link
+              to={ROUTES.tenantSupport}
+              className="group rounded-2xl border border-[#272839] bg-[#101114] p-5 transition-colors hover:border-[#25D366]/40"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#25D366]/15">
+                    <MessageCircle className="h-5 w-5 text-[#25D366]" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-white font-['Sora']">WhatsApp</p>
+                    <p className="mt-1 text-xs text-[#8D8D96] font-['Manrope']">Open support options</p>
+                  </div>
+                </div>
+                <ArrowRight className="h-4 w-4 shrink-0 text-[#25D366] transition-transform group-hover:translate-x-1" />
+              </div>
+              <p className="mt-4 text-sm text-[#8D8D96] font-['Manrope']">
+                View the owner contact page if WhatsApp is not configured yet.
+              </p>
+            </Link>
+          )}
+
+          {telegramHref ? (
+            <a
+              href={telegramHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group rounded-2xl border border-[#0088CC]/25 bg-[#101114] p-5 transition-colors hover:border-[#0088CC]/50"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#0088CC]/15">
+                    <Send className="h-5 w-5 text-[#0088CC]" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-white font-['Sora']">Telegram</p>
+                    <p className="mt-1 text-xs text-[#8D8D96] font-['Manrope']">
+                      {telegramOnboarding?.connected ? 'Connected' : 'Connect now'}
+                    </p>
+                  </div>
+                </div>
+                <ExternalLink className="h-4 w-4 shrink-0 text-[#0088CC] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </div>
+              <p className="mt-4 text-sm text-[#8D8D96] font-['Manrope']">
+                Open Telegram for alerts, payment updates, and lease reminders.
+              </p>
+            </a>
+          ) : (
+            <Link
+              to={ROUTES.tenantIntegrations}
+              className="group rounded-2xl border border-[#272839] bg-[#101114] p-5 transition-colors hover:border-[#0088CC]/40"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#0088CC]/15">
+                    <Send className="h-5 w-5 text-[#0088CC]" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-white font-['Sora']">Telegram</p>
+                    <p className="mt-1 text-xs text-[#8D8D96] font-['Manrope']">Manage connection</p>
+                  </div>
+                </div>
+                <ArrowRight className="h-4 w-4 shrink-0 text-[#0088CC] transition-transform group-hover:translate-x-1" />
+              </div>
+              <p className="mt-4 text-sm text-[#8D8D96] font-['Manrope']">
+                Open integrations to connect Telegram when it becomes available.
+              </p>
+            </Link>
+          )}
+        </section>
       ) : null}
 
       {/* Main Grid: Property Info + Rent Payment */}

@@ -10,6 +10,8 @@ import {
   Clock3,
   CreditCard,
   Crown,
+  MessageCircle,
+  Send,
   TrendingUp,
   Users,
   Wallet,
@@ -327,6 +329,61 @@ export function OwnerDashboardPage() {
               </div>
               <div className="text-[#8D8D96] text-sm font-['DM_Sans'] font-medium mb-1 uppercase tracking-wider">Pending Payments</div>
               <div className="font-['Sora'] text-3xl font-extrabold text-white">{summary.awaiting_approvals}</div>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            variants={staggerParent}
+            initial="hidden"
+            animate="show"
+            className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
+          >
+            <motion.div variants={revealUp}>
+              <Link
+                to={ROUTES.ownerProfile}
+                className="group block rounded-2xl border border-[#272839] bg-[#101114] p-5 transition-colors hover:border-[#25D366]/40"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#25D366]/15">
+                      <MessageCircle className="h-5 w-5 text-[#25D366]" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold text-white font-['Sora']">WhatsApp</p>
+                      <p className="mt-1 truncate text-xs text-[#8D8D96] font-['Manrope']">
+                        {owner?.support_whatsapp ?? 'Add your support number'}
+                      </p>
+                    </div>
+                  </div>
+                  <ChevronRight className="h-4 w-4 shrink-0 text-[#25D366] transition-transform group-hover:translate-x-1" />
+                </div>
+                <p className="mt-4 text-sm text-[#8D8D96] font-['Manrope']">
+                  Manage the WhatsApp number tenants use for reminders and support.
+                </p>
+              </Link>
+            </motion.div>
+
+            <motion.div variants={revealUp}>
+              <Link
+                to={ROUTES.ownerIntegrations}
+                className="group block rounded-2xl border border-[#272839] bg-[#101114] p-5 transition-colors hover:border-[#0088CC]/40"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#0088CC]/15">
+                      <Send className="h-5 w-5 text-[#0088CC]" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-white font-['Sora']">Telegram</p>
+                      <p className="mt-1 text-xs text-[#8D8D96] font-['Manrope']">Open channel settings</p>
+                    </div>
+                  </div>
+                  <ChevronRight className="h-4 w-4 shrink-0 text-[#0088CC] transition-transform group-hover:translate-x-1" />
+                </div>
+                <p className="mt-4 text-sm text-[#8D8D96] font-['Manrope']">
+                  Connect or manage your Telegram bot directly from integrations.
+                </p>
+              </Link>
             </motion.div>
           </motion.div>
 

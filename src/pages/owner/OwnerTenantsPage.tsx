@@ -26,22 +26,10 @@ import { api } from '../../services/api'
 import type { Broker, Property, RentLedgerEntry, Tenant } from '../../types/api'
 import { formatCurrency, formatDate, getCurrencyMarker } from '../../utils/date'
 
-/** Convert YYYY-MM-DD → DD/MM/YYYY for display in text inputs */
-function isoToDDMMYYYY(iso: string): string {
+/** Normalize an ISO date string to YYYY-MM-DD (strips time part if present) */
+function toDateInputValue(iso: string | null | undefined): string {
   if (!iso) return ''
-  const parts = iso.split('-')
-  if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`
-  return iso
-}
-
-/** Convert DD/MM/YYYY → YYYY-MM-DD for API submission. Returns '' if not a complete valid date. */
-function ddmmyyyyToISO(display: string): string {
-  if (!display) return ''
-  const parts = display.split('/')
-  if (parts.length === 3 && parts[2].length === 4) {
-    return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`
-  }
-  return ''
+  return iso.slice(0, 10)
 }
 
 const RENT_CURRENCY_OPTIONS = [
@@ -207,8 +195,8 @@ export function OwnerTenantsPage() {
           full_name: trimmedFullName,
           email: trimmedEmail || null,
           phone: trimmedPhone || null,
-          lease_start_date: ddmmyyyyToISO(form.lease_start_date) || null,
-          lease_end_date: ddmmyyyyToISO(form.lease_end_date) || null,
+          lease_start_date: form.lease_start_date || null,
+          lease_end_date: form.lease_end_date || null,
           monthly_rent: monthlyRent,
           payment_due_day: dueDay,
           payment_status: form.payment_status,
@@ -222,8 +210,8 @@ export function OwnerTenantsPage() {
           email: trimmedEmail || undefined,
           phone: trimmedPhone || undefined,
           password: trimmedPassword,
-          lease_start_date: ddmmyyyyToISO(form.lease_start_date) || undefined,
-          lease_end_date: ddmmyyyyToISO(form.lease_end_date) || undefined,
+          lease_start_date: form.lease_start_date || undefined,
+          lease_end_date: form.lease_end_date || undefined,
           monthly_rent: monthlyRent,
           payment_due_day: dueDay,
           payment_status: form.payment_status,
@@ -264,6 +252,12 @@ export function OwnerTenantsPage() {
 
     if (!trimmedEmail) {
       setFormError('Tenant email is required to send login credentials')
+      return
+    }
+
+    const trimmedPhone = form.phone.trim()
+    if (!trimmedPhone) {
+      setFormError('Tenant phone number is required for WhatsApp reminders')
       return
     }
 
@@ -329,8 +323,8 @@ export function OwnerTenantsPage() {
       email: tenant.email ?? '',
       phone: tenant.phone ?? '',
       password: '',
-      lease_start_date: isoToDDMMYYYY(tenant.lease_start_date ? tenant.lease_start_date.slice(0, 10) : ''),
-      lease_end_date: isoToDDMMYYYY(tenant.lease_end_date ? tenant.lease_end_date.slice(0, 10) : ''),
+      lease_start_date: toDateInputValue(tenant.lease_start_date),
+      lease_end_date: toDateInputValue(tenant.lease_end_date),
       monthly_rent: String(tenant.monthly_rent),
       payment_due_day: String(tenant.payment_due_day),
       payment_status: tenant.payment_status,
@@ -721,11 +715,16 @@ export function OwnerTenantsPage() {
               />
               <FormInput
                 label="Phone (WhatsApp)"
+                type="tel"
                 name="tenant_phone"
                 autoComplete="off"
                 value={form.phone}
                 onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
-                hint="Used for WhatsApp rent reminders"
+                inputMode="tel"
+                hint="Required for WhatsApp rent reminders"
+                placeholder="+971XXXXXXXXX"
+                maxLength={20}
+                required
               />
               {!editingTenantId ? (
                 <label className="block space-y-2">
@@ -833,18 +832,18 @@ export function OwnerTenantsPage() {
               </label>
               <FormInput
                 label="Lease Start"
-                type="text"
+                type="date"
                 name="tenant_lease_start"
-                placeholder="DD/MM/YYYY"
                 value={form.lease_start_date}
+                max={form.lease_end_date || undefined}
                 onChange={(event) => setForm((current) => ({ ...current, lease_start_date: event.target.value }))}
               />
               <FormInput
                 label="Lease End"
-                type="text"
+                type="date"
                 name="tenant_lease_end"
-                placeholder="DD/MM/YYYY"
                 value={form.lease_end_date}
+                min={form.lease_start_date || undefined}
                 onChange={(event) => setForm((current) => ({ ...current, lease_end_date: event.target.value }))}
               />
 
