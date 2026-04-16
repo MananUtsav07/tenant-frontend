@@ -176,13 +176,25 @@ export function OwnerProfilePage() {
                   <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-[#8D8D96] font-[DM_Sans,sans-serif]">
                     Plan
                   </p>
-                  {owner?.organization?.plan_code ? (
+                  {billing ? (
+                    <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider font-[DM_Sans,sans-serif] ${
+                      billing.status === 'active'
+                        ? 'bg-[#32C382]/15 text-[#32C382]'
+                        : billing.isTrialExpired
+                        ? 'bg-[#F25461]/15 text-[#F25461]'
+                        : 'bg-[#EBCF42]/15 text-[#EBCF42]'
+                    }`}>
+                      {billing.status === 'trialing'
+                        ? billing.isTrialExpired ? 'Trial Expired' : 'Free Trial'
+                        : billing.planDisplayName}
+                    </span>
+                  ) : owner?.organization?.plan_code ? (
                     <span className="inline-flex items-center rounded-full bg-[#4E79FF]/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#4E79FF] font-[DM_Sans,sans-serif]">
                       {owner.organization.plan_code}
                     </span>
                   ) : (
                     <span className="inline-flex items-center rounded-full bg-white/8 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#8D8D96] font-[DM_Sans,sans-serif]">
-                      Free
+                      Free Trial
                     </span>
                   )}
                 </div>
