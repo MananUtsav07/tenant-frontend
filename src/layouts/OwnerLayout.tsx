@@ -1,4 +1,4 @@
-import { Bell, Briefcase, Building2, Crown, FileText, Headphones, LayoutDashboard, LifeBuoy, MailWarning, Plug, UserCircle, Users, AlertTriangle, CreditCard, Clock, TrendingUp } from 'lucide-react'
+import { Bell, Briefcase, Building2, Crown, FileText, Headphones, LayoutDashboard, LifeBuoy, MailWarning, Plug, Sparkles, UserCircle, Users, AlertTriangle, CreditCard, Clock, TrendingUp } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
@@ -60,7 +60,7 @@ function OwnerLayoutContent() {
     // { to: ROUTES.ownerMaintenance, label: 'Maintenance', icon: <Hammer className="h-4 w-4" /> },
     { to: ROUTES.ownerNotifications, label: 'Notifications', icon: <Bell className="h-4 w-4" />, badge: unreadCount > 0 ? { count: unreadCount, color: 'red' as const, tooltip: `${unreadCount} notification${unreadCount !== 1 ? 's' : ''} unread` } : undefined },
     // { to: ROUTES.ownerAutomation, label: 'Automation', icon: <Bot className="h-4 w-4" /> },
-    // { to: ROUTES.ownerAiSettings, label: 'AI Settings', icon: <Sparkles className="h-4 w-4" /> },
+    { to: ROUTES.ownerAiSettings, label: 'AI Settings', icon: <Sparkles className="h-4 w-4" /> },
     { to: ROUTES.ownerIntegrations, label: 'Integrations', icon: <Plug className="h-4 w-4" /> },
     { to: ROUTES.ownerProfile, label: 'Profile', icon: <UserCircle className="h-4 w-4" /> },
     { to: ROUTES.ownerBilling, label: 'Billing & Plan', icon: <CreditCard className="h-4 w-4" /> },

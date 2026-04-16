@@ -368,7 +368,7 @@ export function OwnerAiSettingsPage() {
                   icon={<MessageCircle className="h-5 w-5" />}
                   iconColor="#25D366"
                   title="WhatsApp & Telegram Composer"
-                  description="Select any tenant, describe your intent, and AI drafts a personalised WhatsApp or Telegram message. A deep-link opens the chat pre-filled and ready to send."
+                  description="Select any tenant, describe your intent, and AI drafts a personalised message. Opens WhatsApp or Telegram on your device with the tenant's number and message pre-filled — you send it directly from your own phone."
                   tier="standard"
                   locked={!hasStandard}
                   active={hasStandard}
