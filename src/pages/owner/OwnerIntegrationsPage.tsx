@@ -163,7 +163,7 @@ export function OwnerIntegrationsPage() {
   const [error, setError] = useState<string | null>(null)
   const [waConnecting, setWaConnecting] = useState(false)
 
-  const isProfessional = billing?.status === 'active' && billing.planCode === 'professional'
+  const isProfessional = billing?.status === 'active' && (billing.planCode === 'standard' || billing.planCode === 'plus' || billing.planCode === 'beyond')
   const canUseWhatsApp = isProfessional
 
   const fetchIntegrations = useCallback(async () => {

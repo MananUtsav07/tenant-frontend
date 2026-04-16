@@ -110,7 +110,7 @@ export function OwnerAiSettingsPage() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
 
-  const isProfessional = billing?.status === 'active' && billing.planCode === 'professional'
+  const isProfessional = billing?.status === 'active' && (billing.planCode === 'standard' || billing.planCode === 'plus' || billing.planCode === 'beyond')
 
   const loadSettings = useCallback(async () => {
     if (!token) return

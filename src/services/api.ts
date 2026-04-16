@@ -95,6 +95,7 @@ type ListQueryInput = {
   status?: string
   job_type?: string
   lifecycle_status?: string
+  plan_code?: string
 }
 
 type OwnerNotificationPreferencePatch = Partial<{
@@ -164,6 +165,9 @@ function toQueryString(params: ListQueryInput): string {
   }
   if (params.lifecycle_status) {
     searchParams.set('lifecycle_status', params.lifecycle_status)
+  }
+  if (params.plan_code) {
+    searchParams.set('plan_code', params.plan_code)
   }
 
   const rendered = searchParams.toString()

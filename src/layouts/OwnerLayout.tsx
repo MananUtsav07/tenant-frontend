@@ -80,18 +80,14 @@ function OwnerLayoutContent() {
         </div>
       )
     }
-    if (billing.status === 'active' && billing.planCode === 'professional') {
+    if (billing.status === 'active' && billing.planCode) {
+      const isHighTier = billing.planCode === 'standard' || billing.planCode === 'plus' || billing.planCode === 'beyond'
       return (
-        <div className="flex items-center gap-1.5 rounded-md bg-[rgba(34,81,227,0.15)] border border-[#2251E3]/30 px-2 py-1">
-          <Crown className="h-3 w-3 text-[#4E79FF] shrink-0" />
-          <span className="text-[10px] font-semibold text-[#4E79FF] leading-none">Professional</span>
-        </div>
-      )
-    }
-    if (billing.status === 'active' && billing.planCode === 'starter') {
-      return (
-        <div className="flex items-center gap-1.5 rounded-md bg-white/5 border border-white/10 px-2 py-1">
-          <span className="text-[10px] font-semibold text-[#8D8D96] leading-none">Starter Plan</span>
+        <div className={`flex items-center gap-1.5 rounded-md px-2 py-1 border ${isHighTier ? 'bg-[rgba(34,81,227,0.15)] border-[#2251E3]/30' : 'bg-white/5 border-white/10'}`}>
+          {isHighTier && <Crown className="h-3 w-3 text-[#4E79FF] shrink-0" />}
+          <span className={`text-[10px] font-semibold leading-none ${isHighTier ? 'text-[#4E79FF]' : 'text-[#8D8D96]'}`}>
+            {billing.planDisplayName}
+          </span>
         </div>
       )
     }
