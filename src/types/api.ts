@@ -1550,6 +1550,12 @@ export type OwnerAutomationActivityResponse = {
   pagination: PaginationMeta
 }
 
+export type AdminPlan = {
+  plan_code: string
+  plan_name: string
+  monthly_price: number
+}
+
 export type AdminOrganizationRow = {
   id: string
   name: string
@@ -1592,9 +1598,12 @@ export type BlogListResponse = {
   pagination: PaginationMeta
 }
 
+export type BillingPlanCode = 'starter' | 'standard' | 'plus' | 'beyond' | 'trial'
+
 export type BillingState = {
   status: 'trialing' | 'active' | 'past_due' | 'cancelled' | 'inactive'
-  planCode: string | null
+  planCode: BillingPlanCode | null
+  planDisplayName: string
   trialEndsAt: string | null
   currentPeriodEnd: string | null
   daysLeftInTrial: number | null

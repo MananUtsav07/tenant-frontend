@@ -30,7 +30,7 @@ export function formatDateTime(value: string | null | undefined): string {
 function normalizeCurrencyCode(currencyCode: string | null | undefined): string {
   const normalized = currencyCode?.trim().toUpperCase()
   if (!normalized) {
-    return 'INR'
+    return 'GBP'
   }
   return normalized
 }
@@ -46,9 +46,9 @@ export function formatCurrency(value: number | string | null | undefined, curren
       maximumFractionDigits: 0,
     }).format(amount)
   } catch {
-    return new Intl.NumberFormat('en-IN', {
+    return new Intl.NumberFormat('en-GB', {
       style: 'currency',
-      currency: 'INR',
+      currency: 'GBP',
       maximumFractionDigits: 0,
     }).format(amount)
   }
@@ -67,7 +67,7 @@ export function getCurrencyMarker(currencyCode?: string | null): string {
 
     return parts.find((part) => part.type === 'currency')?.value ?? normalizedCurrencyCode
   } catch {
-    return '₹'
+    return '£'
   }
 }
 

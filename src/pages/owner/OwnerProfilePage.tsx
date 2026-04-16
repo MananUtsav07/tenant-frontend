@@ -1,13 +1,13 @@
-import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, Building2, Check, Mail, Pencil, Phone, Save, Shield, Trash2, User } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { AlertTriangle, ArrowUpRight, Building2, Check, CreditCard, Crown, Mail, Pencil, Phone, Save, Shield, Trash2, User } from 'lucide-react'
 
 import { ErrorState } from '../../components/common/ErrorState'
 import { Modal } from '../../components/common/Modal'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
-import type { OwnerDeletionReason } from '../../types/api'
+import type { BillingState, OwnerDeletionReason } from '../../types/api'
 
 const DELETE_REASON_OPTIONS: Array<{ value: OwnerDeletionReason; label: string; description: string }> = [
   { value: 'not_satisfied', label: 'Not satisfied', description: 'The overall experience did not work for me.' },
@@ -44,6 +44,7 @@ export function OwnerProfilePage() {
   const navigate = useNavigate()
   const { owner, token, logout } = useOwnerAuth()
 
+  const [billing, setBilling] = useState<BillingState | null>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [supportEmail, setSupportEmail] = useState(owner?.support_email ?? '')
   const [supportWhatsapp, setSupportWhatsapp] = useState(owner?.support_whatsapp ?? '')
@@ -54,6 +55,11 @@ export function OwnerProfilePage() {
   const [selectedReasons, setSelectedReasons] = useState<OwnerDeletionReason[]>([])
   const [deleteConfirmText, setDeleteConfirmText] = useState('')
   const [deleteBusy, setDeleteBusy] = useState(false)
+
+  useEffect(() => {
+    if (!token) return
+    api.getBillingState(token).then((res) => setBilling(res.billing)).catch(() => {})
+  }, [token])
 
   const ownerName = owner?.full_name?.trim() || owner?.company_name?.trim() || ''
   const normalizedConfirmationText = deleteConfirmText.trim().toLowerCase()
@@ -196,6 +202,71 @@ export function OwnerProfilePage() {
                 <ReadOnlyField label="Member Since" value={memberSince} />
               </div>
             </div>
+
+            {/* Subscription Plan Card */}
+            {billing && (
+              <div className="rounded-2xl bg-[#101114] p-6 shadow-sm" style={{ border: '1.5px solid #272839' }}>
+                <div className="mb-4 flex items-center gap-2">
+                  {billing.status === 'active'
+                    ? <Crown className="h-4 w-4 text-[#32C382]" />
+                    : <CreditCard className="h-4 w-4 text-[#EBCF42]" />}
+                  <h3 className="font-['Sora'] text-base font-bold text-white">Subscription</h3>
+                </div>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-[#8D8D96] font-[DM_Sans,sans-serif] mb-1">Current Plan</p>
+                      <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider font-[DM_Sans,sans-serif] ${
+                        billing.status === 'active'
+                          ? 'bg-[#32C382]/15 text-[#32C382]'
+                          : billing.isTrialExpired
+                          ? 'bg-[#F25461]/15 text-[#F25461]'
+                          : 'bg-[#EBCF42]/15 text-[#EBCF42]'
+                      }`}>
+                        {billing.planDisplayName}
+                      </span>
+                    </div>
+                    <span className={`text-xs font-semibold px-2 py-1 rounded font-[DM_Sans,sans-serif] ${
+                      billing.status === 'active'
+                        ? 'bg-[#32C382]/10 text-[#32C382]'
+                        : billing.isTrialExpired
+                        ? 'bg-[#F25461]/10 text-[#F25461]'
+                        : 'bg-[#EBCF42]/10 text-[#EBCF42]'
+                    }`}>
+                      {billing.status === 'active' ? 'Active' : billing.isTrialExpired ? 'Expired' : 'Trial'}
+                    </span>
+                  </div>
+                  {billing.status === 'trialing' && billing.daysLeftInTrial !== null && (
+                    <p className="text-sm text-[#8D8D96] font-[Manrope,sans-serif]">
+                      {billing.daysLeftInTrial} day{billing.daysLeftInTrial !== 1 ? 's' : ''} remaining in free trial
+                      {billing.trialEndsAt ? ` · ends ${new Date(billing.trialEndsAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}` : ''}
+                    </p>
+                  )}
+                  {billing.status === 'active' && billing.currentPeriodEnd && (
+                    <p className="text-sm text-[#8D8D96] font-[Manrope,sans-serif]">
+                      Renews {new Date(billing.currentPeriodEnd).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                    </p>
+                  )}
+                  {billing.isTrialExpired && (
+                    <p className="text-sm text-[#F25461]/80 font-[Manrope,sans-serif]">
+                      Your trial has ended. Subscribe to restore access.
+                    </p>
+                  )}
+                  <Link
+                    to={ROUTES.ownerBilling}
+                    className="flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-sm font-bold transition-all font-['DM_Sans'] border"
+                    style={
+                      billing.status === 'active'
+                        ? { borderColor: 'rgba(78,121,255,0.3)', color: '#4E79FF', backgroundColor: 'rgba(78,121,255,0.08)' }
+                        : { borderColor: 'rgba(34,81,227,0.5)', color: '#FFFFFF', backgroundColor: '#2251E3' }
+                    }
+                  >
+                    <span>{billing.status === 'active' ? 'Manage / Upgrade Plan' : 'Choose a Plan'}</span>
+                    <ArrowUpRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col gap-6">

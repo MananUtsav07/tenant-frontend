@@ -208,7 +208,7 @@ export function OwnerOnboardingWizard({ onComplete, onSkip }: Props) {
               <label className={labelClass}>Address *</label>
               <input
                 className={inputClass}
-                placeholder="e.g. Al Marsa St, Dubai Marina"
+                placeholder="e.g. 12 Baker Street, London"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 disabled={busy}

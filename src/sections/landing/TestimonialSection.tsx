@@ -9,7 +9,7 @@ const testimonials = [
       'Prophives finally gave our portfolio team the calm control room we were missing. Resident issues, rent follow-up, and approvals now move with much less friction.',
     name: 'Nadia Al Mansoori',
     role: 'Director of Operations',
-    company: 'Private Dubai Portfolio',
+    company: 'Private Property Portfolio',
   },
   {
     quote:

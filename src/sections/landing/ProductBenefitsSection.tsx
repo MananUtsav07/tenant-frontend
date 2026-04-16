@@ -40,7 +40,7 @@ export function ProductBenefitsSection() {
             Built for teams managing premium assets, not generic rentals
           </h2>
           <p className="mt-4 text-base leading-relaxed text-[#8D8D96] md:text-lg">
-            Prophives helps Dubai real estate operators move faster with fewer gaps by bringing AI-assisted service,
+            Prophives helps property operators worldwide move faster with fewer gaps by bringing AI-assisted service,
             collections discipline, and portfolio visibility into one authoritative environment.
           </p>
         </motion.div>

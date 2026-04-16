@@ -8,7 +8,6 @@ const adminLinks = [
   { to: ROUTES.adminDashboard, label: 'Overview', icon: <LayoutDashboard className="h-4 w-4" /> },
   { to: ROUTES.adminOrganizations, label: 'Organizations', icon: <Building2 className="h-4 w-4" /> },
   { to: ROUTES.adminOwners, label: 'Owners', icon: <Users className="h-4 w-4" /> },
-  { to: ROUTES.adminTenants, label: 'Tenants', icon: <Users className="h-4 w-4" /> },
   { to: ROUTES.adminProperties, label: 'Properties', icon: <Building2 className="h-4 w-4" /> },
   { to: ROUTES.adminTickets, label: 'Tickets', icon: <MessageSquare className="h-4 w-4" /> },
   { to: ROUTES.adminAutomations, label: 'Automations', icon: <Bot className="h-4 w-4" /> },

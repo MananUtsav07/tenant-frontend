@@ -1,7 +1,7 @@
 # Prophives - Tenant Frontend
 
 ## Project Overview
-Prophives is a premium AI-powered property management platform for Dubai real estate. This is the frontend SPA built with Vite + React 19 + TypeScript.
+Prophives is a premium AI-powered property management platform for global real estate. This is the frontend SPA built with Vite + React 19 + TypeScript.
 
 ## Tech Stack
 - **Framework**: Vite 7.3.1 + React 19.2.0
@@ -219,26 +219,6 @@ telegram: {
 - If `telegram.linked` → show linked chat info
 - If not linked but `connect_url` exists → `openTelegramConnect()` opens `connect_url` in new tab (`window.open(..., '_blank', 'noopener,noreferrer')`)
 
-## AI Features
-
-### Ticket Summarization (Owner)
-`src/pages/owner/OwnerTicketsPage.tsx` — `handleAiSummarize()` calls `api.summarizeOwnerTicket()` with:
-```ts
-{ ticket_id, subject, message, updates: [{ timestamp, author, message }] }
-```
-Returns `{ ok, summary: { summary: string } }`. Displayed inline in the ticket detail panel. Silently fails (non-critical).
-
-### AI Settings Page (`OwnerAiSettingsPage.tsx`)
-- AI model selector **removed** — backend now manages model selection
-- Toggles: `ticket_classification_enabled`, `reminder_generation_enabled`, `ticket_summarization_enabled`
-- `ai_model` field removed from `patchOwnerAiSettings` payload
-
-### Ticket AI fields (`TenantTicket` type)
-```ts
-ai_category: string | null
-ai_confidence: number | null
-```
-
 ## Auth Pages
 
 ### OwnerLoginPage
@@ -251,6 +231,53 @@ ai_confidence: number | null
 Accepts an optional `theme: 'light' | 'dark'` parameter (default `'dark'`).
 - `'dark'` → existing dark/cream background styles
 - `'light'` → white background, `#1A1A1A` text, lighter borders — for use on white card surfaces
+
+## AI Features
+
+All AI features use `POST /api/owner/ai/*` routes (requireOwnerAuth). Backend uses `gpt-4o-mini` via `openai ^6.27.0`. Each feature returns `null` on failure (non-critical — UI hides/disables silently).
+
+### Feature 1 — Urgent Ticket Auto-Flag
+**File:** `src/pages/owner/OwnerTicketsPage.tsx`
+- `URGENT_KEYWORDS` array + `isUrgent(ticket)` helper — keyword match on subject/message OR `ai_category === 'maintenance'` with `ai_confidence >= 0.85`
+- Red `URGENT` pill badge shown next to status badge in both mobile cards and desktop table rows
+- `filteredTickets` sorts urgent tickets to the top
+
+### Feature 2 — AI Reply Draft
+**File:** `src/pages/owner/OwnerTicketsPage.tsx`
+**Backend:** `POST /api/owner/ai/draft-reply` → `src/services/ai/replyDrafter.ts`
+- "✦ Draft with AI" button in the Reply modal above `TicketReplyComposer`
+- Sends subject, original message, and full thread history to AI
+- Pre-fills the reply textarea; shows "AI draft — review before sending" note (disappears on manual edit)
+
+### Feature 3 — Broadcast Message Generator
+**File:** `src/pages/owner/OwnerNotificationsPage.tsx`
+**Backend:** `POST /api/owner/ai/draft-broadcast` → `src/services/ai/broadcastDrafter.ts`
+- "Compose Broadcast" button in the page header
+- Modal: **property selector** (All Properties or specific property) → topic input → "Generate with AI" → editable preview → channel pills (WhatsApp / Telegram / Email) → "Copy Message"
+- Properties loaded on mount via `api.getOwnerProperties()`; property selection is informational (scopes the copy/send context)
+
+### Feature 4 — WhatsApp & Telegram Message Composer
+**File:** `src/pages/owner/OwnerTenantsPage.tsx`
+**Backend:** `POST /api/owner/ai/draft-whatsapp` → `src/services/ai/whatsappDrafter.ts`
+- **WhatsApp**: green `MessageCircle` button on each tenant row/card (only if `tenant.phone` set)
+  - Modal: intent input → "✦ Draft with AI" → editable preview → Copy + `wa.me/{digits}?text=` deep link
+- **Telegram**: blue `Send` button on each tenant row/card (only if `tenant.phone` set)
+  - Same AI draft flow; deep link opens `https://t.me/+{digits}` (find by phone number)
+  - Note shown: "Copy the message first, then paste it after opening"
+- Both use the same `draftOwnerWhatsappMessage` API method
+
+### Feature 5 — Lease Renewal Risk Digest
+**File:** `src/pages/owner/OwnerDashboardPage.tsx`
+**Backend:** `POST /api/owner/ai/lease-digest` → `src/services/ai/leaseDigest.ts`
+- Amber-accented card below the 4-stat grid
+- Shows live expiring-in-60-days count and overdue count derived from `dashboardTenants`
+- "Generate AI Summary" button calls `getOwnerLeaseDigest()` with tenant array
+- Tenant data fetched non-blocking in `loadDashboard()` via `api.getOwnerTenants()`
+
+### Auth Pages
+#### OwnerLoginPage
+- Supports `?next=<path>` query param — after login/register redirects to `next` instead of dashboard
+- Used by PricingPage CTA: unauthenticated users go to `/login-owner?next=/owner/billing`
 
 ## Related Backend
 Backend at `c:\Users\asus\Desktop\tenant-backend` — see its `CLAUDE.md` for full WhatsApp/Telegram server-side details, env vars, and webhook setup checklist.

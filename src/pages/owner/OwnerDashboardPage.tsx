@@ -10,8 +10,10 @@ import {
   Clock3,
   CreditCard,
   Crown,
+  Lock,
   MessageCircle,
   Send,
+  Sparkles,
   TrendingUp,
   Users,
   Wallet,
@@ -26,7 +28,7 @@ import { StatusBadge } from '../../components/common/StatusBadge'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
-import type { BillingState, OwnerNotification, OwnerPortfolioVisibilityOverview, OwnerRentPaymentApproval, OwnerSummary, AutomationRun } from '../../types/api'
+import type { BillingState, OwnerNotification, OwnerPortfolioVisibilityOverview, OwnerRentPaymentApproval, OwnerSummary, AutomationRun, Tenant } from '../../types/api'
 import { formatCurrency, formatDate, formatDateTime } from '../../utils/date'
 import { revealUp, staggerParent, viewportOnce } from '../../utils/motion'
 
@@ -81,6 +83,9 @@ export function OwnerDashboardPage() {
   const [reviewingApprovalId, setReviewingApprovalId] = useState<string | null>(null)
   const [rejectionNotes, setRejectionNotes] = useState<Record<string, string>>({})
   const [billing, setBilling] = useState<BillingState | null>(null)
+  const [dashboardTenants, setDashboardTenants] = useState<Tenant[]>([])
+  const [leaseDigest, setLeaseDigest] = useState<string | null>(null)
+  const [digestLoading, setDigestLoading] = useState(false)
 
   const loadDashboard = useCallback(async () => {
     if (!token) {
@@ -172,6 +177,13 @@ export function OwnerDashboardPage() {
           console.error('Failed to load rent ledger:', ledgerError)
         }
       }
+      // Fetch tenants for lease digest
+      try {
+        const tenantsResponse = await api.getOwnerTenants(token)
+        setDashboardTenants(tenantsResponse.tenants ?? [])
+      } catch {
+        // silently fail — digest card will still render without data
+      }
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : 'Failed to load dashboard data')
     } finally {
@@ -215,10 +227,64 @@ export function OwnerDashboardPage() {
     }
   }
 
+  const handleGenerateDigest = async () => {
+    if (!token || dashboardTenants.length === 0) return
+    try {
+      setDigestLoading(true)
+      const payload = dashboardTenants.map((t) => ({
+        name: t.full_name,
+        lease_end_date: t.lease_end_date ?? null,
+        payment_status: t.payment_status,
+        monthly_rent: Number(t.monthly_rent ?? 0),
+      }))
+      const result = await api.getOwnerLeaseDigest(token, { tenants: payload })
+      if (result.ok && result.digest) {
+        setLeaseDigest(result.digest.digest)
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setDigestLoading(false)
+    }
+  }
+
   const ownerName = owner?.full_name || owner?.company_name || 'Owner'
   const rentProgress = rentStats.totalDue > 0 ? Math.round((rentStats.totalPaid / rentStats.totalDue) * 100) : 0
   const rentProgressClamped = Math.min(100, Math.max(0, rentProgress))
   const showChartInLeft = false
+
+  /* ── Trial-expired lock overlay ── */
+  if (billing && billing.isTrialExpired && !billing.canAccess) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[#06070B] px-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="max-w-md w-full text-center"
+        >
+          <div className="rounded-2xl border border-[#F25461]/30 bg-[#101114] p-10">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#F25461]/15 mb-5">
+              <Lock className="h-8 w-8 text-[#F25461]" />
+            </div>
+            <h1 className="text-2xl font-extrabold text-white font-['Sora'] mb-3">Your free trial has ended</h1>
+            <p className="text-[#8D8D96] font-['Manrope'] leading-relaxed mb-2">
+              Your 14-day trial has expired. Choose a plan to restore access to your portfolio dashboard and all features.
+            </p>
+            <p className="text-xs text-[#8D8D96]/60 font-['Manrope'] mb-8">
+              No data has been deleted — everything is waiting for you.
+            </p>
+            <Link
+              to={ROUTES.ownerBilling}
+              className="inline-flex items-center gap-2 font-bold py-3 px-8 rounded-xl bg-[#2251E3] hover:bg-[#4E79FF] transition-all text-white font-['DM_Sans']"
+            >
+              <CreditCard className="h-4 w-4" />
+              Choose a Plan
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+    )
+  }
 
   return (
     <div className="p-6 w-full bg-[#06070B] min-h-screen text-white">
@@ -332,6 +398,46 @@ export function OwnerDashboardPage() {
             </motion.div>
           </motion.div>
 
+          {/* Lease Risk Digest */}
+          <motion.div variants={revealUp} initial="hidden" animate="show" className="mb-8">
+            <div className="bg-[#101114] rounded-xl border p-6" style={{ borderColor: 'rgba(235,207,66,0.25)' }}>
+              <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(235,207,66,0.15)' }}>
+                    <AlertTriangle className="w-5 h-5" style={{ color: '#EBCF42' }} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold font-['DM_Sans'] uppercase tracking-wider" style={{ color: '#EBCF42' }}>Lease Risk Digest</p>
+                    <p className="text-xs font-['Manrope']" style={{ color: '#8D8D96' }}>
+                      {dashboardTenants.length > 0
+                        ? `${dashboardTenants.filter((t) => { const end = t.lease_end_date ? new Date(t.lease_end_date) : null; const in60 = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000); return end && end >= new Date() && end <= in60 }).length} expiring · ${dashboardTenants.filter((t) => t.payment_status === 'overdue').length} overdue`
+                        : 'AI-generated tenant risk summary'}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => void handleGenerateDigest()}
+                  disabled={digestLoading || dashboardTenants.length === 0}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-colors disabled:opacity-50"
+                  style={{ backgroundColor: 'rgba(235,207,66,0.12)', color: '#EBCF42', border: '1px solid rgba(235,207,66,0.3)' }}
+                >
+                  <Sparkles className="w-4 h-4" />
+                  {digestLoading ? 'Generating…' : 'Generate AI Summary'}
+                </button>
+              </div>
+              {leaseDigest ? (
+                <div className="rounded-lg px-4 py-3 text-sm font-['Manrope'] leading-relaxed whitespace-pre-wrap" style={{ backgroundColor: 'rgba(235,207,66,0.06)', color: '#E5E7EB', border: '1px solid rgba(235,207,66,0.15)' }}>
+                  {leaseDigest}
+                </div>
+              ) : (
+                <p className="text-xs font-['Manrope']" style={{ color: '#8D8D96' }}>
+                  Click &quot;Generate AI Summary&quot; to get an action-oriented overview of lease renewals and payment risks.
+                </p>
+              )}
+            </div>
+          </motion.div>
+
           <motion.div
             variants={staggerParent}
             initial="hidden"
@@ -406,7 +512,7 @@ export function OwnerDashboardPage() {
                   <div>
                     <p className="text-sm font-semibold text-white font-['DM_Sans']">
                       {billing.status === 'active'
-                        ? `${billing.planCode === 'professional' ? 'Professional' : 'Starter'} Plan — Active`
+                        ? `${billing.planDisplayName} Plan — Active`
                         : billing.isTrialExpired
                         ? 'Free Trial Expired'
                         : billing.daysLeftInTrial !== null

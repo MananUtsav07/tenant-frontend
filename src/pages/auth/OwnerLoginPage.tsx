@@ -3,7 +3,7 @@ import { Eye, EyeOff, Lock, Mail, MoveRight } from 'lucide-react'
 import countryList from 'react-select-country-list'
 import ReactCountryFlag from 'react-country-flag'
 import Select from 'react-select'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 
 import { ErrorState } from '../../components/common/ErrorState'
 import { FormInput } from '../../components/common/FormInput'
@@ -64,6 +64,7 @@ const TESTIMONIALS: Testimonial[] = [
 
 export function OwnerLoginPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { owner, login, register } = useOwnerAuth()
 
   const [mode, setMode] = useState<Mode>('login')
@@ -151,7 +152,8 @@ export function OwnerLoginPage() {
         trackEvent('owner_signup_form_submit', { user_type: 'owner' })
       }
 
-      navigate(ROUTES.ownerDashboard, { replace: true })
+      const next = searchParams.get('next')
+      navigate(next && next.startsWith('/') ? next : ROUTES.ownerDashboard, { replace: true })
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Authentication failed')
     } finally {

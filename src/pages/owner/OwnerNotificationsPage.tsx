@@ -4,17 +4,26 @@ import {
   Bell,
   CheckCircle,
   CheckCircle2,
+  ClipboardCheck,
+  Copy,
   CreditCard,
   FileText,
   Inbox,
+  Megaphone,
+  Sparkles,
   Wrench,
 } from 'lucide-react'
 
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
+import { Modal } from '../../components/common/Modal'
+import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { useOwnerNotifications } from '../../hooks/useOwnerNotifications'
-import type { OwnerNotification } from '../../types/api'
+import { api } from '../../services/api'
+import type { OwnerNotification, Property } from '../../types/api'
+
+type BroadcastChannel = 'whatsapp' | 'telegram' | 'email'
 
 type NotificationFilter = 'all' | 'unread' | 'read'
 
@@ -79,12 +88,69 @@ function getNotificationIcon(notification: OwnerNotification) {
 }
 
 export function OwnerNotificationsPage() {
+  const { token } = useOwnerAuth()
   const { notifications, unreadCount, loading, error, markRead, markAllRead, refresh } = useOwnerNotifications()
   const [activeFilter, setActiveFilter] = useState<NotificationFilter>('all')
+
+  // Properties for broadcast targeting
+  const [properties, setProperties] = useState<Property[]>([])
+  const [broadcastPropertyId, setBroadcastPropertyId] = useState<string>('all')
+
+  // Broadcast compose state
+  const [broadcastOpen, setBroadcastOpen] = useState(false)
+  const [broadcastTopic, setBroadcastTopic] = useState('')
+  const [broadcastDraft, setBroadcastDraft] = useState('')
+  const [broadcastChannels, setBroadcastChannels] = useState<BroadcastChannel[]>([])
+  const [broadcastGenerating, setBroadcastGenerating] = useState(false)
+  const [broadcastCopied, setBroadcastCopied] = useState(false)
+
+  const toggleChannel = (ch: BroadcastChannel) => {
+    setBroadcastChannels((prev) =>
+      prev.includes(ch) ? prev.filter((c) => c !== ch) : [...prev, ch],
+    )
+  }
+
+  const handleGenerateBroadcast = async () => {
+    if (!token || !broadcastTopic.trim()) return
+    try {
+      setBroadcastGenerating(true)
+      const result = await api.draftOwnerBroadcast(token, { topic: broadcastTopic.trim() })
+      if (result.ok && result.draft) {
+        setBroadcastDraft(result.draft.draft)
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setBroadcastGenerating(false)
+    }
+  }
+
+  const handleCopyBroadcast = async () => {
+    if (!broadcastDraft) return
+    await navigator.clipboard.writeText(broadcastDraft)
+    setBroadcastCopied(true)
+    setTimeout(() => setBroadcastCopied(false), 2000)
+  }
+
+  const closeBroadcast = () => {
+    setBroadcastOpen(false)
+    setBroadcastTopic('')
+    setBroadcastDraft('')
+    setBroadcastChannels([])
+    setBroadcastCopied(false)
+    setBroadcastPropertyId('all')
+  }
 
   useEffect(() => {
     void refresh({ silent: true })
   }, [refresh])
+
+  useEffect(() => {
+    if (!token) return
+    api.getOwnerProperties(token)
+      .then((res) => setProperties(res.properties ?? []))
+      .catch(() => {})
+  }, [token])
 
   const filteredNotifications = useMemo(() => notifications.filter((n) => {
     if (activeFilter === 'unread') return !n.is_read
@@ -117,16 +183,27 @@ export function OwnerNotificationsPage() {
               ))}
             </div>
           </div>
-          {unreadCount > 0 && (
+          <div className="flex items-center gap-3 pb-2">
             <button
               type="button"
-              onClick={() => void markAllRead()}
-              className="text-white font-['DM_Sans'] font-bold text-sm flex items-center gap-1.5 hover:text-[#4E79FF] transition-colors whitespace-nowrap pb-2"
+              onClick={() => setBroadcastOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold font-['DM_Sans'] transition-colors"
+              style={{ backgroundColor: 'rgba(78,121,255,0.15)', color: '#4E79FF', border: '1px solid rgba(78,121,255,0.35)' }}
             >
-              <CheckCircle2 className="w-4 h-4" />
-              Mark All as Read
+              <Megaphone className="w-4 h-4" />
+              Compose Broadcast
             </button>
-          )}
+            {unreadCount > 0 && (
+              <button
+                type="button"
+                onClick={() => void markAllRead()}
+                className="text-white font-['DM_Sans'] font-bold text-sm flex items-center gap-1.5 hover:text-[#4E79FF] transition-colors whitespace-nowrap"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                Mark All as Read
+              </button>
+            )}
+          </div>
         </div>
 
         {error ? <ErrorState message={error} variant="light" /> : null}
@@ -196,6 +273,121 @@ export function OwnerNotificationsPage() {
 
 
       </div>
+
+      {/* Broadcast Compose Modal */}
+      <Modal isOpen={broadcastOpen} onClose={closeBroadcast} title="Compose Broadcast" size="md">
+        <div className="space-y-4">
+          <p className="text-sm" style={{ color: '#8D8D96', fontFamily: 'Manrope, sans-serif' }}>
+            Describe what you want to tell your tenants and let AI draft the message.
+          </p>
+
+          {/* Property selector */}
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: '#8D8D96', fontFamily: 'DM Sans, sans-serif' }}>
+              Target Property
+            </label>
+            <select
+              value={broadcastPropertyId}
+              onChange={(e) => setBroadcastPropertyId(e.target.value)}
+              className="w-full rounded-lg px-3 py-2 text-sm outline-none"
+              style={{ backgroundColor: '#141519', border: '1px solid #272839', color: '#FFFFFF', fontFamily: 'Manrope, sans-serif' }}
+            >
+              <option value="all">All Properties</option>
+              {properties.map((p) => (
+                <option key={p.id} value={p.id}>{p.property_name}</option>
+              ))}
+            </select>
+            {broadcastPropertyId !== 'all' && (
+              <p className="mt-1 text-[11px]" style={{ color: '#8D8D96' }}>
+                Message will be scoped to tenants in {properties.find((p) => p.id === broadcastPropertyId)?.property_name ?? 'this property'}.
+              </p>
+            )}
+          </div>
+
+          {/* Topic input */}
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: '#8D8D96', fontFamily: 'DM Sans, sans-serif' }}>
+              What do you want to tell your tenants?
+            </label>
+            <textarea
+              rows={2}
+              value={broadcastTopic}
+              onChange={(e) => setBroadcastTopic(e.target.value)}
+              placeholder="e.g. Water will be off on Friday 9am–12pm for maintenance"
+              className="w-full rounded-lg px-3 py-2 text-sm outline-none resize-none"
+              style={{ backgroundColor: '#141519', border: '1px solid #272839', color: '#FFFFFF', fontFamily: 'Manrope, sans-serif' }}
+            />
+          </div>
+
+          {/* Generate button */}
+          <button
+            type="button"
+            onClick={() => void handleGenerateBroadcast()}
+            disabled={broadcastGenerating || !broadcastTopic.trim()}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold w-full justify-center transition-colors disabled:opacity-50"
+            style={{ backgroundColor: 'rgba(78,121,255,0.15)', color: '#4E79FF', border: '1px solid rgba(78,121,255,0.35)' }}
+          >
+            <Sparkles className="w-4 h-4" />
+            {broadcastGenerating ? 'Generating…' : 'Generate with AI'}
+          </button>
+
+          {/* Draft preview */}
+          {broadcastDraft ? (
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: '#8D8D96', fontFamily: 'DM Sans, sans-serif' }}>
+                Draft Message
+              </label>
+              <textarea
+                rows={4}
+                value={broadcastDraft}
+                onChange={(e) => setBroadcastDraft(e.target.value)}
+                className="w-full rounded-lg px-3 py-2 text-sm outline-none resize-none"
+                style={{ backgroundColor: '#141519', border: '1px solid rgba(78,121,255,0.3)', color: '#FFFFFF', fontFamily: 'Manrope, sans-serif' }}
+              />
+            </div>
+          ) : null}
+
+          {/* Channel selector */}
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: '#8D8D96', fontFamily: 'DM Sans, sans-serif' }}>
+              Channels
+            </label>
+            <div className="flex gap-2 flex-wrap">
+              {(['whatsapp', 'telegram', 'email'] as BroadcastChannel[]).map((ch) => {
+                const active = broadcastChannels.includes(ch)
+                return (
+                  <button
+                    key={ch}
+                    type="button"
+                    onClick={() => toggleChannel(ch)}
+                    className="px-4 py-1.5 rounded-full text-xs font-bold capitalize transition-colors"
+                    style={
+                      active
+                        ? { backgroundColor: '#4E79FF', color: '#FFFFFF' }
+                        : { backgroundColor: '#141519', border: '1px solid #272839', color: '#8D8D96' }
+                    }
+                  >
+                    {ch}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Copy button */}
+          {broadcastDraft ? (
+            <button
+              type="button"
+              onClick={() => void handleCopyBroadcast()}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold w-full justify-center transition-colors"
+              style={{ backgroundColor: broadcastCopied ? 'rgba(50,195,130,0.15)' : '#141519', color: broadcastCopied ? '#32C382' : '#FFFFFF', border: `1px solid ${broadcastCopied ? 'rgba(50,195,130,0.4)' : '#272839'}` }}
+            >
+              {broadcastCopied ? <ClipboardCheck className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              {broadcastCopied ? 'Copied!' : 'Copy Message'}
+            </button>
+          ) : null}
+        </div>
+      </Modal>
     </div>
   )
 }

@@ -14,6 +14,7 @@ import type {
   ApiMessageResponse,
   AdminListResponse,
   AdminOwnerRow,
+  AdminPlan,
   AdminPropertyRow,
   AdminOrganizationDetail,
   AdminOrganizationRow,
@@ -359,6 +360,47 @@ export const api = {
       summary?: { summary: string; model: string }
       reason?: string
     }>('/api/owner/ai/summarize', { method: 'POST', token, body }),
+
+  draftOwnerTicketReply: (
+    token: string,
+    body: {
+      ticket_id?: string
+      subject: string
+      message: string
+      updates?: Array<{ timestamp: string; author: string; message: string }>
+      tenant_name?: string
+      property_name?: string
+    },
+  ) =>
+    request<{
+      ok: boolean
+      draft?: { draft: string; model: string }
+      reason?: string
+    }>('/api/owner/ai/draft-reply', { method: 'POST', token, body }),
+
+  draftOwnerBroadcast: (token: string, body: { topic: string }) =>
+    request<{
+      ok: boolean
+      draft?: { draft: string; model: string }
+      reason?: string
+    }>('/api/owner/ai/draft-broadcast', { method: 'POST', token, body }),
+
+  draftOwnerWhatsappMessage: (token: string, body: { intent: string; tenant_name: string }) =>
+    request<{
+      ok: boolean
+      draft?: { draft: string; model: string }
+      reason?: string
+    }>('/api/owner/ai/draft-whatsapp', { method: 'POST', token, body }),
+
+  getOwnerLeaseDigest: (
+    token: string,
+    body: { tenants: Array<{ name: string; lease_end_date: string | null; payment_status: string; monthly_rent: number }> },
+  ) =>
+    request<{
+      ok: boolean
+      digest?: { digest: string; model: string; expiring_count: number; overdue_count: number }
+      reason?: string
+    }>('/api/owner/ai/lease-digest', { method: 'POST', token, body }),
 
   getOwnerProperties: (token: string) => request<{ ok: true; properties: Property[] }>('/api/owners/properties', { token }),
 
@@ -979,6 +1021,15 @@ export const api = {
   getAdminOrganizationDetail: (token: string, organizationId: string) =>
     request<{ ok: true; detail: AdminOrganizationDetail }>(`/api/admin/organizations/${organizationId}`, { token }),
 
+  getAdminPlans: (token: string) =>
+    request<{ ok: true; plans: AdminPlan[] }>('/api/admin/plans', { token }),
+
+  patchAdminOrganizationPlan: (token: string, organizationId: string, planCode: string) =>
+    request<{ ok: true; organization: { id: string; name: string; slug: string; plan_code: string | null } }>(
+      `/api/admin/organizations/${organizationId}/plan`,
+      { method: 'PATCH', token, body: { plan_code: planCode } },
+    ),
+
   getAdminTenants: (token: string, query: ListQueryInput) =>
     request<AdminListResponse<AdminTenantRow>>(`/api/admin/tenants${toQueryString(query)}`, { token }),
 
@@ -1122,11 +1173,11 @@ export const api = {
   getBillingState: (token: string) =>
     request<{ ok: true; billing: BillingState }>('/api/billing/state', { token }),
 
-  initiateSubscription: (token: string, plan_code: 'starter' | 'professional') =>
-    request<{ ok: true; order: RazorpayOrder }>('/api/billing/initiate', { method: 'POST', token, body: { plan_code } }),
+  initiateSubscription: (token: string, plan_code: 'starter' | 'standard' | 'plus' | 'beyond', property_count?: number) =>
+    request<{ ok: true; order: RazorpayOrder }>('/api/billing/initiate', { method: 'POST', token, body: { plan_code, ...(property_count !== undefined ? { property_count } : {}) } }),
 
   confirmSubscription: (token: string, body: {
-    plan_code: 'starter' | 'professional'
+    plan_code: 'starter' | 'standard' | 'plus' | 'beyond'
     razorpay_order_id: string
     razorpay_payment_id: string
     razorpay_signature: string

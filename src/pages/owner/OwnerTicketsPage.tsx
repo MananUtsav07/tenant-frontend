@@ -5,6 +5,7 @@ import {
   useState,
 } from 'react'
 import {
+  AlertTriangle,
   CheckCircle,
   ChevronLeft,
   ChevronRight,
@@ -13,6 +14,7 @@ import {
   MessageSquare,
   RefreshCw,
   Search,
+  Sparkles,
   Ticket,
   TicketX,
 } from 'lucide-react'
@@ -29,6 +31,18 @@ import type { SupportTicketThread, TenantTicket } from '../../types/api'
 import { formatDateTime } from '../../utils/date'
 
 const ownerTicketStatuses: TenantTicket['status'][] = ['open', 'in_progress', 'resolved', 'closed']
+
+const URGENT_KEYWORDS = [
+  'flood', 'flooding', 'gas leak', 'no electricity', 'power cut',
+  'burst pipe', 'fire', 'no water', 'break-in', 'security breach', 'emergency',
+]
+
+function isUrgent(ticket: TenantTicket): boolean {
+  const text = `${ticket.subject} ${(ticket as { message?: string }).message ?? ''}`.toLowerCase()
+  if (URGENT_KEYWORDS.some((kw) => text.includes(kw))) return true
+  if (ticket.ai_category === 'maintenance' && (ticket.ai_confidence ?? 0) >= 0.85) return true
+  return false
+}
 
 const TICKETS_PER_PAGE = 8
 
@@ -76,6 +90,8 @@ export function OwnerTicketsPage() {
 
   const [replyMessage, setReplyMessage] = useState('')
   const [replyBusy, setReplyBusy] = useState(false)
+  const [draftingReply, setDraftingReply] = useState(false)
+  const [replyIsAiDraft, setReplyIsAiDraft] = useState(false)
 
   const [busyStatusIds, setBusyStatusIds] = useState<Set<string>>(new Set())
 
@@ -126,7 +142,35 @@ export function OwnerTicketsPage() {
     setActiveTicketId(ticketId)
     setModalType(type)
     setReplyMessage('')
+    setReplyIsAiDraft(false)
     setThreadError(null)
+  }
+
+  const handleDraftReply = async () => {
+    if (!token || !thread) return
+    try {
+      setDraftingReply(true)
+      const t = thread.ticket
+      const updates = thread.messages
+        .filter((m) => m.sender_role !== 'system')
+        .map((m) => ({ timestamp: m.created_at, author: m.sender_display_name, message: m.message }))
+      const result = await api.draftOwnerTicketReply(token, {
+        ticket_id: t.id,
+        subject: t.subject,
+        message: (t as { message?: string }).message ?? t.subject,
+        updates,
+        tenant_name: (t as { tenants?: { full_name?: string } }).tenants?.full_name,
+        property_name: (t as { tenants?: { properties?: { property_name?: string } } }).tenants?.properties?.property_name,
+      })
+      if (result.ok && result.draft) {
+        setReplyMessage(result.draft.draft)
+        setReplyIsAiDraft(true)
+      }
+    } catch {
+      // silently fail — button disappears for unconfigured AI
+    } finally {
+      setDraftingReply(false)
+    }
   }
 
   const closeModal = () => {
@@ -184,14 +228,22 @@ export function OwnerTicketsPage() {
   const statsResolved = tickets.filter((t) => t.status === 'resolved').length
 
   const filteredTickets = useMemo(() => {
-    return tickets.filter((t) => {
-      const matchesStatus = filterStatus === 'all' || t.status === filterStatus
-      const matchesSearch =
-        searchQuery.trim() === '' ||
-        t.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        t.id.toLowerCase().includes(searchQuery.toLowerCase())
-      return matchesStatus && matchesSearch
-    })
+    return tickets
+      .filter((t) => {
+        const matchesStatus = filterStatus === 'all' || t.status === filterStatus
+        const matchesSearch =
+          searchQuery.trim() === '' ||
+          t.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          t.id.toLowerCase().includes(searchQuery.toLowerCase())
+        return matchesStatus && matchesSearch
+      })
+      .sort((a, b) => {
+        const aUrg = isUrgent(a)
+        const bUrg = isUrgent(b)
+        if (aUrg && !bUrg) return -1
+        if (!aUrg && bUrg) return 1
+        return 0
+      })
   }, [tickets, filterStatus, searchQuery])
 
   const totalPages = Math.max(1, Math.ceil(filteredTickets.length / TICKETS_PER_PAGE))
@@ -318,9 +370,16 @@ export function OwnerTicketsPage() {
                     <p className="text-xs text-[#8D8D96] mt-0.5 font-['DM_Sans']">#{ticket.id.slice(0, 8).toUpperCase()}</p>
                     <p className="text-xs text-[#8D8D96] mt-0.5">{formatDateTime(ticket.created_at)}</p>
                   </div>
-                  <span className={`px-2.5 py-1 rounded-full text-xs font-bold shrink-0 ${getStatusBadgeClasses(ticket.status)}`}>
-                    {getStatusLabel(ticket.status)}
-                  </span>
+                  <div className="flex flex-col items-end gap-1 shrink-0">
+                    {isUrgent(ticket) ? (
+                      <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/40">
+                        <AlertTriangle className="h-2.5 w-2.5" /> URGENT
+                      </span>
+                    ) : null}
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${getStatusBadgeClasses(ticket.status)}`}>
+                      {getStatusLabel(ticket.status)}
+                    </span>
+                  </div>
                 </div>
                 <div className="flex gap-2 flex-wrap">
                   <button
@@ -397,9 +456,16 @@ export function OwnerTicketsPage() {
                         #{ticket.id.slice(0, 8).toUpperCase()}
                       </td>
                       <td className="px-6 py-4">
-                        <span className="font-medium text-sm" style={{ color: '#FFFFFF', fontFamily: 'Manrope, sans-serif' }}>
-                          {ticket.subject}
-                        </span>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-medium text-sm" style={{ color: '#FFFFFF', fontFamily: 'Manrope, sans-serif' }}>
+                            {ticket.subject}
+                          </span>
+                          {isUrgent(ticket) ? (
+                            <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/40 shrink-0">
+                              <AlertTriangle className="h-2.5 w-2.5" /> URGENT
+                            </span>
+                          ) : null}
+                        </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm font-medium" style={{ color: '#FFFFFF', fontFamily: 'Manrope, sans-serif' }}>Tenant</div>
@@ -498,16 +564,31 @@ export function OwnerTicketsPage() {
             <div className="rounded-lg px-3 py-2 text-xs font-medium" style={{ backgroundColor: 'rgba(78,121,255,0.12)', color: '#4E79FF' }}>
               #{thread.ticket.id.slice(0, 8).toUpperCase()} — {thread.ticket.subject}
             </div>
+            <button
+              type="button"
+              onClick={() => void handleDraftReply()}
+              disabled={draftingReply}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-colors disabled:opacity-60 w-full justify-center"
+              style={{ backgroundColor: 'rgba(78,121,255,0.12)', color: '#4E79FF', border: '1px solid rgba(78,121,255,0.3)' }}
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              {draftingReply ? 'Drafting…' : '✦ Draft with AI'}
+            </button>
             <TicketReplyComposer
               title=""
               description="Replies are added to the permanent ticket history and shared with the tenant."
               value={replyMessage}
-              onChange={setReplyMessage}
+              onChange={(v) => { setReplyMessage(v); setReplyIsAiDraft(false) }}
               onSubmit={handleReplySubmit}
               busy={replyBusy}
               submitLabel="Send Reply"
               placeholder="Write a clear next step, update, or resolution note."
             />
+            {replyIsAiDraft ? (
+              <p className="text-[11px] text-center" style={{ color: '#8D8D96' }}>
+                AI draft — review before sending
+              </p>
+            ) : null}
           </div>
         ) : null}
       </Modal>

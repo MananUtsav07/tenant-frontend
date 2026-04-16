@@ -6,8 +6,12 @@ import {
   ChevronLeft,
   ChevronRight,
   CheckCircle2,
+  ExternalLink,
   Eye,
+  MessageCircle,
   Pencil,
+  Send,
+  Sparkles,
   Trash2,
   UserRoundPlus,
   Users,
@@ -33,12 +37,16 @@ function toDateInputValue(iso: string | null | undefined): string {
 }
 
 const RENT_CURRENCY_OPTIONS = [
-  { code: 'INR', label: 'Rupees (INR)' },
-  { code: 'USD', label: 'Dollar (USD)' },
+  { code: 'GBP', label: 'Pound Sterling (GBP)' },
+  { code: 'USD', label: 'US Dollar (USD)' },
+  { code: 'EUR', label: 'Euro (EUR)' },
   { code: 'AED', label: 'UAE Dirham (AED)' },
+  { code: 'INR', label: 'Indian Rupee (INR)' },
+  { code: 'SGD', label: 'Singapore Dollar (SGD)' },
+  { code: 'AUD', label: 'Australian Dollar (AUD)' },
 ] as const
 
-function buildEmptyTenantForm(defaultPropertyId = '', currencyCode = 'INR') {
+function buildEmptyTenantForm(defaultPropertyId = '', currencyCode = 'GBP') {
   return {
     property_id: defaultPropertyId,
     broker_id: '',
@@ -96,18 +104,110 @@ export function OwnerTenantsPage() {
   const [busy, setBusy] = useState(false)
   const [editingTenantId, setEditingTenantId] = useState<string | null>(null)
   const [showTenantForm, setShowTenantForm] = useState(false)
-  const [form, setForm] = useState(() => buildEmptyTenantForm('', owner?.organization?.currency_code ?? 'INR'))
+  const [form, setForm] = useState(() => buildEmptyTenantForm('', owner?.organization?.currency_code ?? 'GBP'))
   const [filterPropertyId, setFilterPropertyId] = useState('')
   const [tenantPendingDelete, setTenantPendingDelete] = useState<Tenant | null>(null)
   const [showOccupiedWarning, setShowOccupiedWarning] = useState(false)
   const [showCurrencyMenu, setShowCurrencyMenu] = useState(false)
   const currencyMenuRef = useRef<HTMLDivElement | null>(null)
-  const ownerCurrencyCode = owner?.organization?.currency_code ?? 'INR'
+  const ownerCurrencyCode = owner?.organization?.currency_code ?? 'GBP'
   const selectedRentCurrencyCode = form.currency_code || ownerCurrencyCode
   const selectedRentCurrencyMarker = getCurrencyMarker(selectedRentCurrencyCode)
   const [rentLedger, setRentLedger] = useState<RentLedgerEntry[]>([])
   const [ledgerLoading, setLedgerLoading] = useState(true)
   const [ledgerTenantFilter, setLedgerTenantFilter] = useState('')
+
+  // WhatsApp compose state
+  const [whatsappTenant, setWhatsappTenant] = useState<Tenant | null>(null)
+  const [whatsappIntent, setWhatsappIntent] = useState('')
+  const [whatsappDraft, setWhatsappDraft] = useState('')
+  const [whatsappDrafting, setWhatsappDrafting] = useState(false)
+  const [whatsappCopied, setWhatsappCopied] = useState(false)
+
+  const openWhatsapp = (tenant: Tenant) => {
+    setWhatsappTenant(tenant)
+    setWhatsappIntent('')
+    setWhatsappDraft('')
+    setWhatsappCopied(false)
+  }
+
+  const closeWhatsapp = () => {
+    setWhatsappTenant(null)
+    setWhatsappIntent('')
+    setWhatsappDraft('')
+    setWhatsappCopied(false)
+  }
+
+  const handleDraftWhatsapp = async () => {
+    if (!token || !whatsappTenant) return
+    try {
+      setWhatsappDrafting(true)
+      const result = await api.draftOwnerWhatsappMessage(token, {
+        intent: whatsappIntent.trim(),
+        tenant_name: whatsappTenant.full_name,
+      })
+      if (result.ok && result.draft) {
+        setWhatsappDraft(result.draft.draft)
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setWhatsappDrafting(false)
+    }
+  }
+
+  const handleCopyWhatsapp = async () => {
+    if (!whatsappDraft) return
+    await navigator.clipboard.writeText(whatsappDraft)
+    setWhatsappCopied(true)
+    setTimeout(() => setWhatsappCopied(false), 2000)
+  }
+
+  // Telegram compose state
+  const [telegramTenant, setTelegramTenant] = useState<Tenant | null>(null)
+  const [telegramIntent, setTelegramIntent] = useState('')
+  const [telegramDraft, setTelegramDraft] = useState('')
+  const [telegramDrafting, setTelegramDrafting] = useState(false)
+  const [telegramCopied, setTelegramCopied] = useState(false)
+
+  const openTelegram = (tenant: Tenant) => {
+    setTelegramTenant(tenant)
+    setTelegramIntent('')
+    setTelegramDraft('')
+    setTelegramCopied(false)
+  }
+
+  const closeTelegram = () => {
+    setTelegramTenant(null)
+    setTelegramIntent('')
+    setTelegramDraft('')
+    setTelegramCopied(false)
+  }
+
+  const handleDraftTelegram = async () => {
+    if (!token || !telegramTenant) return
+    try {
+      setTelegramDrafting(true)
+      const result = await api.draftOwnerWhatsappMessage(token, {
+        intent: telegramIntent.trim(),
+        tenant_name: telegramTenant.full_name,
+      })
+      if (result.ok && result.draft) {
+        setTelegramDraft(result.draft.draft)
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setTelegramDrafting(false)
+    }
+  }
+
+  const handleCopyTelegram = async () => {
+    if (!telegramDraft) return
+    await navigator.clipboard.writeText(telegramDraft)
+    setTelegramCopied(true)
+    setTimeout(() => setTelegramCopied(false), 2000)
+  }
 
   const loadData = useCallback(async () => {
     if (!token) {
@@ -477,7 +577,7 @@ export function OwnerTenantsPage() {
                   </div>
 
                   {/* Actions */}
-                  <div className="flex gap-2 pt-1">
+                  <div className="flex gap-2 pt-1 flex-wrap">
                     <button
                       type="button"
                       onClick={() => navigate(ROUTES.ownerTenantDetail.replace(':id', tenant.id))}
@@ -499,6 +599,26 @@ export function OwnerTenantsPage() {
                     >
                       <Trash2 className="h-3.5 w-3.5" /> Delete
                     </button>
+                    {tenant.phone ? (
+                      <button
+                        type="button"
+                        onClick={() => openWhatsapp(tenant)}
+                        className="flex items-center gap-1 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors"
+                        style={{ borderColor: 'rgba(37,211,102,0.4)', color: '#25D366', backgroundColor: 'rgba(37,211,102,0.08)' }}
+                      >
+                        <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
+                      </button>
+                    ) : null}
+                    {tenant.phone ? (
+                      <button
+                        type="button"
+                        onClick={() => openTelegram(tenant)}
+                        className="flex items-center gap-1 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors"
+                        style={{ borderColor: 'rgba(0,136,204,0.4)', color: '#0088CC', backgroundColor: 'rgba(0,136,204,0.08)' }}
+                      >
+                        <Send className="h-3.5 w-3.5" /> Telegram
+                      </button>
+                    ) : null}
                   </div>
                 </div>
               )
@@ -577,6 +697,28 @@ export function OwnerTenantsPage() {
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
+                            {tenant.phone ? (
+                              <button
+                                type="button"
+                                title="Message via WhatsApp"
+                                onClick={() => openWhatsapp(tenant)}
+                                className="p-1.5 rounded-lg transition-colors"
+                                style={{ color: '#25D366' }}
+                              >
+                                <MessageCircle className="w-3.5 h-3.5" />
+                              </button>
+                            ) : null}
+                            {tenant.phone ? (
+                              <button
+                                type="button"
+                                title="Message via Telegram"
+                                onClick={() => openTelegram(tenant)}
+                                className="p-1.5 rounded-lg transition-colors"
+                                style={{ color: '#0088CC' }}
+                              >
+                                <Send className="w-3.5 h-3.5" />
+                              </button>
+                            ) : null}
                           </div>
                         </td>
                       </tr>
@@ -969,6 +1111,153 @@ export function OwnerTenantsPage() {
           </div>
         </Modal>
       ) : null}
+
+      {/* WhatsApp Compose Modal */}
+      <Modal isOpen={Boolean(whatsappTenant)} onClose={closeWhatsapp} title="Message via WhatsApp" size="sm">
+        {whatsappTenant ? (
+          <div className="space-y-4">
+            <div className="rounded-lg px-3 py-2 text-xs font-medium" style={{ backgroundColor: 'rgba(37,211,102,0.1)', color: '#25D366', border: '1px solid rgba(37,211,102,0.3)' }}>
+              Tenant: <span className="font-bold">{whatsappTenant.full_name}</span>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: '#8D8D96', fontFamily: 'DM Sans, sans-serif' }}>
+                What do you want to say?
+              </label>
+              <textarea
+                rows={2}
+                value={whatsappIntent}
+                onChange={(e) => setWhatsappIntent(e.target.value)}
+                placeholder="e.g. Remind them rent is due on Friday"
+                className="w-full rounded-lg px-3 py-2 text-sm outline-none resize-none"
+                style={{ backgroundColor: '#141519', border: '1px solid #272839', color: '#FFFFFF', fontFamily: 'Manrope, sans-serif' }}
+              />
+            </div>
+
+            <button
+              type="button"
+              onClick={() => void handleDraftWhatsapp()}
+              disabled={whatsappDrafting || !whatsappIntent.trim()}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold w-full justify-center transition-colors disabled:opacity-50"
+              style={{ backgroundColor: 'rgba(37,211,102,0.1)', color: '#25D366', border: '1px solid rgba(37,211,102,0.3)' }}
+            >
+              <Sparkles className="w-4 h-4" />
+              {whatsappDrafting ? 'Drafting…' : '✦ Draft with AI'}
+            </button>
+
+            {whatsappDraft ? (
+              <>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: '#8D8D96', fontFamily: 'DM Sans, sans-serif' }}>
+                    Message Preview
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={whatsappDraft}
+                    onChange={(e) => setWhatsappDraft(e.target.value)}
+                    className="w-full rounded-lg px-3 py-2 text-sm outline-none resize-none"
+                    style={{ backgroundColor: '#141519', border: '1px solid rgba(37,211,102,0.3)', color: '#FFFFFF', fontFamily: 'Manrope, sans-serif' }}
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => void handleCopyWhatsapp()}
+                    className="flex-1 flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold justify-center transition-colors"
+                    style={{ backgroundColor: '#141519', border: '1px solid #272839', color: whatsappCopied ? '#32C382' : '#FFFFFF' }}
+                  >
+                    {whatsappCopied ? 'Copied!' : 'Copy'}
+                  </button>
+                  <a
+                    href={`https://wa.me/${whatsappTenant.phone?.replace(/\D/g, '')}?text=${encodeURIComponent(whatsappDraft)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold justify-center transition-colors"
+                    style={{ backgroundColor: 'rgba(37,211,102,0.15)', color: '#25D366', border: '1px solid rgba(37,211,102,0.4)' }}
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" /> Open WhatsApp
+                  </a>
+                </div>
+              </>
+            ) : null}
+          </div>
+        ) : null}
+      </Modal>
+
+      {/* Telegram Compose Modal */}
+      <Modal isOpen={Boolean(telegramTenant)} onClose={closeTelegram} title="Message via Telegram" size="sm">
+        {telegramTenant ? (
+          <div className="space-y-4">
+            <div className="rounded-lg px-3 py-2 text-xs font-medium" style={{ backgroundColor: 'rgba(0,136,204,0.1)', color: '#0088CC', border: '1px solid rgba(0,136,204,0.3)' }}>
+              Tenant: <span className="font-bold">{telegramTenant.full_name}</span>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: '#8D8D96', fontFamily: 'DM Sans, sans-serif' }}>
+                What do you want to say?
+              </label>
+              <textarea
+                rows={2}
+                value={telegramIntent}
+                onChange={(e) => setTelegramIntent(e.target.value)}
+                placeholder="e.g. Confirm their lease renewal appointment for Monday"
+                className="w-full rounded-lg px-3 py-2 text-sm outline-none resize-none"
+                style={{ backgroundColor: '#141519', border: '1px solid #272839', color: '#FFFFFF', fontFamily: 'Manrope, sans-serif' }}
+              />
+            </div>
+
+            <button
+              type="button"
+              onClick={() => void handleDraftTelegram()}
+              disabled={telegramDrafting || !telegramIntent.trim()}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold w-full justify-center transition-colors disabled:opacity-50"
+              style={{ backgroundColor: 'rgba(0,136,204,0.1)', color: '#0088CC', border: '1px solid rgba(0,136,204,0.3)' }}
+            >
+              <Sparkles className="w-4 h-4" />
+              {telegramDrafting ? 'Drafting…' : '✦ Draft with AI'}
+            </button>
+
+            {telegramDraft ? (
+              <>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: '#8D8D96', fontFamily: 'DM Sans, sans-serif' }}>
+                    Message Preview
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={telegramDraft}
+                    onChange={(e) => setTelegramDraft(e.target.value)}
+                    className="w-full rounded-lg px-3 py-2 text-sm outline-none resize-none"
+                    style={{ backgroundColor: '#141519', border: '1px solid rgba(0,136,204,0.3)', color: '#FFFFFF', fontFamily: 'Manrope, sans-serif' }}
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => void handleCopyTelegram()}
+                    className="flex-1 flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold justify-center transition-colors"
+                    style={{ backgroundColor: '#141519', border: '1px solid #272839', color: telegramCopied ? '#32C382' : '#FFFFFF' }}
+                  >
+                    {telegramCopied ? 'Copied!' : 'Copy'}
+                  </button>
+                  <a
+                    href={`https://t.me/+${telegramTenant.phone?.replace(/\D/g, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold justify-center transition-colors"
+                    style={{ backgroundColor: 'rgba(0,136,204,0.15)', color: '#0088CC', border: '1px solid rgba(0,136,204,0.4)' }}
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" /> Open Telegram
+                  </a>
+                </div>
+                <p className="text-[11px]" style={{ color: '#8D8D96' }}>
+                  Opens Telegram by phone number. Copy the message first, then paste it after opening.
+                </p>
+              </>
+            ) : null}
+          </div>
+        ) : null}
+      </Modal>
 
       {/* ── Rent Received History ── */}
       <div className="mt-10">
