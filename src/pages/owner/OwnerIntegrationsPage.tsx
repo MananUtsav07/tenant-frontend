@@ -230,7 +230,7 @@ export function OwnerIntegrationsPage() {
       style={{ fontFamily: "'DM Sans', sans-serif" }}
     >
       <Lock className="h-3.5 w-3.5" />
-      Professional Plan Required
+      Standard Plan Required
     </Link>
   ) : status ? (
     !status.whatsapp.configured ? (

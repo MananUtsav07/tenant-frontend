@@ -446,7 +446,7 @@ export function OwnerDashboardPage() {
           >
             <motion.div variants={revealUp}>
               <Link
-                to={ROUTES.ownerProfile}
+                to={ROUTES.ownerIntegrations}
                 className="group block rounded-2xl border border-[#272839] bg-[#101114] p-5 transition-colors hover:border-[#25D366]/40"
               >
                 <div className="flex items-start justify-between gap-4">
@@ -457,14 +457,14 @@ export function OwnerDashboardPage() {
                     <div className="min-w-0">
                       <p className="text-sm font-bold text-white font-['Sora']">WhatsApp</p>
                       <p className="mt-1 truncate text-xs text-[#8D8D96] font-['Manrope']">
-                        {owner?.support_whatsapp ?? 'Add your support number'}
+                        {owner?.support_whatsapp ? `Connected · ${owner.support_whatsapp}` : 'Connect via Integrations'}
                       </p>
                     </div>
                   </div>
                   <ChevronRight className="h-4 w-4 shrink-0 text-[#25D366] transition-transform group-hover:translate-x-1" />
                 </div>
                 <p className="mt-4 text-sm text-[#8D8D96] font-['Manrope']">
-                  Manage the WhatsApp number tenants use for reminders and support.
+                  Connect and manage your WhatsApp Business channel from integrations.
                 </p>
               </Link>
             </motion.div>
@@ -481,7 +481,7 @@ export function OwnerDashboardPage() {
                     </div>
                     <div>
                       <p className="text-sm font-bold text-white font-['Sora']">Telegram</p>
-                      <p className="mt-1 text-xs text-[#8D8D96] font-['Manrope']">Open channel settings</p>
+                      <p className="mt-1 text-xs text-[#8D8D96] font-['Manrope']">Connect or manage your bot</p>
                     </div>
                   </div>
                   <ChevronRight className="h-4 w-4 shrink-0 text-[#0088CC] transition-transform group-hover:translate-x-1" />

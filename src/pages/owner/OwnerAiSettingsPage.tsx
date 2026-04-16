@@ -195,7 +195,7 @@ export function OwnerAiSettingsPage() {
           </div>
         </header>
 
-        {/* ── Professional plan gate ── */}
+        {/* ── Standard plan gate ── */}
         {!loading && !isProfessional && (
           <div className="mb-8 flex items-start gap-4 rounded-2xl border border-[#2251E3]/30 bg-[rgba(34,81,227,0.06)] p-5 shadow-sm">
             <div className="shrink-0 rounded-xl bg-[#2251E3]/10 p-2.5">
@@ -204,10 +204,10 @@ export function OwnerAiSettingsPage() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
                 <Crown className="h-4 w-4 text-[#4E79FF]" />
-                <h4 className="font-['Sora'] font-bold text-[#1A1A1A] text-sm">Professional Plan Required</h4>
+                <h4 className="font-['Sora'] font-bold text-[#1A1A1A] text-sm">Standard Plan Required</h4>
               </div>
               <p className="text-sm text-[#6B7280] font-[Manrope,sans-serif]">
-                AI automation features are available on the Professional plan. Upgrade to enable ticket classification, smart reminders, and AI-powered summaries.
+                AI automation features are available on the Standard plan and above. Upgrade to enable ticket classification, smart reminders, and AI-powered summaries.
               </p>
             </div>
             <Link

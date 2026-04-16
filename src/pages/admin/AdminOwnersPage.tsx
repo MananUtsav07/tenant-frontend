@@ -16,10 +16,11 @@ import type { AdminOwnerRow, AdminOrganizationRow, AdminPlan, PaginationMeta } f
 import { formatDateTime } from '../../utils/date'
 
 const PLAN_COLORS: Record<string, string> = {
-  trial: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
-  starter: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-  professional: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
-  enterprise: 'bg-[rgba(240,163,35,0.15)] text-[#f1cb85] border-[rgba(240,163,35,0.3)]',
+  trial:    'bg-slate-500/20 text-slate-300 border-slate-500/30',
+  starter:  'bg-blue-500/20 text-blue-300 border-blue-500/30',
+  standard: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+  plus:     'bg-purple-500/20 text-purple-300 border-purple-500/30',
+  beyond:   'bg-[rgba(240,163,35,0.15)] text-[#f1cb85] border-[rgba(240,163,35,0.3)]',
 }
 
 function PlanBadge({ planCode }: { planCode: string | null | undefined }) {
