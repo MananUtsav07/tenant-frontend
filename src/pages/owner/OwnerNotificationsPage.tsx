@@ -10,9 +10,12 @@ import {
   FileText,
   Inbox,
   Megaphone,
+  MessageCircle,
+  Send,
   Sparkles,
   Wrench,
 } from 'lucide-react'
+import { useSearchParams } from 'react-router-dom'
 
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
@@ -21,9 +24,7 @@ import { Modal } from '../../components/common/Modal'
 import { useOwnerAuth } from '../../hooks/useOwnerAuth'
 import { useOwnerNotifications } from '../../hooks/useOwnerNotifications'
 import { api } from '../../services/api'
-import type { OwnerNotification, Property } from '../../types/api'
-
-type BroadcastChannel = 'whatsapp' | 'telegram' | 'email'
+import type { OwnerNotification, Property, Tenant } from '../../types/api'
 
 type NotificationFilter = 'all' | 'unread' | 'read'
 
@@ -88,33 +89,36 @@ function getNotificationIcon(notification: OwnerNotification) {
 }
 
 export function OwnerNotificationsPage() {
-  const { token } = useOwnerAuth()
+  const { token, owner } = useOwnerAuth()
   const { notifications, unreadCount, loading, error, markRead, markAllRead, refresh } = useOwnerNotifications()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [activeFilter, setActiveFilter] = useState<NotificationFilter>('all')
 
-  // Properties for broadcast targeting
+  // Properties + tenants for broadcast targeting
   const [properties, setProperties] = useState<Property[]>([])
+  const [tenants, setTenants] = useState<Tenant[]>([])
   const [broadcastPropertyId, setBroadcastPropertyId] = useState<string>('all')
 
   // Broadcast compose state
   const [broadcastOpen, setBroadcastOpen] = useState(false)
   const [broadcastTopic, setBroadcastTopic] = useState('')
   const [broadcastDraft, setBroadcastDraft] = useState('')
-  const [broadcastChannels, setBroadcastChannels] = useState<BroadcastChannel[]>([])
   const [broadcastGenerating, setBroadcastGenerating] = useState(false)
   const [broadcastCopied, setBroadcastCopied] = useState(false)
 
-  const toggleChannel = (ch: BroadcastChannel) => {
-    setBroadcastChannels((prev) =>
-      prev.includes(ch) ? prev.filter((c) => c !== ch) : [...prev, ch],
-    )
-  }
+  // Tenants relevant to the selected property
+  const targetTenants = useMemo(() => {
+    if (broadcastPropertyId === 'all') return tenants
+    return tenants.filter((t) => t.property_id === broadcastPropertyId)
+  }, [tenants, broadcastPropertyId])
+
+  const ownerName = owner?.full_name || owner?.email || undefined
 
   const handleGenerateBroadcast = async () => {
     if (!token || !broadcastTopic.trim()) return
     try {
       setBroadcastGenerating(true)
-      const result = await api.draftOwnerBroadcast(token, { topic: broadcastTopic.trim() })
+      const result = await api.draftOwnerBroadcast(token, { topic: broadcastTopic.trim(), owner_name: ownerName })
       if (result.ok && result.draft) {
         setBroadcastDraft(result.draft.draft)
       }
@@ -125,9 +129,8 @@ export function OwnerNotificationsPage() {
     }
   }
 
-  const handleCopyBroadcast = async () => {
-    if (!broadcastDraft) return
-    await navigator.clipboard.writeText(broadcastDraft)
+  const handleCopyBroadcast = async (text: string) => {
+    await navigator.clipboard.writeText(text)
     setBroadcastCopied(true)
     setTimeout(() => setBroadcastCopied(false), 2000)
   }
@@ -136,9 +139,27 @@ export function OwnerNotificationsPage() {
     setBroadcastOpen(false)
     setBroadcastTopic('')
     setBroadcastDraft('')
-    setBroadcastChannels([])
     setBroadcastCopied(false)
     setBroadcastPropertyId('all')
+    setSearchParams((prev) => { prev.delete('compose'); return prev }, { replace: true })
+  }
+
+  // Build personalised message for a specific tenant
+  const personalise = (draft: string, tenant: Tenant) => {
+    const name = tenant.full_name || 'Resident'
+    return draft.replace(/\[Tenant Name\]/gi, name)
+  }
+
+  const waLink = (tenant: Tenant, text: string) => {
+    const digits = (tenant.phone ?? '').replace(/\D/g, '')
+    if (!digits) return null
+    return `https://wa.me/${digits}?text=${encodeURIComponent(text)}`
+  }
+
+  const tgLink = (tenant: Tenant, _text: string) => {
+    const digits = (tenant.phone ?? '').replace(/\D/g, '')
+    if (!digits) return null
+    return `https://t.me/+${digits}`
   }
 
   useEffect(() => {
@@ -150,7 +171,17 @@ export function OwnerNotificationsPage() {
     api.getOwnerProperties(token)
       .then((res) => setProperties(res.properties ?? []))
       .catch(() => {})
+    api.getOwnerTenants(token)
+      .then((res) => setTenants(res.tenants ?? []))
+      .catch(() => {})
   }, [token])
+
+  // Auto-open broadcast modal if ?compose=broadcast in URL
+  useEffect(() => {
+    if (searchParams.get('compose') === 'broadcast') {
+      setBroadcastOpen(true)
+    }
+  }, [searchParams])
 
   const filteredNotifications = useMemo(() => notifications.filter((n) => {
     if (activeFilter === 'unread') return !n.is_read
@@ -278,7 +309,7 @@ export function OwnerNotificationsPage() {
       <Modal isOpen={broadcastOpen} onClose={closeBroadcast} title="Compose Broadcast" size="md">
         <div className="space-y-4">
           <p className="text-sm" style={{ color: '#8D8D96', fontFamily: 'Manrope, sans-serif' }}>
-            Describe what you want to tell your tenants and let AI draft the message.
+            Describe what you want to tell your tenants. AI drafts the message using only the details you provide.
           </p>
 
           {/* Property selector */}
@@ -297,11 +328,6 @@ export function OwnerNotificationsPage() {
                 <option key={p.id} value={p.id}>{p.property_name}</option>
               ))}
             </select>
-            {broadcastPropertyId !== 'all' && (
-              <p className="mt-1 text-[11px]" style={{ color: '#8D8D96' }}>
-                Message will be scoped to tenants in {properties.find((p) => p.id === broadcastPropertyId)?.property_name ?? 'this property'}.
-              </p>
-            )}
           </div>
 
           {/* Topic input */}
@@ -334,11 +360,14 @@ export function OwnerNotificationsPage() {
           {/* Draft preview */}
           {broadcastDraft ? (
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: '#8D8D96', fontFamily: 'DM Sans, sans-serif' }}>
-                Draft Message
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider" style={{ color: '#8D8D96', fontFamily: 'DM Sans, sans-serif' }}>
+                  Draft Message
+                </label>
+                <span className="text-[10px]" style={{ color: '#8D8D96' }}>[Tenant Name] will be replaced per send</span>
+              </div>
               <textarea
-                rows={4}
+                rows={5}
                 value={broadcastDraft}
                 onChange={(e) => setBroadcastDraft(e.target.value)}
                 className="w-full rounded-lg px-3 py-2 text-sm outline-none resize-none"
@@ -347,43 +376,62 @@ export function OwnerNotificationsPage() {
             </div>
           ) : null}
 
-          {/* Channel selector */}
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: '#8D8D96', fontFamily: 'DM Sans, sans-serif' }}>
-              Channels
-            </label>
-            <div className="flex gap-2 flex-wrap">
-              {(['whatsapp', 'telegram', 'email'] as BroadcastChannel[]).map((ch) => {
-                const active = broadcastChannels.includes(ch)
-                return (
-                  <button
-                    key={ch}
-                    type="button"
-                    onClick={() => toggleChannel(ch)}
-                    className="px-4 py-1.5 rounded-full text-xs font-bold capitalize transition-colors"
-                    style={
-                      active
-                        ? { backgroundColor: '#4E79FF', color: '#FFFFFF' }
-                        : { backgroundColor: '#141519', border: '1px solid #272839', color: '#8D8D96' }
-                    }
-                  >
-                    {ch}
-                  </button>
-                )
-              })}
+          {/* Per-tenant send buttons */}
+          {broadcastDraft && targetTenants.length > 0 ? (
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider mb-2" style={{ color: '#8D8D96', fontFamily: 'DM Sans, sans-serif' }}>
+                Send to Tenants
+              </label>
+              <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                {targetTenants.map((tenant) => {
+                  const msg = personalise(broadcastDraft, tenant)
+                  const wa = waLink(tenant, msg)
+                  const tg = tgLink(tenant, msg)
+                  return (
+                    <div key={tenant.id} className="flex items-center justify-between rounded-lg px-3 py-2" style={{ backgroundColor: '#141519', border: '1px solid #272839' }}>
+                      <span className="text-sm font-medium truncate mr-2" style={{ color: '#FFFFFF', fontFamily: 'Manrope, sans-serif' }}>
+                        {tenant.full_name || tenant.email || 'Tenant'}
+                      </span>
+                      <div className="flex gap-2 shrink-0">
+                        {wa ? (
+                          <a href={wa} target="_blank" rel="noopener noreferrer"
+                            className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold transition-colors"
+                            style={{ backgroundColor: 'rgba(37,211,102,0.15)', color: '#25D366', border: '1px solid rgba(37,211,102,0.3)' }}
+                            onClick={() => void handleCopyBroadcast(msg)}
+                          >
+                            <MessageCircle className="w-3 h-3" /> WA
+                          </a>
+                        ) : null}
+                        {tg ? (
+                          <a href={tg} target="_blank" rel="noopener noreferrer"
+                            className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold transition-colors"
+                            style={{ backgroundColor: 'rgba(0,136,204,0.15)', color: '#0088cc', border: '1px solid rgba(0,136,204,0.3)' }}
+                          >
+                            <Send className="w-3 h-3" /> TG
+                          </a>
+                        ) : null}
+                        {!wa && !tg ? (
+                          <span className="text-[11px]" style={{ color: '#8D8D96' }}>No phone</span>
+                        ) : null}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+              <p className="mt-1.5 text-[10px]" style={{ color: '#8D8D96' }}>Clicking WA copies the personalised message and opens WhatsApp. For Telegram, copy first then paste after opening.</p>
             </div>
-          </div>
+          ) : null}
 
-          {/* Copy button */}
+          {/* Copy full draft button */}
           {broadcastDraft ? (
             <button
               type="button"
-              onClick={() => void handleCopyBroadcast()}
+              onClick={() => void handleCopyBroadcast(broadcastDraft)}
               className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold w-full justify-center transition-colors"
               style={{ backgroundColor: broadcastCopied ? 'rgba(50,195,130,0.15)' : '#141519', color: broadcastCopied ? '#32C382' : '#FFFFFF', border: `1px solid ${broadcastCopied ? 'rgba(50,195,130,0.4)' : '#272839'}` }}
             >
               {broadcastCopied ? <ClipboardCheck className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-              {broadcastCopied ? 'Copied!' : 'Copy Message'}
+              {broadcastCopied ? 'Copied!' : 'Copy Draft (with placeholder)'}
             </button>
           ) : null}
         </div>

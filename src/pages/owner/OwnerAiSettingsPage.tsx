@@ -359,7 +359,7 @@ export function OwnerAiSettingsPage() {
                   tier="standard"
                   locked={!hasStandard}
                   active={hasStandard}
-                  linkTo={ROUTES.ownerNotifications}
+                  linkTo={`${ROUTES.ownerNotifications}?compose=broadcast`}
                   linkLabel="Compose Broadcast"
                 />
 

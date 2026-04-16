@@ -380,7 +380,7 @@ export const api = {
       reason?: string
     }>('/api/owner/ai/draft-reply', { method: 'POST', token, body }),
 
-  draftOwnerBroadcast: (token: string, body: { topic: string }) =>
+  draftOwnerBroadcast: (token: string, body: { topic: string; owner_name?: string }) =>
     request<{
       ok: boolean
       draft?: { draft: string; model: string }
