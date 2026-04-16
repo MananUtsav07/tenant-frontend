@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { AlertTriangle, ArrowUpRight, Building2, Check, CreditCard, Crown, Mail, Pencil, Phone, Save, Shield, Trash2, User } from 'lucide-react'
+import { AlertTriangle, ArrowUpRight, Check, CreditCard, Crown, Mail, Pencil, Phone, Save, Shield, Trash2, User } from 'lucide-react'
 
 import { ErrorState } from '../../components/common/ErrorState'
 import { Modal } from '../../components/common/Modal'
@@ -61,7 +61,7 @@ export function OwnerProfilePage() {
     api.getBillingState(token).then((res) => setBilling(res.billing)).catch(() => {})
   }, [token])
 
-  const ownerName = owner?.full_name?.trim() || owner?.company_name?.trim() || ''
+  const ownerName = owner?.full_name?.trim() || ''
   const normalizedConfirmationText = deleteConfirmText.trim().toLowerCase()
   const canConfirmDeletion =
     selectedReasons.length > 0 &&
@@ -171,17 +171,7 @@ export function OwnerProfilePage() {
 
               <div className="space-y-5">
                 <ReadOnlyField label="Full Name" value={owner?.full_name} />
-                <ReadOnlyField label="Company Name" value={owner?.company_name} />
                 <ReadOnlyField label="Login Email" value={owner?.email} />
-              </div>
-            </div>
-
-            <div className="rounded-2xl bg-[#101114] p-6 shadow-sm" style={{ border: '1.5px solid #272839' }}>
-              <SectionLabel icon={<Building2 className="h-4 w-4 text-[#4E79FF]" />}>Organization Info</SectionLabel>
-
-              <div className="space-y-5">
-                <ReadOnlyField label="Organization Name" value={owner?.organization?.name} />
-
                 <div>
                   <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-[#8D8D96] font-[DM_Sans,sans-serif]">
                     Plan
@@ -196,7 +186,6 @@ export function OwnerProfilePage() {
                     </span>
                   )}
                 </div>
-
                 <ReadOnlyField label="Country" value={owner?.organization?.country_code} />
                 <ReadOnlyField label="Currency" value={owner?.organization?.currency_code} />
                 <ReadOnlyField label="Member Since" value={memberSince} />

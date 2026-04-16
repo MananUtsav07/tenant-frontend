@@ -14,7 +14,6 @@ type OwnerAuthContextValue = {
     email: string
     password: string
     full_name?: string
-    company_name?: string
     support_email?: string
     support_whatsapp?: string
     country_code: string
@@ -64,7 +63,6 @@ export function OwnerAuthProvider({ children }: { children: React.ReactNode }) {
     email: string
     password: string
     full_name?: string
-    company_name?: string
     support_email?: string
     support_whatsapp?: string
     country_code: string

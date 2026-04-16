@@ -15,7 +15,7 @@ import type { BillingState } from '../types/api'
 
 function OwnerLayoutContent() {
   const { owner, token, logout } = useOwnerAuth()
-  const organizationName = owner?.organization?.name || owner?.company_name || owner?.full_name || 'Organization'
+  const organizationName = owner?.full_name || owner?.email || 'Owner'
   const { unreadCount } = useOwnerNotifications()
   const { pendingCount } = useOwnerApprovals()
   const [resendState, setResendState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')

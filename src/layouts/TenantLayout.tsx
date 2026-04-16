@@ -14,13 +14,11 @@ const tenantLinks = [
 
 export function TenantLayout() {
   const { tenant, logout } = useTenantAuth()
-  const organizationName = tenant?.organization?.name || 'Organization'
-
   return (
     <DashboardLayout
       title="My Dashboard"
       subtitle="Your property, payments, and support"
-      identityPrimary={organizationName}
+      identityPrimary={tenant?.full_name || 'Tenant'}
       identitySecondary={tenant?.tenant_access_id || undefined}
       navItems={tenantLinks}
       onLogout={logout}

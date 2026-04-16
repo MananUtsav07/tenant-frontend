@@ -248,7 +248,7 @@ export function OwnerDashboardPage() {
     }
   }
 
-  const ownerName = owner?.full_name || owner?.company_name || 'Owner'
+  const ownerName = owner?.full_name || 'Owner'
   const rentProgress = rentStats.totalDue > 0 ? Math.round((rentStats.totalPaid / rentStats.totalDue) * 100) : 0
   const rentProgressClamped = Math.min(100, Math.max(0, rentProgress))
   const showChartInLeft = false

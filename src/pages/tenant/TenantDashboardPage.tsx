@@ -26,7 +26,6 @@ import { Button } from '../../components/common/Button'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
-import { OrganizationBadge } from '../../components/common/OrganizationBadge'
 import { StatusBadge } from '../../components/common/StatusBadge'
 import { useTenantAuth } from '../../hooks/useTenantAuth'
 import { ROUTES } from '../../routes/constants'
@@ -158,11 +157,6 @@ export function TenantDashboardPage() {
               {property.property_name}
               {property.unit_number ? ` — Unit ${property.unit_number}` : ''}
             </p>
-          ) : null}
-          {authTenant?.organization ? (
-            <div className="mt-2">
-              <OrganizationBadge name={authTenant.organization.name} slug={authTenant.organization.slug} />
-            </div>
           ) : null}
         </div>
         <div className="flex gap-3">

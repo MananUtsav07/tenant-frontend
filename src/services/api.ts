@@ -196,7 +196,6 @@ export const api = {
     email: string
     password: string
     full_name?: string
-    company_name?: string
     support_email?: string
     support_whatsapp?: string
     country_code: string
@@ -222,7 +221,6 @@ export const api = {
     token: string,
     body: Partial<{
       full_name: string | null
-      company_name: string | null
       support_email: string | null
       support_whatsapp: string | null
     }>,

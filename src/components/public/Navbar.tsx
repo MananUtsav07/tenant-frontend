@@ -106,7 +106,7 @@ export function Navbar() {
     : owner
       ? {
           role: 'owner',
-          name: owner.full_name || owner.company_name || owner.email,
+          name: owner.full_name || owner.email,
           dashboardTo: ROUTES.ownerDashboard,
           dashboardLabel: 'Dashboard',
           onLogout: logoutOwner,

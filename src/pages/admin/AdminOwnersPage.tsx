@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { CreditCard, X } from 'lucide-react'
 
 import { AdminPagination } from '../../components/admin/AdminPagination'
@@ -8,9 +7,7 @@ import { DataTable } from '../../components/common/DataTable'
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
-import { OrganizationBadge } from '../../components/common/OrganizationBadge'
 import { useAdminAuth } from '../../hooks/useAdminAuth'
-import { ROUTES } from '../../routes/constants'
 import { api } from '../../services/api'
 import type { AdminOwnerRow, AdminOrganizationRow, AdminPlan, PaginationMeta } from '../../types/api'
 import { formatDateTime } from '../../utils/date'
@@ -268,26 +265,17 @@ export function AdminOwnersPage() {
 
       {!loading && items.length > 0 ? (
         <>
-          <DataTable headers={['Owner', 'Organization', 'Plan', 'Company', 'Support', 'Created', '']}>
+          <DataTable headers={['Owner', 'Plan', 'Support Email', 'Created', '']}>
             {items.map((owner) => (
               <tr key={owner.id}>
                 <td className="px-4 py-3">
                   <p className="font-medium text-[var(--ph-text)]">{owner.full_name || 'Unnamed owner'}</p>
                   <p className="text-xs text-[var(--ph-text-muted)]">{owner.email}</p>
                 </td>
-                <td className="px-4 py-3 text-slate-600">
-                  <Link
-                    to={ROUTES.adminOrganizationDetail.replace(':id', owner.organization_id)}
-                    className="inline-flex hover:opacity-90"
-                  >
-                    <OrganizationBadge name={owner.organizations?.name} slug={owner.organizations?.slug} />
-                  </Link>
-                </td>
                 <td className="px-4 py-3">
                   <PlanBadge planCode={owner.organizations?.plan_code} />
                 </td>
-                <td className="px-4 py-3 text-slate-600">{owner.company_name || '-'}</td>
-                <td className="px-4 py-3 text-slate-600">{owner.support_email || '-'}</td>
+                <td className="px-4 py-3 text-[var(--ph-text-soft)]">{owner.support_email || '-'}</td>
                 <td className="px-4 py-3 text-[var(--ph-text-muted)]">{formatDateTime(owner.created_at)}</td>
                 <td className="px-4 py-3">
                   <button

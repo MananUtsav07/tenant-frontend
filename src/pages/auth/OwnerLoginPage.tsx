@@ -77,7 +77,6 @@ export function OwnerLoginPage() {
     email: '',
     password: '',
     full_name: '',
-    company_name: '',
     support_email: '',
     country_code: '',
   })
@@ -145,7 +144,6 @@ export function OwnerLoginPage() {
           email: form.email,
           password: form.password,
           full_name: form.full_name || undefined,
-          company_name: form.company_name || undefined,
           support_email: form.support_email || undefined,
           country_code: form.country_code,
         })
@@ -350,15 +348,6 @@ export function OwnerLoginPage() {
                   placeholder="John Smith"
                   value={form.full_name}
                   onChange={(e) => updateField('full_name', e.target.value)}
-                />
-                <FormInput
-                  label="Company Name"
-                  variant="dark"
-                  name="owner_company_name"
-                  autoComplete="organization"
-                  placeholder="Your Property Management Company"
-                  value={form.company_name}
-                  onChange={(e) => updateField('company_name', e.target.value)}
                 />
                 <FormInput
                   label="Support Email"
