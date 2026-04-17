@@ -26,6 +26,9 @@ import type {
   Broker,
   ContactMessage,
   ContactMessageReceipt,
+  Expense,
+  ExpenseCategory,
+  ExpenseSummary,
   Owner,
   OwnerAutomationActivityResponse,
   OwnerDeletionReason,
@@ -288,6 +291,57 @@ export const api = {
       token,
       body,
     }),
+
+  getOwnerExpenses: (
+    token: string,
+    filters?: { property_id?: string; category?: ExpenseCategory; year?: number; month?: number },
+  ) => {
+    const params = new URLSearchParams()
+    if (filters?.property_id) params.set('property_id', filters.property_id)
+    if (filters?.category) params.set('category', filters.category)
+    if (filters?.year !== undefined) params.set('year', String(filters.year))
+    if (filters?.month !== undefined) params.set('month', String(filters.month))
+    const qs = params.toString()
+    return request<{ ok: true; expenses: Expense[] }>(`/api/owners/expenses${qs ? `?${qs}` : ''}`, { token })
+  },
+
+  getOwnerExpenseSummary: (token: string) =>
+    request<{ ok: true; summary: ExpenseSummary }>('/api/owners/expenses/summary', { token }),
+
+  createOwnerExpense: (
+    token: string,
+    body: {
+      property_id: string
+      category: ExpenseCategory
+      description: string
+      vendor_name?: string
+      invoice_ref?: string
+      amount: number
+      incurred_on: string
+    },
+  ) => request<{ ok: true; expense: Expense }>('/api/owners/expenses', { method: 'POST', token, body }),
+
+  updateOwnerExpense: (
+    token: string,
+    expenseId: string,
+    body: Partial<{
+      property_id: string
+      category: ExpenseCategory
+      description: string
+      vendor_name: string | null
+      invoice_ref: string | null
+      amount: number
+      incurred_on: string
+    }>,
+  ) =>
+    request<{ ok: true; expense: Expense }>(`/api/owners/expenses/${expenseId}`, {
+      method: 'PATCH',
+      token,
+      body,
+    }),
+
+  deleteOwnerExpense: (token: string, expenseId: string) =>
+    request<{ ok: true }>(`/api/owners/expenses/${expenseId}`, { method: 'DELETE', token }),
 
   getOwnerAiSettings: (token: string) =>
     request<OwnerAiSettingsResponse>('/api/owner/ai-settings', { token }),

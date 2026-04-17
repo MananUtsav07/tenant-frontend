@@ -1,4 +1,4 @@
-import { Bell, Briefcase, Building2, Crown, FileText, Headphones, LayoutDashboard, LifeBuoy, MailWarning, Plug, Sparkles, UserCircle, Users, AlertTriangle, CreditCard, Clock, TrendingUp } from 'lucide-react'
+import { Bell, Briefcase, Building2, Crown, FileText, Headphones, LayoutDashboard, LifeBuoy, MailWarning, Plug, Sparkles, UserCircle, Users, AlertTriangle, CreditCard, Clock, TrendingUp, Wallet } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
@@ -56,6 +56,7 @@ function OwnerLayoutContent() {
     { to: ROUTES.ownerTenants, label: 'Tenants', icon: <Users className="h-4 w-4" /> },
     { to: ROUTES.ownerDocuments, label: 'Documents', icon: <FileText className="h-4 w-4" /> },
     { to: ROUTES.ownerTickets, label: 'Tickets', icon: <LifeBuoy className="h-4 w-4" /> },
+    { to: ROUTES.ownerExpenses, label: 'Expenses', icon: <Wallet className="h-4 w-4" /> },
     { to: ROUTES.ownerAnalytics, label: 'Analytics', icon: <TrendingUp className="h-4 w-4" /> },
     // { to: ROUTES.ownerMaintenance, label: 'Maintenance', icon: <Hammer className="h-4 w-4" /> },
     { to: ROUTES.ownerNotifications, label: 'Notifications', icon: <Bell className="h-4 w-4" />, badge: unreadCount > 0 ? { count: unreadCount, color: 'red' as const, tooltip: `${unreadCount} notification${unreadCount !== 1 ? 's' : ''} unread` } : undefined },

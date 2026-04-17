@@ -741,6 +741,53 @@ export type ScreeningApplicantDetail = ScreeningApplicantOverview & {
   events: ScreeningEvent[]
 }
 
+export const EXPENSE_CATEGORIES = [
+  'maintenance',
+  'insurance',
+  'legal',
+  'agency_fees',
+  'utilities',
+  'furnishing',
+  'tax',
+  'other',
+] as const
+
+export type ExpenseCategory = (typeof EXPENSE_CATEGORIES)[number]
+
+export const EXPENSE_CATEGORY_LABELS: Record<ExpenseCategory, string> = {
+  maintenance: 'Maintenance',
+  insurance: 'Insurance',
+  legal: 'Legal',
+  agency_fees: 'Agency Fees',
+  utilities: 'Utilities',
+  furnishing: 'Furnishing',
+  tax: 'Tax',
+  other: 'Other',
+}
+
+export type Expense = {
+  id: string
+  organization_id: string
+  owner_id: string
+  property_id: string
+  category: ExpenseCategory
+  description: string
+  vendor_name: string | null
+  invoice_ref: string | null
+  amount: number
+  incurred_on: string
+  property_name: string | null
+  property_address: string | null
+  property_unit: string | null
+  created_at: string
+}
+
+export type ExpenseSummary = {
+  totalThisYear: number
+  totalThisMonth: number
+  byCategory: Record<string, number>
+}
+
 export type OwnerScreeningOverview = {
   summary: {
     total_applicants: number

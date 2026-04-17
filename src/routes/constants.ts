@@ -36,6 +36,7 @@ export const ROUTES = {
   ownerDocuments: '/owner/documents',
   ownerTenantDetail: '/owner/tenants/:id',
   ownerTickets: '/owner/tickets',
+  ownerExpenses: '/owner/expenses',
   ownerMaintenance: '/owner/maintenance',
   ownerNotifications: '/owner/notifications',
   ownerAnalytics: '/owner/analytics',
